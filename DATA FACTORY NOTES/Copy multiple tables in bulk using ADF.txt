@@ -1,0 +1,207 @@
+*** Load Multiple CSV Files to a Table in ADF ****
+
+
+
+
+*** Load Multiple CSV Files to Multiple Tables According to File Name *****
+
+getmetadata --> foreach (-->copyactivity)
+
+How to load multiple csv files to different tables according to the 
+@concat(replace(item().name,'.txt','')
+
+@concat(substring(item().name,0,lastindexof(item().name,'_')))
+
+************** Bulk copy with Lookup and Foreach ************
+
+Lookup: retrieve dataset action (content of file or table)
+- Used to dynamically determine list of objects
+- Lookup returns list or first row of data
+- Max of 2MB of data
+- Max of 5000 rows of data
+
+type1:
+{
+ "firstRow":<item1>
+}
+
+firstRowOnly = true
+
+type2:
+
+firstRow = false
+
+{
+ "count":"3",
+ "value":[
+	<item1>,
+	<item2>,
+	<item3>
+	]
+}
+
+@{activity('MyLookupActivity').output.value}
+
+
+STEP1:
+Run this below query in lookupActivity
+
+select * from adflookupdemo.information_schema.tables
+where table_type = 'BASE TABLE'
+
+Lookup --> Foreach(-->copyDataActivity)
+
+In Foreach, get this list in sequential order and pass it on to copyData
+In copyData, go to the source tablename = @item().table_schema
+sink filename = @concat(item().table_schema,'_',item().name,'.txt/.csv')
+
+
+**************** Bulk copy from SQL DB to Data Lake *************
+
+select s.name SchemaName, t.[name] TableName
+from sys.tables t
+join sys.schemas s 
+on s.schema_id = t.schema_id
+where s.name = 'SalesLT'
+
+In pipeline, give parameters schemaName & tableName
+Lookup ---> ForEach (----> copyActivity)
+Activity    Activity
+
+In LookupActivity, Go to settings and write the query below:
+
+@concat('select
+	s.name SchemaName
+	, t.[name] TableName
+	from sys.tables t
+	join sys.schemas s
+	on s.schema_id = t.schema_id
+	where s.name = ''',pipeline().parameters.schemaName,'''')
+
+In Foreach, settings --> items = @activity('lookupActivity').output.value
+In CopyActivity, SOURCE schemaName = item().SchemaName, 
+		tableName = item().TableName
+
+SINK Path = @concat('sql-adventure-prod/',item().SchemaName,'/',
+item().TableName)
+
+
+************* Copy multiple files in bulk into Azure sql DB **************
+
+GetMetadata --> ForEach ----> Copydata Activity
+Activity	Activity
+
+In GetMetada, select the dataset and Field list = Child items
+
+I think GetMetadata is mostly used for files to know their ChildItems, Exists, ItemName, ItemType, LastModified
+
+In ForEach, settings --> Items = @activity('Get File Metadata').output.childItems
+	Inside ForEach we have CopyActivity,
+		Source -> filename = @item().name
+		sink --> 
+
+To verify, go to AzureSQl --> click queryEditor -->write the select query!
+
+I think childItems can be of fileMetadata, fileMetadataChildItems, fileMetadataExists etc..
+
+
+
+
+**************** Copy multiple tables in bulk into csv's **************** 
+
+To get all the tables available in the schema:
+
+SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'dbo'
+
+Step1:
+
+Create lookup activity which useful to execute the above query to get the list of tables in a json format. These tables would be in a list of array in json file.
+
+SELECT TABLE_SCHEMA, TABLE_NAME FROM information_schema.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'dbo'
+
+Step2:
+
+Lookup Activity ---> ForEachActivity
+(GetListofTables)	(ForEachTable)
+
+In ForEachActivity, 
+go to settings --> click on sequential option, 
+		 Items =@activity('GetListofTables').output.value
+go to Activities --> copyActivity with source and target datasets parameterized
+
+	In copyActivity, source Dataset properties 
+			schema = @item().TABLE_SCHEMA
+			table	= @item().TABLE_NAME
+
+			Sink Dataset properties
+			filename = @concat(item().TABLE_SCHEMA,
+					'_',item().TABLE_NAME,'.csv')
+
+
+************** Copy Incremental csv data from ADLS TO Azure SQL DB *****
+
+Incrementally copy data from csv file into stageTable and then to targetTable
+
+STEP1: 
+
+Create these two tables first becoz we need to load data from files into stage to query freely!! and then to load to 
+
+CREATE TABLE PRODUCTS_stage(
+	OrderDate datetime,
+	ProductKey int,
+	EnglishProductName varchar(200),
+	SalesAmount float
+)
+
+
+CREATE TABLE PRODUCTS (
+	OrderDate datetime,
+	ProductKey int,
+	EnglishProductName varchar(200),
+	SalesAmount float
+)
+
+STEP2:
+
+copydata activity_1 --> copydata activity_2
+LoadToStagingTable	CopyIncrementalData
+
+1.Create copydata activity_1 (LoadToStagingTable)
+2. In copydata activity_1, 
+source tab: We have sales.csv file
+sink tab: Pre-copy script = TRUNCATE TABLE DBO.PRODUCTS_stage
+here we are truncate the stage table before loading into target table because we need to clean it up before loading the data.
+
+1.Create copydata activity_2 (CopyIncrementalData)
+2. In copydata activity_2,
+source tab: Instead table choose QUERY
+SELECT * FROM PRODUCTS_stage where OrderDate>
+(SELECT ISNULL(MAX(OrderDate), '') AS MaxDate FROM PRODUCTS)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

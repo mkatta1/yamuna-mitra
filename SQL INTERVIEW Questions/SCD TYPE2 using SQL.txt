@@ -1,0 +1,336 @@
+$$$$$$$$$$$$$$$$ SCD TYPE 2 $$$$$$$$$$$$$$$$$$$$$$$$
+SCD TYPE2:
+----------
+
+1) https://stackoverflow.com/questions/66739508/sql-query-for-scd-type-2
+
+2) https://ram-teja-y.medium.com/how-to-perform-scd-type2-on-all-columns-using-sql-query-c343b904f795
+
+product_id, category_name, sub_category_name, brand, feature_desc
+1001, apparel, shirt, van heusen, van-m
+1002, apparel, shirt, van heusen, van-l
+1003, apparel, shirt, arrow, arr-xl
+1004, footwear, shoe, nike, nike-8
+1005, footwear, shoe, nike, nik-9
+1006, footwear, shoe, adidas, adidas-10
+1007, footwear, shoe, adidas, adidas-7
+
+query for adding fields required for scd2 implementation:
+alter table schema.dim_product add column current)flag varchar(1);
+alter table schema.dim_product add column end_date date;
+alter table schema.dim_product add column changed_field varchar(100);
+
+after these 3 fields have been added to the able, lets update the defualt values to the fields using below query
+
+update schema.dim_product set
+current_flag = 'Y'
+, end_date='2050-01-01'
+, changed_field = 'NA'
+
+one condition: insert newly entered records
+other condition: update existing records that marked as changed record & insert changed record from the source as such. NEW DATA LOOKS LIKE BELOW:
+
+product_id, category_name, sub_category_name, brand, feature_desc
+1003, footwear, sneakers, nike, nike-8.5
+1005, footwear, sneakers, nike, nike-9
+1008, apparel, shirt, arrow, arr-m
+1009, footwear, shoe, reebok, rbk-8
+
+If you notice, the first two records are changes to existing data and the other two are absolute new entries. We have to handle both these cases in the query we are going to write below. Let us assume we’ve captured new data from source into a table called schema.Stg_Product .
+
+query for inserting new records (1008, 1009 items in our example):
+insert into schema.dim_product
+(
+select b.*, 'y', '2400-01-01',null from schema.dim_product as a 
+right join schema.stg_product b
+on nvl(a.product_id,'-1') = nvl(b.product_id,'-1') and a.current_flag = 'Y'
+where a.product_id is null
+);
+
+- The first case has been handled, let us know handle the other case.
+- create a temporary table which contains only the changed records (1004, 1005 in our example).
+
+create temp table #product_temp
+select a.product_id as product_id_new,
+case when a.category_name <> b.category_name then '-category_name' else ''
+end ||
+case when a.sub_category_name <> b.sub_Category_name then '- sub_category_name' else '' end ||
+case when a.brand <> b.brand then '-brand' else '' end ||
+case when a.feature_desc <> b.feature_desc then '-feature_desc' else '' end end as CHANGED_COLUMN_NEW
+from schema.dim_product a join schema.stg_product b
+on a.product_id = b.product_id and a.current_flag = 'Y'
+where
+a.category_name <> b.category_name or 
+a.sub_category_name <> b.sub_category_name or
+a.brand <> b.brand or
+a.feature_desc <> b.feature_desc;
+
+Update the old records to flag them as non-current, end date and show which field has change.
+
+update schema.dim_product set current_flag = 'N', end_date = current_date,
+changed_column = changed_column_new
+from #product_temp
+where product_id = product_id_new and current_flag = 'Y';
+
+Insert the newly changed records as current ones and drop the temporary table.
+
+insert into schema.dim_product
+(select *, 'Y', '2400-01-01', null from schema.stg_product
+where product_id in (select district product_id_new from #product_temp));
+
+drop table #product_temp;
+
+You can write a similar set of queries for your case and create a simple SQL procedure and add a condition to trigger it once the Staging data gets loaded and your done! Note that creating new columns and default value update is a one time step.
+
+
+
+
+3) https://www.sqlshack.com/implementing-slowly-changing-dimensions-scds-in-data-warehouses/
+
+4) https://blogs.oracle.com/dataintegration/post/type-2-slowly-changing-dimension-scd-implementation-in-oracle-cloud-infrastructure-oci-data-integration
+
+$$$$$$$$$$$$$$$$$$$$$$$$ Incremental Data $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Incremental Data Load approach and implementation strategy:
+----------------------------------------------------------
+
+1) https://medium.com/@nripapathak/incremental-data-load-approach-and-implementation-strategy-dd89bc41629c
+
+Source Table: SalesTransactions
+
+TransactionId, ProductId, customerid, transactiondate, amount
+1,101,201, 2023-08-10 10:00:00, $100
+2,102,202, 2023-08-10 11:30:00, $200
+3,103,203, 2023-08-11 19:15:00, $150
+..,..,..,..
+..,..,..,..
+
+
+Target table:  datawarehouse_sales
+-----------
+
+transactionid, productid, customerid, transactiondate, amount
+1,101,201, 2023-08-10 10:00:00, $100
+2,102,202, 2023-08-10 11:30:00, $200
+
+we want to load only the new sales transacs from the source table into target based on the transaction date. let's assume the last successful load was up to transactionID 2.
+
+STEP 1: identify the timestamp of the last successful data load
+declare @lastloadtimestamp DATETIME
+SET @lastloadtimestamp=(SELECT MAX(TransactionDate) FROM DataWarehouse_sales)
+
+STEP 2: capture new sales transactions since the last load
+INSERT INTO DataWarehouse_sales(transactionid, productid, customerid, transactiondate, amount)
+select st.transactionid, st.productid, st.customerid, st.transactiondate, st.amount
+from salestransactions st
+where st.transactiondate > @lastloadtimestamp
+
+
+STEP 3: update the metadata (timestamp of the latest incremental data load)
+UPDATE metadattable
+SET lastincrementalloadtimestamp = GETDATE() - assuming you have a metadata table to trick load timestamps
+
+STEP 4: optional - data quality checks and optimization
+-(e.g., creating indexes, validating data, handling conflicts)
+
+STEP 5: logging and monitoring (track the load status, errors, etc.)
+
+STEP 6: scheduling this script to run periodically (e.g., daily) to capture new sales transactions.
+'''
+
+This SQL code does the following:
+
+1.identify timestamp of last successful load from datawarehouse_sales table.
+2. captures new sales transactions (based on transactiondate) from the salestransactions table into the datawarehouse_sales table.
+3. updates the metadata table with the timestamp of the latest incremental load.
+4. this code 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+How to do incremental load in SQL server:
+https://stackoverflow.com/questions/42597866/how-to-do-incremental-load-in-sql-server
+
+**Basic Understanding of Full Load And Incremental Load In ETL (PART 2)
+https://blogs.perficient.com/2023/05/15/basic-understanding-of-full-load-and-incremental-load-in-etl-part-2/
+
+incremental using talend:
+------------------------
+https://community.qlik.com/t5/Design-and-Development/How-to-do-incremental-loading-in-talend/td-p/2365045
+
+$$$$$$$$$$$$$$$$$$ Change data capture $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Change Data Capture:
+-------------------
+
+1) HOW TO ENABLE SQL SERVER CHANGE DATA CAPTURE IN 5 STEPS
+https://estuary.dev/enable-sql-server-change-data-capture/
+
+Step 1: Creating A New Database
+-- Create a database
+CREATE DATABASE New_Source_DB
+USE [New_Source_DB];
+GO
+EXEC sp_changedbowner 'admin'
+GO
+Next is the sp_changedbowner command which changes the database owner. As mentioned earlier, you need admin privileges to enable CDC. So, with this command, you get the required access level. 
+
+Step 2: Creating Table
+-- Create a Users table 
+CREATE TABLE Users 
+(    
+   ID int NOT NULL PRIMARY KEY,    
+   FirstName varchar(30),    
+   LastName varchar(30),    
+   Email varchar(50) 
+)
+
+Step 3: Enabling CDC
+
+-- Enable Database for Change data capture  
+USE New_Source_DB  
+GO  
+EXEC sys.sp_cdc_enable_db  
+GO
+That was easy but where exactly did we enable the change data capture? 
+It’s that little thing saying sys.sp_cdc_enable_db. 
+Next, let’s say you want to enable change data capture for a specific table only. Here is how you can do it. 
+
+-- ======================  
+-- Enable a Table for CDC 
+-- ======================  
+USE New_Source_DB  
+GO  
+  
+EXEC sys.sp_cdc_enable_table  
+@source_schema = N'dbo',  
+@source_name   = N'Users',  
+@role_name     = N'admin',  
+@filegroup_name = N'MyDB_CT',  
+@supports_net_changes = 1  
+GO
+
+You’ll also need to double-check things to ensure everything is in place. Use the following snippet to verify the enabled CDC.
+-- Check that CDC is enabled on the database
+SELECT name, is_cdc_enabled
+FROM sys.databases WHERE database_id = DB_ID();
+
+Step 4: Insert values Within The Table(s) 
+We’ll update some values in the table and see if the CDC reflects them.
+
+INSERT INTO Users Values (1, 'Jorge', 'Ramos', 'ramos@yahoo.com')
+INSERT INTO Users Values (2, 'Andrew', 'Strudwick', 'andrew@yahoo.com')
+INSERT INTO USERS Values (3, 'Thomas', 'Tuchel', 'tuchel@gmail.com')
+
+After inserting the values, run the following command to see the changes in CDC.
+-- Query the results of the changes captured
+SELECT * FROM [cdc].[dbo_Users_CT]
+GO
+
+Step 5: Verify Whether The CDC Is Functioning Correctly Or Not
+Now, we’ll upscale our testing to ensure that our CDC tracks real-time changes.
+
+DELETE FROM Users WHERE ID = 1
+UPDATE Users SET LastName = 'Snow' WHERE ID = 2
+DELETE FROM Users WHERE ID = 3
+View the CDC table by running the following query:
+
+SELECT * FROM [cdc].[dbo_Users_CT] 
+GO
+
+Now that was all about running the SQL server CDC on a newly created database. But how would you make a CDC table for an existing database? We’ll cover that next.
+
+$$$$$$$$$$$$$$ Enabling CDC For Existing Database $$$$$$$$$$$$$$$$$$$$
+
+Use Adventureworks2019;
+EXEC sys.sp_cdc_enable_db;
+
+USE Adventureworks2019
+GO
+EXEC sys.sp_cdc_enable_table
+@source_schema = 'dbo',
+@source_name = 'DimCustomer',
+@role_name = null,
+@supports_net_changes = 0;
+
+This code enables CDC for the ‘DimCustomer’ table. 
+Now you can verify if the CDC is working (i.e. it’s enabled). Here is how you do it.
+USE Adventureworks2019
+GO
+
+select name, is_cdc_enabled
+from sys.databases where name = 'Adventureworks2019'
+GO
+
+If you enabled CDC for a table, use the following snippet to verify CDC. Here, remember that here the SQL server database title is ‘Adventureworks2019’ and the table name is ‘DimCustomer’, so the code looks something like this:
+
+USE Adventureworks2019
+GO
+select name,type,type_desc,is_tracked_by_cdc
+from sys.tables
+where name = 'DimCustomer'
+GO
+
+Enabling SQL Server Agent:
+=========================
+
+If you’re self-hosting SQL Server, For the CDC to work correctly, the SQL Server Agent service must be set up to start and run automatically. (If you use a cloud hosting provider like Azure SQL Database, this is automatically taken care of and you can skip this step).
+
+Here are the steps to do it. 
+
+1.Start the MS SQL server and run the SQL Server Configuration Manager from the left pane.
+2.Image Source: https://www.sqlshack.com/how-to-use-sql-server-configuration-manager/
+Open the Properties of SQL Server agent service. In the properties, windows populate the necessary details of the desired account.
+Image Source
+3.In the Log On tab, enter the account details.
+Image Source
+4.Move to the Service tab and click Start Mode. From the drop-down menu, select Automatic. Click Apply and then the OK button to save the changes.
+Image Source
+5.Finally, start the SQL Server agent service.
+
+Pros Of SQL Server CDC:
+----------------------
+CDC has a minimal overhead on the system which means it does not impact the performance of the database.
+The significant advantage of Microsoft SQL server CDC is that the tables replicated to the target instance don’t require a primary key. 
+SQL Server CDC is a good option for Always On Availability Groups as the changes captured in CDC transfer to all replicas in real time.
+It allows granular control over the data that is captured which means you can choose to capture only the data that is relevant to your application.
+CDC can be integrated with other SQL Server tools such as data replication and data warehouses, making it a valuable tool for data analysis and reporting.
+Cons Of SQL Server CDC:
+----------------------
+You must take effective maintenance measures over time to ensure database integrity.
+Although MS SQL Server offers native integration for CDC, there is a significant amount of coding needed to complete the data pipeline. 
+For on-prem databases, the entire CDC process depends on the SQL Server Agent service running. If it stops, the process fails.
+
+Before we conclude, let's introduce an exciting integration: Cloud SQL to BigQuery. This integration allows you to seamlessly transfer and analyze your data between Google Cloud SQL and BigQuery. Now, let's explore how you can use Estuary Flow for change data capture from SQL Server.Now that we know how to enable Change Data Capture in the SQL server, let’s explore how you use Estuary Flow for this purpose.
+
+
+
+
+
+
+
+
+
+
+
+2) SQL Server Change Data Capture (CDC) for real-time SQL Server Replication
+https://bryteflow.com/sql-server-change-data-capture-cdc-for-real-time-sql-server-replication/
+
+3) How to Implement Change Data Capture in SQL Server
+https://www.integrate.io/blog/how-to-implement-change-data-capture-in-sql-server/
+
+**4) Change Data Capture in Microsoft SQL
+https://airbyte.com/data-engineering-resources/change-data-capture-in-microsoft-sql
+
+**5) CDC using Talend
+https://help.talend.com/en-US/components/7.3/change-data-capture/toraclecdc-tlogrow-tmap-toracleoutput-step-1-configuring-cdc-standard-component-enterprise-before
+

@@ -1,0 +1,15 @@
+USE DATABASE DEMO_DB;
+
+CREATE STORAGE INTEGRATION azure_integration
+	TYPE = EXTERNAL_STAGE
+	STORAGE_PROVIDER = AZURE
+	ENABLED = TRUE
+	AZURE_TENANT_ID = Get it from AzureActiveDirectory Tenant info, tenant id
+	STORAGE_ALLOWED_LOCATIONS = ('azure://your-account.blob.core.windows.net/your-container/path/data','');
+
+DESC STORAGE integration azure_integration;
+
+Note: from the desc description you will get Azure consent url where you need to give permissions to accept it.
+
+Storage integration object will have have access to containers by doing the following:
+add role assignment-> storage blob data contributor -> select snowflake ->save

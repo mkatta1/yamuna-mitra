@@ -1,0 +1,198 @@
+*********************************************************** What is Dynamic SQL ***********************************************************
+In this video we will discuss
+1. What is Dynamic SQL
+2. Simple example of using Dynamic SQL
+
+What is Dynamic SQL
+Dynamic SQL is a SQL built from strings at runtime.
+
+Simple example of using Dynamic SQL
+
+Here is the SQL Script to create Employees table and populate it with data
+
+Create table Employees
+(
+     ID int primary key identity,
+     FirstName nvarchar(50),
+     LastName nvarchar(50),
+     Gender nvarchar(50),
+     Salary int
+)
+Go
+
+Insert into Employees values ('Mark', 'Hastings', 'Male', 60000)
+Insert into Employees values ('Steve', 'Pound', 'Male', 45000)
+Insert into Employees values ('Ben', 'Hoskins', 'Male', 70000)
+Insert into Employees values ('Philip', 'Hastings', 'Male', 45000)
+Insert into Employees values ('Mary', 'Lambeth', 'Female', 30000)
+Insert into Employees values ('Valarie', 'Vikings', 'Female', 35000)
+Insert into Employees values ('John', 'Stanmore', 'Male', 80000)
+Go
+
+One way to achieve this is by implementing a stored procedure as shown below that this page would call.
+
+Create Procedure spSearchEmployees
+@FirstName nvarchar(100),
+@LastName nvarchar(100),
+@Gender nvarchar(50),
+@Salary int
+As
+Begin
+
+     Select * from Employees where
+     (FirstName = @FirstName OR @FirstName IS NULL) AND
+     (LastName  = @LastName  OR @LastName  IS NULL) AND
+     (Gender      = @Gender    OR @Gender    IS NULL) AND
+     (Salary      = @Salary    OR @Salary    IS NULL)
+End
+Go
+
+The stored procedure in this case is not very complicated as we have only 4 search filters. What if there are 20 or more such filters. This stored procedure can get complex. To make things worse what if we want to specify conditions like AND, OR etc between these search filters. The stored procedure can get extremely large, complicated and difficult to maintain. One way to reduce the complexity is by using dynamic SQL as show below. Depending on for which search filters the user has provided the values on the "Search Page", we build the WHERE clause dynamically at runtime, which can reduce complexity.
+
+However, you might hear arguments that dynamic sql is bad both in-terms of security and performance. This is true if the dynamic sql is not properly implemented. From a security standpoint, it may open doors for SQL injection attack and from a performance standpoint, the cached query plans may not be reused. If properly implemented, we will not have these problems with dynamic sql. In our upcoming videos, we will discuss good and bad dynamic sql implementations.
+
+For now let's implement a simple example that makes use of dynamic sql. In the example below we are assuming the user has supplied values only for FirstName and LastName search fields. To execute the dynamicl sql we are using system stored procedure sp_executesql. 
+
+sp_executesql takes two pre-defined parameters and any number of user-defined parameters.
+
+@statement - The is the first parameter which is mandatory, and contains the SQL statements to execute
+
+@params - This is the second parameter and is optional. This is used to declare parameters specified in @statement
+
+The rest of the parameters are the parameters that you declared in @params, and you pass them as you pass parameters to a stored procedure
+
+Declare @sql nvarchar(1000)
+Declare @params nvarchar(1000)
+
+Set @sql = 'Select * from Employees where FirstName=@FirstName and LastName=@LastName'
+Set @params = '@FirstName nvarchar(100), @LastName nvarchar(100)'
+
+Execute sp_executesql @sql, @params, @FirstName='Ben',@LastName='Hoskins'
+
+This is just the introduction to dynamic SQL. If a few things are unclear at the moment, don't worry. In our upcoming videos we will discuss the following
+1. Implementing a real world "Search Web Page" with and without dynamic SQL
+2. Performance and Security implications of dynamic sql. Along the way we will also discuss good and bad dynamic sql implementations.
+3. Different options available for executing dynamic sql and their implications
+4. Using dynamic sql in stored procedures and it's implications
+
+
+
+*********************************************************** Prevent SQL injection using dynamic sql **********************************************************
+I have seen lot of software developers, not just the beginners but even experienced developers, buidling their dynamic sql queries by concatenating strings instead of using parameters without realizing that they are opening the doors for SQL Injection.
+
+Please check my blog at the following link for code used in the demo.
+http://csharp-video-tutorials.blogspo...
+
+Since we are  concatenating the user input values to build the dynamic sql statement, the end user can very easily inject sql. Imagine, what happens for example, if the user enters the following in the "Firstname" textbox.
+
+' Drop database SalesDB --
+
+With the above SQL injected into the "Firstname" textbox, if you click the "Search" button, the following is the query which is sent to SQL server. This will drop the SalesDB.
+
+Select * from Employees where 1 = 1 AND FirstName = '' Drop database SalesDB --'
+
+On the other hand, if you use parameters to build your dynamic SQL statements, SQL Injection is not an issue. The following input in the "Firstname" textbox, would not drop the SalesDB database.
+
+' Drop database SalesDB --
+
+The text the user has provided in the "Firstname" textbox is treated as the value for @Firstname parameter. The following is the query that is generated and executed.
+
+exec sp_executesql N'Select * from Employees where 1 = 1 AND FirstName=@FirstName',N'@FirstName nvarchar(26)',@FirstName=N''' Drop database SalesDB --'
+
+We don't have this problem of sql injection if we are using stored procedures. "SearchPageWithoutDynamicSQL.aspx" is using the stored procedure "spSearchEmployees" instead of dynamic SQL. The same input in the "Firstname" texbox on this page, would generate the following. Notice, whatever text we typed in the "Firstname" textbox is treated as the value for @FirstName parameter.
+
+exec spSearchEmployees @FirstName=N''' Drop database SalesDB --'
+
+An important point to keep in mind here is that if you have dynamic SQL in your stored procedure, and you are concatenating strings in that stored procedure to build your dynamic sql statements instead of using parameters, it is still prone to SQL injection. If this is not clear at the moment don't worry, we will discuss an example of this in out next video.
+
+So in summary, while dynamic sql provides great flexibility when implementing complicated logic with lot of permutations and combinations, if not properly implemented it may open doors for sql injection. Always use parameters to build dynamic sql statements, instead of concatenating user input values.
+
+Another benefit of using parameters to build dynamic sql statements is that it allows cached query plans to be reused, which greatly increases the performance. We will discuss an example of this in our upcoming videos.
+
+*********************************************************************       *********************************************************************
+
+
+Consider the following stored procedure "spSearchEmployees". We implemented this procedure in Part 139 of SQL Server tutorial. This stored procedure does not have any dynamic sql in it. It is all static sql and is immune to sql injection.
+
+Create Procedure spSearchEmployees
+@FirstName nvarchar(100) = NULL,
+@LastName nvarchar(100) = NULL,
+@Gender nvarchar(50) = NULL,
+@Salary int = NULL
+As
+Begin
+
+ Select * from Employees where
+ (FirstName = @FirstName OR @FirstName IS NULL) AND
+ (LastName  = @LastName  OR @LastName  IS NULL) AND
+ (Gender    = @Gender    OR @Gender    IS NULL) AND
+ (Salary    = @Salary    OR @Salary    IS NULL)
+End
+Go
+
+Whether you are creating your dynamic sql queries in a client application like ASP.NET web application or in a stored procedure, you should never ever concatenate user input values. Instead you should be using parameters.
+
+Notice in the following example, we are creating dynamic sql queries by concatenating parameter values, instead of using parameterized queries. This stored procedure is prone to SQL injection. Let's prove this by creating a "Search Page" that calls this procedure.
+
+Create Procedure spSearchEmployeesBadDynamicSQL
+@FirstName nvarchar(100) = NULL,
+@LastName nvarchar(100) = NULL,
+@Gender nvarchar(50) = NULL,
+@Salary int = NULL
+As
+Begin
+
+ Declare @sql nvarchar(max)
+
+ Set @sql = 'Select * from Employees where 1 = 1'
+  
+ if(@FirstName is not null)
+  Set @sql = @sql + ' and FirstName=''' + @FirstName + ''''
+ if(@LastName is not null)
+  Set @sql = @sql + ' and LastName=''' + @LastName + ''''
+ if(@Gender is not null)
+  Set @sql = @sql + ' and Gender=''' + @Gender + ''''
+ if(@Salary is not null)
+  Set @sql = @sql + ' and Salary=''' + @Salary + ''''
+
+ Execute sp_executesql @sql
+End
+Go
+
+Add a Web Page to the project that we have been working with in our previous video. Name it "DynamicSQLInStoredProcedure.aspx". Copy and paste the HTML and code available on my blog at the following link
+http://csharp-video-tutorials.blogspo...
+
+At this point, run the application and type the following text in the "Firsname" text and click "Search" button. Notice "SalesDB" database is dropped. Our application is prone to SQL injection as we have implemented dynamic sql in our stored procedure by concatenating strings instead of using parameters.
+' Drop database SalesDB --
+
+In the following stored procedure we have implemented dynamic sql by using parameters, so this is not prone to sql injecttion. This is an example for good dynamic sql implementation.
+
+Create Procedure spSearchEmployeesGoodDynamicSQL 
+@FirstName nvarchar(100) = NULL,
+@LastName nvarchar(100) = NULL,
+@Gender nvarchar(50) = NULL,
+@Salary int = NULL
+As
+Begin
+
+ Declare @sql nvarchar(max)
+ Declare @sqlParams nvarchar(max)
+
+ Set @sql = 'Select * from Employees where 1 = 1'
+  
+ if(@FirstName is not null)
+  Set @sql = @sql + ' and FirstName=@FN'
+ if(@LastName is not null)
+  Set @sql = @sql + ' and LastName=@LN'
+ if(@Gender is not null)
+  Set @sql = @sql + ' and Gender=@Gen'
+ if(@Salary is not null)
+  Set @sql = @sql + ' and Salary=@Sal'
+
+ Execute sp_executesql @sql, 
+ N'@FN nvarchar(50), @LN nvarchar(50), @Gen nvarchar(50), @sal int', 
+ @FN=@FirstName, @LN=@LastName, @Gen=@Gender, @Sal=@Salary
+End
+Go
+
+Summary : Whether you are creating dynamic sql in a client application (like a web application) or in a stored procedure always use parameters instead of concatnating strings. Using parameters to create dynamic sql statements prevents sql injection.

@@ -1,0 +1,1313 @@
+1
+1
+
+00:00:00,260  -->  00:00:02,730
+<v Instructor>Hello and welcome to this Python tutorial.</v>
+2
+
+2
+
+00:00:02,730  -->  00:00:04,740
+Now we're going to import the libraries
+3
+
+3
+
+00:00:04,740  -->  00:00:06,420
+we will be using to implement
+4
+
+4
+
+00:00:06,420  -->  00:00:08,130
+our restricted Boltzmann machines,
+5
+
+5
+
+00:00:08,130  -->  00:00:11,130
+and actually, I have listed all of these libraries here,
+6
+
+6
+
+00:00:11,130  -->  00:00:13,800
+so that all the required imports are done,
+7
+
+7
+
+00:00:13,800  -->  00:00:15,810
+and so that we don't have to worry about this.
+8
+
+8
+
+00:00:15,810  -->  00:00:18,030
+So, there is NumPy, because of course
+9
+
+9
+
+00:00:18,030  -->  00:00:19,700
+we will be working with arrays,
+10
+
+10
+
+00:00:19,700  -->  00:00:22,010
+There is Pandas to import the dataset
+11
+
+11
+
+00:00:22,010  -->  00:00:24,560
+and create the training set and the test set,
+12
+
+12
+
+00:00:24,560  -->  00:00:26,970
+and then we have old Torch libraries,
+13
+
+13
+
+00:00:26,970  -->  00:00:28,220
+so, for example this.
+14
+
+14
+
+00:00:28,220  -->  00:00:30,740
+And then, is the module of Torch
+15
+
+15
+
+00:00:30,740  -->  00:00:32,870
+to implement neural networks,
+16
+
+16
+
+00:00:32,870  -->  00:00:34,800
+this is for the parallel computations,
+17
+
+17
+
+00:00:34,800  -->  00:00:38,150
+this for the optimizer, these are the tools that we will use
+18
+
+18
+
+00:00:38,150  -->  00:00:40,920
+and this is for stochastic range and descent.
+19
+
+19
+
+00:00:40,920  -->  00:00:42,180
+So let's import them all,
+20
+
+20
+
+00:00:42,180  -->  00:00:44,450
+so I am going to select all of them,
+21
+
+21
+
+00:00:44,450  -->  00:00:47,520
+and then let's press Cmnd or Cntrl + Enter to execute.
+22
+
+22
+
+00:00:47,520  -->  00:00:49,990
+Here we go, now all the libraries, classes
+23
+
+23
+
+00:00:49,990  -->  00:00:51,870
+and functions are well imported.
+24
+
+24
+
+00:00:51,870  -->  00:00:54,060
+And so, we are ready to start.
+25
+
+25
+
+00:00:54,060  -->  00:00:57,040
+So now what we're going to do is to import the dataset,
+26
+
+26
+
+00:00:57,040  -->  00:01:00,780
+the first dataset we're going to import is all our movies.
+27
+
+27
+
+00:01:00,780  -->  00:01:05,220
+So let's do it, all our movies are in this file movies.dat.
+28
+
+28
+
+00:01:05,220  -->  00:01:07,410
+And so, let's create a new variable
+29
+
+29
+
+00:01:07,410  -->  00:01:09,520
+that will contain all our movies,
+30
+
+30
+
+00:01:09,520  -->  00:01:12,110
+so I'm calling it movies, then =,
+31
+
+31
+
+00:01:12,110  -->  00:01:14,216
+and then we're gonna Pandas of course,
+32
+
+32
+
+00:01:14,216  -->  00:01:16,560
+which has the shortcut pd.
+33
+
+33
+
+00:01:16,560  -->  00:01:19,770
+Then, the read_csv function,
+34
+
+34
+
+00:01:19,770  -->  00:01:20,970
+here we go,
+35
+
+35
+
+00:01:20,970  -->  00:01:23,080
+and now there is gonna be quite some adventure
+36
+
+36
+
+00:01:23,080  -->  00:01:25,650
+because the dataset is not that simple,
+37
+
+37
+
+00:01:25,650  -->  00:01:27,600
+and we'll need to use some of the arguments here
+38
+
+38
+
+00:01:27,600  -->  00:01:29,440
+to import it well.
+39
+
+39
+
+00:01:29,440  -->  00:01:31,560
+So first what we need to do, is to
+40
+
+40
+
+00:01:31,560  -->  00:01:34,620
+find the path that contains the dataset,
+41
+
+41
+
+00:01:34,620  -->  00:01:38,720
+and so, this whole folder here is the working directory,
+42
+
+42
+
+00:01:38,720  -->  00:01:41,430
+but then we need to access this folder,
+43
+
+43
+
+00:01:41,430  -->  00:01:44,840
+because this is the folder that contains this movies.file,
+44
+
+44
+
+00:01:44,840  -->  00:01:49,440
+and so the first element of the path is ml-1n.
+45
+
+45
+
+00:01:49,440  -->  00:01:51,440
+So that's what we need to specify first,
+46
+
+46
+
+00:01:51,440  -->  00:01:56,440
+so, ml-1n, and then, /,
+47
+
+47
+
+00:01:56,480  -->  00:01:59,680
+and then we just need to type the name of the file,
+48
+
+48
+
+00:01:59,680  -->  00:02:02,393
+which is movies.dat.
+49
+
+49
+
+00:02:03,480  -->  00:02:05,590
+Okay, perfect, that's the first argument.
+50
+
+50
+
+00:02:05,590  -->  00:02:07,210
+Now, second one.
+51
+
+51
+
+00:02:07,210  -->  00:02:09,110
+So the second one is the separator.
+52
+
+52
+
+00:02:09,110  -->  00:02:11,010
+The default separator is a comma,
+53
+
+53
+
+00:02:11,010  -->  00:02:14,450
+and that works for csv file, you know, simple csv files.
+54
+
+54
+
+00:02:14,450  -->  00:02:17,400
+Where the features are separated by commas.
+55
+
+55
+
+00:02:17,400  -->  00:02:19,320
+But here that's not the case because
+56
+
+56
+
+00:02:19,320  -->  00:02:20,860
+we have the titles of the movies,
+57
+
+57
+
+00:02:20,860  -->  00:02:24,230
+and some of them contain commas inside the title.
+58
+
+58
+
+00:02:24,230  -->  00:02:27,180
+So we cannot use commas to separate the movies
+59
+
+59
+
+00:02:27,180  -->  00:02:29,260
+because then we could have the same movie
+60
+
+60
+
+00:02:29,260  -->  00:02:30,760
+in two different columns.
+61
+
+61
+
+00:02:30,760  -->  00:02:33,270
+And therefore the separator is not a comma
+62
+
+62
+
+00:02:33,270  -->  00:02:36,120
+but a double colon, like this.
+63
+
+63
+
+00:02:36,120  -->  00:02:38,110
+If you open the movies.dat file,
+64
+
+64
+
+00:02:38,110  -->  00:02:40,060
+you will see that the movies are separated
+65
+
+65
+
+00:02:40,060  -->  00:02:42,780
+by their ratings and their other features,
+66
+
+66
+
+00:02:42,780  -->  00:02:44,620
+by a double colon like this.
+67
+
+67
+
+00:02:44,620  -->  00:02:46,100
+So that's the separator and therefore
+68
+
+68
+
+00:02:46,100  -->  00:02:49,690
+we need to add sep=, and we have to
+69
+
+69
+
+00:02:49,690  -->  00:02:53,340
+input this double colon in quotes, like this.
+70
+
+70
+
+00:02:53,340  -->  00:02:55,100
+Then comma, and third parameter.
+71
+
+71
+
+00:02:55,100  -->  00:02:57,100
+The third parameter is the header.
+72
+
+72
+
+00:02:57,100  -->  00:02:59,270
+Because actually the file movies.dat,
+73
+
+73
+
+00:02:59,270  -->  00:03:03,530
+doesn't contain headers, that is, names of columns.
+74
+
+74
+
+00:03:03,530  -->  00:03:05,770
+And therefore we need to specify this because,
+75
+
+75
+
+00:03:05,770  -->  00:03:08,280
+the default value of header is not none,
+76
+
+76
+
+00:03:08,280  -->  00:03:10,400
+that is the case when there are no column names,
+77
+
+77
+
+00:03:10,400  -->  00:03:13,080
+but infer, and therefore we need to specify
+78
+
+78
+
+00:03:13,080  -->  00:03:15,440
+that there is no column names,
+79
+
+79
+
+00:03:15,440  -->  00:03:20,440
+and to do this we put header=None, alright.
+80
+
+80
+
+00:03:21,070  -->  00:03:23,520
+Then the next parameter is going to be engine,
+81
+
+81
+
+00:03:23,520  -->  00:03:24,590
+and this is to make sure that
+82
+
+82
+
+00:03:24,590  -->  00:03:26,870
+the dataset gets imported correctly.
+83
+
+83
+
+00:03:26,870  -->  00:03:29,240
+And we will use the Python engine,
+84
+
+84
+
+00:03:29,240  -->  00:03:33,490
+Python here, in quotes, to make it efficient.
+85
+
+85
+
+00:03:33,490  -->  00:03:36,340
+And finally, we need to input a last argument,
+86
+
+86
+
+00:03:36,340  -->  00:03:37,750
+which is the encoding.
+87
+
+87
+
+00:03:37,750  -->  00:03:39,900
+And we need to input a different encoding than usual
+88
+
+88
+
+00:03:39,900  -->  00:03:43,540
+because some of the movie titles contain special characters
+89
+
+89
+
+00:03:43,540  -->  00:03:44,950
+that cannot be treated properly
+90
+
+90
+
+00:03:44,950  -->  00:03:47,080
+with the classic encoding, UTF-8.
+91
+
+91
+
+00:03:47,080  -->  00:03:50,780
+So, we're just adding this encoding argument
+92
+
+92
+
+00:03:50,780  -->  00:03:52,610
+because of some of the special characters
+93
+
+93
+
+00:03:52,610  -->  00:03:53,960
+in the movie titles.
+94
+
+94
+
+00:03:53,960  -->  00:03:57,510
+So, in quotes we input Latin-1.
+95
+
+95
+
+00:04:00,100  -->  00:04:03,770
+And quote, again, and that's the end of the parenthesis,
+96
+
+96
+
+00:04:03,770  -->  00:04:06,310
+perfect, I think now we have everything,
+97
+
+97
+
+00:04:06,310  -->  00:04:08,570
+let's make sure it's the case.
+98
+
+98
+
+00:04:08,570  -->  00:04:10,490
+So I'm going to select this line,
+99
+
+99
+
+00:04:10,490  -->  00:04:12,350
+and, execute.
+100
+
+100
+
+00:04:12,350  -->  00:04:14,210
+Perfect, that works.
+101
+
+101
+
+00:04:14,210  -->  00:04:17,060
+So, let's check it out in Variable Explorer,
+102
+
+102
+
+00:04:17,060  -->  00:04:20,700
+and here are all our movies, here we go.
+103
+
+103
+
+00:04:20,700  -->  00:04:22,950
+So that's the list of all the movies
+104
+
+104
+
+00:04:22,950  -->  00:04:25,140
+in this Movieland database,
+105
+
+105
+
+00:04:25,140  -->  00:04:26,600
+so feel free to have a look at this,
+106
+
+106
+
+00:04:26,600  -->  00:04:28,297
+we have thousands of movies,
+107
+
+107
+
+00:04:28,297  -->  00:04:31,270
+and for each of these movies you have this first column
+108
+
+108
+
+00:04:31,270  -->  00:04:32,760
+which is the movie ID,
+109
+
+109
+
+00:04:32,760  -->  00:04:34,470
+and that's the most important information
+110
+
+110
+
+00:04:34,470  -->  00:04:36,380
+because this is the information we will use
+111
+
+111
+
+00:04:36,380  -->  00:04:39,010
+to make a recommender system, you know,
+112
+
+112
+
+00:04:39,010  -->  00:04:40,710
+we will not be using the titles,
+113
+
+113
+
+00:04:40,710  -->  00:04:44,210
+it will be much more simple with the movies' IDs.
+114
+
+114
+
+00:04:44,210  -->  00:04:46,140
+Okay, so this is the first dataset
+115
+
+115
+
+00:04:46,140  -->  00:04:48,600
+and in fact, this is just to show you the movies.
+116
+
+116
+
+00:04:48,600  -->  00:04:50,470
+We will not be using this dataset
+117
+
+117
+
+00:04:50,470  -->  00:04:52,410
+to make the training set or the test set.
+118
+
+118
+
+00:04:52,410  -->  00:04:55,460
+It is just to show you what's going on with all the movies.
+119
+
+119
+
+00:04:55,460  -->  00:05:00,200
+So, okay, and now we're gonna do the same for our users.
+120
+
+120
+
+00:05:00,200  -->  00:05:02,130
+Same, that's just for you to see where they are.
+121
+
+121
+
+00:05:02,130  -->  00:05:03,700
+And so we're gonna create a new variable
+122
+
+122
+
+00:05:03,700  -->  00:05:07,080
+that we're gonna call users, and =,
+123
+
+123
+
+00:05:07,080  -->  00:05:09,720
+and now, good news, we're going to copy this line
+124
+
+124
+
+00:05:09,720  -->  00:05:12,030
+because it's going to be almost the same,
+125
+
+125
+
+00:05:12,030  -->  00:05:14,470
+so, copy, paste that here,
+126
+
+126
+
+00:05:14,470  -->  00:05:17,500
+and actually we need to use the exact same arguments here
+127
+
+127
+
+00:05:17,500  -->  00:05:20,920
+for the header, the engine and the encoding.
+128
+
+128
+
+00:05:20,920  -->  00:05:23,030
+But then of course we need to change the path
+129
+
+129
+
+00:05:23,030  -->  00:05:26,410
+because we're now importing our users.
+130
+
+130
+
+00:05:26,410  -->  00:05:28,630
+That are contained in users.dat.
+131
+
+131
+
+00:05:28,630  -->  00:05:32,590
+And therefore I'm replacing movies here by users.
+132
+
+132
+
+00:05:32,590  -->  00:05:34,300
+And that should be all.
+133
+
+133
+
+00:05:34,300  -->  00:05:36,480
+They use the same separator, the double colon
+134
+
+134
+
+00:05:36,480  -->  00:05:39,050
+to separate the features, and therefore that's done.
+135
+
+135
+
+00:05:39,050  -->  00:05:42,130
+We can select this line, and, execute.
+136
+
+136
+
+00:05:42,130  -->  00:05:45,410
+Here we go, perfect, our users are well imported.
+137
+
+137
+
+00:05:45,410  -->  00:05:49,040
+Here they are, users, and that all the information
+138
+
+138
+
+00:05:49,040  -->  00:05:51,080
+is about the different users.
+139
+
+139
+
+00:05:51,080  -->  00:05:52,840
+So the first column is the user ID,
+140
+
+140
+
+00:05:52,840  -->  00:05:54,700
+the second column is the gender,
+141
+
+141
+
+00:05:54,700  -->  00:05:56,880
+the third column is the age,
+142
+
+142
+
+00:05:56,880  -->  00:05:59,130
+the fourth column is some codes
+143
+
+143
+
+00:05:59,130  -->  00:06:01,100
+that correspond to the user's job,
+144
+
+144
+
+00:06:01,100  -->  00:06:04,520
+and the last column is the zip code.
+145
+
+145
+
+00:06:04,520  -->  00:06:07,580
+Okay, and now, let's import our ratings,
+146
+
+146
+
+00:06:07,580  -->  00:06:08,840
+so there are 1 million ratings,
+147
+
+147
+
+00:06:08,840  -->  00:06:11,440
+and, in fact, this is going to be exactly the same,
+148
+
+148
+
+00:06:11,440  -->  00:06:12,910
+we're gonna create a new variable
+149
+
+149
+
+00:06:12,910  -->  00:06:14,900
+that we're gonna call ratings,
+150
+
+150
+
+00:06:14,900  -->  00:06:17,428
+and here we just paste the same line,
+151
+
+151
+
+00:06:17,428  -->  00:06:20,130
+and that's the same, we're gonna use the same separator,
+152
+
+152
+
+00:06:20,130  -->  00:06:23,260
+the same header, the same engine, the same encoding,
+153
+
+153
+
+00:06:23,260  -->  00:06:26,500
+and therefore we only need to replace movies
+154
+
+154
+
+00:06:26,500  -->  00:06:29,900
+by the name of the file that contains all the ratings
+155
+
+155
+
+00:06:29,900  -->  00:06:31,770
+this is ratings.dat.
+156
+
+156
+
+00:06:31,770  -->  00:06:35,040
+So here I'm just replacing movies by ratings.
+157
+
+157
+
+00:06:35,040  -->  00:06:40,040
+Alright, and now let's select this line, and, execute.
+158
+
+158
+
+00:06:40,070  -->  00:06:41,690
+Here we go it's taking a little time
+159
+
+159
+
+00:06:41,690  -->  00:06:44,130
+because there is 1 million ratings,
+160
+
+160
+
+00:06:44,130  -->  00:06:46,330
+and if you go to Variable Explorer,
+161
+
+161
+
+00:06:46,330  -->  00:06:48,330
+this is our ratings.
+162
+
+162
+
+00:06:48,330  -->  00:06:52,250
+So here that's really important to understand the structure,
+163
+
+163
+
+00:06:52,250  -->  00:06:54,210
+because we are getting closer
+164
+
+164
+
+00:06:54,210  -->  00:06:56,420
+to the training set and the test set we'll make,
+165
+
+165
+
+00:06:56,420  -->  00:06:58,760
+to train our autoencoders.
+166
+
+166
+
+00:06:58,760  -->  00:07:02,430
+So, the first column corresponds to the users.
+167
+
+167
+
+00:07:02,430  -->  00:07:04,100
+So this one here that we see,
+168
+
+168
+
+00:07:04,100  -->  00:07:07,400
+corresponds to the first user of the database.
+169
+
+169
+
+00:07:07,400  -->  00:07:10,470
+So all these ones here correspond to the same user.
+170
+
+170
+
+00:07:10,470  -->  00:07:13,440
+Then the second column corresponds to the movies.
+171
+
+171
+
+00:07:13,440  -->  00:07:17,440
+And the numbers that we see here are the movies' IDs.
+172
+
+172
+
+00:07:17,440  -->  00:07:19,460
+So this corresponds to a first movie,
+173
+
+173
+
+00:07:19,460  -->  00:07:21,450
+this corresponds to a second movie,
+174
+
+174
+
+00:07:21,450  -->  00:07:23,310
+a third movie, a fourth movie,
+175
+
+175
+
+00:07:23,310  -->  00:07:25,690
+well, these are the movies' IDs,
+176
+
+176
+
+00:07:25,690  -->  00:07:30,120
+that are contained in this movies DataFrame,
+177
+
+177
+
+00:07:30,120  -->  00:07:32,090
+and so that's why we imported this DataFrame,
+178
+
+178
+
+00:07:32,090  -->  00:07:33,310
+it's for you to see
+179
+
+179
+
+00:07:33,310  -->  00:07:36,280
+which movie IDs corresponds to which movie,
+180
+
+180
+
+00:07:36,280  -->  00:07:37,920
+just if you want to play or test
+181
+
+181
+
+00:07:37,920  -->  00:07:39,810
+the recommender system in the end.
+182
+
+182
+
+00:07:39,810  -->  00:07:41,150
+Let's open that again,
+183
+
+183
+
+00:07:41,150  -->  00:07:42,510
+okay so that's the second column
+184
+
+184
+
+00:07:42,510  -->  00:07:44,000
+corresponding to the movies,
+185
+
+185
+
+00:07:44,000  -->  00:07:46,430
+and then, the third column corresponds,
+186
+
+186
+
+00:07:46,430  -->  00:07:48,420
+of course, to the ratings.
+187
+
+187
+
+00:07:48,420  -->  00:07:50,590
+So the ratings go from one to five,
+188
+
+188
+
+00:07:50,590  -->  00:07:52,730
+one means that the user didn't like the movie,
+189
+
+189
+
+00:07:52,730  -->  00:07:55,935
+and five means that user absolutely loved the movie.
+190
+
+190
+
+00:07:55,935  -->  00:07:58,020
+So let's give two examples,
+191
+
+191
+
+00:07:58,020  -->  00:08:01,770
+this second line here of index two, means that,
+192
+
+192
+
+00:08:01,770  -->  00:08:03,240
+the user number one,
+193
+
+193
+
+00:08:03,240  -->  00:08:06,780
+rated the movie number 914,
+194
+
+194
+
+00:08:06,780  -->  00:08:08,850
+and gave it three stars.
+195
+
+195
+
+00:08:08,850  -->  00:08:11,203
+And then, let's give another example,
+196
+
+196
+
+00:08:12,190  -->  00:08:13,800
+if I'm scrolling down,
+197
+
+197
+
+00:08:13,800  -->  00:08:15,320
+well, for example,
+198
+
+198
+
+00:08:15,320  -->  00:08:19,110
+let's take this observation, 1589.
+199
+
+199
+
+00:08:19,110  -->  00:08:22,240
+Well this corresponds to the user number 15,
+200
+
+200
+
+00:08:22,240  -->  00:08:26,500
+that rated the movie number 357,
+201
+
+201
+
+00:08:26,500  -->  00:08:28,410
+and gave it one star.
+202
+
+202
+
+00:08:28,410  -->  00:08:30,810
+So this user absolutely hated this movie.
+203
+
+203
+
+00:08:30,810  -->  00:08:32,350
+So now, for example, if you're curious
+204
+
+204
+
+00:08:32,350  -->  00:08:36,204
+you can have fun, and see what this 357 movie ID
+205
+
+205
+
+00:08:36,204  -->  00:08:37,610
+corresponds to.
+206
+
+206
+
+00:08:37,610  -->  00:08:40,183
+The answer is in this movies dataset.
+207
+
+207
+
+00:08:41,110  -->  00:08:42,810
+Alright so that's the third column,
+208
+
+208
+
+00:08:42,810  -->  00:08:45,420
+and the fourth column we absolutely don't care,
+209
+
+209
+
+00:08:45,420  -->  00:08:46,930
+these are just the timestamps,
+210
+
+210
+
+00:08:46,930  -->  00:08:51,660
+that basically specifies when each user rated the movie.
+211
+
+211
+
+00:08:51,660  -->  00:08:52,830
+So that's all, so we don't care
+212
+
+212
+
+00:08:52,830  -->  00:08:55,730
+and we will remove this data afterwards
+213
+
+213
+
+00:08:55,730  -->  00:08:58,540
+when creating the training set and the test set.
+214
+
+214
+
+00:08:58,540  -->  00:09:02,280
+Alright, perfect, so, that's it for this first tutorial.
+215
+
+215
+
+00:09:02,280  -->  00:09:04,420
+The dataset is now imported correctly,
+216
+
+216
+
+00:09:04,420  -->  00:09:06,330
+and so we will move onto the next step,
+217
+
+217
+
+00:09:06,330  -->  00:09:09,740
+which will be to create the training set and the test set.
+218
+
+218
+
+00:09:09,740  -->  00:09:11,410
+So I'll see you in the next tutorial,
+219
+
+219
+
+00:09:11,410  -->  00:09:13,210
+and until then, enjoy deep learning.

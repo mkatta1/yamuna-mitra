@@ -1,0 +1,58 @@
+SELECT 
+	transaction_id ,
+	transactional_date ,
+	EXTRACT(year from transactional_date)*10000 + EXTRACT('month' from transactional_date)*100+EXTRACT('day' from transactional_date)as 	transactional_date_fk,
+	f.product_id ,
+	p.product_PK as product_FK,
+	payment_PK as payment_FK,
+    customer_id ,
+    credit_card ,
+   	cost  ,
+    quantity ,
+   	price
+FROM "Staging".sales f
+LEFT JOIN 
+core.dim_payment d
+ON d.payment = COALESCE(f.payment,'cash') AND d.loyalty_card=f.loyalty_card
+LEFT JOIN core.dim_product p on p.product_id=f.product_id
+order by transaction_id
+
+
+transaction_id,transactional_date, transactional_date_fk, product_id,
+product_FK, payment_FK, customer_id ,credit_card , cost, quantity, price
+1,2021-05-04 02:00:00, 20210504, P0494,
+2,2021-05-04 03:04:00, 20210504, P0221,
+3,2021-05-04 02:56:00, 20210504, P0625,
+4,2021-05-04 05:20:00, 20210504, P0431,
+5,2021-05-04 05:45:00, 20210504, P0058,
+6,2021-05-04 06:58:00, 20210504, P0385,
+7,2021-05-04 07:03:00, 20210504, P0575,
+
+
+Fact table design
+1.Create DateKey
+2.Include product_FK (for product dimension)
+3.Payment dimension (Junk Dimension) --> for payment dimension
+4.Additional columns:
+- total_cost
+- Add total_price
+- Add profit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

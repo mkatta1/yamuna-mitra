@@ -1,0 +1,64 @@
+Training Data Model Samples:
+- POS()
+- Banking Data Model
+- Mortgage Data Model
+
+Part 1 - Dimension data model(olap):
+- Need for Strategic
+
+Part 4 - Diff types of Fact Tables:
+- Transactional Facts
+- Snapshot or inventory
+- Factless Facts
+- Semi Additive and Non Additive Facts
+
+Part 5 - Dimension Tables:
+
+Snowflaked Dimension
+Junk Dimention
+Denormalized Flattened Dimension
+Degenerate Dimension
+
+Part 6 - Designing Star Schema:
+Declare the grain of Business Process
+4 Steps Dimensional Model Design Process
+- Identify Business Process
+- Identify Grain
+- Identify Dimensions
+- Identify Facts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

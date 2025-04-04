@@ -1,0 +1,9 @@
+- Create copies of a database, a schema or a table
+- If we want to copy a database we want to copy the complete structure like metadata, database, primary keys, and everything. It is in snowflake with "clone" command.
+- Cloned object is completely independent object means if we update the cloned table then it doesn't affect the original table But how?? if you are just referencing the same table location with different table name???
+
+- Easy to copy all the metadata & improved storage management
+- Creating backups for development purposes.
+
+yamunasailakshmi
+Alchemist@2023

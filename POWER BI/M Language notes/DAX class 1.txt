@@ -1,0 +1,45 @@
+DAX Data Analysis Expression
+Additional formulas to make additional calculations in our data model.
+Complex calculations for additional insights.
+
+In formulat bar, we provide the expression to fill in the calculated columns!!
+
+Measures are not physical they are only created to get some calcuated results. Even Measures Table is not a physical table it is organised to have a set of measure calculated into an separate table.
+
+On Home, click on "Enter data" to create an measured table and add the other measured columns into it. Here we can't directly move the columns into the "Measures Table". First, we need to select the measure column in another table, Go to Measure tools --> Home Table --> select the "Measure Table". So now it will be moved!!
+
+COUNTROWS(TABLENAME) function is to count the rows in a table while
+COUNT(TABLENAME(columnname)) function is to count the values in a column
+means there can be whitspaces instead of blank which will also be counted!
+So, to find the actual value COUNTROWS - COUNT(column) gives the whitespaces in the column!!
+
+Diff bw SUM & SUMX is that sum is used to total all the values at once but SUMX is to carry sum of (each row along with the expression)
+
+eg: SUMX(Table, expression)
+SUMX(sales, sales[sales]*sales[price])
+
+Similarly we have AVERAGEX(Table, expression) for row based operation.
+
+Base Dimension = AVERAGEX(producthierarchy,ROUND(producthierarchy[length],0)*ROUND(producthierarchy[width],0)) 
+
+
+Need to finish topic RELATED video 87 & Section 9
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

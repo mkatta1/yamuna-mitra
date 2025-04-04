@@ -1,0 +1,22 @@
+
+
+https://www.rittmanmead.com/blog/2016/11/odi12c-gettingstarted-install-and-config/
+
+
+
+https://docs.oracle.com/middleware/1221/core/ODING/GUID-C68567CE-238C-4C41-B16B-88F0A0F6A7F1.htm#ODING237
+
+community comments:
+https://apexapps.oracle.com/pls/apex/f?p=44785:24:0::::P24_CONTENT_ID,P24_PREV_PAGE:7952,1
+
+
+concepts:
+https://odibeginnertutorials.blogspot.com/2013/11/running-scenarios-asynchronouslyparalle.html
+
+https://odibeginnertutorials.blogspot.com/
+
+only sample:
+https://creativeme1807.wordpress.com/2020/07/05/beginner-tutorial-for-odi-11g-and-12c-lesson-1/
+
+Mapping creation:
+http://pubududewagama.blogspot.com/2017/08/odi-12c-create-simple-mapping-etl-job.html

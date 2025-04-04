@@ -1,0 +1,45 @@
+Azure Data Factory (Part-2)— Moving Bulk Files Using Metadata:
+https://ragvenderrawat.medium.com/azure-data-factory-part-2-moving-bulk-files-using-metadata-bd690dc51efb
+
+A Comprehensive Guide to Migrating On-Premise Oracle Data to Databricks Unity Catalog with Python and Databricks Notebook:
+https://blog.devgenius.io/a-comprehensive-guide-to-migrating-on-premise-oracle-data-to-databricks-unity-catalog-with-python-a5071e901518
+
+Mastering PySpark: From Configuration to Advanced Data Operations:
+https://blog.devgenius.io/mastering-pyspark-from-configuration-to-advanced-data-operations-for-data-engineers-cdd7b7c43455#6bef
+
+How to Maximize Data Security in Databricks with Unity Catalog:
+https://blog.amoran.io/how-to-maximize-data-security-in-databricks-with-unity-catalog-c709d8a38908
+
+Creating Azure Databricks with Bicep and Azure DevOps YAML Pipelines:
+https://towardsdatascience.com/creating-azure-databricks-with-bicep-and-azure-devops-yaml-pipelines-4bf85be30cc7
+
+How To Build Dynamic Pipelines in Azure Synapse Using Metadata Tables:
+https://medium.com/@ivannaditlevsenjurkiv/how-to-build-dynamic-pipelines-in-azure-synapse-using-metadata-tables-ba450cae8447
+
+Azure Databricks Unity Catalog — up and running: THIS HAS ALL THE 4 PARTS BELOW TO READ
+https://medium.com/@hwangdb/azure-databricks-unity-catalog-up-and-running-e758a295c919
+
+Azure Databricks Unity Catalog — Part 1: UC Concepts and Components:
+Azure Databricks Unity Catalog — Part 2: Get the infra — build UC metastore and initial set up:
+Azure Databricks Unity Catalog — Part 3: Automate Unity Catalog set up using Terraform:
+Azure Databricks Unity Catalog — up and running — Part 4: UC Storage Account Networking Set Up:
+
+Ingest data with Databricks Autoloader: 
+( schema inference means automatically detect the schema VS the checkpoint location is file path AND kql-> KUSTO QUERY LANGUAGE)
+https://matthewsalminen.medium.com/ingest-data-with-databricks-autoloader-7360c16b8608
+
+Databricks Autoloader and Medallion Architecture… Pt 2
+https://matthewsalminen.medium.com/databricks-autoloader-and-medallion-architecture-pt-2-71fa7003480b
+
+Apache Airflow Cookbook — Part 1,2,3
+https://towardsdev.com/apache-airflow-cookbook-part-3-2c74351e8bfb
+
+SYNAPSE:
+Basic Story1: https://medium.com/predict/getting-started-with-azure-synapse-a-beginners-guide-to-big-data-and-analytics-747ba5dd4c84/
+Basic Story2: 
+
+
+LOT OF PYSPARK CODE -> Data Engineering End-to-End Project — Part 1 — Spark, Kafka, Elasticsearch, Kibana, MinIO, Docker, Airflow, Hadoop YARN, HDFS, Zookeeper, Pandas
+https://medium.com/@dogukannulu/data-engineering-end-to-end-project-part-1-spark-kafka-elasticsearch-kibana-minio-docker-bac7e0de5952
+https://github.com/dogukannulu/streaming_data_processing?source=post_page-----bac7e0de5952--------------------------------
+

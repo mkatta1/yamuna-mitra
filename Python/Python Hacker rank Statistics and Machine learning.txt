@@ -1,0 +1,837 @@
+Correlation and Regression Lines - A Quick Recap #1
+===================================================
+Here are the test scores of 10 students in physics and history:
+
+Physics Scores  15  12  8   8   7   7   7   6   5   3
+History Scores  10  25  17  11  13  17  20  13  9   15
+Compute Karl Pearson’s coefficient of correlation between these scores.
+Compute the answer correct to three decimal places.
+
+
+Output Format
+
+In the text box, using the language of your choice, print the floating point/decimal value required. Do not leave any leading or trailing spaces.
+
+For example, if your answer is 0.255. In python you can print using
+
+print("0.255")
+This is NOT the actual answer - just the format in which you should provide your answer.
+
+
+
+CODE:
+====
+
+import math
+
+def mean(my_list):
+    return sum(my_list)/len(my_list)
+
+def std(my_list):
+    mu = mean(my_list)
+    return math.sqrt(sum([(x-mu)**2/len(my_list) for x in my_list]))
+
+def covariance(X, Y):
+    mx = mean(X)
+    my = mean(Y)
+    sx = std(X)
+    sy = std(Y)
+    return sum([ (x-mx)*(y-my) for (x,y) in zip(X,Y) ])/len(X)
+
+def pearson_correlation_coefficient(X,Y):
+    return covariance(X,Y)/(std(X)*std(Y))
+
+phys_list = [float(val) for val in input().split()]
+hist_list = [float(val) for val in input().split()]
+pcc = pearson_correlation_coefficient(phys_list,hist_list)
+
+print(round(pcc,3))
+
+2. Correlation and Regression Lines - A Quick Recap #2:
+=======================================================
+
+Here are the test scores of 10 students in physics and history:
+
+Physics Scores  15  12  8   8   7   7   7   6   5   3
+History Scores  10  25  17  11  13  17  20  13  9   15
+Compute the slope of the line of regression obtained while treating Physics as the independent variable. Compute the answer correct to three decimal places.
+
+Output Format
+
+In the text box, enter the floating point/decimal value required. Do not leave any leading or trailing spaces. Your answer may look like: 0.255
+
+This is NOT the actual answer - just the format in which you should provide your answer.
+
+CODE:
+====
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+#Here is my solution, calculating slope by multiplying correlation coefficient with the ratio of standard deviation of x and y. i.e. m = r*(x_std/y_std)
+
+import math
+
+x =[int(l)for l in str("15  12  8   8   7   7   7   6   5   3").split()]
+y =[int(l)for l in str("10  25  17  11  13  17  20  13  9   15").split()]
+
+# sqrt(sum((x - xbar)^2)/(len(x)))
+def correlation_coef(x,y):
+    mean_x = [(sum(x)/len(x))]*len(x)
+    mean_y = [(sum(y)/len(y))]*len(x)
+
+    x_diff = [x - mean_x for (x, mean_x) in zip(x,mean_x)]
+    y_diff = [y - mean_y for (y, mean_y) in zip(y,mean_y)]
+
+    numerator = sum([x_diff * y_diff for (x_diff, y_diff) in zip(x_diff,y_diff)])
+
+    x_sq =sum([i**2 for i in x_diff])
+    y_sq =sum([i**2 for i in y_diff]) 
+
+    denominator = math.sqrt(x_sq * y_sq)
+
+    return (numerator/denominator)
+
+def calc_std(x):
+    xbar = [sum(x)/len(x)]* len(x)
+    x_diff = [x-xbar for (x, xbar) in zip(x, xbar)]
+    x_std = math.sqrt(sum([i*i for i in x_diff])/len(x_diff))
+    return x_std
+
+x_std = calc_std(x)
+y_std = calc_std(y)
+corr = correlation_coef(x,y) 
+slope = corr * (y_std/x_std)
+print(round(slope,3))   
+
+3. Correlation and Regression Lines - A quick recap #3:
+=======================================================
+
+Here are the test scores of 10 students in physics and history:
+
+Physics Scores  15  12  8   8   7   7   7   6   5   3
+History Scores  10  25  17  11  13  17  20  13  9   15
+When a student scores 10 in Physics, what is his probable score in History? Compute the answer correct to one decimal place.
+
+Output Format
+
+In the text box, enter the floating point/decimal value required. Do not leave any leading or trailing spaces. Your answer may look like: 5.5
+
+
+CODE:
+=====
+
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+inp = [15,12,8,8,7,7,7,6,5,3]
+out = [10,25,17,11,13,17,20,13,9,15]
+x = np.array(inp).reshape(-1,1)
+y = np.array(out).reshape(-1,1)
+reg = LinearRegression()
+result = reg.fit(x,y)``
+pred = result.predict(np.array(10).reshape(-1,1))
+print(round(pred[0][0],1))
+
+OR
+
+X = [[i] for i in list(map(int, "15  12  8   8   7   7   7   6   5   3".split("  ")))]
+Y = [[i] for i in list(map(int, "10  25  17  11  13  17  20  13  9   15".split("  ")))]
+from sklearn.linear_model import LinearRegression
+regression = LinearRegression()
+regression.fit(X, Y)
+x = 10
+y = regression.predict(x)
+round(y[0][0], 1)
+
+OR
+==
+
+class LR:
+    def __init__(self):
+        self.slope = None
+        self.intercept = None
+        
+    def fit(self, x, y):
+        x_avg = sum(x)/x.__len__()
+        y_avg = sum(y)/y.__len__()
+        numerator = sum([(a - x_avg)*(b - y_avg) for a,b in zip(x,y)])
+        denominator = sum([(a - x_avg)**2 for a in x])
+        self.slope = round(numerator/denominator, 3)
+        self.intercept = y_avg - self.slope*x_avg
+    def predict(self, x):
+        if self.slope and self.intercept:
+            return self.slope*x + self.intercept
+        else:
+            raise ModuleNotFoundError('predict is not found, call fit() before predict()')
+        
+
+if __name__ == '__main__':
+    if __name__ == '__main__':
+        feature_1 = "Physics Scores  15  12  8   8   7   7   7   6   5   3"
+        feature_2 = "History Scores  10  25  17  11  13  17  20  13  9   15"
+        feature_1 = [int(x) for x in input().split() if x.isnumeric()]
+        feature_2 = [int(x) for x in input().split() if x.isnumeric()]
+        model = LR()
+        model.fit(feature_1, feature_2)
+        out = str(model.predict(10))
+        out = out.split('.')
+        print(float(out[0] + '.' + out[1][0]))
+
+
+OR
+===
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+students=[[15,10],[12,25],[8,17],[8,11],[7,13],[7,17],[7,20],[6,13],[5,9],[3,15]]
+data=pd.DataFrame(students)
+x=data.iloc[:,0].values.reshape(-1,1)
+y=data.iloc[:,1].values.reshape(-1,1)
+#%%
+from sklearn.preprocessing import StandardScaler
+
+sc=StandardScaler()
+x=sc.fit_transform(x)
+z=np.array(10).reshape(-1,1)
+#%%
+from sklearn.linear_model import LinearRegression
+lr=LinearRegression()
+lr.fit(x,y)
+lr.predict(z)
+y=lr.predict(x)
+round(y[0][0], 1)
+
+================================================================================
+4.Correlation and Regression Lines - A Quick Recap #4:
+======================================================
+
+The two regression lines of a bivariate distribution are:
+4x – 5y + 33 = 0 (line of y on x) 20x – 9y – 107 = 0 (line of x on y).
+Estimate the value of x when y = 7. Compute the correct answer to one decimal place.
+
+Output Format
+In the text box, enter the floating point/decimal value required. Do not lead any leading or trailing spaces. Your answer may look like: 7.2
+
+CODE:
+====
+
+It's very simple. They are giving two different regression equations just to ensure you pick the correct one. Since we are given a value of 'y' and are asked to estimate a value of 'x', we need to pick the equation for 'y regressed on x'. Then you just need to plug in your value for y and solve for x.
+
+What is the difference between linear regression on y with x and x with y?
+https://stats.stackexchange.com/questions/22718/what-is-the-difference-between-linear-regression-on-y-with-x-and-x-with-y
+
+x=[i for i in range(0,20)]
+
+''' 4x - 5y + 33 = 0 x = ( 5y - 33 ) / 4 y = ( 4x + 33 ) / 5
+
+20x - 9y - 107 = 0
+x = (9y + 107)/20
+y = (20x - 107)/9
+''' t=7 print( ( 9 * t + 107 ) / 20 )
+
+# estimate the value of x when y = 7
+y = 7
+
+# the regression line 
+val_x = (9 * y + 107) / 20
+
+# print the result
+print(round(val_x, 1))
+
+================================================================================
+4.Correlation and Regression Lines - A Quick Recap #5:
+======================================================
+
+The two regression lines of a bivariate distribution are: 4x – 5y + 33 = 0 and 20x – 9y – 107 = 0. find the variance of y when sigma x = 3. Compute the correct answer to one decimal place.
+
+Output Format
+In the text box, enter the floating point or decimal value required. Do not lead any leading or trailing spaces. Your answer may look like: 7.2
+
+
+
+Hint:
+
+slope1 = cov(x,y)/Var(X)
+
+slope2 = cov(x,y)/Var(Y)
+
+Var(Y) = slope1/slope2 * Var(X)
+
+Small tip:
+1. calculate var(x) 2. cov(x,y)/var(x) = b1, cov(x,y)/var(y) = b2
+3. var(y) = ....
+b1 is slope of first function, b2 slope of second one.
+
+small code:
+===========
+import math
+slope2 = 20/9
+slope1 = 5/4
+
+print("{:.1f}".format((slope2/slope1)*(3**2))))
+
+
+================================================================================
+
+
+
+Objective
+In this challenge, we practice using multiple linear regression to predict housing prices. Check out the Resources tab for helpful videos!
+
+Task
+Charlie wants to buy a house. He does a detailed survey of the area where he wants to live, in which he quantifies, normalizes, and maps the desirable features of houses to values on a scale of  to  so the data can be assembled into a table. If Charlie noted  features, each row contains  space-separated values followed by the house price in dollars per square foot (making for a total of  columns). If Charlie makes observations about  houses, his observation table has  rows. This means that the table has a total of  entries.
+
+Unfortunately, he was only able to get the price per square foot for certain houses and thus needs your help estimating the prices of the rest! Given the feature and pricing data for a set of houses, help Charlie estimate the price per square foot of the houses for which he has compiled feature data but no pricing.
+
+Important Observation: The prices per square foot form an approximately linear function for the features quantified in Charlie's table. For the purposes of prediction, you need to figure out this linear function.
+
+Recommended Technique: Use a regression-based technique. At this point, you are not expected to account for bias and variance trade-offs.
+
+Scoring:
+=======
+For each test case, we will compute the following:
+
+d = Normalized Distance from expected answer = abs(computed - expected)/expected
+There are multiple ways to approach this problem that account for bias, variance, various subjective factors, and "noise". We take a realistic approach to scoring and permit up to a +_10% swing of our expected answer.
+
+d-adjusted = max(d-0.1,0)
+score for each test case = max(1-d-adjusted, 0)
+score for the test case = (Average score for all the tests it contains) X M, where M is the maximum possible score for the test case.
+Consider a test case in which we only need to find the pricing for 1 house. Suppose our expected answer is 10, and your answer is 9.5:
+
+d = (10-9.5)/10 = 0.05
+d-adjusted = max(0.05-0.1,0)=0
+The score for a test case with 10 points = max(1,0) x 10 = 10
+
+Sample Input:
+============
+2 7
+0.18 0.89 109.85
+1.0 0.26 155.72
+0.92 0.11 137.66
+0.07 0.37 76.17
+0.85 0.16 139.75
+0.99 0.41 162.6
+0.87 0.47 151.77
+4
+0.49 0.18
+0.57 0.83
+0.56 0.64
+0.76 0.18
+
+Sample Output:
+=============
+105.22
+142.68
+132.94
+129.71
+
+CODE:
+====
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+
+  
+f,n= map(int, input().split())
+
+
+houses=[]
+for i in range(n):
+    houses.append(list(map(float,input().split())))
+
+t=int(input())
+test=[]
+for j in range(t):
+    test.append(list(map(float, input().split())))
+
+x_train=[]
+y_train=[]
+for i in houses:
+    x_train.append(i[:-1])
+    y_train.append(i[-1])
+
+model=LinearRegression()  
+x_trains=pd.DataFrame(x_train)
+
+model.fit(x_trains,y_train)
+tests=pd.DataFrame(test)
+predicts=model.predict(tests)
+for a in predicts:
+    print(round(a,2))
+
+
+================================================================================
+
+
+Polynomial Regression: Office Prices
+Polynomial Regression- Linear/Quadratic/Cubic - https://www.youtube.com/watch?v=-lS35GZBxJE
+
+The Problem
+
+Charlie wants to purchase office-space. He does a detailed survey of the offices and corporate complexes in the area, and tries to quantify a lot of factors, such as the distance of the offices from residential and other commercial areas, schools and workplaces; the reputation of the construction companies and builders involved in constructing the apartments; the distance of the offices from highways, freeways and important roads; the facilities around the office space and so on.
+
+Each of these factors are quantified, normalized and mapped to values on a scale of 0 to 1. Charlie then makes a table. Each row in the table corresponds to Charlie's observations for a particular house. If Charlie has observed and noted F features, the row contains F values separated by a single space, followed by the office-space price in dollars/square-foot. If Charlie makes observations for H houses, his observation table has (F+1) columns and H rows, and a total of (F+1) * H entries.
+
+Charlie does several such surveys and provides you with the tabulated data. At the end of these tables are some rows which have just F columns (the price per square foot is missing). Your task is to predict these prices. F can be any integer number between 1 and 5, both inclusive.
+
+There is one important observation which Charlie has made.
+
+The prices per square foot, are (approximately) a polynomial function of the features in the observation table. This polynomial always has an order less than 4
+Input Format
+
+The first line contains two space separated integers, F and N. Over here, F is the number of observed features. N is the number of rows for which features as well as price per square-foot have been noted.
+This is followed by a table having F+1 columns and N rows with each row in a new line and each column separated by a single space. The last column is the price per square foot.
+
+The table is immediately followed by integer T followed by T rows containing F columns.
+
+Sample Input
+============
+2 100
+0.44 0.68 511.14
+0.99 0.23 717.1
+0.84 0.29 607.91
+0.28 0.45 270.4
+0.07 0.83 289.88
+0.66 0.8 830.85
+0.73 0.92 1038.09
+0.57 0.43 455.19
+0.43 0.89 640.17 so on........
+
+Sample Output
+=============
+180.38
+1312.07
+440.13
+343.72
+
+
+Explanation:
+===========
+There are two features which have been noted by Charlie. There are 100 data points, for which he has taken note of the features, and the price per square foot (in the last column).
+
+At the end, are four rows where he knows the two features, you output the predicted price/square foot of the office space for every testcase.
+
+Recommended Technique
+
+Use a regression based technique. At this point, you are not expected to account for bias and variance trade-offs.
+
+Scoring
+
+For each test in a test case file we will compute the following:
+
+d = Normalized Distance from expected answer  
+  = abs(Computed-Expected)/Expected  
+Since there can be multiple ways to approach this problem, which account for bias, variance, various subjective factors and "noise", we will take a realistic approach to scoring, and permit upto +/- 10% swing of our expected answer.
+
+d_adjusted = max(d - 0.1, 0)  
+Score for each test = max(1-d_adjusted,0)
+Score for the test case file == (Average of the scores for the tests it contains) * M
+Where M is the Max possible score for the test case.
+
+Suppose we have a test case file with just one test. Suppose our expected answer is 10
+And your answer is: 9.5
+d = (10 - 9.5) / 10 = 0.05
+d_adjusted = max(0.05 - 0.1,0) = 0 Score = max(1-d_adjusted, 0) = max(1,0) = 1
+
+
+
+CODE:
+----
+import numpy as np
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import mean_squared_error
+
+# train data
+row = input()
+F,N = map(int, row.split())
+data_train = []
+for _ in range(N):
+    row = input()
+    data_train.append(list(map(float, row.split())))
+data_train = np.array(data_train)
+X_train, y_train = data_train[:,:-1], data_train[:,-1]
+
+# test data
+row = input()
+T = int(row)
+data_test = []
+for _ in range(T):
+    row = input()
+    data_test.append(list(map(float, row.split())))
+X_test = np.array(data_test)
+
+# train and select model
+degrees = [1,2,3]
+errors = []
+models = []
+for degree in degrees:
+
+    lr = LinearRegression()
+    model = make_pipeline(PolynomialFeatures(degree), lr)
+
+    model.fit(X_train,y_train)
+    models.append(model)
+
+    y_pred = model.predict(X_train)
+    errors.append(mean_squared_error(y_train,y_pred))
+    
+# make predictions and output results
+i_best = np.argmin(errors)
+best_model = models[i_best]
+y_test_pred = np.round(best_model.predict(X_test),2)
+print('\n'.join(map(str,y_test_pred)))
+
+================================================================================
+LAPTOP BATTERY LIFE:
+--------------------
+
+Fred is a very predictable man. For instance, when he uses his laptop, all he does is watch TV shows. He keeps on watching TV shows until his battery dies. Also, he is a very meticulous man, i.e. he pays great attention to minute details. He has been keeping logs of every time he charged his laptop, which includes how long he charged his laptop for and after that how long was he able to watch the TV. Now, Fred wants to use this log to predict how long will he be able to watch TV for when he starts so that he can plan his activities after watching his TV shows accordingly.
+
+Challenge
+
+You are given access to Fred’s laptop charging log by reading from the file “trainingdata.txt”. The training data file will consist of 100 lines, each with 2 comma-separated numbers.
+
+The first number denotes the amount of time the laptop was charged.
+The second number denotes the amount of time the battery lasted.
+
+The training data file can be downloaded here (this will be the same training data used when your program is run). The input for each of the test cases will consist of exactly 1 number rounded to 2 decimal places. For each input, output 1 number: the amount of time you predict his battery will last.
+
+Sample Input
+
+1.50
+
+Sample Output
+
+3.00
+
+Scoring
+=======
+Your score will be 10-X, where X is the sum of the distances you are from expected answer of each test case. For instance if there are 2 test cases with expected answer 4 and you print 3 for the first one and 6 for the second one your score will be 10-(1+2) = 7.
+
+CODE:
+====
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+import numpy as np
+import pandas as pd
+
+
+
+if __name__ == '__main__':
+    timeCharged = float(input().strip())
+    df = pd.read_csv('trainingdata.txt', header = None)
+
+
+# In[215]:
+
+
+    df.head()
+
+
+    # In[216]:
+
+
+    from matplotlib import pyplot as plt
+
+
+    # In[217]:
+
+
+    plt.scatter(df.iloc[:,:1],df.iloc[:,-1])
+    plt.xlabel('Time')
+    plt.ylabel('Battery')
+
+
+    # In[218]:
+
+
+    df[df[1]>= 8].min()
+
+
+    # In[226]:
+
+
+    from sklearn.linear_model import Ridge, LinearRegression
+    from sklearn.metrics import r2_score
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
+
+    df = df[df[0]<4.11]
+    plt.scatter(df.iloc[:,:1],df.iloc[:,-1])
+    plt.xlabel('Time')
+    plt.ylabel('Battery')
+    X = df.iloc[:,:1]
+    y = df.iloc[:,-1]
+    #print('X',X.shape)
+    #print('y',y.shape)
+    X_train, X_test, y_train, y_test = train_test_split(X,y,train_size = 0.8)
+    X_train = X_train.to_numpy()
+    X_test = X_test.to_numpy()
+    y_train = y_train.to_numpy()
+    y_test = y_test.to_numpy()
+    scaler = MinMaxScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+    poly = PolynomialFeatures(degree = 1)
+    X_train = poly.fit_transform(X_train)
+    X_test = poly.transform(X_test)
+    #print('X_train',X_train.shape)
+    #print('X_test',X_test.shape)
+    #model = Ridge(alpha = 0.0089)
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_train)
+    y_hat = model.predict(X_test)
+    #print('Training score is: {:.2f}'.format(r2_score(y_train, y_pred)))
+    #print('Test score is: {:.2f}'.format(r2_score(y_test, y_hat)))
+
+
+    # In[230]:
+
+
+    inp = timeCharged
+    if inp >= 4.11:
+        print(8)
+    else:
+        X_ = scaler.transform(np.array([[inp]]))
+        X_poly = poly.transform(X_)
+        print('{:.2f}'.format(model.predict(X_poly)[0]))
+
+
+    # In[ ]:
+
+
+==================================================================
+Stock Predictions 
+-----------------
+ In this one-player game, you try to predict the rise and fall of the stock price of various stocks and buy or sell the stocks accordingly.
+
+You start with $100. Each turn you will be given the stock prices of current day and previous 4 days. You must then choose to BUY or SELL the stocks. Your program will be run with input for 1 day at a time.
+
+The stock prices are generated by us and may contain patterns.
+
+Input Format
+
+The input of each turn will consist of multiple lines. All money values are doubles to two decimal places, all other numbers are integers.
+
+The first line contains three space separated numbers m k d.
+
+m - the amount of money you could spend that day.
+k - the number of different stocks available for buying or selling.
+d - the number of remaining days for trading stocks.
+k lines follow, each in the following format: name owned prices
+
+name - the name of the stock (a string).
+owned - the number of shares you own of that stock.
+prices - 5 space separated numbers representing the stock's price for the last 5 days. These are ordered from oldest to newest, so the last number is the current stock price.
+Your program will be fed the days sequentially so you can write to a file in order to store a longer history of the prices.
+
+Sample Input
+
+90 2 400
+iStreet 10 4.54 5.53 6.56 5.54 7.60
+HR 0 30.54 27.53 24.42 20.11 17.50
+Sample Output
+
+2
+iStreet SELL 10
+HR BUY 5
+Explanation
+
+You have 90 dollars and 10 iStreet stocks. You decide to sell the iStreet stocks, then purchase 5 HR stocks. After the transactions you will have 90 - 17.50 x 5 + 7.60 x 10 = 78.5 dollars and 5 HR stock for the next days trading.
+
+You could not have bought more than 5 HR stock because you do not get to spend the money from selling iStreet stock until the next day.
+
+Scoring
+
+Your score is = to 5 x ln(money). You will only receive points from the hidden test case.
+
+Task
+
+You trade until you run out of days. Any stocks left on the last day will automatically be sold at the last day's market price. Your objective is to make as much money as possible starting from $100.
+
+Complete the function printTransactions that takes a float m money left, an integer k number of stocks, an integer d days left, a string array name of stock names, an integer array owned of stocks owned, and an 2d integer array prices of stock prices containing k arrays of length 5 and print your output.
+
+All indexes correspond properly (For index i, the name of the stock is name[i], the number of shares of it you hold is owned[i] and the data about it is prices[i].
+
+CODE:
+----
+=================================================================================
+Basic Statistics Warmup:
+-----------------------
+Display the following:
+
+Mean (m): The average of all the integers.
+
+Median of this array: In case, the number of integers is odd, the middle element; else, the average of the middle two elements.
+
+Mode: The element(s) which occurs most frequently. If multiple elements satisfy this criteria, display the numerically smallest one.
+
+Standard Deviation (SD).
+
+SD = (((x1-m)2+(x2-m)2+(x3-m)2+(x4-m)2+...(xN-m)2))/N)0.5
+
+where xi is the ith element of the array
+
+Lower and Upper Boundary of the 95% Confidence Interval for the mean, separated by a space. This might be a new term to some. However, it is an important concept with a simple, formulaic solution. Look it up!
+
+Other than the modal values (which should all be integers) the answers should be in decimal form till one place of decimal (0.0 format). An error margin of +/- 0.1 will be tolerated for the standard deviation and the confidence interval boundaries. The mean, mode and median values should match the expected answers exactly.
+
+Output Format
+
+A total of five lines are required.
+
+Mean (format:0.0) on the first line
+Median (format: 0.0) on the second line
+Mode(s) (Numerically smallest Integer in case of multiple integers)
+Standard Deviation (format:0.0) 
+Lower and Upper Boundary of Confidence Interval (format: 0.0) with a space between them.
+
+Sample Input
+============
+10
+64630 11735 14216 99233 14470 4978 73429 38120 51135 67060
+Sample Output
+
+43900.6
+44627.5
+4978
+30466.9
+25017.0 62784.2
+Note
+Use the constant 1.96 while computing the confidence interval.
+
+Scoring
+========
+Scoring is proportional to the number of test cases cleared.
+
+CODE:
+=====
+import sys
+import numpy as np
+from scipy import stats
+
+# Read Data
+data = sys.stdin.read().splitlines()
+nums = data[1].split(' ')
+nums = np.array([int(num) for num in nums])
+
+# Calculate Stats
+mean = np.mean(nums)
+median = np.median(nums)
+mode = stats.mode(nums)[0]
+std = np.std(nums)
+z = 1.96
+std_error = (std/(np.sqrt(len(nums))))
+lower = mean - z*std_error
+upper = mean + z*std_error
+
+# Print Output
+print(f"{mean:.1f}")
+print(f"{median:.1f}")
+print(mode)
+print(f"{std:.1f}")
+print(f"{lower:.1f} {upper:.1f}")
+
+==================================================================================
+Markov's Snakes And Ladders:
+---------------------------
+Markov is travelling in a train and he is bored. He takes out his Snakes and Ladders game and decides to play it all by himself. 
+A few notes about the Snakes and Ladders game:
+==============================================
+Those who are not familiar with this game might get a decent idea from this Wikipedia page: Snakes And Ladders
+
+Assume that you will always deal with a 10x10 board as described on the page above. There will be not more than fifteen snakes and fifteen ladders.
+
+You will be given the different probabilities with which the different faces of the biased die might show up.
+
+When a player reaches a square which is the base of a ladder, he has to climb up the ladder- (s)he has no choice. The ladder always leads to a "higher" square, which is closer to the top (100).
+
+When a player reaches a square which has the mouth of a snake, (s)he will always end up at the square which corresponds to to tail of the snake- (s)he goes down and has no choice.
+
+A die roll which would cause the player to land up at a square greater than 100, goes wasted, and the player remains at his original square. Such as a case when the player is at Square Number 99, rolls the die, and ends up with 5.
+
+Simulate rolls of the die as per the given probabilities. For each board configuration, simulate 5000 games, and record the number of die rolls required to reach Square Number 100, after starting from Square Number 1. Take the average of these numbers for these 5000 games; this gives us a fair idea of the expected number of die rolls required to complete the game for a given board configuration.
+
+The results of simulations are approximations and they vary a little bit, so we will allow a deviation of +/- 10% from the expected answers which we arrived at by averaging over a number of simulations. Your score for a given test file will be proportional to the number of tests which you manage to pass.
+
+Rounds in which the game hasn't terminated (i.e. square #100 hasn't been reached) after even 1000 rolls of the die can be terminated and ignored.
+
+Input Format
+------------
+First line contains the number of tests, T. This is followed by 4T lines. There are 4 lines per test configuration and in each test: The first line is a list of six comma-separated probabilities with which different faces of the die appear.
+The second line contains the number of ladders and snakes, separated by a comma.
+The third is a list of comma separated pairs indicating the starting and ending squares of the ladders.
+The fourth is a list of comma separated pairs indicating the starting and ending (mouth and tail) squares of the snakes.
+
+Output Format For each of the T test cases, output one integer, each on a new line, which is the expected number of rolls of the die, which you have obtained either via computation or via simulation.
+
+Sample Input
+------------
+3
+0.32,0.32,0.12,0.04,0.07,0.13
+3,7
+32,62 42,68 12,98
+95,13 97,25 93,37 79,27 75,19 49,47 67,17
+0.39,0.05,0.14,0.05,0.12,0.25
+5,8
+32,62 44,66 22,58 34,60 2,90
+85,7 63,31 87,13 75,11 89,33 57,5 71,15 55,25
+0.54,0.02,0.02,0.01,0.3,0.11
+4,9
+8,52 6,80 26,42 2,72
+51,19 39,11 37,29 81,3 59,5 79,23 53,7 43,33 77,21
+
+Explanation of the Input
+------------------------
+line1: The first line contains '3': This is the number of board configurations provided, i.e. there are 3 tests.
+
+line 2: This contains the comma separated probabilities of the different faces of the die showing up. Face 1 shows up with probability 0.32, face 2 shows up with probability 0.32, face 3 shows up with probability 0.12 and so on.
+
+line 3: Number of ladders and snakes, separated by commas. There are 3 ladders and 7 snakes.
+
+line 4: Pairs of starting and ending squares of ladders. The first ladder starts at square 32 and takes the player all the way to square 62. The second ladder starts at square 42 and takes the player all the way to square 68. There are commas between the starting and ending square of each ladder; and there are spaces between each such pair.
+
+line 5: Pairs of starting and ending squares of snakes. The first snake starts at square 95 and takes the player down to square 13. The second snake starts at square 97 and takes the player all the way down to square 25. There are commas between the starting and ending square of each snake; and there are spaces between each such pair.
+
+And so on, for the other 2 board configurations.
+
+Sample Output
+-------------
+Please note that as this is a simulation challenge it is not necessary that your answers should match these values exactly.
+
+160
+95
+162
+
+Explanation
+-----------
+Since this is a problem involving simulation, a reasonable margin of deviation from these numbers will be tolerated, as explained in the scoring section. For the first test, the expected number of die rolls to reach the destination square (100) is 160.
+For the second test, it is 95 die rolls.
+For the third test, it is 162 die rolls.
+
+Scoring
+-------
+If there are N tests in a particular test case file, your score will be:
+
+(maxScore for test case file) * C/N
+
+Where C is the number of correct answers in your output; which are within +/- 10% of the expected values which we arrived at by averaging over a number of simulations.
+
+==================================================================================
+
+THERE ARE A LOT TO LEARN MORE ........
+
+
+
+

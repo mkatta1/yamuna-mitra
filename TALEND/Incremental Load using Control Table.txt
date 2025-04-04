@@ -1,0 +1,97 @@
+As far as i know, the diff bw SCD vs Incremental load 
+
+SCD maintains historical records means old records will also be stored but Incremental load only maintains updated & inserted records!
+
+
+
+Incremental Load using Control Table:
+
+Step1:
+-----
+source_table1:
+use dev;
+select * from product_details;
+
+product_id, product_name, product_type, product_price, created_on, modified_on
+
+Here created_on indicates insert date, modified_on indicates update date.
+
+control_table2:
+select * from etl_control; -- To capture last time the job was successful
+
+job_id, job_name, table_name, last_success/last_loaded
+
+target_table3:
+select * from products_inc;
+
+
+Step2:
+-----
+
+create two context variables
+1) last_success = TalendDate.formatDate("yyyy-MM-dd HH:mm:ss", input_row.last_success);
+2) current_run = TalendDate.formatDate("yyyy-MM-dd HH:mm:ss", TalendDate.getCurrentDate())
+
+Prejob -onComponentOk-->tDBConnection(MySQl)-onSubjobOk-->tDBInput(etl_control table) --> tjavaRow
+
+tDBInput2(etl_control table)
+	/\ 
+	|
+	OnSubjobOk
+	|
+tDBInput(product_details table) --> tDBOutput(product_Inc table)
+
+
+In tJavaRow,
+context.last_success = TalendDate.formatDate("yyyy-MM-dd HH:mm:ss", input_row.last_success);
+context.current_run = TalendDate.formatDate("yyyy-MM-dd HH:mm:ss", TalendDate.getCurrentDate())
+
+System.out.println("Last Success : " + context.last_success);
+System.out.println("current run : " + context.current_run);
+
+
+In tDBInput(product_details table),
+"select * from product_details where created_on >='"+context.last_success +"' or modified_on >= ' "+context.last_success +" ' "
+
+In tDBOutput(product_Inc table), 
+in edit schema click on the primarykey of "product_id" only on the target schema. 
+Action on data : "Insert or Update"
+
+In tDBInput2(etl_control table),
+"update etl_control set last_success = '" +context.current_run+ "' 
+where job_name = '"+jobName+"' "
+
+insert into product_details values (7,'microphone','accessories',1000, current_timestamp(), null)
+
+update product_details
+set product_price = 30000, modified_on = current_timestamp()
+where product_id = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,206 @@
+Catalog stored procedures, polybase stored procedures,
+Change Data Capture stored procedures (Transact-SQL):
+sys.sp_cdc_(add_job, change_job, disable_table, drop_job, get_captured_columns, get_ddl_history, help_jobs, start_job, stop_job, generate_wrapper_function)
+
+https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/change-data-capture-stored-procedures-transact-sql?view=sql-server-ver16
+
+
+Implement SCD-2 ETL Data Pipelines in Snowflake using Merge Statement:
+https://debipmishra.medium.com/implement-scd-2-etl-data-pipelines-in-snowflake-using-merge-statement-140f8fbd49fc
+
+Implement SCD-2 ETL Data Pipelines in Snowflake using Streams & Task-Part 1:
+https://debipmishra.medium.com/implement-scd-2-etl-data-pipelines-in-snowflake-using-streams-task-part-1-f4442297ce6a
+
+Concepts for Data Engineers: Data Architectures Kappa and Lambda:
+https://cassio-bolba.medium.com/concepts-for-data-engineers-data-architectures-kappa-and-lambda-eaefb6eb94d2
+
+
+
+
+
+Check this topic of change data capture in "Medium page" :
+https://cassio-bolba.medium.com/change-data-capture-cdc-in-snowflake-dd3f01f93a0b
+
+Step 1: setup tables
+Here we create 2 sources tables CARS_STG and VENDORS, and a destination table called CARS_STOCK_CURATED which will be a result from a join of the 2 source tables above mentioned.
+
+/*-------------------------------------------------------------
+PREP
+-------------------------------------------------------------*/
+-------------------- Stream example: INSERT SETUP ------------------------
+CREATE OR REPLACE TRANSIENT DATABASE STREAMS_DB;
+
+-- Create example table 
+-- we gonna track changes on this table and insert to final table in case changes happens
+
+CREATE OR REPLACE TABLE CARS_STG(
+  id varchar,
+  car_model varchar,
+  price varchar,
+  in_stock varchar,
+  vendor_id varchar);
+  
+-- insert values to have something as starting point
+INSERT INTO CARS_STG 
+    VALUES
+        (1,'chevete',1000,1,1),
+        (2,'celta',2000,1,1),
+        (3,'uno',5000,1,2),
+        (4,'uno mille',8000,1,2),
+        (5,'uno com escada',1000000,2,1);  
+
+-- create a map table with some extra info
+ CREATE OR REPLACE TABLE  VENDORS(
+  vendor_id number,
+  location varchar,
+  employees number);
+
+-- insert values to mapping store table, with info about the store
+INSERT INTO VENDORS VALUES(1,'FIAT',33);
+INSERT INTO VENDORS VALUES(2,'FORD',12);
+
+-- this will be the final table to insert date with already some more data about store
+CREATE OR REPLACE TABLE  CARS_STOCK_CURATED(
+  id int,
+  car_model varchar,
+  price number,
+  in_stock int,
+  vendor_id int,
+  location varchar,
+  employees int);
+
+ -- Insert into final table to have same data available
+INSERT INTO CARS_STOCK_CURATED 
+    SELECT 
+    SA.id,
+    SA.car_model,
+    SA.price,
+    SA.in_stock,
+    ST.vendor_id,
+    ST.LOCATION, 
+    ST.EMPLOYEES 
+    FROM CARS_STG SA
+    JOIN VENDORS ST ON ST.vendor_id=SA.vendor_id ;
+
+Step 2: Create a Stream:
+-- Create a stream object
+CREATE OR REPLACE STREAM CARS_STREAM ON TABLE CARS_STG
+    COMMENT = 'my stream'
+    -- APPEND_ONLY = TRUE | FALSE --only in tables
+    -- INSERT_ONLY = TRUE | FALSE --only in external tables
+    -- SHOW_INITIAL_ROWS = TRUE | FALSE -- show rows existing on source object on stream creation
+;
+
+Now, every time data is added to CARS_STG, it will be recorded in the stream if the data was changed
+
+If you can run a select in the stream as it was a table, and it show you zero rows, that is because no change was made since stream creation. On the other hand, the table has the 5 expected rows.
+
+-- Get changes on data using stream (INSERTS)
+-- should have 0 rows, nothing changed on the tables being checked
+select * from CARS_STREAM;
+
+-- staging should have 5 rows
+select * from CARS_STG;
+
+Step 3: Capture Changes
+To see it in action, let's insert 2 values in CARS_STG and perform the same queries as before. Now, you should see 7 rows in the table, and 2 in the stream. The 2 rows in the stream are the new ones =D so, it just captured the difference of the new data and the current data.
+
+
+-- insert values 2 rows to tables being checked
+insert into CARS_STG  
+    values
+        (6,'mercedes',1.99,1,2),
+        (7,'Garlic',0.99,1,1);
+        
+-- Get changes on data using stream (INSERTS)
+-- now should have 2 row, because they were added after table being checked on stream
+-- check the metadata columns indicating a insert
+select * from CARS_STREAM;
+
+select * from CARS_STG;       
+
+Then the final table CARS_STOCK_CURATED is still with 5 rows. To implement a CDC insert pattern, we can consume the data directly from the stream in our joined table that insert data to CARS_STOCK_CURATED, as shown below.
+
+-- why here we still have the same 5 rows? We need to insert with a command            
+select * from CARS_STOCK_CURATED;        
+        
+-- Consume stream object as a source and insert only the missing rows
+INSERT INTO CARS_STOCK_CURATED 
+    SELECT 
+    SA.id,
+    SA.car_model,
+    SA.price,
+    SA.in_stock,
+    ST.vendor_id,
+    ST.LOCATION, 
+    ST.EMPLOYEES 
+    FROM CARS_STREAM SA
+    JOIN VENDORS ST ON ST.vendor_id=SA.vendor_id ;
+
+-- final table should now have the 7 rows and stream object must be empty, because they were consumed
+-- Get changes on data using stream (INSERTS)
+select * from CARS_STREAM;
+
+Final table should now have the 7 rows and stream object must be empty, because they were consumed.
+
+Powerful Combination of SREAMS and Snowflake TASKS
+Snowflake’s strength lies not only in its streamlined implementation of streams but also in its seamless integration with tasks. Tasks allow users to schedule and automate the execution of SQL statements, creating a potent combination for CDC processes. Here’s a detailed guide on how to combine Snowflake streams with tasks:
+
+Step 1: Create a Task
+
+CREATE TASK my_cdc_task
+ WAREHOUSE = my_warehouse
+ SCHEDULE = '5 MINUTE'
+AS
+INSERT INTO CARS_STOCK_CURATED 
+    SELECT 
+    SA.id,
+    SA.car_model,
+    SA.price,
+    SA.in_stock,
+    ST.vendor_id,
+    ST.LOCATION, 
+    ST.EMPLOYEES 
+    FROM CARS_STREAM SA
+    JOIN VENDORS ST ON ST.vendor_id=SA.vendor_id
+
+Step 2: Enable and Start the Task
+ALTER TASK my_cdc_task
+ RESUME;
+
+In this configuration, the task is set to execute every five minutes, ensuring a timely and automated capture of changes from the stream to the target table.
+
+
+Advantages of Snowflake Streams and Tasks Combination
+1. Automation:
+The integration of streams with tasks automates the CDC process, eliminating the need for manual intervention. This not only saves time but also reduces the risk of human error.
+
+2. Scheduling Flexibility:
+Snowflake tasks provide the flexibility to schedule CDC processes at specific intervals. This ensures that changes are captured and integrated into the target table according to the organization’s operational requirements.
+
+3. Scalability:
+Snowflake’s cloud-based architecture ensures scalability. As the data volume grows, Snowflake can seamlessly handle the increased workload, making it an ideal solution for organizations experiencing rapid data expansion.
+
+Sum up
+In conclusion, Snowflake streams offer an efficient and powerful solution for implementing CDC in a modern data engineering environment. The simplicity of setting up streams, combined with the automation capabilities of tasks, positions Snowflake as a robust platform for tracking and capturing changes in data. By incorporating these features, organizations can unlock the full potential of their data, gaining valuable insights and maintaining data integrity effortlessly. The combination of Snowflake streams and tasks heralds a new era in CDC, streamlining processes and enhancing the agility of data-driven decision-making.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,279 @@
+Character And String Routines
+Date And Time Routines
+Arithmetic Operations Routines
+Currency Handling
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Watch this video:
+https://www.youtube.com/watch?v=DKFidRRZhF0
+Right click on the file "MyRoutine" -> Edit Routine Libraries -> import External library  
+Install a new module from a Library File
+joda-time-2.10.5.jar
+
+so, import org.joda.time.DateTime;
+
+
+package routines;
+import java.util.Date;
+public class MyRoutine {
+public static int getHourofDay(Date input) {
+	DateTime dt = new DateTime(input);
+	return dt.getHourOfDay();
+}
+}
+
+MyRoutine.getHourOfDay(row1.dateColumn)
+
+String[] list = {"Monday","Tuesday","Wednesday","Thursday","Friday"};
+
+//Code generated according to input schema and output schema
+output_row.myDate = input_row.myDate;
+output_row.myIntHour = MyRoutine.getHourFromDateTime(input_row.myDate);
+
+file: MySecondRoutine
+package routines;
+import routines.system.RamdomUtils;
+public class MySecondRoutine {
+
+/**
+* getRandomWeekday: get random weekday between Monday and Friday.
+* {talendTypes} String
+* {Category} MyFirstTalendRoutine
+* {example} getRandomWeekday() #Tuesday or #wednesday
+*/
+
+public static String getRandomWeekday() {
+  String[] list = {"Monday","Tuesday","Wednesday","Thursday","Friday"}
+  Integer random = 0 + ((Long) Math.round(RandomUtils.random() * (list.length - 1 - 0))).intValue();
+return list[random];
+}
+}
+
+
+
+$$$$$$$$$$$$$$$$$
+
+file: MySecondRoutine
+package routines;
+import java.util.Date;
+import java.util.UUID;
+import org.joda.time.DateTime;
+public class MyRoutine {
+
+/**
+* getRandomWeekday: get random weekday between Monday and Friday.
+* {talendTypes} String
+* {Category} MyFirstTalendRoutine
+* {example} getRandomWeekday() #Tuesday or #wednesday
+*/
+
+public static String getRandomWeekday() {
+  String[] list = {"Monday","Tuesday","Wednesday","Thursday","Friday"}
+  Integer random = 0 + ((Long) Math.round(RandomUtils.random() * (list.length - 1 - 0))).intValue();
+return list[random];
+}
+
+public static String getUUID() {
+  return UUID.randomUUID().toString();
+}
+
+public static Integer getHourFromDateTime(Date input) {
+  DateTime dt = new DateTime(input);
+  return dt.getHourOfDay();
+
+}
+}
+
+"yyyy-MM-dd HH:mm:ss"
+TalendDate.parseDate("yyyy-MM-dd HH:mm:ss","2022-02-15 05:10:45")
+
+MyRoutine.getHourFromDateTime(row2.dateTimeInput)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Watch this youtube video: 
+https://www.youtube.com/watch?v=jWG0qR3Uuzg
+
+public class duplicateremove {
+
+    public static String removeDupsInPlace(String word) {
+    	  final StringBuilder output = new StringBuilder();
+    	  for (int i=0;i<word.length();i++){
+    	      String character = word.substring(i,i+1);
+    	      if(output.indexOf(character)<0)
+    	          output.append(character);
+    	      }
+    	      return output.toString();
+}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Create & Use Parameterized Routines
+
+public class FN_DEMO {
+  public static String generate_FULLName (String First_Name, String LastName) {
+  String FullName = First_Name + " " + LastName;
+  return FullName;
+}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Youtube watch video:
+https://www.youtube.com/watch?v=OWhDuugBIrA&list=PLlE6hb-4NUuT-76l-9g3Ecfo_fM_JGmzj&index=6
+
+1. Error management
+2. Generating a warning
+
+1. Set up sales files 
+2. Creating customer metadata
+3. Creating product metadata
+
+
+business logic checks: missing data/ field
+bad data from source: null data / special characters
+table constraint issues: dups / column length etc
+
+a.environmental issues:
+ - connectivity issues (time out/ reset)
+ - resource issues (heap memory / storage)
+b.data quality issues:
+ - special characters
+ - data truncation issues
+c.logical issues:
+ - data count checks (less orders - sum(order_amount))
+ - file count check (less records)
+
+normalizes a flat row with items
+
+tdenormalize:
+concatenates different fields into an array or a delimited string
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+https://www.youtube.com/watch?v=kAbIctDh-DM
+
+Creating and Using User Defined Routines
+a. Customer Routines
+b. tJava
+c. tJavaRow
+d. tJavaFlex
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 6 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+public class pali{
+public static boolean palindrome(String message)
+  String check= "";
+  int p=message.length();
+  for(int i=p-1;i>0;i--)
+  {
+   check = check+message.charAt(i);
+  }
+  if(message.equals(check))
+ {
+   return true;
+ }
+  else
+ {
+  return false;
+}
+}
+
+so, pali.palindrome(row1.column)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% EXAMPLE 7 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Date Functions in Talend in detail | Talend Date Functions/Routine Tutorial
+https://www.youtube.com/watch?v=2CmzACWyelA
+
+TalendDate.formatDate("dd-MM-yyyy",row1.date)
+TalendDate.parseDate("dd-MM-yyyy", row2.date) but its string pattern is "MM-dd-yyyy" converted into DATE ("MM-dd-yyyy")
+
+CompareDate will output integer datatype:
+-----------------------------------------
+TalendDate.compareDate(row1.date,row1.enddate,"yyyy-MM-dd")
+date1,date2 => if date1<date2 then -1; if date1=date2 then 0; if date2<date1 then 1
+
+setDate will output Date datatype:
+---------------------------------
+TalendDate.setDate(mydate,newValue,"MM")
+TalendDate.setDate(row1.date,2025,"yyyy")
+example: 
+row1.date = 16-05-2022
+output: 2025-05-16
+so the year changed from 2022 to 2025
+
+addDate:
+-------
+TalendDate.addDate(mydate,addValue,"MM")
+example: 
+TalendDate.addDate(row1.date,3,"MM")
+output: 16-05-2022 --> 2022-08-16
+so the months added from 05 to 08
+
+I have used TalendDate.addDate(TalendDate.getCurrentDate(),-1,"DD") and the out put is "Wed Dec 28 23:51:27 IST 2016" . I want it in "2016-12-28" format.
+TalendDate.formatDate("yyyy-MM-dd",TalendDate.addDate(TalendDate.getCurrentDate(),-1,"DD"))
+
+
+getCurrentDate:
+--------------
+TalendDate.getCurrentDate()
+
+
+a.convert date to string:
+-------------------------
+date("yyyy-MM-dd"),enddate("yyyy-MM-dd") 
+
+date,endDate
+2022-05-12,2022-05-16
+2022-05-13,2022-05-30
+2022-05-14,2022-05-20
+2022-05-25,2022-04-28
+2022-05-16,2022-01-22
+
+
+
+
+
+
+diff find vs grep
+
+find will finding the file
+grep will file the pattern in a file
+
+bucketing vs partitioning
+
+
+reading excel file loading data
+advace settings "eventmode" less memory and more 
+"usermode" 
+instead of commiting each row but batch records file
+1mb blah but 10 gb data
+hit run analysis like read the file less than 5 times
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

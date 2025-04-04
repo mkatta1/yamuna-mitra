@@ -1,0 +1,244 @@
+================================== Text Mining ================================== 
+import csv
+from textblob import TextBlob
+import os
+import pandas as pd
+from textblob.sentiments import NaiveBayesAnalyzer
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from nltk.corpus import stopwords
+import string
+import nltk
+import textmining
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+
+#set working directory
+os.chdir("E:/Others/Edwisor/Content")
+
+#Load Text data
+post = pd.read_csv("Post.csv")
+post.head(20)
+
+#select few text
+post = post.iloc[:1000,]
+
+#download repository
+#nltk.download()
+
+#Extract stop words
+stop = set(stopwords.words('english'))
+#extract punctuation marks
+exclude = set(string.punctuation)
+
+#text pre processing
+def clean(doc):
+    stop_free = " ".join([i for i in doc.lower().split() if i not in stop])
+    punc_free = " ".join(i for i in stop_free if i not in exclude)
+    num_free = " ".join(i for i in punc_free if not i.isdigit())
+    return num_free
+post_corpus = [clean(post.iloc[i,1]) for i in range(0, post.shape[0])]
+
+post_corpus[2]
+
+post.head(15)
+
+what is text mining?
+- process of extracting interesting and non-trivial information and knowledge from unstructured text.
+- process of identifying novel information from a collection of texts (also known as a corpus).
+- discover useful and previously unknown "gems" of information in large text collections
+- patterns, associations, trends
+
+motivation for text mining:
+==========================
+- 90% of world's data is in unstructured format 
+- information intensive business 
+
+text mining process:
+===================
+data acquisition => text preprocessing => modeling ==> evaluation/validation  
+- acquisition	- transformation	- discover
+- cleaning				- extract
+					- organizing knowledge
+
+==================================================================================
+			Framework Deployment
+==================================================================================
+
+- software deployment is all of the activities that make a software system available for use
+- different tools for online deployment
+Deployment types:
+-----------------
+- data mining tools @RevoDeployR @Orange
+- programming language (java, c, vb, ..)
+- database and sql script ()
+- pmml (predictive model markup language)
+- schedulers
+
+		DEPLOYMENT PLAN
+		===============
+databases 
+-> dataServer(data management)(<=> r & PythonScripts, output reports-> windowScheduler)
+-> visual Interactive Dashboard Using -> QlikView/spotfile
+
+
+import os
+import csv
+import tweepy
+from tweepy.streaming import StreamListener
+from tweepy import OAuthHandler
+from tweepy import Stream
+import codecs
+import pymysql
+import pandas as pd
+
+#set working directory
+os.chdir("E:/Others/Edwisor/ContentRevamp/Advanced Predictive Analytics")
+
+#CONNECT DATABASE
+#Establish connection
+conn = pymysql.connect(user='root', passwd='password', db='edwisor')
+cursor = conn.cursor()
+
+#write query
+query_cropcord = cursor.execute("select * from superstoreus_2015")
+
+#cursor.execute(query_cropcord)
+USstore_data = cursor.fetchall()
+
+USstore_data
+
+#save the output
+filename=open('test.csv', 'wb')
+c = csv.writer(filename)
+
+for item in USstore_data:
+    print(item)
+    c.writerow(item)
+
+CONNECT TWITTER
+---------------
+#Store required keys
+consumer_key =""
+consumer_secret =""
+access_key = ""
+access_secret = ""
+
+#Establish connection
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_key, access_secret)
+api = tweepy.API(auth)
+#Extract tweets
+#Create empty list
+results = []
+#Get the first 500 items based on the search query
+for tweet in tweepy.Cursor(api.search, q='Interstellar').items(500):
+    results.append(tweet)
+#Verify the number of items 
+print len(results)
+#Convert list into dataframe
+def toDataFrame(tweets):
+    #create empty data frame
+    DataSet = pd.DataFrame()
+
+   #extract relevant information
+   Dataset['tweetID'] = [tweet.id for tweet in tweets]
+   Dataset['tweetText'] = [tweet.text for tweet in tweets]
+   Dataset['tweetRetweetCt'] = [tweet.retweet for tweet in tweets]
+   Dataset['tweetFavouriteCt'] = [tweet.favorite_count for tweet in tweets]
+   Dataset['tweetSource'] = [tweet.source for tweet in tweets]
+   Dataset['tweetCreated'] = [tweet.created for tweet in tweets]
+   Dataset['userID'] = [tweet.user.id for tweet in tweets]
+   Dataset['userScreen'] = [tweet.user.screen_name for tweet in tweets]
+   Dataset['userName'] = [tweet.user.name for tweet in tweets]
+   Dataset['userCreateDt'] = [tweet.user.created_at for tweet in tweets]
+   Dataset['userDesc'] = [tweet.user.description for tweet in tweets]
+   Dataset['userFollowerCt'] = [tweet.user.followers_count for tweet in tweets]
+   Dataset['userFriendsCt'] = [tweet.user.friends_count for tweet in tweets]
+   Dataset['userLocation'] = [tweet.user.location for tweet in tweets]
+   Dataset['userTimezone'] = [tweet.user.time_zone for tweet in tweets]
+   
+   return DataSet
+
+#pass the tweets list to the above function to create a dataframe
+DataSet = toDataFrame(results)
+
+DataSet.head(10)
+
+Learn Functions
+---------------
+def sort(data, variable):
+    data = data.sort_values(variable, ascending = True)
+    return data
+
+DataSet = sort(DataSet, 'tweetRetweetCt')
+
+DataSet = sort(DataSet, 'tweetFavoriteCt')
+DataSet.head()
+
+==================================================================================
+[Eduwiser] Data Science -> 6-DEPLOYMENT AND ADVANCE PROGRAMMING -> SEE THE VIDEO CALLED "15 Excel Session"
+
+==================================================================================
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

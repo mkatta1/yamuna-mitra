@@ -1,0 +1,127 @@
+AWS GLUE:
+CONTAINS
+- Data Catalog: Databases, Tables, Connections
+- Crawlers: Classifiers
+- Schema registries: Schemas
+
+ETL:
+AWS GLUE STUDIO: NEW
+JOBS 
+TRIGGERS
+DEV END ENDPOINTS: NOTEBOOKS
+WORKFLOWS
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+[Instructions] Overview of Glue Components
+As part of this module we will get a high level overview of different Glue Components. We will get into the details of each and every component as part of subsequent modules or sections.
+
+Glue Catalog
+
+Glue Crawlers
+
+Glue Databases and Tables
+
+Glue Jobs
+
+Glue Triggers
+
+Glue Workflows
+
+Let us go ahead and build a simple pipeline using the flights dataset to get a quick overview about Glue Components.
+
+Create Crawler and Catalog table for flights data
+
+Validate using Athena
+
+Create Glue Job to convert file format from csv to parquet
+
+Run and Monitor the job
+
+Create Catalog table on top of new location with parquet file format
+
+Validate new table using Athena
+
+Clean up everything
+
+Build the workflow for the pipeline
+
+Crawl the source folder for flights data to refresh the table
+
+Run Glue Job to convert the file format
+
+Crawl the target folder to refresh the table
+
+Run the workflow and monitor
+
+Validate both source and target tables using Athena
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Crawlers:
+--------
+
+A crawler connects to a data store, progresses through a prioritized list of classifiers to determine the schema for your data, and then creates metadata tables in your data catalog.
+
+1st method:
+Add crawler -> Add tables using a crawler
+2nd method:
+Tables -> Add tables using a crawler -> crawler name: Flights Data Crawler -> Crawler source type: Data stores/Existing catalog tables, Repeat crawls of  S3 data stores: Crawl all folders/ Crawl new folders only -> choose a data store: S3, connection, Crawl data in Specified path in my account/another account, Include path: "s3://crawler-public-us-east-1/flight/2016/csv" -> Add another data store: Yes/No -> Create IAM rols/ choose IAM ROLE/ update police in an IAM ROLES 
+-> Frequency: Run on demand/ Hourly/Daily/choose days/weekly/monthly/
+-> choose a database or create a database 
+Note: database is create when crawler is executed but not during the creation of crawler
+---> FINISH
+
+SELECT crawler -> Run crawler -> click on logs to troubleshoot
+DELETE the table -> Edit the crawler -> click on Output -> Prefix added to table names
+
+[Instructions] Create Crawler and Catalog Table
+Let us define and run the crawler to create a catalog table for flights data set.
+
+Crawler Name: Flights Data Crawler
+
+Database Name: flights-db
+
+Table Name: flightscsv
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+A serverless query engine called Athena to QUERY Glue catalog table
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

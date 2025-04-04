@@ -1,0 +1,143 @@
+Introduction to Lambda:
+----------------------
+
+- Run functions on demand without the servers
+- supports many languages like python
+- adhoc tasks or completely serverless high TPS applications
+- Pay per invocation, duration, memory
+- Built in metrics with AWS Cloudwatch
+
+amazon resource name (arn)
+
+Lambda Sercie Reserve Pool LSR ( EC2, EC2, EC2, EC2)
+
+Invoke ---> then load balancer gets activated now lambda users this reserve pool to assign EC2 while job execution and later detaches for others usage.
+
+upload code 
+
+Integrations with other AWS services...
+
+- host a lambda function behind an API GATEWAY to create REST APIs
+- file update/delete/insert in S3 invokes LAMBDA for data processing 
+- hookup lambda with SQS Message Buffering & Processing , event processing that pop's up the environment
+- SNS for Message Processing 
+- Step Functions for Workflow Orchestration
+- DynamoDB for change detection 
+
+Lambda Edge Features:
+----------
+To easily deploy your lambda functions to multiple regions anywhere in the world
+
+Destinations Features:
+---------------------
+Pipe your lambda outputs directly into other aws services like sns, sqs. Contrast to writing your own code in lambda.
+
+Layers:
+------
+Reusable libraries that can be used in multiple lambda applications
+
+Provisioned Concurrency (Cold Start):
+-----------------------------------
+
+
+**************** INVOKE A LAMDBA FROM ANOTHER LAMDBA **************** 
+		----------------------------------
+
+STEP 1: CREATE A LAMDBA FUNCTION - "InvokeOtherLambdaRole"
+import json
+import uuid
+
+def lambda_handler(event, context):
+
+	# 1 - Read-off the input arguments
+    customerId = event['CustomerId']
+
+	# 2 - Generate a random id
+	transactionId = str(uuid.uuid1())
+
+	# 3 - Do some stuff i.e. save to s3, write to database, etc....
+	
+	# 4 - Format and return response
+	return {'CustomerId': customerId , 'Success': 'true', 'TransactionId': transactionId}
+
+
+STEP 2: COPY THE ARN of the lambda function at the top of the Lamda function code
+STEP 3: CREATE A CALLER FUNCTION TO invoke the above STEP1 lambda function
+functionname = invoker, runtime = python 3.8
+
+**choose or create an execution role for SYNCHRONOUS FUNCTION that waits for a request to response. OTHER OPTION is ASYNCHRONOUS FUNCTION which is a fire and forget model
+
+choose an existing role is "InvokeOtherLambdaRole" from STEP1
+
+STEP 4: PYTHON CODE FOR AN INVOKER FILE
+
+import json
+import boto3 # to get interact with the lamdba api's
+
+client = boto3.client('lambda')
+
+def lamdba_handler(event, context):
+     inputForInvoker = {'CustomerId': '123', 'Amount':50}
+
+     response = client.invoke(
+	FunctionName='#copy the paste the ARN of the STEP1 lambda function which is a unique to identify'
+	InvocationType = 'RequestResponse' # EVENT or we have event type
+#here requestresponse makes to wait for the response to act!
+	PayLoad = json.dumps(inputForInvoker) #convert the dict to json
+	)
+
+responseJson = json.load(response['Payload']) # Payload is from the other function in STEP1
+
+print('\n')
+print(responseJson)
+print('\n')
+
+STEP 5: Execute the Invoker in the above STEP 4 name Event Name: "name"
+
+
+SAMPLE UNRELATED CODE BELOW:
+---------------------------
+import json
+def lambda_handler(event, context):
+     # todo implement
+    return {
+	'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+}
+
+
+**************** AWS SQS TO LAMDBA in nodejs **************** 
+		----------------------------------
+
+S3 PUT create
+		--> push --> SQS (CreditCard Transaction Queue) ->continue
+DYNAMO DB trigger
+
+--> LAMBDA (Transaction Processing Lambda--> Handler)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

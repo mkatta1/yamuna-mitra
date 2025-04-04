@@ -1,0 +1,838 @@
+TELECOME DOMAIN TUTORIALS
+https://www.youtube.com/playlist?list=PLZmL6ZMW6Y032Z9EXkSS4b2Yh4VKJTCqV
+
+https://www.youtube.com/watch?v=ZGol3hTzd3g
+https://www.youtube.com/watch?v=kHDJaKkhGsA
+
+
+Top priority video
+https://www.youtube.com/watch?v=WAfyE7zzBFo ---- DONE
+
+https://www.youtube.com/watch?v=KwbgTpwOHVc&list=PL6C0rry7YvLULfuzW01sYs274dvmpHzz4&index=15
+
+manual testing, Health care domain Youtube videos
+https://www.youtube.com/playlist?list=PLIGvNBG10COzF2GMnYUR_G0vv1QJ8UR0v
+
+manual testing, banking 3, insurance 1, health care 1 domain youtube videos (TestingInterviewQuestions channel)
+https://www.youtube.com/playlist?list=PLIGvNBG10COz612gZ8u55nnfthwmHE40C --- VIDEOS WRITTEN BUT NEED TO VIEW THEM
+
+MANUAL TESTING step by step 70 videos (G C REDDY)
+https://www.youtube.com/playlist?list=PLyGqUe6Oa_5GYxp4FExLCH0y67x0ogpBC
+
+SOFTWARE TESTING FUNDAMENTALS 25 videos (G C REDDY)
+ 
+INVESTMENT BANKING, CAPITAL MARKET (Manual Testing All at one place CHANNEL)
+https://www.youtube.com/playlist?list=PL6C0rry7YvLULfuzW01sYs274dvmpHzz4 ---- VIDEOS WRITTEN BUT NEED TO VIEW THEM
+https://www.youtube.com/watch?v=KwbgTpwOHVc&list=PL6C0rry7YvLULfuzW01sYs274dvmpHzz4&index=15
+
+PROJECT MANAGEMENT TUTORIALS (TechCanvass)
+https://www.youtube.com/playlist?list=PL9oE-9dvIJIq9IM43Nh2lxJAGF_av-5WM
+
+Business Analyst Tutorials (TechCanvass)
+https://www.youtube.com/playlist?list=PL9oE-9dvIJIpZdEJi4H91VSbYMgOGu91i
+
+SDLC interesting video
+https://www.youtube.com/watch?v=rgP0RR4Kaxc
+
+SDLC with emphasis on Business Analyst role in under 10 minutes
+
+Planning:
+---------
+Goal Setting
+Feasibility
+Vendor Selection
+Determination of sponsors
+
+Roles involved 
+- CxO
+- Project Manager
+- Business Supports PM/PO
+- Stakeholder
+
+Outcomes
+- Feasibility and business proposal document
+- Project plan
+- Project Initiation document
+
+Requirements Gathering
+-----------------------
+BRD, FDD
+Mock-ups
+Calculations
+Functional specification document
+System Impact Analysis
+To-Be process
+
+- Business Analyst
+- Project Manager
+- Stakeholders from different business areas
+- Architects
+
+- Business Requirement Document
+- Functional Requirement Documents
+- Functional Specification Document
+- Use Cases
+- Prototype
+- SRS
+
+DESIGNING:
+---------
+High level architecture
+Design Document
+Determination of Hardware and Software Requirements
+
+Roles Involved
+- Architect
+- Development Team Leads
+
+- Design Document
+- Architecture document
+
+CODING
+------
+Low Level Design
+Completed Code
+Integration Testing
+Test environment set-up
+
+Roles Involved
+- Developers
+- Business Analyst supports developer 
+
+- Low Level Design Document
+- Code
+
+USER ACCEPTANCE TEST
+--------------------
+ACCEPT/REJECT
+
+Test Results Documented
+Defects logged for failed test cases
+Test cases sign off
+
+Roles Involved
+- Business Analyst
+- Specialist QA
+- Developers -Defect resolution
+
+- Defects
+- Documented Test results
+
+MAINTENANCE:
+-----------
+Client Operations Team
+Production Support Team
+
+
+
+
+
+
+
+"Leonard Peltier" is a remorseless killer, who brutally murdered two of our own–Special Agents Jack Coler and Ronald Williams," Wray wrote. "Granting Peltier any relief from his conviction or sentence is wholly unjustified and would be an affront to the rule of law."
+
+https://abcnews.go.com/Politics/biden-sparks-outrage-minute-commutation-leonard-peltier-man/story?id=117909582
+
+https://www.foxnews.com/us/biden-frees-radical-left-wing-killer-convicted-fbi-agents-murders-during-last-hours-president
+
+https://www.washingtontimes.com/news/2025/jan/20/joe-biden-gives-last-minute-preemptive-pardons-fam/
+
+https://thehill.com/policy/energy-environment/5095591-biden-commutes-leonard-peltier-sentence/
+
+
+On June 26, 1975, FBI agents Jack Coler and Ronald Williams were killed by Peltier in a shootout while they were on the Pine Ridge Reservation.
+
+Wray said Peliter fled to Canada after he "executed" the two agents "at close range." Peltier was arrested in Alberta in 1976, before standing trial for the murders.
+
+
+
+1. can you share an example of a time when you identified a critical requirement that others had missed out?
+A) They want to know: Your understanding, eye to detail, how do you resolve the issue
+
+Student entries of personal info at one place into database and also to print their identity cards of them. But we neglected to "lock" the data after the entries. Now, this could lead to discrepancies between our data and the actual i-cards. 
+Solution is to "lock data" feature which meant that students couldn't change their data without authorization.
+
+2. describe a situation where the client given vague requirements. how did you get clear req and ensuring both parties on same page?
+A) They want to know: how well can you probe?, how actively do you listen?, how good are your documentation skills?
+
+{
+Work opportunity with a retail company: vague requirements were "get more orders through the App", "increase the time customers spend on the App" etc. GET A CLEAR AND OBJECTIVE UNDERSTANDING OF THE REQUIREMENTS!!
+}
+i) Unveil the actual requirements through stakeholder's interviews:
+ask questions related to operations, pain points and customer behavior this probing helps in unravel their needs & improvement.
+ii) Bridging the gap with visual aids like prototypes & mockups.
+These visual aids help the client visualize the whole process.
+iii) Documenting with precision. This outlines specific functionalities, intricate business rules and detailed user interface specifications which further solidifies the understanding of both the parties. Following this process has helped me many times in converting vague requirements into a well-defined vision for the project.
+
+3) Have you ever worked on a project with a very tight budget and limited resources? How did you go about prioritizing the requirements to give a functional product?
+A) i) How effectively do you communicate? -- this helps in unraveling the actual requirements and aligning everyone's understanding of the system
+ii) Your analytical thinking ability! -- To asses how important is each requirement to the system 
+iii) Prioritization -- able to point finger on exact requirements
+
+ 
+
+
+
+
+books: UML Modelling for Business Analysts
+Software testing practical approach
+ERP to E^2 RP
+
+
+Banking Domain Knowledge or Bank Domain Knowledge for Business Analyst, Software Testers and Developers in the banking domain: What is a Bank, what is Spread, Banking Channels in bank domain knowledge (e.g. ATM, internet banking, mobile banking, phone banking, relationship manager banking, DSA), Retail Banking products (Savings bank account, Recurring deposit account, Fixed deposit account, Certificate of Deposit, Term deposit, IRA, Credit card, Debit card, ATM card, Mortgage, Mutual fund, Personal loan, Cheque, NEFT and RTGS), and banking domain knowledge for software engineers including Business Banking or Corporate Banking products (Bank Current account, Overdraft, Revolving Credit, Business loan, Term loan and Cash management) and Investment Banking domain knowledge (raising capital, Mergers and Acquisitions and trading securities). Since this BFSI domain knowledge video provides banking business domain knowledge, it may be useful to get domain knowledge for business analyst. Also, this banking industry knowledge video may be useful to get basic domain knowledge in banking software development (banking domain knowledge for software developers) or banking domain knowledge in software testing. View if interested in how to get domain knowledge in banking.
+
+Investment Banking Interview Preparation
+https://www.youtube.com/watch?v=F2ZcXdww69U&list=PLc3SzDYhhiGXmLkhbZnrCf73JHUbmrauj&index=2
+
+book, ledger
+CORE banking
+Reconciliations, cards, 
+BFSI - Banking Finance Services and Insurance
+In banking,
+savings, current, custodial ACCOUNTS
+different reconciliations in banking
+what are the cards & how does they happen
+profit share
+
+Retail banking is separate
+investment banking: ETF, mutual funds, fixed deposits, recurring deposits
+
+Most important one is RISK & COMPLIANCE --- FACTA
+Corporate banking different from the core banking
+wealth management vs investment banking
+Trading -- broker, ... shares etc
+AML - Anti Money Laundering --- (FACTA is to check is it white money or not!) 
+
+Country 1 -- has lot of black money
+Country 2 -- has liberal laws -- don't reveal identities of customers
+
+Citizens of country 1 will send money to country 2 --- and from there the shell companies owners will send money in legal way to company 1  -- which will make it white money.
+
+LOANS -- types
+
+Certified Financial Analyst (CFA)
+Financial Risk Manager (FRM)
+
+credit score - independent body -- individual credit history will be tracked and based on that the score will be define --
+
+banks consider this score and classify customers
+
+1. The forms of business organisations
+2. types of financial institutions and their need
+
+i) sole proprietorship - the owner is solely responsible for the activities of running a company and liabilities.
+
+ii) LLC - Limited Liability Company - part of your profit - can buy personal assets -- which are not company property --
+
+Eg: Tax details
+Person 1 is owning LLC
+Year1 -- he took 10 million $ as loan and started business
+End of financial year 1 -- he made 5 million $ as profit --
+
+PAT (Profit After Tax) -- 30% as tax -- (5 million - 1.5 million) -- 3.5 million$ is my PAT
+25% personal assets --- is again taxable
+
+iii) Corporation -- similar to LLC -- 2 or 3 board members should be there -- any decision has to be taken in consent with the board members. These board members may or may not be partners!
+S Corp and C Corp are the two in it!
+you will have to buy only company assets ---
+It has to be bought with the consent of board members
+
+Great Partnerships/LP/LLP -- 2 or more members will pool the money and decide the partnership model -- and start the organisation
+It's a Collective decision model ---- U will have single taxing mode and the general -- no.of employees/employment -- tax will be reduced -- 15-25%
+Profit that is earned 
+
+GP - all the partners are liable -- personally 
+Limited partnership - more share in the profit 
+LLP --------- Professionals maintained partnership --doctors --- CA -- their name in the market -- goodwill or branding to get or do business ---- 
+PwC --is a LLP type
+
+Bank --- commercial banks
+NBFS -- non banking financial services
+Housing Finance Corporations HFC--
+Investment banks
+
+I have some money--
+a. i would save for future
+b. i want to earn and multiply more
+c. i want to invest
+
+Financial institution makes the above abc all these options safeguarded - and done in legal way
+Banks and Non banks
+commercial banks, investment banks, UITS - Unit Investment Trusts, Faces Amount Certificates, Management Investment Companies, Credit Unions
+
+MF --Mutual Funds
+ULIPS -- Unit Link plans
+bonds -- gov bonds, face value hahaha
+
+
+2. Insurance -- Life and Non Life
+They will pool money from customers and use it as source of clearing any insurance activities --
+
+X --- 10x -- accident
+50x -- life death
+
+Eg: 1 million people --- each 1000$
+
+per 6.2% claim for money, so ---- 62000 people getting affected
+62000 * 50000 === 310 Millions
+
+Brokerages -- firms which will invest in secondary markets/primary markets on behalf of customers
+
+New York stock exchange --- 1000 companies listed -- brokerage --- Computershare -- apply shares worth 1 million -- brokerage amount , NSE/BSE
+
+Investment Companies are the registered ones who may or may not get their money back but where as Investment Banks get their amount reimbursed!!!
+
+In investment companies, you will get more profits than investment banks as banks have more regulatory body
+
+Investment Companies might have Black Money.
+UITS - Unit Investment Trusts--- Registered --- its group of people who pool money 
+Faces Amount Certificates -- here we trust someone to give money with more interest than banks based upon their face value.
+
+Management Investment Companies -- here Fund Managers with core knowledge on the particular business will invest/remove funds something similar to Investment companies. Mutual funds/ULIPS are similar to it.
+
+Credit Unions
+
+Books: Financial modeling & valuation, (mergers, acquisitions divestitures, and other restructurings by paul pignataro), leveraged buyouts
+
+Structure of an Investment Bank:
+--------------------------------
+
+Investment Banking: IBD Coverage, Mergers & Acquisitions, DCMS, ECMS, Other CMS
+Sales & Trading, Equity Research, Asset Management, Brokerage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TRADING CONCEPTS:
+----------------
+Intraday trading
+how share are traded
+what is topclass, put, buy
+
+
+what is broker and exchange perspective
+Vendor Assessment Technique:
+--------------------------
+
+supply chain
+consultant
+outsourcing for other areas
+customers management
+relationship management
+account management
+store management
+
+types: formal (RFI, RFQ, RFT, RFP), Informal
+request for information, request for queue, request for tender, request for proposal
+
+elements: knowledge and expertise, licensing and pricing models, vendor market position, terms and conditions, vendor experience, reputation, and stability
+
+vendor profile: procurement, account payables, contract, legal contract system, contact, facilities, other engagements
+
+vendor assessment flow: 
+Analyze the business requirement -> vendor search -> request for proposal (RFP) and request for quotation (RFQ) -> proposal evaluation and vendor selection -> contract negotiation strategies -> analyze and zero down the vendor
+
+example: 
+A medical organization needs a specific database clinical system -> list of vendors are selected for RFI -> request for proposal(RFP) Request for Quotation (RFQ) -> Vendor short listed -> Contract Negotiation -> Analyze and zero down the vendor
+
+PROS-CONS: price, expertise, service levels (SLA)
+
+
+HANDLING AMBIGIOUS REQUIREMENTS:
+================================
+"Each of us saw her duck"
+
+Characteristics of Requirement:
+atomic -> complete -> consistent -> concise -> feasible -> unambiguous -> testable -> prioritised -> understandable
+
+unambiguity helps in: 
+- reducing costs and delays in timelines
+- creating valid test cases
+- helping in reducing further defects in software
+- building good quality software
+
+APPROACH: through COMMUNICATION, have multiple meetings to know the requirements in detail. Also setup interviews and answer the questions by paraphrasing the requirements, so that the client understands that you know better.
+SEND follow-up questionnaires to fill-ups the gaps of understanding, ask open ended questions. 
+DOCUMENTATION with cross verifications. MOM minutes of meetings, people in finance will call it MONTH OVER MONTH, in cybersecurity it is METHOD OPPORTUNITIY MOTIVE, 
+
+LANGUAGE USED must be specific instead of negative requirements eg: "the product and service will not be available during the weekend" can be rephrased as "the product and service will only be available during weekdays"
+
+eg: if they say to save records more than $100 ASK them about what if the exact amount is deposited. They might come up with answer or might note it down to answer it later!
+
+- when they use the words like general, usual ASK them to elaborate with an example.
+- some pronouns always leads to confusion.
+- "biweekly" can once in two weeks time or twice in a weeks time 
+- permissibility of the solution can be assured with the PROOF OF CONCEPT is to be provided to the customer by Business analyst with the help of technical team member onboarded! Here the progress @regular intervals must be shared with the customer.
+
+How important are end users as stake holders?
+- end users may have low influence on the project but they face the High Impact. 
+key factors for business analysts
+- looking at a business need agnostically, every stakeholder is important, know the domain, where are the requirements hiding?, be a good listener, can you make a decision?
+
+Business analyst:
+business analysis starts before the software development gets underway.
+The solution can be IT or non IT solutions where analysts need to find is it viable to invest into this. This process is called strategy analysis which business analysts also need to consider.
+BAs talk to the end-users/stakeholders/customer team members get the info expand/detail it into a process diagram like flow chart. You create prototypes, screen designs and many other things like SRS or FRS or BRD.
+
+BA is the practice of enabling change in an organizational context, by defining needs and recommending solutions that deliver value to stakeholders.
+a. understanding the needs 
+b. conduct meetings with the customer team for more details
+c. gets the requirements detailed out
+d. create software screen designs & takes customer approval
+e. docs the requirements - SRS or FRS or BRD
+f. functionality test
+g. takes to customer for UAT
+
+1. convince the client to allow you to talk to the end users
+2. know about their concerns & issues.
+3. be careful about their Wishlist.
+	
+Functional vs non functional requirements
+=========================================
+
+Business requirements:
+Statements of goals, objectives, and outcomes that describe why a change has been initiated. They can apply to the whole of an enterprise, a business area, or a specific initiative.
+
+stakeholder requirements:
+describe the needs of stakeholders that must be met in order to achieve the business requirements. They may serve as a bridge between business and solution requirements.
+
+stakeholder requirements are the ones which does not need be developed as a separate software. So, we need to transform them into solution requirements in order to work as a software.
+
+solution requirements:
+- Describe the capabilities and qualities of a solution that meets the stakeholder requirements. They provide the appropriate level of detail to allow for the development and implementation of the solution.
+- these are of 2 types: functional and non-functional requirements
+
+  functional requirements:
+its represented by behaviour or functionalities where external agent is always required.
+  - talks about the software system features
+  - describe the interactions between the system and its environment
+  - identified by actions phrases
+   Eg: -register a user, search and compare products, make a payment using credit card, view the new emails, respond to customer service requests
+
+  non-functional requirements:
+  - aspects not directly related to functional behavior.
+  - could be related to Interface, usability, reliability, support, performance, look & feel, security etc.
+  - all the data transfer to server or vice versa must be encrypted and secure
+  - all the pages must load in less than 2 second
+  - the system must be able to support more 1,00,000 users at a time
+  - the system must be comply with the corporate design guidelines.
+  - non-functional requirements may or may not involve coding
+  - non-functional requirements may involve cross-functional teams
+  - Non development teams like infrastructure, security etc.. are involved in this non-functional requirements.
+  - the project management team prepares the schedule based on functional and non-functional requirements.
+  - checks the wellness of functionality, process and people
+  categories of non-functional are availability, compatibility, maintainability, performance efficiency, portability, reliability, scalability, security, usability, certification, compliance, localization, SLA, Extensibility, interoperability
+
+
+Transition requirements:
+describe the capabilities that the solution must have and the conditions the solutions must meet to facilitate transition from the current state to the future state, but which are not needed once the change is complete. They are differentiated from other requirement types because they are of temporary nature.
+Example: data conversion, training, and business continuity.
+
+
+How to use ChatGPT to Write User stories and Use cases?
+Research & Conversation:
+I want your help in some research with my {}. I want you to act as.. I will ask you questions one by one, you need to understand my prompt and reply by using real stories and events in your life. Do you understand?
+
+use MOM test method
+Using the principles given in the MOM/s test book. Can you come up with 5 questions I should ask my users of the streaming app?
+
+ProductBRD Requirement Document:
+I am looking to create a detailed business requirement document, can you give me a quick template to follow along?
+Help me  create a detailed Functional Requirement Document for an Android App which { }. Do include all the important details.
+
+Convert features into user stories:
+I am creating a product with the following features: {Paste features here}. Can you help me write user stories from this information?
+Can you write acceptance criteria for these stories?
+can you give me some non-functional requirements for their user story?
+can you create a use case diagram for this user story?
+
+What might be some good user stories to include in a PRD for {app idea}
+Please draft a use case titled"
+Relevant frameworks/insights
+
+7. Business Rules
+- credit card eligibility criteria
+- credit limit calculation rules
+- rewards program rules
+
+8. reporting and analytics
+- metrics and analytics requriements
+- reports and dashboards
+- data visualization and interpretation
+
+9. project management
+- roles and responsibilities
+- change management and communication plan
+- risk management and mitigation plan
+
+10. glossary of terms
+- definitions of key terms and acronyms
+
+remember, this is just an example and your specific FRD may require customization based on your project needs. Additionally, you may want to include diagrams or wireframes of help illustrate the user interface and user experience.
+ 
+How to Create a BRD using ChatGPT?
+
+
+https://www.macquarie.com/au/en/about/company/risk-management.html
+
+Financial Management Group (FMG) 
+FMG is a group that advises on financial and resource allocation for a territory.
+FMG's responsibilities include:
+Developing and managing the territory budget
+Analyzing and advising on resource issues
+Coordinating, analyzing, and monitoring the territory's infrastructure program
+Preparing and analyzing financial statements
+Establishing, negotiating, and reviewing funding arrangements
+Managing the Central Holding Authority
+
+In Risk Management Group (RMG), we develop and maintain risk management and internal control frameworks. We provide independent review and challenge to the business, as part of our efforts to ensure that appropriate balance is considered in risk/return decisions.
+
+Effective revenue growth management (RGM) enables businesses to understand and standardize the core business factors (listed below) that contribute to profitability and growth by continuously utilizing their data, computing power, and analytical algorithms.
+
+RGM in finance:
+Revenue Growth Management (RGM) is a strategic analytics discipline focused on continuously maximizing an organization's revenue.
+
+This Resource Management Guide (RMG) applies to officials in Commonwealth entities that issue concessional loans (eg accountable authorities, chief financial officers and finance teams).
+
+RMG in banking refers to Resource Management Guides, which are guidance documents that help companies and entities comply with the Public Governance, Performance and Accountability (PGPA) Act. RMGs are written in plain English to explain policy and legislation requirements. 
+
+RMG Mortgages is a division of MCAP Financial Corp. It focuses on providing residential mortgages and mortgage servicing products through independent brokers. Operating across Canada, RMG Mortgages offers an alternative to the big banks and credit unions.
+
+BRS business requirements specification; the document in which the business goals and. stakeholders requirements are documented. investment brief the investment information, scope, objectives, risks, dependencies, project. costs and benefits of the proposed program or project
+
+what is Pugh matrix???
+
+Use case documents
+ Process/business flow documents
+ Requirement Traceability Matrix (RTM) document
+ Functionality Matrix (FM)
+ Functional Requirement Specification (FRS) document
+ System Requirement Specification (SRS) document
+ Activity/sequence diagrams
+ Business Requirement Document (BRD)
+
+System Design Document (SDD)
+
+Functions of financial markets:
+Price determination
+capital formation
+funds mobilization
+liquidity
+risk sharing
+easy access
+reduction in transaction costs
+
+banking products:
+----------------
+categorization: banking products
+		     ||
+	Fee based 	  fund based
+	  ||		     ||
+retail corporate	retail	corporate
+
+
+fee based products/services:
+============================
+retail fee based products/services:
+-----------------------------------
+cards (credit/debit cards), atm, foreign inwards/outward remittance, fund transfer, bill payments, portfolio management services, safe deposit locker
+
+corporate fee based products/services:
+---------------------------------------
+cash management services, merchant banking, foreign exchange services, bill discounting, factoring, forfeiting, letter of credit
+
+Fund based products/service:
+===========================
+
+retail fund based products:
+---------------------------
+personal loan, vehicle loan, housing loan, overdraft
+
+corporate fund based products:
+------------------------------
+working capital finance, bill discounting, short term finance, term lending, buy's credit/supplier's credit
+
+
+SEARCH "list of private sectors banks in India" Wikipedia ,"list of public sector banks in India" Wikipedia,"banking-system-in-india" by lopol
+
+SIMILARLY SEARCH FOR AUSTRALIA
+
+*************** DOMAIN TOPIC: TRADE FINANCE *************** 
+overview of trade finance
+methods of payments in trade finance
+advance payment
+documentary credits
+documentary collections
+open accounts
+diff types of products in trade fiancé
+confirmed letter of credits
+pre-shipment trade finance
+post-shipment trade finance
+forfaiting
+factoring
+bank guarantees/SBLC's
+lifecycle of trade finance products
+trade documentation
+SWIFT messages in trade fiancé
+international commercial terms (INCOTERMS)
+regulations and compliance
+
+Business Process Model and Notation.
+BPMN contains graphic elements business users, and developers use to create
+activity flows and processes. BPMN's four basic element categories are:
+1. Flow objects: Events, activities, gateways
+2. Connecting objects: Sequence flow, message flow, association
+3. Artifacts: Data object, group, annotation
+4. Pool and lanes
+
+Gap analysis concentrates on ‘what needs to be changed’ rather than ‘how’ and
+results in giving quantifiable data against it.
+Here are some of the tools/techniques I have employed to conduct gap analysis:
+ SWOT Analysis
+ Spreadsheets
+ 5 Hows / Questionnaire
+ Fishbone Analysis
+ McKinsey 7S
+
+Black box testing: This is functional testing where a BA validates that the
+output generated by the system is as per the requirements/use case.
+ Unit Testing: A BA does unit testing on a developer's machine to ensure
+the requested functionality is achieved.
+ Integration Testing: This testing is done when more than one functionality
+is integrated to realize a more extensive, and complex functionality. A BA
+does integration testing to ensure that the system performs as expected
+after integrating different modules.
+
+ Functional Testing: A BA is expected to conduct functional testing to
+validate that the system achieves the functionality specified in the use
+case/functional requirement specification document (FRS).
+ Acceptance Testing: A BA and the client do the acceptance testing to
+validate that the system performs as per the business requirements and the
+product's acceptance criteria.
+ Regression Testing: Regression testing is done after a modification has
+been made to the existing system. It aims to ensure that all the system
+functionalities are working as expected.
+ Beta Testing: A BA and the testing team do the beta testing, and it is done
+on a pre-production version of the product. This testing ensures that the
+system's functional and non-functional requirements are met.
+
+ Entity relationship diagram
+ Data flow diagram
+ Use case diagram
+ Class diagram
+ Activity diagram
+ Sequence diagram
+ Collaboration diagram
+ Component diagram
+ Deployment diagram
+
+The principal business analysis techniques used by a BA are:
+ Interviews
+ SWOT analysis
+ Facilitated workshop
+ Brainstorming
+ Observation
+ Prototyping
+ Root cause analysis
+
+The 100-point method is a Each person within the group is given 100 points which they can distribute as votes across the available items.
+
+8 Omega is a business change framework to improve the existing business
+processes.
+Based on its name, this framework consists of 8 life-cycle phases, namely;
+ Discover
+ Analyze
+ Design
+ Integrate
+ Implement
+ Manage
+ Control
+ Improve
+
+FMEA stands for 'Failure Mode and Effects Analysis' and is used for failure analysis, risk analysis, and quality engineering.
+The resulting data is then used for risk management and mitigation.
+
+A use case is a methodology used in requirement analysis to identify, organize
+and document the requirements.
+Following are the main characteristics of a use case:
+ Contains both functional and non-functional requirements
+ Describes the flow of events/scenarios
+ Defines the actors involved in the scenarios
+ Contains main flow, alternative flows, and exceptional flows.
+ Contains business rules and associated diagrams.
+Use cases can be used at various stages of a project; its audiences are technology
+and business.
+
+
+Scrum is the most widely used process framework for agile development.
+Concepts of Scrum include:
+ Sprint: It's the basic unit of Scrum development and is restricted to a
+specific duration (generally 2 or 3 weeks).
+ Product backlog: A detailed listing of all the product's requirements.
+ Daily scrum meeting: Each day during the sprint, the project team
+assembles and discusses what was achieved yesterday, what is due today, and
+the roadblocks faced. This meeting is strictly timed for 15 minutes.
+ Sprint Review Meeting: A meeting that reviews what was achieved in the
+course of the sprint and the quality of the features developed.
+ Sprint Retrospective: Team members reflect on the recently concluded
+sprint to learn from the mistakes made and document the ‘lessons learned’ to
+continuously improve the sprint process and deliverables.
+
+A sprint backlog is a collection of requirements the development team must
+achieve in the next sprint.
+A sprint backlog is created based on the development team's capacity and the
+priority of the requirements. Conversely, a product backlog is a prioritized list of
+high-level requirements of the product.
+
+A sprint burndown chart is a graphic visualization of the current sprint's progress rate (amount of work completed and the total work still remaining).
+This chart is updated daily over the course of a sprint and acts as a guide for the
+agile team to determine if their progress is as per the initially projected pace of
+completion.
+
+The duties and responsibilities of a Product Owner:
+ Act as a primary stakeholder of the project/product
+ Create, edit and prioritize user stories
+ Add user stories to the product backlog
+The duties and responsibilities of a Scrum Master:
+ Act as a facilitator to the project team
+ Makes resources available to the project team
+ Enforces the scrum rules on the team
+ Manage and encourage the project team
+ Chairs and arranges stand-up meetings
+	
+Explain the steps that turn an idea into a product?
+The steps include Market Analysis, Competitor Analysis, SWOT Analysis, Personas, Strategic
+Vision and Feature Set, Prioritize Features, Use Cases, SDLC, Storyboards, Test Cases,
+Monitoring, and Scalability. The role of personas and feature prioritization is extremely crucial.
+
+Methods of Payments:
+-------------------
+- Payment in advance, documentary credit, documentary collections, open accounts
+
+a) Advance payment: Payment is made in whole or in part by the importer in advance of the exporter shipping the goods.
+
+b) open accounts: seller forwards documents directly to the buyer and settlement is made in accordance with the terms of the contract.
+
+c) letter of credit: the letter of credit is an undertaking of payment given by the importer's bank to the exporter for a specified sum provided the exporter ships out the goods and present the required compliant documents by a predetermined deadline. Types of letter of credits: sight letter of credit, usance letter of credit.
+
+letter of credit will follow the rules of 'UCP600' is Uniform Customs and Practices for documentary credit.
+
+importer, importers bank, exporters bank, exporter
+applicant, issuing bank, Advising bank/negotiating bank/nominating bank, beneficiary
+
+2 types of payments in the letter of credit are sight and usance.
+
+120 days after shipment date/lc expiry date.
+second advising bank, reimbursement bank, transferring bank.
+
+d) documentary credits
+
+e) documentary collections
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

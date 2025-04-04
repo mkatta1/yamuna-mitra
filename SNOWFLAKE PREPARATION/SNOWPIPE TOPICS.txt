@@ -1,0 +1,3 @@
+https://www.whizlabs.com/blog/snowpipe-in-snowflake/
+
+https://docs.snowflake.com/en/user-guide/data-load-snowpipe.html

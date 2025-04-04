@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!-- saved from url=(0074)https://app.snowflake.com/xmgjfpc/ds42038/#/compute/history/dynamic-tables -->
+<html lang="en-US" class="lightMode"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>.ͼ1.cm-focused {outline: 1px dotted #212121;}
+.ͼ1 {position: relative !important; box-sizing: border-box; display: flex !important; flex-direction: column;}
+.ͼ1 .cm-scroller {display: flex !important; align-items: flex-start !important; font-family: monospace; line-height: 1.4; height: 100%; overflow-x: auto; position: relative; z-index: 0;}
+.ͼ1 .cm-content[contenteditable=true] {-webkit-user-modify: read-write-plaintext-only;}
+.ͼ1 .cm-content {margin: 0; flex-grow: 2; flex-shrink: 0; display: block; white-space: pre; word-wrap: normal; box-sizing: border-box; padding: 4px 0; outline: none;}
+.ͼ1 .cm-lineWrapping {white-space: pre-wrap; white-space: break-spaces; word-break: break-word; overflow-wrap: anywhere; flex-shrink: 1;}
+.ͼ2 .cm-content {caret-color: black;}
+.ͼ3 .cm-content {caret-color: white;}
+.ͼ1 .cm-line {display: block; padding: 0 2px 0 6px;}
+.ͼ1 .cm-layer > * {position: absolute;}
+.ͼ1 .cm-layer {position: absolute; left: 0; top: 0; contain: size style;}
+.ͼ2 .cm-selectionBackground {background: #d9d9d9;}
+.ͼ3 .cm-selectionBackground {background: #222;}
+.ͼ2.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {background: #d7d4f0;}
+.ͼ3.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {background: #233;}
+.ͼ1 .cm-cursorLayer {pointer-events: none;}
+.ͼ1.cm-focused > .cm-scroller > .cm-cursorLayer {animation: steps(1) cm-blink 1.2s infinite;}
+@keyframes cm-blink {50% {opacity: 0;}}
+@keyframes cm-blink2 {50% {opacity: 0;}}
+.ͼ1 .cm-cursor, .ͼ1 .cm-dropCursor {border-left: 1.2px solid black; margin-left: -0.6px; pointer-events: none;}
+.ͼ1 .cm-cursor {display: none;}
+.ͼ3 .cm-cursor {border-left-color: #444;}
+.ͼ1 .cm-dropCursor {position: absolute;}
+.ͼ1.cm-focused > .cm-scroller > .cm-cursorLayer .cm-cursor {display: block;}
+.ͼ2 .cm-activeLine {background-color: #cceeff44;}
+.ͼ3 .cm-activeLine {background-color: #99eeff33;}
+.ͼ2 .cm-specialChar {color: red;}
+.ͼ3 .cm-specialChar {color: #f78;}
+.ͼ1 .cm-gutters {flex-shrink: 0; display: flex; height: 100%; box-sizing: border-box; inset-inline-start: 0; z-index: 200;}
+.ͼ2 .cm-gutters {background-color: #f5f5f5; color: #6c6c6c; border-right: 1px solid #ddd;}
+.ͼ3 .cm-gutters {background-color: #333338; color: #ccc;}
+.ͼ1 .cm-gutter {display: flex !important; flex-direction: column; flex-shrink: 0; box-sizing: border-box; min-height: 100%; overflow: hidden;}
+.ͼ1 .cm-gutterElement {box-sizing: border-box;}
+.ͼ1 .cm-lineNumbers .cm-gutterElement {padding: 0 3px 0 5px; min-width: 20px; text-align: right; white-space: nowrap;}
+.ͼ2 .cm-activeLineGutter {background-color: #e2f2ff;}
+.ͼ3 .cm-activeLineGutter {background-color: #222227;}
+.ͼ1 .cm-panels {box-sizing: border-box; position: sticky; left: 0; right: 0;}
+.ͼ2 .cm-panels {background-color: #f5f5f5; color: black;}
+.ͼ2 .cm-panels-top {border-bottom: 1px solid #ddd;}
+.ͼ2 .cm-panels-bottom {border-top: 1px solid #ddd;}
+.ͼ3 .cm-panels {background-color: #333338; color: white;}
+.ͼ1 .cm-tab {display: inline-block; overflow: hidden; vertical-align: bottom;}
+.ͼ1 .cm-widgetBuffer {vertical-align: text-top; height: 1em; width: 0; display: inline;}
+.ͼ1 .cm-placeholder {color: #888; display: inline-block; vertical-align: top;}
+.ͼ1 .cm-highlightSpace:before {content: attr(data-display); position: absolute; pointer-events: none; color: #888;}
+.ͼ1 .cm-highlightTab {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="20"><path stroke="%23888" stroke-width="1" fill="none" d="M1 10H196L190 5M190 15L196 10M197 4L197 16"/></svg>'); background-size: auto 100%; background-position: right 90%; background-repeat: no-repeat;}
+.ͼ1 .cm-trailingSpace {background-color: #ff332255;}
+.ͼ1 .cm-button {vertical-align: middle; color: inherit; font-size: 70%; padding: .2em 1em; border-radius: 1px;}
+.ͼ2 .cm-button:active {background-image: linear-gradient(#b4b4b4, #d0d3d6);}
+.ͼ2 .cm-button {background-image: linear-gradient(#eff1f5, #d9d9df); border: 1px solid #888;}
+.ͼ3 .cm-button:active {background-image: linear-gradient(#111, #333);}
+.ͼ3 .cm-button {background-image: linear-gradient(#393939, #111); border: 1px solid #888;}
+.ͼ1 .cm-textfield {vertical-align: middle; color: inherit; font-size: 70%; border: 1px solid silver; padding: .2em .5em;}
+.ͼ2 .cm-textfield {background-color: white;}
+.ͼ3 .cm-textfield {border: 1px solid #555; background-color: inherit;}
+.ͼ1 .cm-diagnostic {padding: 3px 6px 3px 8px; margin-left: -1px; display: block; white-space: pre-wrap;}
+.ͼ1 .cm-diagnostic-error {border-left: 5px solid #d11;}
+.ͼ1 .cm-diagnostic-warning {border-left: 5px solid orange;}
+.ͼ1 .cm-diagnostic-info {border-left: 5px solid #999;}
+.ͼ1 .cm-diagnostic-hint {border-left: 5px solid #66d;}
+.ͼ1 .cm-diagnosticAction {font: inherit; border: none; padding: 2px 4px; background-color: #444; color: white; border-radius: 3px; margin-left: 8px; cursor: pointer;}
+.ͼ1 .cm-diagnosticSource {font-size: 70%; opacity: 0.7;}
+.ͼ1 .cm-lintRange {background-position: left bottom; background-repeat: repeat-x; padding-bottom: 0.7px;}
+.ͼ1 .cm-lintRange-error {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%23d11%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-warning {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22orange%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-info {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%23999%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-hint {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="6" height="3">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%2366d%22%20fill%3D%22none%22%20stroke-width%3D%22.7%22%2F%3E</svg>');}
+.ͼ1 .cm-lintRange-active {background-color: #ffdd9980;}
+.ͼ1 .cm-tooltip-lint {padding: 0; margin: 0;}
+.ͼ1 .cm-lintPoint:after {content: ""; position: absolute; bottom: 0; left: -2px; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 4px solid #d11;}
+.ͼ1 .cm-lintPoint {position: relative;}
+.ͼ1 .cm-lintPoint-warning:after {border-bottom-color: orange;}
+.ͼ1 .cm-lintPoint-info:after {border-bottom-color: #999;}
+.ͼ1 .cm-lintPoint-hint:after {border-bottom-color: #66d;}
+.ͼ1 .cm-panel.cm-panel-lint ul [aria-selected] u {text-decoration: underline;}
+.ͼ1 .cm-panel.cm-panel-lint ul [aria-selected] {background-color: #ddd;}
+.ͼ1 .cm-panel.cm-panel-lint ul:focus [aria-selected] {background: #bdf; background-color: Highlight; color: white; color: HighlightText;}
+.ͼ1 .cm-panel.cm-panel-lint ul u {text-decoration: none;}
+.ͼ1 .cm-panel.cm-panel-lint ul {max-height: 100px; overflow-y: auto; padding: 0; margin: 0;}
+.ͼ1 .cm-panel.cm-panel-lint [name=close] {position: absolute; top: 0; right: 2px; background: inherit; border: none; font: inherit; padding: 0; margin: 0;}
+.ͼ1 .cm-panel.cm-panel-lint {position: relative;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > li, .ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > completion-section {padding: 1px 3px; line-height: 1.2;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > li {overflow-x: hidden; text-overflow: ellipsis; cursor: pointer;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul > completion-section {display: list-item; border-bottom: 1px solid silver; padding-left: 0.5em; opacity: 0.7;}
+.ͼ1 .cm-tooltip.cm-tooltip-autocomplete > ul {font-family: monospace; white-space: nowrap; overflow: hidden auto; max-width: 700px; max-width: min(700px, 95vw); min-width: 250px; max-height: 10em; height: 100%; list-style: none; margin: 0; padding: 0;}
+.ͼ2 .cm-tooltip-autocomplete ul li[aria-selected] {background: #17c; color: white;}
+.ͼ2 .cm-tooltip-autocomplete-disabled ul li[aria-selected] {background: #777;}
+.ͼ3 .cm-tooltip-autocomplete ul li[aria-selected] {background: #347; color: white;}
+.ͼ3 .cm-tooltip-autocomplete-disabled ul li[aria-selected] {background: #444;}
+.ͼ1 .cm-completionListIncompleteTop:before, .ͼ1 .cm-completionListIncompleteBottom:after {content: "···"; opacity: 0.5; display: block; text-align: center;}
+.ͼ1 .cm-tooltip.cm-completionInfo {position: absolute; padding: 3px 9px; width: max-content; max-width: 400px; box-sizing: border-box;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-left {right: 100%;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-right {left: 100%;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-left-narrow {right: 30px;}
+.ͼ1 .cm-completionInfo.cm-completionInfo-right-narrow {left: 30px;}
+.ͼ2 .cm-snippetField {background-color: #00000022;}
+.ͼ3 .cm-snippetField {background-color: #ffffff22;}
+.ͼ1 .cm-snippetFieldPosition {vertical-align: text-top; width: 0; height: 1.15em; display: inline-block; margin: 0 -0.7px -.7em; border-left: 1.4px dotted #888;}
+.ͼ1 .cm-completionMatchedText {text-decoration: underline;}
+.ͼ1 .cm-completionDetail {margin-left: 0.5em; font-style: italic;}
+.ͼ1 .cm-completionIcon {font-size: 90%; width: .8em; display: inline-block; text-align: center; padding-right: .6em; opacity: 0.6; box-sizing: content-box;}
+.ͼ1 .cm-completionIcon-function:after, .ͼ1 .cm-completionIcon-method:after {content: 'ƒ';}
+.ͼ1 .cm-completionIcon-class:after {content: '○';}
+.ͼ1 .cm-completionIcon-interface:after {content: '◌';}
+.ͼ1 .cm-completionIcon-variable:after {content: '𝑥';}
+.ͼ1 .cm-completionIcon-constant:after {content: '𝐶';}
+.ͼ1 .cm-completionIcon-type:after {content: '𝑡';}
+.ͼ1 .cm-completionIcon-enum:after {content: '∪';}
+.ͼ1 .cm-completionIcon-property:after {content: '□';}
+.ͼ1 .cm-completionIcon-keyword:after {content: '🔑︎';}
+.ͼ1 .cm-completionIcon-namespace:after {content: '▢';}
+.ͼ1 .cm-completionIcon-text:after {content: 'abc'; font-size: 50%; vertical-align: middle;}
+.ͼ1 .cm-tooltip {z-index: 100; box-sizing: border-box;}
+.ͼ2 .cm-tooltip {border: 1px solid #bbb; background-color: #f5f5f5;}
+.ͼ2 .cm-tooltip-section:not(:first-child) {border-top: 1px solid #bbb;}
+.ͼ3 .cm-tooltip {background-color: #333338; color: white;}
+.ͼ1 .cm-tooltip-arrow:before, .ͼ1 .cm-tooltip-arrow:after {content: ''; position: absolute; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;}
+.ͼ1 .cm-tooltip-above .cm-tooltip-arrow:before {border-top: 7px solid #bbb;}
+.ͼ1 .cm-tooltip-above .cm-tooltip-arrow:after {border-top: 7px solid #f5f5f5; bottom: 1px;}
+.ͼ1 .cm-tooltip-above .cm-tooltip-arrow {bottom: -7px;}
+.ͼ1 .cm-tooltip-below .cm-tooltip-arrow:before {border-bottom: 7px solid #bbb;}
+.ͼ1 .cm-tooltip-below .cm-tooltip-arrow:after {border-bottom: 7px solid #f5f5f5; top: 1px;}
+.ͼ1 .cm-tooltip-below .cm-tooltip-arrow {top: -7px;}
+.ͼ1 .cm-tooltip-arrow {height: 7px; width: 14px; position: absolute; z-index: -1; overflow: hidden;}
+.ͼ3 .cm-tooltip .cm-tooltip-arrow:before {border-top-color: #333338; border-bottom-color: #333338;}
+.ͼ3 .cm-tooltip .cm-tooltip-arrow:after {border-top-color: transparent; border-bottom-color: transparent;}
+.ͼ1.cm-focused .cm-matchingBracket {background-color: #328c8252;}
+.ͼ1.cm-focused .cm-nonmatchingBracket {background-color: #bb555544;}
+.ͼ1 .cm-selectionMatch {background-color: #99ff7780;}
+.ͼ1 .cm-searchMatch .cm-selectionMatch {background-color: transparent;}
+.ͼ1 .cm-panel.cm-search [name=close] {position: absolute; top: 0; right: 4px; background-color: inherit; border: none; font: inherit; padding: 0; margin: 0;}
+.ͼ1 .cm-panel.cm-search input, .ͼ1 .cm-panel.cm-search button, .ͼ1 .cm-panel.cm-search label {margin: .2em .6em .2em 0;}
+.ͼ1 .cm-panel.cm-search input[type=checkbox] {margin-right: .2em;}
+.ͼ1 .cm-panel.cm-search label {font-size: 80%; white-space: pre;}
+.ͼ1 .cm-panel.cm-search {padding: 2px 6px 4px; position: relative;}
+.ͼ2 .cm-searchMatch {background-color: #ffff0054;}
+.ͼ3 .cm-searchMatch {background-color: #00ffff8a;}
+.ͼ2 .cm-searchMatch-selected {background-color: #ff6a0054;}
+.ͼ3 .cm-searchMatch-selected {background-color: #ff00ff8a;}
+.ͼ7 {width: 100%; height: 100%;}
+.ͼ7 .cm-scroller {color: var(--editor-text); background: transparent; font-size: 13.5px; line-height: 18px; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-variant-ligatures: none;}
+.ͼ7 .cm-panels {color: var(--primary-text-color);}
+.ͼ7 .cm-panel > div {border-color: var(--divider-color);}
+.ͼ7 .cm-panels-top {z-index: 1; border: none;}
+.ͼ7 .cm-search-container {box-shadow: 0 2px 8px #00000026; border-radius: 6px; background-color: var(--themed-surface-level-1-background); position: absolute; right: 20px; top: 0;}
+.ͼ7 .cm-search-container:first-child {border-radius: 6px;}
+.ͼ7 .cm-cursor {border-left-color: var(--fallback-black);}
+.ͼ7 .cm-tooltip-autocomplete.cm-tooltip > ul {border-radius: 6px; max-height: 15em; min-width: 200px;}
+.ͼ7 .cm-content {width: 0;}
+.ͼ7.cm-editor.cm-content {color: var(--editor-text); background: transparent; font-size: 13.5px; line-height: 18px; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-variant-ligatures: none;}
+.ͼ7.cm-editor.cm-focused {outline: none;}
+.ͼ7 .cm-placeholder {color: var(--themed-reusable-text-secondary);}
+.ͼ7 .cm-line {padding-left: 8px;}
+.ͼ7 .cm-gutters {background-color: var(--fallback-white); border-right: 0;}
+.ͼ7 .cm-lineNumbers {font-size: 13px; color: var(--themed-reusable-text-secondary); cursor: default; top: 1px; padding-left: 22px; padding-right: 26px; border-right: 1px solid var(--fallback-gray10);}
+.ͼ7 .cm-activeLineGutter {background: none; color: var(--editor-active-line-number);}
+.ͼ7 .cm-activeLine {background: none;}
+.ͼ7 .cm-matchingBracket {color: var(--fallback-gray80); background: rgba(0, 0, 0, 0.1); border-radius: 2px;}
+.ͼ7.cm-focused .cm-matchingBracket {background-color: rgba(0, 0, 0, 0.1);}
+.ͼ7 .cm-nonmatchingBracket {color: var(--editor-text);}
+.ͼ7 .cm-tooltip-autocomplete.cm-tooltip {box-shadow: 0 2px 8px #00000026; border-radius: 6px; max-height: 408px; z-index: 1001; background: var(--themed-surface-level-3-background); border: 1px solid var(--border-color); padding: 0; margin-left: -17px; font-style: inherit; font-family: Inter; font-size: 14px;}
+.ͼ7 .cm-tooltip-autocomplete.cm-tooltip ul li {white-space: normal; border-top: 1px solid transparent; border-bottom: 1px solid transparent; padding-top: 12px; line-height: 1.1; padding-bottom: 12px; padding-left: 18px; padding-right: 13px; font-variant-ligatures: none; font-family: Inter; color: var(--editor-text); position: relative;}
+.darkMode .ͼ7 .cm-tooltip-autocomplete.cm-tooltip ul li .cm-completionLabel {color: var(--basecolor-gray-40);}
+.ͼ7 .cm-tooltip-autocomplete.cm-tooltip ul li:first-child {transform: translate(0px, -1px);}
+.ͼ7 .cm-tooltip-autocomplete.cm-tooltip ul li:last-child {border-bottom: none;}
+.ͼ7 .cm-tooltip-autocomplete ul li[aria-selected] {background: var(--table-row-hover-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);}
+.darkMode .ͼ7 .cm-tooltip-autocomplete ul li[aria-selected] {background: var(--basecolor-gray-80);}
+.ͼ7 .cm-tooltip-autocomplete ul li[aria-selected]:before {content: ""; background: var(--fallback-blue50); top: 0; left: 0; position: absolute; height: 100%; width: 5px;}
+.ͼ7 .cm-tooltip {background: var(--themed-surface-level-3-background);}
+.ͼ7 .cm-tooltip .cm-signature-activeParameter {font-weight: bold; color: var(--fallback-blue50);}
+.ͼ7 .cm-tooltip-hover {background-color: transparent; border: none;}
+.ͼ7 .cm-tooltip-hover > .hover-scroll, .ͼ7 .cm-tooltip-hover .cm-diagnostic {box-shadow: 0 2px 8px #00000026; border-radius: 6px; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; overflow: hidden; background: var(--themed-surface-level-3-background); padding: 6px 13px 6px 13px;}
+.ͼ7 .cm-tooltip-lint {color: var(--editor-text); background: transparent; font-size: 13.5px; line-height: 18px; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-variant-ligatures: none; box-shadow: 0 2px 8px #00000026; border-radius: 6px; border: 1px solid var(--border-color);}
+.ͼ7 .cm-tooltip.cm-completionInfo, .ͼ7 .cm-tooltip-hover .hover-scroll {box-shadow: 2px 2px 8px #00000026; border-radius: 6px; border: 1px solid var(--border-color); color: var(--editor-comment); display: block; font-family: Inter; font-size: 13px; font-style: normal; margin-left: 0; margin-right: 0; max-height: 320px; min-width: 250px; max-width: 430px; overflow: auto; padding: 6px 13px 6px 13px; transform: translateY(-1px);}
+.ͼ7 .cm-tooltip.cm-completionInfo[style*=" height"] {max-height: unset !important;}
+.ͼ7 .cm-tooltip.cm-completionInfo[style*=" width"] {max-width: unset !important;}
+.ͼ7 .cm-tooltip-autocomplete-info code, .ͼ7 .cm-tooltip-hover code {font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; color: var(--editor-text); font-size: 13px; white-space: pre-wrap;}
+.ͼ7 .cm-tooltip-autocomplete-info pre:first-of-type {margin-top: 8px;}
+.ͼ7 .cm-tooltip-autocomplete-info p:last-of-type {margin-bottom: 8px;}
+.ͼ7 .cm-tooltip-autocomplete-info hr:first-of-type {border-top: var(--border-color); border-left: none; border-right: none;}
+.ͼ7 .cm-completionIcon {display: none;}
+.ͼ7 .cm-completionLabel {display: block; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-size: 13.5px;}
+.ͼ7 .cm-selectionBackground {background: var(--fallback-gray40); opacity: .4; transform: translateY(-2px); padding-top: 2px; padding-bottom: 2px;}
+.ͼ7.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {background: var(--fallback-gray40); opacity: .6;}
+.ͼ7 .cm-selectionMatch {background: var(--editor-selection-match-bg);}
+.ͼ7 .cm-searchMatch * {background: var(--editor-search-match-bg) !important;}
+.ͼ7 .cm-searchMatch-selected * {background: var(--editor-search-match-selected-bg) !important;}
+.darkMode .ͼ7 .cm-searchMatch * {color: var(--fallback-black) !important;}
+.darkMode .ͼ7 .cm-searchMatch-selected * {color: var(--fallback-white) !important;}
+.ͼ7 .cm-lintRange {padding-bottom: 1.7px;}
+.ͼ7 .cm-lintRange-error {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3">%3Ccircle%20cx%3D%221.5%22%20cy%3D%221.5%22%20r%3D%220.65%22%20fill%3D%22var(--fallback-red40)%22%2F%3E</svg>');}
+.ͼ7 .cm-lintRange-info {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3">%3Ccircle%20cx%3D%221.5%22%20cy%3D%221.5%22%20r%3D%220.65%22%20fill%3D%22var(--fallback-gray60)%22%2F%3E</svg>');}
+.ͼ7 .cm-lintRange-warning {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3">%3Ccircle%20cx%3D%221.5%22%20cy%3D%221.5%22%20r%3D%220.65%22%20fill%3D%22var(--fallback-gray60)%22%2F%3E</svg>');}
+.ͼ7 .cm-lintPoint-error:after {border-bottom: 6px solid var(--fallback-red30); bottom: -3px; left: -6px;}
+.ͼ7 .desclink:link, .ͼ7 .desclink:visited {color: var(--editor-comment); text-decoration: underline;}
+.ͼ7 .desclink:hover {color: var(--fallback-blue60);}
+.ͼ7 .active-handler {background-color: transparent; border-color: var(--editor-active-handler-border); border-width: 1px; border-style: solid; border-radius: 6px; padding: 2px 4px;}
+.ͼ7 .active-handler-tooltip.hover-scroll {border-left-color: var(--editor-control-keyword); border-left-width: 5px; border-left-style: solid;}
+.ͼ7 .error-highlight {background: var(--editor-error-bg);}
+.ͼ7 .executed-highlight {background: var(--editor-executed-bg);}
+.ͼ7 .executed-line {border-left: #457cff 4px solid; width: 4px; height: 100%;}
+.ͼ7 .tok-builtin {color: var(--editor-function);}
+.ͼ7 .tok-comment {color: var(--editor-comment);}
+.ͼ7 .tok-controlKeyword {color: var(--editor-control-keyword);}
+.ͼ7 .tok-variableName {color: var(--fallback-violet60);}
+.ͼ7 .tok-keyword {color: var(--editor-keyword);}
+.ͼ7 .tok-name {color: var(--editor-text);}
+.ͼ7 .tok-functionName.tok-variableName {color: var(--editor-control-keyword);}
+.ͼ7 .tok-number {color: var(--editor-function);}
+.ͼ7 .tok-string2 {color: var(--editor-function);}
+.ͼ7 .tok-string {color: var(--editor-string);}
+.ͼ7 .tok-typeName {color: var(--editor-function);}
+.ͼ7 .tok-specialVariable {color: var(--editor-control-keyword);}
+.ͼ7 .typetag {color: var(--editor-string);}
+.ͼ7 .typetag.typetag-alias {color: var(--editor-special);}
+.ͼ7 .typetag.typetag-function {color: var(--editor-function);}
+.ͼ7 .typetag.typetag-keyword {color: var(--editor-keyword);}
+.ͼ7 .typetag.typetag-joinSuggestion {color: var(--editor-keyword);}
+.ͼ7 .typetag.typetag-filter {color: var(--editor-control-keyword);}
+.ͼ7 .typetag.typetag-as {color: var(--editor-special);}
+.ͼ6 .cm-gutters {background-color: var(--additional-info-bg);}
+.ͼ5 {width: 100%; height: 100%;}
+.ͼ5 .cm-scroller {color: var(--editor-text); background: transparent; font-size: 13.5px; line-height: 18px; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-variant-ligatures: none;}
+.ͼ5 .cm-panels {color: var(--primary-text-color);}
+.ͼ5 .cm-panel > div {border-color: var(--divider-color);}
+.ͼ5 .cm-panels-top {z-index: 1; border: none;}
+.ͼ5 .cm-search-container {box-shadow: 0 2px 8px #00000026; border-radius: 6px; background-color: var(--themed-surface-level-1-background); position: absolute; right: 20px; top: 0;}
+.ͼ5 .cm-search-container:first-child {border-radius: 6px;}
+.ͼ5 .cm-cursor {border-left-color: var(--fallback-black);}
+.ͼ5 .cm-tooltip-autocomplete.cm-tooltip > ul {border-radius: 6px; max-height: 15em; min-width: 200px;}
+.ͼ5 .cm-content {width: 0;}
+.ͼ5.cm-editor.cm-content {color: var(--editor-text); background: transparent; font-size: 13.5px; line-height: 18px; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-variant-ligatures: none;}
+.ͼ5.cm-editor.cm-focused {outline: none;}
+.ͼ5 .cm-placeholder {color: var(--themed-reusable-text-secondary);}
+.ͼ5 .cm-line {padding-left: 8px;}
+.ͼ5 .cm-gutters {background-color: var(--fallback-white); border-right: 0;}
+.ͼ5 .cm-lineNumbers {font-size: 13px; color: var(--themed-reusable-text-secondary); cursor: default; top: 1px; padding-left: 22px; padding-right: 26px; border-right: 1px solid var(--fallback-gray10);}
+.ͼ5 .cm-activeLineGutter {background: none; color: var(--editor-active-line-number);}
+.ͼ5 .cm-activeLine {background: none;}
+.ͼ5 .cm-matchingBracket {color: var(--fallback-gray80); background: rgba(0, 0, 0, 0.1); border-radius: 2px;}
+.ͼ5.cm-focused .cm-matchingBracket {background-color: rgba(0, 0, 0, 0.1);}
+.ͼ5 .cm-nonmatchingBracket {color: var(--editor-text);}
+.ͼ5 .cm-tooltip-autocomplete.cm-tooltip {box-shadow: 0 2px 8px #00000026; border-radius: 6px; max-height: 408px; z-index: 1001; background: var(--themed-surface-level-3-background); border: 1px solid var(--border-color); padding: 0; margin-left: -17px; font-style: inherit; font-family: Inter; font-size: 14px;}
+.ͼ5 .cm-tooltip-autocomplete.cm-tooltip ul li {white-space: normal; border-top: 1px solid transparent; border-bottom: 1px solid transparent; padding-top: 12px; line-height: 1.1; padding-bottom: 12px; padding-left: 18px; padding-right: 13px; font-variant-ligatures: none; font-family: Inter; color: var(--editor-text); position: relative;}
+.darkMode .ͼ5 .cm-tooltip-autocomplete.cm-tooltip ul li .cm-completionLabel {color: var(--basecolor-gray-40);}
+.ͼ5 .cm-tooltip-autocomplete.cm-tooltip ul li:first-child {transform: translate(0px, -1px);}
+.ͼ5 .cm-tooltip-autocomplete.cm-tooltip ul li:last-child {border-bottom: none;}
+.ͼ5 .cm-tooltip-autocomplete ul li[aria-selected] {background: var(--table-row-hover-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);}
+.darkMode .ͼ5 .cm-tooltip-autocomplete ul li[aria-selected] {background: var(--basecolor-gray-80);}
+.ͼ5 .cm-tooltip-autocomplete ul li[aria-selected]:before {content: ""; background: var(--fallback-blue50); top: 0; left: 0; position: absolute; height: 100%; width: 5px;}
+.ͼ5 .cm-tooltip {background: var(--themed-surface-level-3-background);}
+.ͼ5 .cm-tooltip .cm-signature-activeParameter {font-weight: bold; color: var(--fallback-blue50);}
+.ͼ5 .cm-tooltip-hover {background-color: transparent; border: none;}
+.ͼ5 .cm-tooltip-hover > .hover-scroll, .ͼ5 .cm-tooltip-hover .cm-diagnostic {box-shadow: 0 2px 8px #00000026; border-radius: 6px; font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; overflow: hidden; background: var(--themed-surface-level-3-background); padding: 6px 13px 6px 13px;}
+.ͼ5 .cm-tooltip-lint {color: var(--editor-text); background: transparent; font-size: 13.5px; line-height: 18px; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-variant-ligatures: none; box-shadow: 0 2px 8px #00000026; border-radius: 6px; border: 1px solid var(--border-color);}
+.ͼ5 .cm-tooltip.cm-completionInfo, .ͼ5 .cm-tooltip-hover .hover-scroll {box-shadow: 2px 2px 8px #00000026; border-radius: 6px; border: 1px solid var(--border-color); color: var(--editor-comment); display: block; font-family: Inter; font-size: 13px; font-style: normal; margin-left: 0; margin-right: 0; max-height: 320px; min-width: 250px; max-width: 430px; overflow: auto; padding: 6px 13px 6px 13px; transform: translateY(-1px);}
+.ͼ5 .cm-tooltip.cm-completionInfo[style*=" height"] {max-height: unset !important;}
+.ͼ5 .cm-tooltip.cm-completionInfo[style*=" width"] {max-width: unset !important;}
+.ͼ5 .cm-tooltip-autocomplete-info code, .ͼ5 .cm-tooltip-hover code {font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; color: var(--editor-text); font-size: 13px; white-space: pre-wrap;}
+.ͼ5 .cm-tooltip-autocomplete-info pre:first-of-type {margin-top: 8px;}
+.ͼ5 .cm-tooltip-autocomplete-info p:last-of-type {margin-bottom: 8px;}
+.ͼ5 .cm-tooltip-autocomplete-info hr:first-of-type {border-top: var(--border-color); border-left: none; border-right: none;}
+.ͼ5 .cm-completionIcon {display: none;}
+.ͼ5 .cm-completionLabel {display: block; font-family: apercu-mono-regular, Menlo, Monaco, Consolas, 'Courier New', monospace; font-size: 13.5px;}
+.ͼ5 .cm-selectionBackground {background: var(--fallback-gray40); opacity: .4; transform: translateY(-2px); padding-top: 2px; padding-bottom: 2px;}
+.ͼ5.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {background: var(--fallback-gray40); opacity: .6;}
+.ͼ5 .cm-selectionMatch {background: var(--editor-selection-match-bg);}
+.ͼ5 .cm-searchMatch * {background: var(--editor-search-match-bg) !important;}
+.ͼ5 .cm-searchMatch-selected * {background: var(--editor-search-match-selected-bg) !important;}
+.darkMode .ͼ5 .cm-searchMatch * {color: var(--fallback-black) !important;}
+.darkMode .ͼ5 .cm-searchMatch-selected * {color: var(--fallback-white) !important;}
+.ͼ5 .cm-lintRange {padding-bottom: 1.7px;}
+.ͼ5 .cm-lintRange-error {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3">%3Ccircle%20cx%3D%221.5%22%20cy%3D%221.5%22%20r%3D%220.65%22%20fill%3D%22var(--fallback-red40)%22%2F%3E</svg>');}
+.ͼ5 .cm-lintRange-info {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3">%3Ccircle%20cx%3D%221.5%22%20cy%3D%221.5%22%20r%3D%220.65%22%20fill%3D%22var(--fallback-gray60)%22%2F%3E</svg>');}
+.ͼ5 .cm-lintRange-warning {background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3">%3Ccircle%20cx%3D%221.5%22%20cy%3D%221.5%22%20r%3D%220.65%22%20fill%3D%22var(--fallback-gray60)%22%2F%3E</svg>');}
+.ͼ5 .cm-lintPoint-error:after {border-bottom: 6px solid var(--fallback-red30); bottom: -3px; left: -6px;}
+.ͼ5 .desclink:link, .ͼ5 .desclink:visited {color: var(--editor-comment); text-decoration: underline;}
+.ͼ5 .desclink:hover {color: var(--fallback-blue60);}
+.ͼ5 .active-handler {background-color: transparent; border-color: var(--editor-active-handler-border); border-width: 1px; border-style: solid; border-radius: 6px; padding: 2px 4px;}
+.ͼ5 .active-handler-tooltip.hover-scroll {border-left-color: var(--editor-control-keyword); border-left-width: 5px; border-left-style: solid;}
+.ͼ5 .error-highlight {background: var(--editor-error-bg);}
+.ͼ5 .executed-highlight {background: var(--editor-executed-bg);}
+.ͼ5 .executed-line {border-left: #457cff 4px solid; width: 4px; height: 100%;}
+.ͼ5 .tok-comment {color: var(--editor-comment);}
+.ͼ5 .tok-controlKeyword {color: var(--editor-control-keyword);}
+.ͼ5 .tok-definitionKeyword.tok-keyword {color: var(--editor-keyword);}
+.ͼ5 .tok-variableName {color: var(--editor-variable-name);}
+.ͼ5 .tok-keyword {color: var(--editor-py-keyword);}
+.ͼ5 .tok-name {color: var(--editor-text);}
+.ͼ5 .tok-functionName.tok-variableName {color: var(--editor-function-name-variable-name);}
+.ͼ5 .tok-number {color: var(--editor-number);}
+.ͼ5 .tok-string2 {color: var(--editor-special);}
+.ͼ5 .tok-string {color: var(--editor-string);}
+.ͼ5 .tok-typeName {color: var(--editor-type-name);}
+.ͼ5 .typetag {color: var(--editor-type-tag);}
+.darkMode .ͼ5 .typetag {color: var(--basecolor-gray-40);}
+.ͼ4 .cm-line ::selection {background-color: transparent !important;}
+.ͼ4 .cm-line::selection {background-color: transparent !important;}
+.ͼ4 .cm-line {caret-color: transparent !important;}
+</style><title>Tasks</title><link rel="icon" type="image/png" href="https://app.snowflake.com/static/favicon-16.png" sizes="16x16"><link rel="icon" type="image/png" href="https://app.snowflake.com/static/favicon-32.png" sizes="32x32"><link rel="icon" type="image/png" href="https://app.snowflake.com/static/favicon-48.png" sizes="48x48"><link rel="icon" type="image/png" href="https://app.snowflake.com/static/favicon-96.png" sizes="96x96"><link rel="icon" type="image/png" href="https://app.snowflake.com/static/favicon-144.png" sizes="144x144"><meta name="viewport" content="width=device-width"><link rel="preload" href="https://app.snowflake.com/static/Inter-Black-c2edcb3c2d698b82baeb.woff2" as="font" type="font/woff2" crossorigin=""><link rel="preload" href="https://app.snowflake.com/static/Inter-Bold-3717db0be15085acc210.woff2" as="font" type="font/woff2" crossorigin=""><link rel="preload" href="https://app.snowflake.com/static/Inter-SemiBold-90c67f61a1c18b18a53c.woff2" as="font" type="font/woff2" crossorigin=""><link rel="preload" href="https://app.snowflake.com/static/Inter-Medium-be3029dd56c7701e7e9d.woff2" as="font" type="font/woff2" crossorigin=""><link rel="preload" href="https://app.snowflake.com/static/Inter-Regular-f80c55a7aedf386182e8.woff2" as="font" type="font/woff2" crossorigin=""><style media=""></style><style media="(max-width: 1000px)"></style><script charset="utf-8" data-webpack="@snowflake/nu-ui:chunk-9593" src="https://app.snowflake.com/static/route.DynamicTables-bb86d86395d8f6146e9b.js"></script></head><body style="color: var(--themed-reusable-text-primary); font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; font-size: 14px;"><div id="reactRoot"><div class="content"><div class="vn jc gw             b8 vo"><nav class="bl bm bn bo             bp b3 b4 bq br bs bt bk al" role="navigation" aria-labelledby="site_nav_title"><div class="ae af ag ah ai aj             ak al am an ao"><div id="site_nav_title">Site</div></div><div class="bf            "><a href="https://app.snowflake.com/" class="  bb          bc" role="link" tabindex="0"><div class="bu bv             b3" role="presentation"><svg width="140" height="32" role="img" aria-label="Navigate to homepage" viewBox="0 0 140 32" fill="none"><g clip-path="url(#clip0_6458_15533)"><path fill-rule="evenodd" clip-rule="evenodd" d="M40.7468 9.97503C41.5392 9.97503 42.5345 10.3734 43.3217 10.9526C44.1239 11.5429 44.5045 12.1694 44.1131 12.5128C44.0536 12.565 43.9924 12.6024 43.9285 12.6249C43.741 12.691 43.5626 12.6314 43.3266 12.4621C43.2519 12.4085 42.8098 12.0495 42.656 11.9391C42.0496 11.5038 41.4187 11.2711 40.5794 11.2711C40.0665 11.2711 39.4222 11.4385 38.9279 11.728C38.3329 12.0765 37.9925 12.5645 37.9925 13.1728C37.9925 13.5865 38.2121 13.9042 38.6554 14.1791C39.0114 14.3998 39.4122 14.5549 40.2521 14.8264C40.2454 14.8242 40.4464 14.8891 40.503 14.9074C40.6108 14.9424 40.6989 14.9713 40.7832 14.9994C40.8634 15.0262 40.9445 15.0531 41.0555 15.0898C41.0852 15.0995 41.1235 15.1122 41.1913 15.1345C41.2453 15.1524 41.2865 15.166 41.3265 15.1792C42.5983 15.6003 43.2233 15.864 43.7785 16.2796C44.5005 16.8201 44.8714 17.5288 44.8714 18.5019C44.8714 19.4984 44.3953 20.4008 43.5591 21.0339C42.7424 21.6341 41.7715 21.9147 40.5725 21.9147C39.7849 21.9047 38.7947 21.6896 38.0804 21.3522C37.4497 21.0543 36.9959 20.7638 36.7454 20.4866C36.4516 20.1616 36.4286 19.8347 36.7155 19.5652C36.8864 19.4046 37.079 19.4106 37.3501 19.5416C37.4373 19.5837 37.9864 19.902 38.1899 20.0033C38.8827 20.3482 39.623 20.5377 40.5739 20.5377C41.1018 20.5377 41.7939 20.378 42.3252 20.0923C43.0009 19.7289 43.3834 19.2004 43.3761 18.5031C43.3709 18.0007 43.0833 17.6029 42.5277 17.2596C42.1006 16.9956 41.6643 16.8235 40.7103 16.5043C40.6991 16.5005 40.6877 16.4967 40.676 16.4929C40.615 16.473 39.3467 16.1166 38.9215 15.9644C37.3251 15.3931 36.4558 14.5597 36.4953 13.1695C36.5284 12.0041 36.9125 11.3674 37.8123 10.7472C38.5414 10.2446 39.5532 9.97503 40.7468 9.97503ZM48.2196 21.6579C48.1048 21.8227 47.9091 21.9147 47.7 21.9147H47.5405L47.525 21.9103C47.3347 21.8559 47.1683 21.7228 47.079 21.5556C47.0489 21.5204 47.0383 21.4862 47.0358 21.4418L47.0112 21.4172V10.6874C47.0112 10.3055 47.3093 9.99893 47.7 9.99893C48.0715 9.99893 48.3649 10.31 48.3649 10.6874V11.5094C49.2686 10.5595 50.538 9.99893 51.8844 9.99893C54.57 9.99893 56.7577 12.193 56.7577 14.8695V21.2262C56.7577 21.6169 56.4509 21.9147 56.0689 21.9147C55.6868 21.9147 55.3801 21.6169 55.3801 21.2262V14.8695C55.3801 12.9411 53.8211 11.3759 51.8844 11.3759C49.9748 11.3759 48.4115 12.9383 48.3649 14.8695V21.336L48.3624 21.3459L48.3615 21.3497C48.322 21.5075 48.2933 21.5814 48.2196 21.6579ZM64.2997 9.97503C67.4243 9.97503 69.962 12.6779 69.962 15.9449C69.962 19.2119 67.4243 21.9147 64.2997 21.9147C61.1909 21.9147 58.6375 19.2032 58.6375 15.9449C58.6375 12.6866 61.1909 9.97503 64.2997 9.97503ZM93.6903 6.39544C93.668 6.39787 93.6452 6.39929 93.6204 6.39969C92.9031 6.3947 92.4783 6.53073 92.2372 6.80047C91.965 7.12004 91.7981 7.7278 91.7865 8.6745V9.80959L93.3225 9.80967C93.717 9.79451 94.0408 10.1046 94.0304 10.4732C94.0402 10.8748 93.7347 11.1938 93.3269 11.216H91.7864L91.7864 21.2436C91.8021 21.6288 91.4935 21.9515 91.1197 21.9515C90.7156 21.9515 90.4 21.6356 90.4162 21.2483V11.216L88.9797 11.2158C88.5872 11.1937 88.2826 10.8758 88.2826 10.476C88.2826 10.1032 88.605 9.79448 88.9861 9.80958H90.4162V8.67352C90.4274 7.35947 90.6565 6.50185 91.2169 5.87847C91.7463 5.26914 92.572 4.99331 93.6212 4.99331C93.6459 4.99331 93.6705 4.99458 93.6949 4.9971C93.7191 4.99458 93.7436 4.99331 93.7682 4.99331H93.9528C94.3407 4.99331 94.6558 5.30828 94.6557 5.69852L94.6553 5.72161C94.642 6.0989 94.3317 6.39969 93.9533 6.39969H93.7679C93.7418 6.39969 93.716 6.39826 93.6903 6.39544ZM78.8654 15.2381L76.2605 21.4588L76.2517 21.4676L76.2483 21.4777C76.1645 21.7291 75.8903 21.9147 75.6372 21.9147C75.5639 21.9147 75.51 21.902 75.4007 21.866C75.3661 21.863 75.3345 21.8527 75.3061 21.8356C75.2886 21.8251 75.2767 21.8159 75.2614 21.8014C75.1302 21.7417 75.0405 21.634 74.9795 21.4814L71.0597 10.9449C70.9186 10.6064 71.0801 10.2029 71.4086 10.0537C71.7583 9.90808 72.1866 10.0849 72.3019 10.4308L75.6204 19.4549L78.2102 13.2933C78.3217 13.0424 78.5981 12.8666 78.8651 12.8666C79.1521 12.8666 79.4308 13.0387 79.545 13.2955L82.1334 19.454L85.4283 10.4311L85.4302 10.4263C85.5732 10.0832 85.9994 9.90725 86.3217 10.0537C86.6681 10.198 86.8381 10.6003 86.6961 10.9407L82.7976 21.4362C82.7421 21.5749 82.6575 21.6877 82.5446 21.7723C82.4157 21.8689 82.2978 21.9147 82.1409 21.9147H82.0692L82.055 21.9138C81.8057 21.8827 81.5638 21.6993 81.485 21.462L78.8654 15.2381ZM97.3814 4.95654C97.7751 4.95654 98.0941 5.26648 98.0941 5.64503V21.2262C98.0941 21.6048 97.7751 21.9147 97.3814 21.9147C97.0071 21.9147 96.6926 21.6004 96.6926 21.2262V5.64503C96.6926 5.27086 97.0071 4.95654 97.3814 4.95654ZM110.061 19.8198C108.996 21.1268 107.436 21.9147 105.776 21.9147C102.644 21.9147 100.114 19.2276 100.114 15.9449C100.114 12.6622 102.644 9.97503 105.776 9.97503C107.444 9.97503 109.001 10.7496 110.061 12.0464V10.6635C110.061 10.2729 110.367 9.97503 110.749 9.97503C111.131 9.97503 111.438 10.2729 111.438 10.6635V21.2262C111.438 21.6004 111.124 21.9147 110.749 21.9147C110.375 21.9147 110.061 21.6004 110.061 21.2262V19.8198ZM64.2997 11.3281C61.9633 11.3281 60.0151 13.4133 60.0151 15.9449C60.0151 18.4719 61.9588 20.5377 64.2997 20.5377C66.6406 20.5377 68.5844 18.4719 68.5844 15.9449C68.5844 13.4133 66.6362 11.3281 64.2997 11.3281ZM115.253 16.6282L121.991 10.0601C122.275 9.77631 122.682 9.77631 122.962 10.056C123.251 10.3161 123.251 10.7507 122.965 11.0366L118.522 15.3324L122.998 20.7711C123.249 21.0781 123.225 21.4794 122.942 21.7616L122.933 21.7701C122.805 21.8725 122.65 21.9147 122.479 21.9147C122.241 21.9147 122.04 21.8343 121.93 21.6509L117.521 16.3304L115.253 18.5973V21.2262C115.253 21.6048 114.934 21.9147 114.54 21.9147C114.166 21.9147 113.851 21.6004 113.851 21.2262V5.64503C113.851 5.27086 114.166 4.95654 114.54 4.95654C114.934 4.95654 115.253 5.26648 115.253 5.64503V16.6282ZM125.325 16.2749C125.495 18.6798 127.392 20.518 129.708 20.5376C129.713 20.5376 129.814 20.5377 129.972 20.5377L130.261 20.5377C131.681 20.5377 133.111 19.5903 133.939 18.2105C134.131 17.8828 134.553 17.7929 134.863 17.9787L134.871 17.9843C135.188 18.2144 135.288 18.6154 135.092 18.9509C133.977 20.729 132.156 21.9147 130.261 21.9147C130.209 21.9147 130.14 21.9147 130.056 21.9147C129.923 21.9147 129.817 21.9146 129.757 21.9146L129.703 21.9146C126.512 21.8913 123.94 19.2287 123.94 15.9688C123.94 12.6525 126.529 9.97503 129.746 9.97503C132.794 9.97503 135.258 12.3854 135.504 15.5625V15.6342C135.504 16.0028 135.196 16.2749 134.815 16.2749H125.325ZM105.776 11.3281C103.432 11.3281 101.491 13.3976 101.491 15.9449C101.491 18.4875 103.427 20.5377 105.776 20.5377C108.14 20.5377 110.061 18.4963 110.061 15.9449C110.061 13.3888 108.136 11.3281 105.776 11.3281ZM125.416 14.9218H134.007C133.583 12.851 131.801 11.352 129.746 11.352C127.652 11.352 125.884 12.8201 125.416 14.9218Z" fill="#2AB5E8" stroke="#2AB5E8" stroke-width="0.5"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5976 20.2544C13.5413 20.4041 14.2624 21.2211 14.2624 22.2066V30.0233C14.2624 31.1153 13.3772 32 12.2854 32C11.1933 32 10.3084 31.115 10.3084 30.0233V25.6096L6.47198 27.8246C5.52325 28.3723 4.30861 28.0475 3.76053 27.0982C3.21232 26.1487 3.53778 24.935 4.48718 24.3868L11.2423 20.4867C11.6686 20.2406 12.1486 20.1707 12.5976 20.2544ZM18.0134 21.2131C18.5615 20.2638 19.7761 19.939 20.7248 20.4867L27.48 24.3868C28.4294 24.935 28.7548 26.1487 28.2066 27.0982C27.6585 28.0475 26.4439 28.3723 25.4952 27.8246L21.7107 25.6396V30.0233C21.7107 31.115 20.8258 32 19.7336 32C18.6418 32 17.7566 31.1153 17.7566 30.0233V22.3978C17.7176 21.9997 17.7981 21.586 18.0134 21.2131ZM0.266274 11.0982C0.81436 10.1489 2.029 9.82406 2.97773 10.3718L9.73284 14.2719C10.3798 14.6454 10.7371 15.3281 10.7255 16.0256C10.7313 16.7177 10.3745 17.3931 9.73284 17.7636L2.97773 21.6637C2.02832 22.2118 0.814481 21.8868 0.266274 20.9373C-0.281812 19.988 0.0442034 18.7736 0.99293 18.2259L4.81758 16.0177L0.99293 13.8096C0.0435233 13.2614 -0.281932 12.0477 0.266274 11.0982ZM31.7009 11.0982C32.2491 12.0477 31.9236 13.2614 30.9742 13.8096L27.1496 16.0177L30.9742 18.2259C31.9229 18.7736 32.249 19.988 31.7009 20.9373C31.1527 21.8868 29.9388 22.2118 28.9894 21.6637L22.2343 17.7636C21.5926 17.3931 21.2358 16.7177 21.2417 16.0256C21.2301 15.3281 21.5873 14.6454 22.2343 14.2719L28.9894 10.3718C29.9381 9.82406 31.1528 10.1489 31.7009 11.0982ZM16.3409 12.3218C16.491 12.3218 16.6994 12.4082 16.8059 12.5147L19.4853 15.1941C19.5914 15.3002 19.6782 15.5088 19.6782 15.6591V16.3409C19.6782 16.491 19.5918 16.6994 19.4853 16.8059L16.8059 19.4853C16.6998 19.5914 16.4912 19.6782 16.3409 19.6782H15.6591C15.509 19.6782 15.3006 19.5918 15.1941 19.4853L12.5147 16.8059C12.4086 16.6998 12.3218 16.4912 12.3218 16.3409V15.6591C12.3218 15.509 12.4082 15.3006 12.5147 15.1941L15.1941 12.5147C15.3002 12.4086 15.5088 12.3218 15.6591 12.3218H16.3409ZM16.0151 14.7126H15.9849C15.8748 14.7126 15.7223 14.7757 15.6441 14.854L14.854 15.6441C14.7759 15.7222 14.7126 15.8744 14.7126 15.9849V16.0151C14.7126 16.1252 14.7757 16.2777 14.854 16.3559L15.6441 17.146C15.7222 17.2241 15.8744 17.2874 15.9849 17.2874H16.0151C16.1252 17.2874 16.2777 17.2243 16.3559 17.146L17.146 16.3559C17.2241 16.2778 17.2874 16.1256 17.2874 16.0151V15.9849C17.2874 15.8748 17.2243 15.7223 17.146 15.6441L16.3559 14.854C16.2778 14.7759 16.1256 14.7126 16.0151 14.7126ZM12.2854 0C13.3772 0 14.2624 0.884672 14.2624 1.97669V9.79343C14.2624 10.3686 14.0168 10.8864 13.6246 11.2476C13.0041 11.8563 12.0313 12.0042 11.2423 11.5487L4.48718 7.64865C3.53778 7.10051 3.21232 5.88679 3.76053 4.93727C4.30861 3.98796 5.52325 3.66314 6.47198 4.21089L10.3084 6.42582V1.97669C10.3084 0.884993 11.1933 0 12.2854 0ZM19.7336 0C20.8258 0 21.7107 0.884993 21.7107 1.97669V6.39587L25.4952 4.21089C26.4439 3.66314 27.6585 3.98796 28.2066 4.93727C28.7548 5.88679 28.4294 7.10051 27.48 7.64865L20.7248 11.5487C19.7761 12.0965 18.5615 11.7716 18.0134 10.8223C17.7981 10.4494 17.7176 10.0358 17.7566 9.63769V1.97669C17.7566 0.884672 18.6418 0 19.7336 0Z" fill="#2AB5E8"></path></g><defs><clippath id="clip0_6458_15533"><rect width="135.54" height="32" fill="white"></rect></clippath></defs></svg></div></a><div class="bv            "><div class="            b3 bw" role="navigation" id="__js7997" aria-label="Projects"><a href="https://app.snowflake.com/xmgjfpc/ds42038/worksheets" class="ar as at au bx by bz c0 c1 c2 bf c3  bb          bc b3 c4 c5" role="link" tabindex="0" aria-label="Projects"><div class="c6 c7             b7 c8 c9 ca cb"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="c0 cc cd ce             cf cg" role="img" aria-label="Projects"><path d="M4.53553 11.3639L3.12132 9.94969L5.24264 7.82837L3.12132 5.70705L4.53553 4.29284L7.36396 7.12126C7.75449 7.51179 7.75449 8.14495 7.36396 8.53548L4.53553 11.3639Z"></path><path d="M8 11.5H12V9.5H8V11.5Z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M0 3C0 1.34315 1.34315 0 3 0H13C14.6569 0 16 1.34315 16 3V13C16 14.6569 14.6569 16 13 16H3C1.34315 16 0 14.6569 0 13V3ZM3 2C2.44772 2 2 2.44772 2 3V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2H3Z"></path></svg>Projects</div></a></div><div class="            b3 bw" role="navigation" id="__js7999" aria-label="Data"><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/data/databases" class="ar as at au bx by bz c0 c1 c2 bf c3  bb          bc b3 c4 c5" role="link" tabindex="0" aria-label="Data"><div class="c6 c7             b7 c8 c9 ca cb"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="c0 cc cd ce             co cg" role="img" aria-label="Data"><path d="M3 3.5V12M14 3.29999V12" stroke-width="2"></path><path d="M14 3.3C14 5.0863 11.25 5.6 8.5 5.6C5.75 5.6 3 5.0863 3 3.3C3 1.575 5.75 1 8.5 1C11.25 1 14 1.5137 14 3.3Z" stroke-width="2"></path><path d="M14 12C14 14 11.25 15 8.5 15C5.75 15 3 14 3 12" stroke-width="2"></path></svg>Data</div></a></div><div class="            b3 bw" role="navigation" id="__js8001" aria-label="Data Products"><a href="https://app.snowflake.com/marketplace" class="ar as at au bx by bz c0 c1 c2 bf c3  bb          bc b3 c4 c5" role="link" tabindex="0" aria-label="Data Products"><div class="c6 c7             b7 c8 c9 ca cb"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="c0 cc cd ce             co cg" role="img" aria-label="Data Products"><path d="M11.0172 5.01192C10.4786 3.4801 9.27949 2.3819 7.5625 2.3819C4.41633 2.3819 3.46814 5.19025 3.64904 6.75388C2.36065 6.75388 1 7.66312 1 9.37689C1 10.8256 2.17525 12 3.625 12H11.5C13.433 12 15 10.4341 15 8.50252C15 5.49545 12.2577 4.92251 11.0172 5.01192Z" stroke-width="2" stroke-linejoin="round"></path></svg>Data Products</div></a></div><div class="            b3 bw" role="navigation" id="__js8003" aria-label="Monitoring"><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/compute/history" class="ar as at au bx by bz c0 c1 c2 bf c3  bb          bc b3 c4 c5" role="link" tabindex="0" aria-label="Monitoring"><div class="c6 c7             b7 c8 c9 ca cb"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="c0 cc cd ce             co cg" role="img" aria-label="Monitoring"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 8H3.8L6.6 2L9.4 14L12.2 7.5H15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></svg>Monitoring</div></a></div><div class="ch            "><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/compute/history" class="ar as at au bx bz c0 c2 c3  bb          bc b3 c4 c5" role="link" tabindex="0"><div class="cj c7             b7 c8 cl ca cb">Query History</div></a></div><div class="ch            "><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/compute/history/copies" class="ar as at au bx bz c0 c2 c3  bb          bc b3 c4 c5" role="link" tabindex="0"><div class="cj c7             b7 c8 cl ca cb">Copy History</div></a></div><div class="ch            "><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/compute/history/tasks" class="ar as at au bx bz c0 c2 c3  bb          bc b3 c4 c5" role="link" tabindex="0"><div class="cj c7             b7 c8 cl ca cb">Task History</div></a></div><div class="ch            "><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/compute/history/dynamic-tables" class="ar as at au bx bz c0 c2   bb          bc b3 c4 ci c5" role="link" tabindex="0" aria-current="page"><div class="cj c7             b7 ck cl cm cn">Dynamic Tables</div></a></div><div class="            b3 bw" role="navigation" id="__js8005" aria-label="Admin"><a href="https://app.snowflake.com/xmgjfpc/ds42038/#/compute/warehouses" class="ar as at au bx by bz c0 c1 c2 bf c3  bb          bc b3 c4 c5" role="link" tabindex="0" aria-label="Admin"><div class="c6 c7             b7 c8 c9 ca cb"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="c0 cc cd ce             co cg" role="img" aria-label="Admin"><circle cx="7.97386" cy="6.57143" r="1.57143" stroke-width="2"></circle><path d="M3.97388 12.0914C5.03539 11.1018 6.43717 10.5 7.97388 10.5C9.51059 10.5 10.9124 11.1018 11.9739 12.0914" stroke-width="2"></path><path d="M2.20437 3.20561L7.18601 1.16171C7.68911 0.946097 8.25859 0.946097 8.76169 1.16171L13.7624 3.20561C14.6095 3.56866 15.1048 4.46385 14.9328 5.3693C14.1678 9.3969 12.3764 15 7.97385 15C3.57127 15 1.79895 9.3969 1.03395 5.3693C0.861972 4.46385 1.35725 3.56866 2.20437 3.20561Z" stroke-width="2"></path></svg>Admin</div></a></div></div><div class="cp             b3 cq b5 cr"><div class="cs ct cu cv cw cx cy cz d0             d1 d2"><div class="            b3 cq b5 cr"><svg width="32" height="32" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="d3 d4 ce             d5 d6 d7 d8 cg" role="presentation"><path d="M7.5 4.5V8.5H10.5M14.5 8C14.5 11.5899 11.5899 14.5 8 14.5C4.41015 14.5 1.5 11.5899 1.5 8C1.5 4.41015 4.41015 1.5 8 1.5C11.5899 1.5 14.5 4.41015 14.5 8Z" stroke-linecap="square" stroke-linejoin="round"></path></svg></div><div class="d9             d5 da">11 days left in trial</div><a href="https://app.snowflake.com/australia-east.azure/wr21181/account/billing" class="d9 bf db  bb          bc dc dd" role="link" tabindex="0"><div class="de df dg dh di dj dk dl dm br dn do dp bl dq dr c6 bx ds dt du dv dw dx dy dz e0 e1 e2 e3 e4 e5 e6 e7 e8 e9 ea eb           ec ed bc dd ee cr ef eg eh ei ej ek el em en" role="presentation" aria-disabled="false"><span class="eo             b3 ep c4 cr ao eq er ei eg">Upgrade</span></div></a></div></div></div><div class="bf             b3 b4 b5 es"><div class="et            "><div class="            b3 bs c4"><div class="eu ev ew ex at au as ar dm br dn do ey ez f0 f1 c6 f2 f3 f4 f5 f6 f7 f8 f9 fa bf fb fc bb          ed bc b3 ee cr ef eg eh ei ej fd fe ff fg" role="button" tabindex="0" aria-disabled="false" aria-haspopup="true" aria-label="Account Menu" data-testid="user-context-menu-button" aria-expanded="false"><span class="eo             b3 ep c4 cr ao eq er ei eg"><span class="bf fh fi fj            fk fl fm fn ei fo fp"><span class="            b3 bs c4"><span class="            b3 cq b5 bp fq"><span class="            fr"><span class="fs ft fu fv c6 bx fw             b3 c4 cr fx ed fy fz g0 g1 fl g2 g3" aria-hidden="true" data-testid="avatar-block">MK</span></span><span class="g4             fr"><span class="            fk b7 fl fo fp"><span class="g5             fr al am g6 ao" id="__js8011">mitra katta</span></span><span class="cj c1             b3 fl fo fp"><span class="g5             fr al am g6 ao" id="__js8014">ACCOUNTADMIN</span></span></span></span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="none" xmlns="http://www.w3.org/2000/svg" class="cc cd ce             g7 cg" role="presentation"><path d="M4 10L8 6L12 10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span></span></span></div></div></div></div></nav></div><h1 class="gj gk f3 gl gm gn g9 go gp gq   bb gr          gs gt" role="heading" aria-level="1"><span class="gu g8 gv gw             b3 c4 b4 cr gx b8"><span class="gy gz h0 h1 fs ft fu fv dm br dn do h2 h3 h4 h5 h6 h7             fr ed h8 h9 ha hb hc hd he hf" role="progressbar" aria-busy="true" aria-label="Loading…" aria-valuetext="Loading…"></span><span class="hg           hh  fr"></span></span></h1><div></div><div data-testid="error-container" class="errorManager-container hidden" role="region" aria-labelledby="error-container"><div class="ae af ag ah ai aj             ak al am an ao"><div id="error-container">Error</div></div><div class="errorManager-message">An unknown error occurred</div></div><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="ap aq             an" role="presentation" id="dragGhost"></div><div class="ae af ag ah ai aj             ak al am an ao" role="status" aria-atomic="true" aria-live="polite">The table was removed before loading finished</div><div class="           "></div></div><script defer="defer" src="./Monitoring Task History_files/index-c45e4cab5d5f1d56e36c.js.download"></script><!--License information for included third-party packages can be found at https://app.snowflake.com/static/oss-licenses-240408-2-c14d701d4f.json--><script src="./Monitoring Task History_files/lodash-d6de9ac24fbd03e0191b.js.download" defer=""></script><script src="./Monitoring Task History_files/moment-7bb3b102c9752b2889e2.js.download" defer=""></script><link rel="stylesheet" href="./Monitoring Task History_files/styles.240408-2-c14d701d4f.css"><script src="./Monitoring Task History_files/vscode-9f7c87183e3ff4ad6714.js.download" defer=""></script><script src="./Monitoring Task History_files/snowflake-d94c9e59a33dc2b19a1a.js.download" defer=""></script><script src="./Monitoring Task History_files/lezer-4cf14af3992239a6b12a.js.download" defer=""></script><script src="./Monitoring Task History_files/codemirror-2be5a096f2db49d3aebf.js.download" defer=""></script><script src="./Monitoring Task History_files/datadog-11a89b897bdc8570a844.js.download" defer=""></script><script src="./Monitoring Task History_files/core-js-782ded5b66ae066ef618.js.download" defer=""></script><script src="./Monitoring Task History_files/redux-59792ddfb9620118cf7a.js.download" defer=""></script><script src="./Monitoring Task History_files/react-c08309bd2330e1bbfb4a.js.download" defer=""></script><script src="./Monitoring Task History_files/9365-fd35381bdea34758e61d.js.download" defer=""></script><script src="./Monitoring Task History_files/317-eb08e7c9ec3bc57d9e65.js.download" defer=""></script><script src="./Monitoring Task History_files/5918-7a81083e30e8dda16d12.js.download" defer=""></script><script src="./Monitoring Task History_files/179-8c43a88139b4177249e0.js.download" defer=""></script><script src="./Monitoring Task History_files/numeracy-5a8f53d91c01a36c7c9e.js.download" defer=""></script><canvas class="tabular-figures" style="display: none;"></canvas></body></html>

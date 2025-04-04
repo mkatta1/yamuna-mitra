@@ -1,0 +1,147 @@
+
+Building blocks of Data Factory
+Dataset(Table.) <- Activity <------------- Pipeline (Is a logical grouping 	files,						of activities)
+	folders
+
+Triggers (eventbased, 
+Data Flow
+Linked services (
+Integration Runtime (comupte infrastructure)
+
+
+Cost effective: ADF is serverless, and the billing is based on factors such as the number of activities.
+If you run a pipline hourly, which also involves data movement (assuming 100GB data movement per hourly run, which should take around 8 minutes with 200MBps bandwidth), then ADF would bill you not more than $12 for the monthly execution.
+
+90+ connectors 
+
+- Companies policies can restrict to securly on high level on subscriptions 
+- Managementgroups > Subscriptions > Resource Groups > Resources
+
+Support+troubleshooting -> how to create support ticket etc
+
+ADF ---> Activity log to check last 45 days logs like subscription, resourcegroup,Resource 
+
+ADF --> Access control --> initiall you will get "Contributor" role
+
+Day 6
+ADF settings->Networking -> Private endpoint connections
+
+Without using credentials, we can "System assigned Managed identities" are used which are tied to life cycle of that particular resource (like ADF, Storage, ...) . Restricted one per resource.
+
+{connectionstrings, username,passwords, sas keys, certificates, appsecrets, client secret, connection strings} --> Managed Identity
+
+access policies are req to use keyvalut which is again a process. So better to use Managed Identity!!
+
+	-- Instead of Managed Identity the service principal process ---
+
+Create service principal -> Grant permissions -> Set credentials -> Store credentials on resource -> Rotate credentials -> Clean up credentials -> Delete service principal
+
+			OR
+Create Azure resource(ADF) with managed identity 
+		||
+		\/
+Grannt permissions
+		||
+		\/
+Delete resources
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

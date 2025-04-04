@@ -1,0 +1,37 @@
+Manageability and monitoring with dedicated SQL pool in Azure Synapse Analytics
+
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-manageability-monitoring?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext
+
+Learn about compute management and elasticity
+
+Understand what metrics and logs are available in the Azure portal
+Learn about backup and restore capabilities
+Learn about built-in intelligence and recommendations
+Learn about maintenance periods and what is available to minimize downtime of your data warehouse
+Find common troubleshooting guidance
+
+
+Use Azure Functions to manage compute resources for your dedicated SQL pool (formerly SQL DW) in Azure Synapse Analytics:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/manage-compute-with-azure-functions
+
+System views supported in Synapse SQL:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql/reference-tsql-system-views#dedicated-sql-pool-dynamic-management-views-dmvs
+
+Create, Understand and Analyze serverless spark pool
+https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-analyze-spark
+
+Analyze data with a serverless SQL pool
+https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-analyze-sql-on-demand
+
+Analyze data with dedicated SQL pools:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-analyze-sql-pool
+
+Monitor your Synapse Workspace:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-monitor
+
+Data Explorer activities
+Navigate to Activities > KQL requests.
+Apache Spark activities
+Navigate to Activities > Apache Spark applications. Now
+SQL activities
+Navigate to Activities > SQL requests.

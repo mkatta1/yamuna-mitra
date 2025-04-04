@@ -1,0 +1,196 @@
+Datasets & Data Flows:
+
+- Understand the dataflow in a project
+- Understand the concept of Models in dbt
+- Create three basic models:
+	a. src_listings
+	b. src_reviews: guided exercises
+	c. src_hosts: individual lab
+
+Models basic building blocks of business logic. They are materialized as tables, views etc.. They are stored as sql files in 'models' folder.
+They reference other models like a way of dbt knows semantic dependencies between others. Different scripts and macros in your models.
+
+- Models can reference each other and use templates and macros.
+- We can organize models into sub folders or you can keep them in top level.
+
+- Common Table Expressions (CTE) are commonly used in dbt.
+
+Upon RAW tables we create view called Stages which are cleansed of RAW tables.
+
+example code:
+
+models (folder)/src (subfolder) --> create a view in src_listings.sql
+
+src_listings.sql:
+
+WITH raw_listings AS(
+	SELECT * FROM AIRBNB.RAW.RAW_LISTINGS
+)
+SELECT
+	id AS listing_id,
+	name AS listing_name,
+	listing_url,
+	room_type,
+	minimum_nights,
+	host_id,
+	price AS price_str,
+	created_at,
+	updated_at
+FROM
+	raw_listings
+	
+
+
+
+2) Create a new model in the '/src/' folder called 'src_reviews.sql'
+- Use a CTE to reference the AIRBNB.RAW.RAW_REVIEWS table
+- SELECT every column and every record, and rename the following columns.
+	- date to review_date
+	- comments to review_text
+	- sentiment to review_sentiment
+- Execute 'dbt run' and verify that your model has been created.
+
+code:
+WITH raw_reviews AS (
+	SELECT * FROM AIRBNB.RAW.RAW_REVIEWS
+)
+SELECT
+	listings_id,
+	date AS review_date,
+	reviewer_name,
+	comments AS review_text,
+	sentiment AS review_sentiment	
+
+FROM raw_reviews
+
+Store this above code in src_reviews.sql file and then execute dbt run
+Then these views get populated in DEV schema --> Views ---> SRC_REVIEWS
+
+models --> dim/fact/mart/src....
+now we want to do models--> fact--> test_model.sql
+
+WITH AS (
+	SELECT * FROM {{ref("src_reviews")}}
+)
+
+click view in top pane --> terminal
+		
+			OBJECTIVES
+
+- Understand how models can be connected 
+- Understand the four built-in materializations
+- Understand how materializations can be configured on the file and project level
+- Use dbt run with extra parameters
+
+4 types of Materialisations :
+
+- View: Lightweight representation and don't reuse data too often
+Don't use it: don't read from same model several times???
+
+- Table: You read from this model repeatedly
+Don't use it: Building single-use models, Your model is populated incrementally
+
+- Incremental(table appends): For Fact tables, and Appends to tabels
+Don't use it: You want to update historical records
+
+- Ephemeral(CTEs): You merely want an alias to your data
+Don't use it: You read from the same model several times???
+
+
+RAW layer--> Staging Layer --> Core layer (dims merged as one here)
+
+Jinja is a one of the most used template engines for python. 
+
+
+MODELS ---> DIM --> DIM_LISTINGS_CLEANSED.SQL
+
+WITH src_listings AS (
+	SELECT * FROM {{ ref('src_listings') }}
+)
+SELECT
+ listing_id,
+ listing_name,
+ room_type,
+CASE
+  WHEN minimum_nights = 0 THEN 1
+  ELSE minimum_nights
+END AS minimum_nights,
+host_id,
+REPLACE(
+  price_str,
+  '$'
+) :: NUMBER (
+  10,
+  2
+) AS price,
+created_at,
+updated_at
+FROM 
+
+dim_hosts_cleansed.sql:
+
+Creae a new model in the 'models/dim/' folder called 'dim_hosts_cleanse.sql'
+
+- Use a CTE to reference the 'src_hosts' model
+- SELECT every column and every record, and add a cleansing step to host_name:
+	- If host_name is not null, keep the original value
+	- If host_name is null, replace it with the value 'Anonymous'
+	- Use the NVL(column_name, default_null_value) function
+- Execute 'dbt run' and verify that your model has been created
+
+
+dim_hosts_cleansed.sql CODE:
+
+WITH src_hosts AS(
+SELECT * FROM {{ref ('src_hosts')}}
+)
+SELECT host_id,
+	NVL(host_name, 'Anonymous') AS host_name,
+	is_superhost,
+	created_at,
+	updated_at
+FROM src_hosts
+
+
+In dbt_project.yml file, to create a subfolders for models and setting "materialization" by default to "view". So, we do the following:
+
+models:
+  dbtlearn:
+	+materialized: view
+	dim:
+	   +materialized: table
+
++ means this is a built in property for dbt
+dim models will only be tables and rest of them would be views. For example, src models would all be views by default
+
+fct folder is created so it is a model now. fact_reviews.sql. THIS CONFIG STATEMENT ABOVE THE WITH STATEMENT DEFINES THE "incremental materialisation"
+{{
+ config(
+	materialized = 'incremental',
+	on_schema_change = 'fail' ---> No schema changes needed for FACT!
+	)
+}}
+WITH src_reviews AS (
+	SELECT * FROM {{ref ('src_reviews')}}
+)
+SELECT * FROM src_reviews
+WHERE review_text is not null
+{% if is_incremental() %}
+   AND review_date > (select max(review_date) from {{ this }})
+{% endif %}
+
+
+Here { this}  means fact_reviews.sql file and above if condition is a ginger if statement.
+
+To test if it incrementally loads:
+
+INSERT INTO "AIRBNB"."RAW"."RAW_REVIEWS" VALUES (3176, CURRENT_TIMESTAMP(), 'Zoltan', 'excellent stay!', 'positive');
+
+
+IF WE WANT TO REBUILD EVERY INCREMENTAL TABLE THEN "dbt run --full-refresh" need to executed
+
+
+
+
+
+

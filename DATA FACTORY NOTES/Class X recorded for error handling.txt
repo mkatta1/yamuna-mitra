@@ -1,0 +1,273 @@
+- Delta table for SCD Type 2 process
+
+
+USE CODE BEAUTIFY Python Formatter:
+----------------------------------
+
+print("Spark version", sc.version, spark.sparkContext.version, spark.version)
+print("Python version", sc.pythonVer)
+
+
+pipeline failure and error handling in Microsoft docs online
+handling row level errors in Microsoft docs online
+how to get the details of an error message in stack overflow
+
+copy data ---if success--> SET VARIABLE activity
+  ---if failure ---> SET VARIABLE activity
+
+-> to get any error message 
+Try this in set variable dynamic expression
+@activity('copy to destination').output.errors[0].Message
+
+-> to get the error message from DataFlow Activity:
+@activity('DataFlow').error.Message
+-. to get therror message from copyActivity:
+@activity('copyData').output.errors[0].Message
+
+
+lookupActivity to lookup the details of config file, config table etc.
+
+@activity('getmetadata').output.childitems -> In filter, @endswith(item().name,'.csv') ->In ForEach, @activity('Filter1').output.value (-->copyData Activity, @item.name)
+
+We have different kind of source systems like sftp, data lake, sql server, oracle server, rest endpoints.
+How did you connect SFTP from scratch? We used zip files in sftp. load the data into raw --> union transformations are used to combine these zip files -> select few columns from these , adding & updating the columns by using derived columns transformations --> splitting the data using monthly and weekly in hierarchical folder structure by ENABLE the option
+
+HOW TO SETUP SFTP connection in adf?
+
+In Synapse, Integrate option contains pipeline, link connection, copy data tool, browse gallery, import pipeline template
+
+throughput in synapse analytics which is cost effective
+it is combination of all the resources into one.
+
+
+
+TRY CATCH BLOCK FOR MOUNT POINT:
+-------------------------------
+
+try:
+  dbutils.fs.mount(
+    source = inputSource,
+    mount_point = str(mountpoint),
+    extra_configs = extraConfig
+)
+print("=> Succeeded")
+except Exception as e:
+  if "Directory already mounted" in str(e):
+    print("=> Directory {} already mounted".format(mountPoint))
+  else:
+    raise(e)
+
+
+try:
+  dbutils.fs.mount(
+    source = "abfss://raw1@azuredatalakegen2007.dfs.core.windows.net/",
+    mount_point = "/mnt/azuredatalakegen2007/raw1,
+    extra_configs = configs
+)
+print("=> Succeeded")
+except Exception as e:
+  if "Directory already mounted" in str(e):
+    print("=> Directory {} already mounted".format(mountPoint))
+  else:
+    raise(e)
+
+
+Data set with JSON CODE instead of using GUI:
+----------------------------------------------
+
+ "name": "DS_Summary",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "LS_AzureDataLakeStore1",
+            "type": "LinkedServiceReference"
+        },
+        "type": "AzureDataLakeStoreFile",
+        "structure": [
+            {
+                "name": "dates",
+                "type": "String"
+            },
+            {
+                "name": "hits",
+                "type": "Int32"
+            },
+            {
+                "name": "bytes_sent",
+                "type": "Double"
+            },
+            {
+                "name": "bytes_received",
+                "type": "Double"
+            }
+        ],
+        "typeProperties": {
+            "format": {
+                "type": "TextFormat",
+                "columnDelimiter": ",",
+                "rowDelimiter": "",
+                "quoteChar": "\"",
+                "nullValue": "\\N",
+                "encodingName": null,
+                "treatEmptyAsNull": true,
+                "skipLineCount": 0,
+                "firstRowAsHeader": true
+            },
+            "fileName": "six_month_summary.csv",
+            "folderPath": "output",
+            "partitionedBy": [
+                {
+                    "name": "Year",
+                    "value": {
+                        "type": "DateTime",
+                        "date": "SliceStart",
+                        "format": "yyyy"
+                    }
+                },
+                {
+                    "name": "Month",
+                    "value": {
+                        "type": "DateTime",
+                        "date": "SliceStart",
+                        "format": "MM"
+                    }
+                }
+            ]
+        },
+        "published": false,
+        "availability": {
+            "frequency": "Month",
+            "interval": 1
+        }
+    },
+    "type": "Microsoft.DataFactory/factories/datasets"
+}
+}			
+
+Creating the Azure Data Factory Pipeline:
+-----------------------------------------
+
+The last step to tie all the loose ends together would be to create a Data Factory pipeline which will call the U-SQL script that I saved my Data Lake Store and copy the data to my SQL DB Table. Conceptually, this is a simple source to destination mapping and flow and would look like this:
+
+The JSON Code for the pipeline would be as follows:
+---------------------------------------------------
+
+{
+    "name": "Transform_Data_With_USQL",
+    "properties": {
+        "activities": [
+            {
+                "name": "SummarizeLogs_With_USQL",
+                "type": "DataLakeAnalyticsU-SQL",
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "scriptPath": "SummarizeLogs.usql",
+                    "degreeOfParallelism": 2,
+                    "scriptLinkedService": {
+                        "referenceName": "LS_AzureDataLakeStore1",
+                        "type": "LinkedServiceReference"
+                    },
+                    "parameters": {
+                        "log_file": "bigdata/{*}.txt",
+                        "summary_file": "output/six_month_summary.csv"
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "AzureDataLakeAnalytics1",
+                    "type": "LinkedServiceReference"
+                }
+            },
+            {
+                "name": "Copy Data1",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "SummarizeLogs_With_USQL",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureDataLakeStoreSource",
+                        "recursive": true
+                    },
+                    "sink": {
+                        "type": "SqlSink",
+                        "writeBatchSize": 10000
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "columnMappings": {
+                            "dates": "log_date",
+                            "hits": "requests",
+                            "bytes_sent": "bytes_in",
+                            "bytes_received": "bytes_out"
+                        }
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "DS_Summary",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "DS_SQLTable",
+                        "type": "DatasetReference"
+                    }
+                ]
+            }
+        ]
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

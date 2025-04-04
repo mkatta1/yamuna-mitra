@@ -1,0 +1,211 @@
+4 key decisions:
+1) Identify business process for analysis
+Example:
+Sales, Order processing
+
+2) Declare the grain: What one row is referring to?? which is the level of information in the table.
+One refers to one row or one transaction or one order or some periodic snapshot fact tables with some periods as grain. 
+Pre-aggregated would be a better option for this. It would be useful if we have atomic transactional data to analyze in detail.
+Example: Transaction, order, order lines, daily, daily + location
+
+3) Identify the dimensions that are relevant
+What, when, where, how and why ---> If we focus on these we will get to know what type of dimensions we need....
+Example: Time, locations, products, customers,....
+
+4) Facts for our measurements: We can aggregate them if necessary for the defined grain. These are the steps we need to take to design our layout.
+
+
+			*** Surrogate Keys *****
+
+Instead of natural keys with high storage/latency in joins. Better to use surrogate keys which improves performance (less storage/better joins). 
+Handle dummy values (nulls/missing values) e.g. 999 or -1
+
+Implement them in PK and FK, Fact & Dimensions(except date dimensions) because it is very predicatable to use our date key.
+
+			*** case study ******
+
+step1: identify business process
+
+Business process for first DWH?
+- most critical for business
+- data availabilty, data quality
+
+
+Sales Transactions
+- which products sold
+- what is sales profit
+- sales of each website
+- performance on different days
+- sales over time
+
+Step 2: Declare the grain
+What level of detail?
+- Mots analytical value with atomic grain
+- Highest dimensionality
+
+Atomic level grain:
+custId, custName, OrdId, OrdLineName, OrdLineId, Quantity, UnitPrice, SalesAmount
+312, Franklin Miller, 2314, Sunglases SU-6, 34, 2, 22.99, 45.98
+312, Franklin Miller, 2314, towel, 156, 3, 26.97
+312, Franklin Miller, 2314, Swimsuite, 643, 1, 14.99
+
+Aggregated grain:
+ccustId, custName, OrdId, No.of lines, TotalQuantity, salesAmount, DateTime
+312, Franklin Miller, 2314, 3, 6, 87.94, 23/4/2022 13:34
+
+Step 3: Identify dimensions
+
+- Descriptive aspects of measures
+- Naturally derived after grain defined
+
+Atomic level grain:
+custId, custName, OrdId, OrdLineName, OrdLineId, Quantity, UnitPrice, Discounted_price, promo_id, SalesAmount, product_cost, dateTime
+312, Franklin Miller, 2314, Sunglases SU-6, 34, 2, 22.99, null, 45.98, 14.84, 23/4/2022 13:34
+312, Franklin Miller, 2314, towel, 156, 3, 26.97, 3, 4.87, 23/4/2022 13:35
+312, Franklin Miller, 2314, Swimsuite, 643, 1, 14.99, 3, 14.99, 12.53, 23/4/2022 13:36
+
+
+Dimesions we can derive from the above table are:
+Customer, Products, Promotions, Time/date, Website
+
+
+Step 4: Identify the fact tables for measurements
+
+What facts are in the fact table?
+- Must comply with the grain
+
+
+
+
+We need to check if all our measurements are complying with the grain to have fact tables???
+
+Additive Facts tables:
+- Discount absolute (yes?) Here the discount amount is precise to remove it from the actual amount!!!!
+- Discount percentage (no?) The same also goes with profit margin
+- profit (yes) = SalesAmount - (productCost * Quantity)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

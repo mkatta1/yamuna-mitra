@@ -1,0 +1,125 @@
+Setup code repository --> select either Git hub repository and Azure DEVOPs 
+
+search for SureshPallapolu272 --> in Git hub
+
+Step1:
+Give the Github_Repo_Owner name: SureshPallapolu272 owner details in the ADF about Owner details!!!
+
+Step2:
+Repository name: select from the drop down list of repo's "TestAzureDataFactoryProject"
+
+Collaboration branch: Master
+Publish branch: adf_publish
+Root folder: /
+Import existing resources to repository: Yes
+Import resources into master branch: YEs
+
+Now, you can select the "Master branch" or Create your Newbranch and once your work is approved you can with the main branch. To do this use PullRequest!!
+
+- Create a pipeline, Wait Activity with 10 seconds
+
+Diff bw pullrequest & draftrequest:
+- pullrequest: open pull request that is ready for review
+- draftrequest: Cannot be merged until marked ready for review
+
+DAY21_RECORDING: @27 mins check and @32mins-36mins check 
+
+Merge pull request has options like:
+- Create a merge commit: All commits from this branch will be added to the base branch via a merge commit.
+- Squash and merge: The 1 commit from this branch will be added to the base branch
+- Rebase and merge: The 1 commit from this branch will be rebased and added to the base branch.
+
+Note: Mostly use "Squash and merge" option. If any other person already made changes to your files then go with the option "Rebase and merge".
+Until you "publish" your changes from Master branch all the changes won't be reflected in "Switch to Live Mode"
+
+Manage pane > Source control > Git configuration > options to edit repositoy type, account, reponame, collaboration branch, publish branch, root folder, last published commit, publish
+
+Options to Overwrite live mode & Disconnect the connect of Github etc..
+
+
+		********* AZURE DEVOPS *************
+
+Go to dev.azure.com, 
+
+Azure Boards: Agile tools to plan, track, and discuss work across your team. Used in Agile Scrum with Sprints(2-3 weeks) complete your stories/tasks.
+
+Azure Pipelines: Build, test, and deploy with CI/CD that works with any language, platform, and cloud. Connect to GitHub or any other Git provider and deploy continuously.
+
+Azure Repos: Get unlimited, cloud-hosted private Git repos and collaborate to build better code with pull requests and advanced file management.
+
+Azure test Plans: Test and ship with confidence using manual and exploratory testing tools.
+
+Azure Artifacts: Create, host, and share packages with your team, and add artifacts to your CI/CD pipelines with a single click.
+
+Create new project in Azure Devops,
+Version controls = "Git"/Team Foundation Version Control
+Work item process = "Basic"/Agile/CMMI/Scrum
+Visibility = Enterprise(Members of your enterprise can view the project
+				OR
+	     Private (Only people you give access to will be able to view 			this project)
+
+Work items contain Epic, Issue, Task etc..
+
+Create Task then create Epic name as "Create a pipeline with wait acitivity"
+
+Epic means task within a task
+1: high, 2: medium, 3: moderate, 4: less
+
+- In Boards, you can only see Epics&Issues
+
+Go to "Organization Settings", Azure Active directory have tenentID which we require to connect with our DevOps.
+
+While configuring the repository for Azure Devops:
+Devops org name: spallapolu0322
+Project name: TestDatafactoryProjectDemo14
+Repository name:TestDatafactoryProjectDemo014
+Collaboration branch:
+Publish branch:
+Root folder:
+
+
+In DevOps Repos, check all the 
+Files : credentials, dataflow,dataset,factory, IR, LinkedService, pipelines,
+Commits: Check all commits
+Pushes: Check all pushes
+Branches: Check all featured and master branches
+Pull requests:
+Tags:
+
+Step1: You create a branch in ADF and after validating, save those changes into DevOps
+Step2: Create a pull request in feature branch located in DevOps>Repos>Branches tab  
+Step3: Check this pull request in DevOps>Repos>Pull requests
+Optional and required reviewers are added. Then publish it!!
+
+
+
+Merge pull request has options like:
+- Create a merge commit: All commits from this branch will be added to the base branch via a merge commit.
+- Squash commit: The 1 commit from this branch will be added to the base branch
+- Rebase and fast-forward: The 1 commit from this branch will be rebased and added to the base branch.
+- Semi-linear merge: Rebase source commits onto target and create a two-parent merge
+
+
+*** NOTE: PUBLISH only from the Master but not from the FeatureBranches!!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

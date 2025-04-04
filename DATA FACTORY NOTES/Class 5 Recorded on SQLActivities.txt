@@ -1,0 +1,164 @@
+While using SQL_DB dataset we have many options in COPY DATA TOOL OF SINK
+like
+write behaviour of Insert, Upsert, and StoredProcedure
+Bulk insert table lock 
+Table option --> Auto create table (in order to create automatically in target DB)
+Pre-copy Script --> To filter or delete some data in the target if you want to do.
+writeBatchTimeout, writeBatchSize and Max concurrent connections
+
+DefaultPerformanceMetrics---> to have the metrics while using cosmosDB, and SynapseDWh
+
+Question) If any file name starts with csv we want to filter those items?
+
+GetMetadata---> Filter Activity--->ForEach Activity{-->CopyActivity}
+
+In FilterActivity, go to settings
+
+items: @activity('Get Files').output.childitems
+condition: @startswith(item().name,'Sales')
+
+If we set on a particular activity as "Debug Until" to debug only until
+
+In ForEach Activity, Go to settings have options like Sequential, BatchCount, Items
+
+Items: @activity('Get Files').output.pipelineReturnValue -->wrong
+Items: @activity('Filter the files').output.value --> Right
+
+
+In {-->CopyActivity} of inside ForeachActivity, we need to provide the values from ForEachActivity into copyActivity which is within ForEachActivity.
+
+Insource, sourcefiles: @item().name
+In sink, @concat(replace(item().name,'.csv',''))
+Pre-copy script: drop table @{item().name}
+
+
+In DataFlows,
+select source transformation --> Optimize -->Partition option 
+
+Use current partitioning/ Single partition/ Set partitioning
+
+In Set partitioning, 
+Partition type: RoundRobin/Hash/DynamicRange/FixedRange/Key
+
+Number of partitions =2
+
+Round Robin:
+Simple distribution of data across partitions equally. Use this partitioning when you do not have a good key candidate for partitioning.
+
+Hash: The columns (or computed) value is used to form a uniform hash to distribute values. Rows with similar values are assured to fall in the same partition.
+
+Fixed Range:
+Fixed Range partitioning will allow you set ranges for your key values to provide balanced partitions. Only use this option if you have an understanding of the range of values of your data.
+
+Key:
+Every distinct Column (no computed columns) value becomes a new partition. Use this partitioning if the number of distinct values are not huge.
+
+
+Source settings-> Sampling: Use Sampling to limit the number of rows from your Source. This is useful when you need just a sample of your source data for testing and debugging purposes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

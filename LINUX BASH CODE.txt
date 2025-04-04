@@ -1,0 +1,452 @@
+Wesfil Oil Filter - WZ79
+LIQUI MOLY Engine Flush Plus - 300mL
+LIQUI MOLY Fuel System Cleaner/Conditioner 500mL
+Autolite Copper Core Spark Plug - 3924
+
+
+throttle 
+fuel injector
+oxygen sensor
+faulty airflow sensor
+throttle position censor
+throttle body itself
+ignition coils
+vacuum leaks
+air leaks on the manifold and headers
+
+How To Replace Brake Fluid and Bleed Brakes:
+-------------------------------------------
+https://www.supercheapauto.com.au/blog/servicing-mechanical/replacing-brake-fluid-and-bleeding-brakes.html?fdid=check-it
+
+How to Check For Clues:
+----------------------
+https://www.supercheapauto.com.au/check-it/how-to-check-for-clues.html?fdid=check-it
+
+How to Check All Your Items Are Packed Securely:
+-----------------------------------------------
+https://www.supercheapauto.com.au/check-it/how-to-check-all-your-items-are-packed-securely.html?fdid=check-it
+
+camshaft position sensor:
+------------------------
+
+AFI, PAT, RAE which brand is better among these
+AFI is $200 - $250
+PAT is 
+RAE is $65.99, $119 - $173
+
+$$$$$$$$$$ LIST OF ITEMS TO BUY $$$$$$$$$$$$
+
+Liqui-Moly for Fuel pump, Injectors, Metering Nozzles, safe for catalytic convertors, oxygen sensors, 
+
+MOTUL Engine clean ---> needs to be added before engine oil change to see the effects
+
+
+Bosch Electric Fuel Pump - BFP0382 ($55.99)
+Bosch Oxygen Sensor - 0258986627 ($95.99)
+SCA Engine Starting Fluid 300g ($10.99)
+Gulf Western Premium Energy SP Engine Oil - 10W-30 5 Litre ($50.99)
+PAT Throttle Position Sensor - TPS-016 ($69.99)
+PAT Engine Camshaft Position Sensor - CAM-039 ($46.99)
+
+
+PAT Fuel Injector Repair Kit - IJK-005 ($18.39)
+PAT Fuel Injector - INJ-122 ($125.59)
+Nulon Petrol Injector Cleaner - 300mL ($15.19)
+Wesfil Fuel Filter - WCF256 ($42)
+
+
+ToolPRO Oxygen Sensor Socket Set 7 Piece:
+----------------------------------------
+Oxygen sensor O2S B1S1(mA) means Oxygen Sensor Bank1 Sensor1
+Range should be in between -2 to 1.5 (Try to check with throttle as well--> accel)
+Lambda B1S1 is another way of looking at airflow mixtures. So, anything closer to 1 = GOOD  means it is balanced (Try to check with throttle as well--> accelarate)
+
+Oxygen sensor O2S B1S2(V) means Oxygen Sensor Bank1 Sensor2 with Volts
+which should in range 0.1 to 0.9
+
+IF ALL DONE, then we need to Erase DTCs codes to again recheck the codes in ignition position!!!
+
+
+3/8" Drive x 22mm (7/8") x 30mm long - Offset oxygen sensor socket1/2" Drive x 29mm x 90mm long - Oxygen sensor socket
+1/2" Drive x 22mm (7/8") x 50mm long - 8-point offset oxygen sensor socket
+3/8" Drive x 22mm (7/8") x 90mm long - Wide-slot oxygen sensor socket
+3/8" Drive x 22mm (7/8") x 80mm long - Narrow vacuum sensor socket
+1/2" Drive x 27mm x 78mm long - Injector socket
+​​​​​3/8" Drive x 27mm (1-1/16") x 74mm long - Oil sender unit socket
+
+Tachometer fluctuation:
+----------------------
+
+1. Reason clean the oxygen sensor:
+- Unplug the line along the oxygen sensor
+- Take a adjustable wrench and unscrew the oxygen sensor
+- Dip the oxygen sensor into the toilet cleaning liquid 
+
+2. Reason clean the spark plug:
+You need repair manual, ratchet, spark plug socket, work light, small brush, plug gapping tool, air gun, dielectric grease, electronics cleaner
+
+- spark plug gap can be  .044  or .40-.45  check the existing old spark plug
+- pull the 4 plugs
+- loosen the 4 screws with wrench
+- pull out the 4 ignition coils
+- turn the spark plug sleeve in "counter clockwise" 
+- SPARK PLUGs needs to be removed and soaked in toilet cleaner liquid for 5 minutes
+- 
+
+Cleaning electric circuit and gas circuit :
+-------------------------------------------
+
+Camshaft position censor cleaning:
+---------------------------------
+- remove the camshaft plug
+- loosen counter clockwise the screw
+
+
+read expression result=(echo " scale = 5;expression" | bc -l) rounded_res=(printf "result") 
+echo $rounded_res
+
+
+CUT #1
+N=1
+while [[ $N -ge 1 && $N -le 100 ]]; do
+        let N++
+        read n
+        echo "$n" | cut -c 3
+done
+
+
+echo "$(cut -c3)"
+
+
+CUT #2
+awk '{ print substr(0,2,1) substr(0, 7, 1) }'
+
+CUT #3
+cut -b 2-7
+
+CUT #4
+cut -b 1-4
+ or 
+while read lines; do
+    echo $lines | cut -c 0-4
+done
+
+CUT #5
+echo "$(cut -f 1-3)" 
+	or
+while read line
+do 
+    echo "$line" | cut -f 1-3
+done
+
+CUT #6
+echo "$(cut -c13-)"
+	or
+
+CUT #7
+
+cut -d ' ' -f4
+	or
+# Other than using cut -d " " -f 4 you can also use tr ' ' '\t' | cut -f 4
+
+
+CUT #8
+
+while read line;
+do
+    echo "$line" | cut -d " " -f 1-3;
+done;
+
+	or
+Solution with awk:
+
+while read line;
+do
+    echo ${line} | awk '{print $1, $2, $3}'
+done
+	or
+another solutions:
+
+another way to solve the problem using only read function
+
+while IFS=' ' read -r -a line;do
+    echo "${line[0]} ${line[1]} ${line[2]}"
+done
+
+Cut #9
+
+while read lines
+do 
+    echo "$lines" | cut -f 2-
+done
+
+	or
+cut -f2-
+
+	or
+#!/bin/bash/
+echo "$($* cut -d $'\t' -f 2-)"
+
+--------------------------------------------------------------------------------
+
+Head of a Text File #1
+----------------------
+
+head -n 20
+
+	or
+while read file; do
+    echo $file >> file.txt
+done
+head -n 20 < file.txt
+
+Head of a Text File #2
+----------------------
+
+head -c 20
+
+	or
+while read lines
+do 
+    echo $lines >> file.txt
+done 
+head -c 20 < file.txt
+
+Middle of a Text File
+---------------------
+awk '22>=NR && NR>=12 {print $0}'
+
+	or
+
+while read lines
+do 
+    echo $lines >> file.txt
+done
+head -n 22 file.txt | tail -n 11 
+
+
+Tail of a Text File #1
+----------------------
+tail -20
+
+	or
+
+while read lines
+do 
+    echo $lines >> file.txt
+done 
+tail -n 20 file.txt
+
+
+Tail of a Text File #2
+----------------------
+
+tail -c 20
+
+	or
+
+while read lines
+do 
+    echo $lines >> file.txt
+done
+tail -c 20 file.txt
+
+
+'Tr' Command #1:
+---------------
+
+tr '()' '[]'
+
+'Tr' Command #2:
+---------------
+
+tr -d [:lower:]
+
+	or
+
+tr -d "[a-z]"
+
+	or
+
+while read FILE;
+do
+    echo "${FILE}" >> file.txt
+done
+tr -d 'a-z' < file.txt
+
+
+tr -s ' '
+	or
+
+while read input; do 
+    echo $input | tr -s " "
+done
+
+SORT COMMAND #1:
+----------------
+
+while read TEXT;
+do
+    echo "${TEXT}" >> text.txt
+done
+sort -k 1n < text.txt
+
+	or
+rm file.txt > stdout.txt 2> stderr.txt
+while IFS= read -r line || [ -n "$line" ]; do
+  echo "$line" >> file.txt
+done 
+sort < file.txt
+
+
+Sort Command #2:
+---------------
+while read TEXT;
+do
+    echo "${TEXT}" >> text.txt
+done
+sort -r < text.txt
+
+
+Sort Command #3:
+---------------
+sort -n $1
+
+	or
+
+rm file.txt > stdout.txt 2> stderr.txt
+while IFS= read -r line || [ -n "$line" ]; do
+  echo "$line" >> file.txt
+done 
+sort -n < file.txt
+
+Sort Command #4:
+---------------
+while read N do echo "$N" >> file.txt done sort -n -r < file.txt
+
+	or
+
+while read FILE;
+do
+echo "$FILE" >> file.txt
+done
+sort -g -r < file.txt
+
+Sort Command #5:
+----------------
+sort -r -n -k 2 -t $'\t'
+
+-r : For reverse order
+-n : numerical sort
+-k: column ordering
+-t : tab separated indicator
+
+'Sort' command #6:
+-----------------
+sort -t $'\t' -k2n
+
+-t$'\t': This option specifies that the field separator should be a tab character\t. The$'\t' syntax is a Bash feature that allows you to represent special characters, such as tabs, in a way that the shell can understand.
+
+-k2n: This option tells sort to sort the file based on the numeric value of the second column. The 2 specifies the column number, and the n tells sort to sort the column numerically.
+
+
+'Uniq' Command #1:
+-----------------
+while read line;do
+ echo $line >> file.txt
+done
+cat file.txt | uniq
+
+	or
+
+rm file.txt > stdout.txt 2> stderr.txt
+while IFS= read -r line || [ -n "$line" ]; do
+  echo "$line" >> file.txt
+done
+uniq < file.txt
+
+
+'Uniq' Command #2:
+-----------------
+uniq -c | cut -c 7-
+
+'Uniq' command #3:
+-----------------
+
+'Uniq' command #4:
+-----------------
+uniq -u | sed 's/^ *//' 
+
+
+Paste - 1:
+---------
+paste -s | tr $'\t' ';'
+
+
+paste -d ';' - - - $1
+
+doubt:
+------
+Can anyone help, I am not geeting output
+number=0 while read lines ; do echo lines >> test1.txtnumber =((number+1)) if [[ $number == 3 ]] ;then paste -s -d ';' test1.txt rm test1.txt number=0 fi
+
+explanation:
+------------
+you forgot $ in lines and number When you are comparing two numbers use the -eq not == (used for strings) I don't understand your code but maybe these errors are the reason
+
+import sys
+for line in sys.stdin:
+    print(line.strip(), end='\t')
+
+a=""
+while read line
+do
+   a=$a$line
+   a=$a'\t'
+done 
+echo -e $a
+
+while read line
+do
+    text+="${line}`echo $'\t'`"
+done
+echo $text
+
+
+
+Type 1:
+------
+Very easy first replacement then adding seperator and put in one line:
+
+sed "s/([A-Z])/./1" | paste -s -d " "
+
+Type 2:
+------
+awk ' BEGIN { ORS=" " } { gsub(/^[A-Z]/, "."); print } ' this was working
+
+Type 3:
+------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

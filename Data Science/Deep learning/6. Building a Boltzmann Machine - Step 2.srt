@@ -1,0 +1,1247 @@
+1
+1
+
+00:00:00,260  -->  00:00:02,720
+<v Instructor>Hello and welcome to this Python tutorial.</v>
+2
+
+2
+
+00:00:02,720  -->  00:00:05,270
+So in the previous tutorial, we imported the data set
+3
+
+3
+
+00:00:05,270  -->  00:00:07,530
+and now we're going to prepare the training set
+4
+
+4
+
+00:00:07,530  -->  00:00:08,730
+and the test set.
+5
+
+5
+
+00:00:08,730  -->  00:00:09,810
+So let's do this.
+6
+
+6
+
+00:00:09,810  -->  00:00:12,130
+Let's start with the training set.
+7
+
+7
+
+00:00:12,130  -->  00:00:14,360
+So we're first gonna go to File Export
+8
+
+8
+
+00:00:14,360  -->  00:00:16,050
+to see what we are going to take.
+9
+
+9
+
+00:00:16,050  -->  00:00:19,180
+And as I said in the previous tutorial, we are going to take
+10
+
+10
+
+00:00:19,180  -->  00:00:23,130
+the 1000 ratings data set, which is in this folder.
+11
+
+11
+
+00:00:23,130  -->  00:00:27,000
+And in fact, what we're seeing here in the ML-100K folder
+12
+
+12
+
+00:00:27,000  -->  00:00:30,420
+is five trend test plates of the whole dataset
+13
+
+13
+
+00:00:30,420  -->  00:00:32,630
+composed of 100,000 ratings.
+14
+
+14
+
+00:00:32,630  -->  00:00:35,120
+So as you can see, we have we have U1 base U1 test,
+15
+
+15
+
+00:00:35,120  -->  00:00:40,120
+U2 base U2 test, U3 base U3 test up to U5 base U5 test.
+16
+
+16
+
+00:00:40,120  -->  00:00:43,500
+And so each one of those pairs of sets are actually some
+17
+
+17
+
+00:00:43,500  -->  00:00:45,360
+separate training set and test it.
+18
+
+18
+
+00:00:45,360  -->  00:00:49,400
+So base means training set and test means test it.
+19
+
+19
+
+00:00:49,400  -->  00:00:52,420
+So U1 base and U1 test is one train test
+20
+
+20
+
+00:00:52,420  -->  00:00:55,920
+plate of the whole dataset composed of 100,000 ratings,
+21
+
+21
+
+00:00:55,920  -->  00:00:59,100
+and the other pairs are other training test plates.
+22
+
+22
+
+00:00:59,100  -->  00:01:02,320
+And so what's the use of having several train test plates?
+23
+
+23
+
+00:01:02,320  -->  00:01:04,890
+Well, that's to perform K for cross validation
+24
+
+24
+
+00:01:04,890  -->  00:01:08,140
+manually afterwards, to be able to train our model
+25
+
+25
+
+00:01:08,140  -->  00:01:11,400
+on several training set and test it on several test sets
+26
+
+26
+
+00:01:11,400  -->  00:01:14,250
+exactly as we did when we performed K for cross validation
+27
+
+27
+
+00:01:14,250  -->  00:01:16,680
+with tenfold since indeed we were training
+28
+
+28
+
+00:01:16,680  -->  00:01:18,740
+our neural network content training folds
+29
+
+29
+
+00:01:18,740  -->  00:01:21,740
+and we were testing it on 10 associated test folds.
+30
+
+30
+
+00:01:21,740  -->  00:01:24,800
+And here instead of having 10 train test folds
+31
+
+31
+
+00:01:24,800  -->  00:01:27,050
+we actually have five train test folds
+32
+
+32
+
+00:01:27,050  -->  00:01:30,130
+and therefore that's to do five fold cross validation.
+33
+
+33
+
+00:01:30,130  -->  00:01:32,770
+But we're not going to perform five fold cross validation
+34
+
+34
+
+00:01:32,770  -->  00:01:35,820
+in the section because I'd like to focus on the order
+35
+
+35
+
+00:01:35,820  -->  00:01:37,070
+and coders themselves.
+36
+
+36
+
+00:01:37,070  -->  00:01:40,240
+And therefore we will only take one train test plates
+37
+
+37
+
+00:01:40,240  -->  00:01:43,280
+and we will take the first one composed of U1 base
+38
+
+38
+
+00:01:43,280  -->  00:01:46,560
+that is the training set and U1 test that is the test set.
+39
+
+39
+
+00:01:46,560  -->  00:01:49,090
+So let's import these two sets.
+40
+
+40
+
+00:01:49,090  -->  00:01:51,100
+All right so we're gonna start with the training set
+41
+
+41
+
+00:01:51,100  -->  00:01:53,450
+which is U1 base and therefore we're gonna
+42
+
+42
+
+00:01:53,450  -->  00:01:55,703
+create a new variable training set.
+43
+
+43
+
+00:01:56,880  -->  00:02:00,150
+Here we go and now we're going to use the Penals library
+44
+
+44
+
+00:02:00,150  -->  00:02:02,840
+still because we want to import U1 base.
+45
+
+45
+
+00:02:02,840  -->  00:02:05,820
+But then we will convert this training set into an array
+46
+
+46
+
+00:02:05,820  -->  00:02:08,620
+because by importing U1 base with benders,
+47
+
+47
+
+00:02:08,620  -->  00:02:10,280
+we will get a data frame.
+48
+
+48
+
+00:02:10,280  -->  00:02:12,930
+And remember with Python we would rather work with arrays.
+49
+
+49
+
+00:02:12,930  -->  00:02:15,760
+So let's first import it with benders as a data frame
+50
+
+50
+
+00:02:15,760  -->  00:02:17,370
+and then let's convert it.
+51
+
+51
+
+00:02:17,370  -->  00:02:21,230
+So same we're gonna use the shortcut PD and dot
+52
+
+52
+
+00:02:21,230  -->  00:02:25,660
+then the read_CSV function then parenthesis
+53
+
+53
+
+00:02:25,660  -->  00:02:28,950
+and for the first argument we need to input the path
+54
+
+54
+
+00:02:28,950  -->  00:02:33,260
+that will take U1 base in this ML-100K folder.
+55
+
+55
+
+00:02:33,260  -->  00:02:34,140
+So let's do it.
+56
+
+56
+
+00:02:34,140  -->  00:02:37,360
+We have to put the best in quotes like before,
+57
+
+57
+
+00:02:37,360  -->  00:02:41,070
+and so we start with the folder that contains U1 base
+58
+
+58
+
+00:02:41,070  -->  00:02:46,070
+there is a training set and this folder is ML-100K.
+59
+
+59
+
+00:02:46,220  -->  00:02:48,700
+So we start by typing ML-100K,
+60
+
+60
+
+00:02:50,760  -->  00:02:54,490
+then slash and then simply the name of the training set
+61
+
+61
+
+00:02:54,490  -->  00:02:56,910
+which is U1.base.
+62
+
+62
+
+00:02:56,910  -->  00:02:59,790
+So U1.base.
+63
+
+63
+
+00:02:59,790  -->  00:03:00,623
+And here we go.
+64
+
+64
+
+00:03:00,623  -->  00:03:03,460
+That should be okay to import the training set.
+65
+
+65
+
+00:03:03,460  -->  00:03:08,390
+However, I pre checked the separator for this U1 based file.
+66
+
+66
+
+00:03:08,390  -->  00:03:09,940
+And this time it happens to be
+67
+
+67
+
+00:03:09,940  -->  00:03:13,060
+not a double colon, but a tab.
+68
+
+68
+
+00:03:13,060  -->  00:03:15,980
+So you can check it out by opening for example U1 base
+69
+
+69
+
+00:03:15,980  -->  00:03:18,500
+on the text editor and you'll see that the separator
+70
+
+70
+
+00:03:18,500  -->  00:03:21,480
+is a tab and therefore here we need to specify it.
+71
+
+71
+
+00:03:21,480  -->  00:03:23,630
+Otherwise, it will think the separator is a comma
+72
+
+72
+
+00:03:23,630  -->  00:03:26,070
+because the default separator is a comma.
+73
+
+73
+
+00:03:26,070  -->  00:03:28,310
+So we're gonna add the argument delimiter
+74
+
+74
+
+00:03:29,660  -->  00:03:32,570
+equals tab and to specify tab we need
+75
+
+75
+
+00:03:32,570  -->  00:03:36,230
+to input slash t like this.
+76
+
+76
+
+00:03:36,230  -->  00:03:39,100
+And by the way to delimiter tab should rather be taken
+77
+
+77
+
+00:03:39,100  -->  00:03:43,470
+with this delimiter argument rather than this set argument.
+78
+
+78
+
+00:03:43,470  -->  00:03:44,810
+So it's good to know that.
+79
+
+79
+
+00:03:44,810  -->  00:03:47,450
+And actually now I think we're ready
+80
+
+80
+
+00:03:47,450  -->  00:03:49,390
+to import the training set.
+81
+
+81
+
+00:03:49,390  -->  00:03:50,500
+So let's check it out.
+82
+
+82
+
+00:03:50,500  -->  00:03:54,280
+I'm going to select this line and execute.
+83
+
+83
+
+00:03:54,280  -->  00:03:55,120
+Here we go.
+84
+
+84
+
+00:03:55,120  -->  00:03:57,480
+Yes, the training set is well imported.
+85
+
+85
+
+00:03:57,480  -->  00:03:58,313
+Perfect.
+86
+
+86
+
+00:03:58,313  -->  00:04:01,500
+Let's have a look in the Variable Explorer and here it is.
+87
+
+87
+
+00:04:01,500  -->  00:04:03,390
+So first of all, what is the split?
+88
+
+88
+
+00:04:03,390  -->  00:04:05,680
+I mean, what is the proportion of the training set
+89
+
+89
+
+00:04:05,680  -->  00:04:07,410
+compared to the whole set?
+90
+
+90
+
+00:04:07,410  -->  00:04:09,530
+Well, we can already see that.
+91
+
+91
+
+00:04:09,530  -->  00:04:13,200
+Remember, the whole original dataset in this ML100K
+92
+
+92
+
+00:04:13,200  -->  00:04:16,040
+folder contains 100,000 ratings.
+93
+
+93
+
+00:04:16,040  -->  00:04:20,000
+And since each observation corresponds to one rating,
+94
+
+94
+
+00:04:20,000  -->  00:04:23,530
+well since we can see here that we have 80,000 observations,
+95
+
+95
+
+00:04:23,530  -->  00:04:25,990
+that means that we have 80,000 ratings.
+96
+
+96
+
+00:04:25,990  -->  00:04:29,643
+And therefore, the training set is 80% of the original
+97
+
+97
+
+00:04:29,643  -->  00:04:32,630
+dataset composed of the 100,000 ratings.
+98
+
+98
+
+00:04:32,630  -->  00:04:35,480
+So that will be an 80%, 20% train test plate.
+99
+
+99
+
+00:04:35,480  -->  00:04:37,740
+And I think that's the optimal training test plate
+100
+
+100
+
+00:04:37,740  -->  00:04:39,440
+to train a model.
+101
+
+101
+
+00:04:39,440  -->  00:04:41,450
+Okay, so now let's open the training set
+102
+
+102
+
+00:04:41,450  -->  00:04:43,390
+to see what it looks like.
+103
+
+103
+
+00:04:43,390  -->  00:04:46,220
+So remember, that's exactly the same as in this
+104
+
+104
+
+00:04:46,220  -->  00:04:49,660
+ratings data set that we imported in the previous tutorial.
+105
+
+105
+
+00:04:49,660  -->  00:04:53,010
+The first column corresponds to the users the second column
+106
+
+106
+
+00:04:53,010  -->  00:04:55,400
+corresponds to the movies and the third column
+107
+
+107
+
+00:04:55,400  -->  00:04:58,410
+corresponds to the ratings and then the fourth column
+108
+
+108
+
+00:04:58,410  -->  00:05:00,050
+corresponds to the timestamps.
+109
+
+109
+
+00:05:00,050  -->  00:05:01,610
+But that, as we said, we don't care
+110
+
+110
+
+00:05:01,610  -->  00:05:04,600
+because this won't be relevant to train the model.
+111
+
+111
+
+00:05:04,600  -->  00:05:07,220
+And so here for example, at the fourth index,
+112
+
+112
+
+00:05:07,220  -->  00:05:10,400
+that is the fifth observation because it started at zero
+113
+
+113
+
+00:05:10,400  -->  00:05:12,920
+well, that corresponds to the user number one
+114
+
+114
+
+00:05:12,920  -->  00:05:17,200
+that's rated the movie number seven, and gave it four stars.
+115
+
+115
+
+00:05:17,200  -->  00:05:19,790
+Then, if we take another example well,
+116
+
+116
+
+00:05:19,790  -->  00:05:23,760
+at the 260 first observation, well, that corresponds
+117
+
+117
+
+00:05:23,760  -->  00:05:26,510
+to the user number five that rated the movie
+118
+
+118
+
+00:05:26,510  -->  00:05:30,410
+number 373 and gave it three stars.
+119
+
+119
+
+00:05:30,410  -->  00:05:32,360
+Okay, so that is the training set.
+120
+
+120
+
+00:05:32,360  -->  00:05:36,130
+It is so far imported as data frame and therefore as I just
+121
+
+121
+
+00:05:36,130  -->  00:05:38,810
+told you, we have to convert it into an array
+122
+
+122
+
+00:05:38,810  -->  00:05:41,570
+because then you'll see that we will use pi touch tensors
+123
+
+123
+
+00:05:41,570  -->  00:05:44,750
+and for this we need arrays instead of data frames.
+124
+
+124
+
+00:05:44,750  -->  00:05:48,690
+So let's quickly convert this training set into an array.
+125
+
+125
+
+00:05:48,690  -->  00:05:52,260
+That's very simple, we need to take our training set
+126
+
+126
+
+00:05:52,260  -->  00:05:56,070
+variable again and give it a new value.
+127
+
+127
+
+00:05:56,070  -->  00:05:59,050
+And so now basically what we're gonna do is use a function
+128
+
+128
+
+00:05:59,050  -->  00:06:01,760
+that will convert a Data Frame into an array.
+129
+
+129
+
+00:06:01,760  -->  00:06:04,730
+And this function is of course, a number I function
+130
+
+130
+
+00:06:04,730  -->  00:06:06,080
+that is called array.
+131
+
+131
+
+00:06:06,080  -->  00:06:10,000
+So we take our shortcut NP because we're taking
+132
+
+132
+
+00:06:10,000  -->  00:06:11,560
+this function from number I.
+133
+
+133
+
+00:06:11,560  -->  00:06:16,070
+And now we take this function array and parenthesis.
+134
+
+134
+
+00:06:16,070  -->  00:06:17,590
+So that's the best way of converting
+135
+
+135
+
+00:06:17,590  -->  00:06:19,050
+a data frame into an array.
+136
+
+136
+
+00:06:19,050  -->  00:06:22,350
+And now inside this function, we have to input our training
+137
+
+137
+
+00:06:22,350  -->  00:06:26,200
+set but the old one, this one that is a data frame.
+138
+
+138
+
+00:06:26,200  -->  00:06:28,520
+So training set.
+139
+
+139
+
+00:06:28,520  -->  00:06:31,920
+And as a second argument, we will need to specify the type
+140
+
+140
+
+00:06:31,920  -->  00:06:34,110
+of this new array that we're creating.
+141
+
+141
+
+00:06:34,110  -->  00:06:37,580
+And since we only have user IDs, movie IDs, and ratings
+142
+
+142
+
+00:06:37,580  -->  00:06:41,250
+that are all integers, then we will convert this whole array
+143
+
+143
+
+00:06:41,250  -->  00:06:43,050
+into an array of integers.
+144
+
+144
+
+00:06:43,050  -->  00:06:45,680
+And to do this, we need to use this argument here that you
+145
+
+145
+
+00:06:45,680  -->  00:06:49,610
+see D type and that will specify the type of the array.
+146
+
+146
+
+00:06:49,610  -->  00:06:54,610
+And so we'll add D type equals and in quote we will specify
+147
+
+147
+
+00:06:54,810  -->  00:06:58,540
+the type which is INT for integers.
+148
+
+148
+
+00:06:58,540  -->  00:06:59,373
+Perfect.
+149
+
+149
+
+00:06:59,373  -->  00:07:03,250
+So as you see if I select this line now we consider
+150
+
+150
+
+00:07:03,250  -->  00:07:06,890
+the train set as a data frame of this size.
+151
+
+151
+
+00:07:06,890  -->  00:07:10,470
+And if I execute this, the training set is now an array
+152
+
+152
+
+00:07:10,470  -->  00:07:13,800
+that means array actually of intergers 64
+153
+
+153
+
+00:07:13,800  -->  00:07:15,240
+and of the same size.
+154
+
+154
+
+00:07:15,240  -->  00:07:19,650
+So perfect and if we open it well we get the same values
+155
+
+155
+
+00:07:19,650  -->  00:07:21,393
+but this time into an array.
+156
+
+156
+
+00:07:22,290  -->  00:07:25,590
+Okay so now we're gonna do the same for the test set,
+157
+
+157
+
+00:07:25,590  -->  00:07:27,410
+we're going to prepare the test set
+158
+
+158
+
+00:07:27,410  -->  00:07:29,190
+and actually this is going to be very easy
+159
+
+159
+
+00:07:29,190  -->  00:07:32,480
+because we will use the same techniques to import
+160
+
+160
+
+00:07:32,480  -->  00:07:35,120
+and convert our test sets into an array.
+161
+
+161
+
+00:07:35,120  -->  00:07:39,850
+So I'm pasting that here, I'm going to replace training set
+162
+
+162
+
+00:07:39,850  -->  00:07:44,850
+by test set, same here training set, test set
+163
+
+163
+
+00:07:45,250  -->  00:07:48,260
+and here's well and of course after that
+164
+
+164
+
+00:07:48,260  -->  00:07:53,260
+we'll need to replace this U1.base by U1.test
+165
+
+165
+
+00:07:53,580  -->  00:07:58,580
+because we're taking out the test set which is U1.test.
+166
+
+166
+
+00:07:58,770  -->  00:08:00,280
+Here we go, perfect.
+167
+
+167
+
+00:08:00,280  -->  00:08:02,290
+And that will take the test set.
+168
+
+168
+
+00:08:02,290  -->  00:08:04,090
+The delimiter is also a tab.
+169
+
+169
+
+00:08:04,090  -->  00:08:07,890
+So basically, we're already ready to import the test it.
+170
+
+170
+
+00:08:07,890  -->  00:08:10,290
+So let's do it step by step, I'm going to select
+171
+
+171
+
+00:08:10,290  -->  00:08:12,700
+this line first and execute.
+172
+
+172
+
+00:08:12,700  -->  00:08:15,440
+Here we go, test and import it, we can have a quick look.
+173
+
+173
+
+00:08:15,440  -->  00:08:17,220
+So that's the test set.
+174
+
+174
+
+00:08:17,220  -->  00:08:19,830
+And same this is exactly the same structure.
+175
+
+175
+
+00:08:19,830  -->  00:08:22,970
+We have the users in the first column, then the movies
+176
+
+176
+
+00:08:22,970  -->  00:08:26,460
+in the second column and the ratings in the third column.
+177
+
+177
+
+00:08:26,460  -->  00:08:29,290
+And so what we have to understand is that the training set
+178
+
+178
+
+00:08:29,290  -->  00:08:32,040
+and the test set have different ratings, you know,
+179
+
+179
+
+00:08:32,040  -->  00:08:35,610
+there is no common rating of a same movie by the same user
+180
+
+180
+
+00:08:35,610  -->  00:08:37,510
+between the training set and the test set.
+181
+
+181
+
+00:08:37,510  -->  00:08:39,700
+However we have the same users.
+182
+
+182
+
+00:08:39,700  -->  00:08:42,570
+Here in deed we start with user one as in the training set.
+183
+
+183
+
+00:08:42,570  -->  00:08:46,720
+But for this same user one we won't have the same movies
+184
+
+184
+
+00:08:46,720  -->  00:08:48,730
+because the ratings are different.
+185
+
+185
+
+00:08:48,730  -->  00:08:50,310
+Okay, so perfect.
+186
+
+186
+
+00:08:50,310  -->  00:08:51,610
+That's the test set.
+187
+
+187
+
+00:08:51,610  -->  00:08:53,630
+But right now it is as a data frame
+188
+
+188
+
+00:08:53,630  -->  00:08:55,700
+and we need to convert it into an array.
+189
+
+189
+
+00:08:55,700  -->  00:08:57,540
+So that's what we're gonna do now.
+190
+
+190
+
+00:08:57,540  -->  00:08:59,440
+And actually, we don't have anything to do,
+191
+
+191
+
+00:08:59,440  -->  00:09:01,200
+the line of code is ready.
+192
+
+192
+
+00:09:01,200  -->  00:09:04,170
+So we just have to select it and press command
+193
+
+193
+
+00:09:04,170  -->  00:09:06,620
+or control plus Enter To execute.
+194
+
+194
+
+00:09:06,620  -->  00:09:07,490
+And here we go.
+195
+
+195
+
+00:09:07,490  -->  00:09:09,870
+Now the test set is an array of integers
+196
+
+196
+
+00:09:09,870  -->  00:09:13,190
+64 of 20,000 ratings.
+197
+
+197
+
+00:09:13,190  -->  00:09:16,430
+That corresponds to 20% of the original data set
+198
+
+198
+
+00:09:16,430  -->  00:09:19,230
+composed of the 100,000 ratings.
+199
+
+199
+
+00:09:19,230  -->  00:09:20,063
+Perfect.
+200
+
+200
+
+00:09:20,063  -->  00:09:21,490
+So that's done for this tutorial.
+201
+
+201
+
+00:09:21,490  -->  00:09:24,650
+We prepared correctly the training set and the test set.
+202
+
+202
+
+00:09:24,650  -->  00:09:26,770
+And now in the next tutorial, we will get
+203
+
+203
+
+00:09:26,770  -->  00:09:29,880
+the maximum number of users and the maximum number
+204
+
+204
+
+00:09:29,880  -->  00:09:32,240
+of movies in two separate variables
+205
+
+205
+
+00:09:32,240  -->  00:09:34,720
+because then we will need these two variables to prepare
+206
+
+206
+
+00:09:34,720  -->  00:09:36,400
+our restricted Boltzmann machines.
+207
+
+207
+
+00:09:36,400  -->  00:09:38,050
+So we'll do that in the next tutorial.
+208
+
+208
+
+00:09:38,050  -->  00:09:39,863
+And until then, enjoy Deep Learning.

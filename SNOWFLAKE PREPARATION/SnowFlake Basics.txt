@@ -1,0 +1,128 @@
+what is the snowsql? 
+CLI of snowflake
+It is used to connect to snowflake and performs below:
+- execute sql queries
+- perform all ddl, dml operations
+- loading/unloading data into snowflake db tables
+
+SnowSql (SnowSql executable) can be run as:
+- an interactive shell, in batch mode through stdin 
+- or using -f option to execute multiple queries in a sequence
+
+snowflake provides platform-specific versions of snowsql for download for the following platforms:
+linux, macOS, windows
+
+
+system-defined 
+user-defined
+external functions
+
+SYSTEM-DEFINED FUNCTIONS ARE:
+
+scalar functions:
+takes a single row/value as input and return a single value
+
+aggregate functions:
+take multiple rows/values as input and return a single value
+
+window functions
+subset of aggregate functions that can operate on a subset of rows
+
+Table functions:
+functions that return results in a tabular format
+
+system functions:
+functions that perform control operations or return system-level information
+
+
+
+USER-DEFINED FUNCTIONS:
+
+sql udf:
+defined to return either scalar or tabular output.
+
+javascript udf:
+defined to return either scalar or tabular output.
+
+while loops, for loops etc in javascripts
+
+EXTERNAL FUNCTIONS:
+These are defined stored and executed outside the snowflake. supports in aws and azure.
+
+
+SNOWFLAKE SCRIPTING:
+
+Extension for sql to create procedure logic
+
+For people with plsql background can use snowflake language
+
+Using string constant delimiters around a block in a stored procedure
+Passing a block as a string literal to execute immediate
+
+Currenlty, snowsql and the classinc web interface do not correctly parse snowflake scripting blocks. Entering and running a snowflake scripting block can result in the following error:
+SQL compilation error: syntax error line 2 at position 25 unexpected '<EOF>'
+
+
+create or replace warehouse mywarehouse with
+warehouse_size = 'X-SMALL'
+auto_suspend = 120
+auto_resume = true
+initially_suspended=true;
+
+create or replace file format myCSVFORMAT
+	type = 'CSV'
+	field_delimiter = '|'
+	skip_header = 1;
+
+show file formats like '%my%for%;
+show file formats;
+show file formats in database mycsvdatabase;
+show file formats in schema mycsvdatabase.mycsvschema;
+
+Step 3: Create a Named stage object
+
+create or replace stage my_csv_stage
+file_format = mycsvformat
+url = 's3://snowflake-docs';
+
+show stages;
+show stages in database mycsvdatabase;
+show stages in schema mycsvdatabase.mycsvschema;
+
+show stages like '%my_csv%';
+
+#warehouse cannot be resumed if it is not suspended first
+alter warehouse mywarehouse resume;
+
+copy into mycsvtable
+from @my_csv_stage/tutorials/dataloading/contacts1.csv
+on_error = 'skip_file';
+
+select last_query_id();
+
+copy into mycsvtable
+from @my_csv_stage/tutorials/dataloading/contacts1.csv
+pattern = '.*contacts[1-5].csv'
+on_error = 'skip_file';
+-- step 5: Resolve Data Load Errors Related to Data Issues
+
+CREATE OR REPLACE TABLE save_copy_erros_1 as select * from table(validate(mycsvtable, job_id=>'0fwefwewe')
+
+CREATE OR REPLACE TABLE save_copy_errors_all as select * from table(validate(mycsvtable, job_id=>'0198ed44'))
+
+
+BULK LOADING FROM A LOCAL FILE USING COPY COMMAND
+
+QUERYING METADATA FOR STAGED FILES:
+
+-Snowflake automatically generates metadata for files in internal (i.e.Snowflake) stages or external(AmazonS3, GCP OR AZURE) stages
+
+
+CREATE OR REPLACE FILE AND STAGE
+
+Now place the file into the stage using snowcli
+--Staging the data files
+> snowsql -a jn85279.ap-south-1 -u krishna
+
+--Named Stage
+--Linux

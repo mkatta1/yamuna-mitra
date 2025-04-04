@@ -1,0 +1,365 @@
+GGPLOT used in R language:
+
+from plotnine.data import economics
+from plotnine import ggplot, aes, geom_line
+(
+ ggplot(economics)
++ aes(x="date", y="pop") #what variable to use
++ geom_line() # geometric object to use for drawing
+)
+
+1. The data that you want to plot
+2. The variables to use on each axis
+3. The geometric object to use for drawing
+
+
+from plotnine.data import mpg
+from plotnine import ggplot, aes, geom_point
+ggplot(mpg) + aes(x="class", y="hwy") + geom_point()
+
+from plotnine.data import mpg
+from plotnine import ggplot, aes, geom_bar
+ggplot(mpg) + aes(x="class") + geom_bar()
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+from plotnine.data import huron
+from plotnine import ggplot, aes, stat_bin, geom_bar
+
+ggplot(huron) + aes(x="level") + stat_bin(bins=10) + geom_bar()
+
+
+from plotnine.data import huron
+from plotnine import ggplot, aes, geom_histogram
+ggplot(huron) + aes(x="level") + geom_histogram(bins=10)
+
+
+from plotnine.data import economics
+from plotnine import ggplot, aes, scale_x_timedelta,  labs, geom_line
+(
+ ggplot(economics)
++ aes(x="date", y="pop")
++ scale_x_timedelta(name="Years since 1970")
++ labs(title = "population evolution", y= "population")
++ geom_line()
+)
+
+FOLIUM LIBRARY:
+
+- Folium is a python library used for visualizing geospatial data. it is easy to use and yet a powerful library. folium is a python wrapper for leaflet.js which is a leading open-source javascript library for plotting interactive maps
+
+- It has the power of leaflet.js and the simplicity of python, which makes it an excellent tool for plotting maps.
+- Folium is designed with simplicity, performance, and usability in mind.
+- It works efficiently, can be extended with a lot of plugins, has a beautiful and easy-to-use api.
+
+PLOTTING MAPS WITH FOLIUM:
+
+- Folium provides the folium map() class which takes location parameter in terms of latitude and longitude and generates a map around it.
+- So, let's plot a map of Bengaluru with latitude and longitude as 12.983377 and 77.594167 respectively.
+- You can see that these maps are interactive. You can zoom in and out by clicking the positive and negative buttons in the top-left corner of the map. You can also drag the map and see different regions.
+
+m= folium.Map(location=[12.983377, 77.594167])
+
+import plotly.express as px
+df = px.data.election()
+print(df.head(5))
+geojson = px.data.election_geojson()
+fig = px.choropleth_mapbox(df, geojson=geojson, color="Bergeron", locations="district", featureidkey="properties.district", 
+center={"lat": 45.5517, "lon": -73.7073},
+mapbox_style = "earto-positron", zoom=9)
+fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+fig.show(
+
+#import seaborn
+import seaborn as sns
+sns.set_theme(
+tips = sns.load_dataset("tips")
+tips.head()
+
+
+
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Lisa Moore at lisa.moore@portofnewcastle.com.au
+Linear Regression:
+Binary classification: 0 & 1
+
+Logistic regression: It is also called as classification algorithm.
+
+It estimates the probability of an event occurring, such as voted or didn't vote, based on a given dataset of independent variables. Since the outcome is a probability, the dependent variable is bounded between 0 and 1. In logistic regression, a logic transformation is applied on the odds-that is, the probability of success divided by the probability of failure.
+This is also commonly known as the log odds, or the natural logarithm of odds, and this logistic function is represented by the following formulas:
+- logit(pi) = 1/(1+exp(-pi))
+ln(pi/(1-pi)) = Beta_0 + Beta_1*x_1 + ...+ B_K*K_k
+
+- In this logistic regression equation, logit(pi) is the dependent or response variable and x is the independent variable. The beta parameter, or coefficient, in this model is commonly estimated via maximum likelihood estimation (MLE). This method tests different values of beta through multiple iterations to optimize for the best fit of log odds. All of these iterations produce the log likelihood function, and logistic regression seeks to maximize this function to find the best parameter estimate. Once the optimal coefficient (or coefficient if there is more than one independent variable) is found, the conditional probabilities for each observation can be calculated, logged, and summed together to yield a predicted probability. For binary classification, a probability less than 0.5 percent 0 while a probability greater than 0 will predict 1.
+
+Hypothesis => Z = WX + B
+h(x) = sigmoid()
+
+Sigmoid Function
+sig(t) = 1/1+e^-x
+
+3 types of logistic regression models:
+1. Binary logistic regression: In this approach, the response or dependent variable is dichotomous in nature -- i.e. it has only two possible outcomes (e.g. 0 or 1). Some popular examples of its use include predicting if an e-mail is spam or not spam or if a tumor is malignant or not malignant. Within logistic regression, this is the most commonly used approach, and more generally, it is one of the most common classifiers for binary classification.
+
+2. Multinomial logistic regression: In this type of logistic regression model, the dependent variable has three or more possible outcomes; however, these values have no specified order. For example, movie studios want to predict what genre of film a moviegoer is likely to see to market films more effectively. A multinomial logistic regression model can help the studio to determine the strength of influence a person's age, gender, and dating status may have on the type of film that they prefer. The studio can then orient an advertising campaign of a specific movie toward a group of people likely to go see it.
+
+3. Ordinal logistic regression: 
+
+This type of logistic regression model is leveraged when the response variable has three or more possible outcome, but in this case, these values do have a defined order. Examples of ordinal responses include grading scales from A to F or 
+
+4. Fraud detection: Logistic regression models can help teams identify data anomalies, which are predictive of fraud. Certain behaviors or characteristics may have a higher association with fraudulent activities, which is particularly helpful to banking and other financial institutions in protecting their clients. SaaS-based companies have also started to adopt these practices to eliminate fake user accounts from their datasets when conducting data analysis around business performance.
+
+5. Disease prediction: In medicine, this analytics approach can be used to predict the likelihood of disease or illness for a given population. Healthcare organizations can set up preventative care for individuals that show higher propensity for specific illnesses.
+
+6. Churn prediction: Specific behaviors may be indicative of churn in different functions of an organization. For example, human resources and management teams may want to know if there are high performers within the company who are at risk of leaving the organization; this type of insight can prompt conversations to understand problem areas within the company, such as culture or compensations to understand problem areas within the company, such as culture or compensation. Alternatively, the sales organization may want to learn which of their clients are at risk of taking their business elsewhere. This can prompt teams to set up a retention strategy to avoid lost revenue.
+
+A bar chart height or length of each bar corresponds to the value being measured, and the bars are usually arranged horizontally or vertically to make comparisons easy.
+Comparing data across multiple categories. Showing changes over time.
+Displaying survey results. Comparing subcategories. Visualizing budget allocation. Showing ranking.
+
+An area chart is a type of graph that displays quantitative data over time or a continuous interval. It is similar to a line chart, but the area between the line and the x-axis is filled with color or shading. The filled area emphasizes the cumulative magnitude or proportion of the data, making it useful for illustrating trends, comparing multiple datasets, and identifying overall patterns of change.
+
+When to use area chart?
+Showing trends over Time
+Area charts are effective for displaying trends or changes in data over time. They provide a visual representation of the cumulative values or proportions, making it easy to observe the overall pattern or direction of change.
+
+Comparing multiple data series: Area charts can be used to compare multiple data series or categories. By stacking the filled areas, you can visually compare the relative contributions or proportions of different datasets, enabling insights into the composition or distribution of the data.
+Illustrating cumulative data: Area charts are particularly useful for illustrating cumulative data. They showcase the total or cumulative values of multiple variables, allowing for a clear understanding of how the components contribute to the overall sum.
+
+Highlighting patterns and fluctuations:
+Area charts help identify patterns, fluctuations, or seasonality in the data. By examining the rise and fall of the filled areas, you can easily spot periods of growth, decline, or cyclical behavior.
+ 
+Communicating Progress or Performance:
+Area charts are often used to communicate progress or performance metrics. They provide a visually appealing way to showcase the advancement or achievement of targets, goals, or milestones over time, creating a clear representation of progress.
+
+		WHAT IS BOX PLOT
+A box plot, also known as a box-and-whisker plot, is a graphical representation of the distribution of a set of numerical data. It provides a summary of the data's central tendency, spread, and any potential outliers. The plot displays several key statistical measures, including the minimum, maximum, median, and quartiles of the data.
+Here are the distribution of a variable and identifies outliers.
+
+MINIMUM AND MAXIMUM: The whiskers or lines extending from the box represent the minimum and maximum values of the data, excluding outliers.
+MEDIAN: A line inside the box represents the median, which is the middle value of the dataset when it is ordered. It divides the data into two equal halves.
+
+INTERQUARTILE RANCE (IQR): The box itself represents the IQR, which is the range between the first quartile (Q1) and the third quartile (Q3). It contains the middle 50% of the data.
+OUTLIERS: Data points that fall outside the whiskers, beyond 1.5 times the IQR from the quartiles, are considered outliers. They are typically represented as individual points or asterisks.
+
+		BUBBLE CHART
+A bubble chart is a type of data visualization that represents data points as bubbles or circles on a two dimensional graph. Each bubble's position on the graph corresponds to its x and y values, and the size of the bubble represents a third variable. Bubble charts are useful for displaying and comparing three different data dimensions simultaneously, allowing for the identification of patterns, relationships, and outliers in the data.
+
+CHECK THE PDF
+Why Have Us Deliver for Your Restaurant
+Environmental Data Analysis
+Risk Assessment
+
+When to use a bubble char?
+Economic Analysis
+Project Management
+Market Analysis
+
+			GANTT CHART
+
+A Gantt chart is a visual representation of a project schedule that displays tasks, milestones, and timelines. It consists of horizontal bars that represent different activities, with their lengths indicating their duration. Gantt charts help in planning, scheduling, and tracking project progress, enabling project managers to visualize the project timeline and dependencies.
+
+WHEN TO USE A GANTT CHART?
+Project planning: Gantt charts are commonly used during the project planning phase to outline tasks, allocate recourses, and establish timelines. They provide a comprehensive overview of the project and help in identifying potential bottlenecks or scheduling conflicts.
+
+Task Dependencies: Gantt charts are valuable when managing projects with complex task dependencies. By visualizing the interdependencies between tasks, project managers can identify critical paths and prioritize activities accordingly.
+
+Progress tracking: Gantt charts allow project managers to track the progress of individual tasks and the overall project. By comparing planned timelines with actual progress, they can identify delays or deviations and take corrective measures.
+
+Resource Management: Gantt charts provide a clear visualization of resource allocation and availability. Project managers can identify periods of resource overload or underutilization, ensuring efficient utilization of team members and equipment.
+
+Communication and collaboration:
+Gantt charts serve as effective communication tools, allowing project managers to share project plans with stakeholders, team members, and clients. They provide a common visual reference point and facilitate collaboration by ensuring everyone is aware of project timelines and milestones.
+		
+ 				HEAT MAP
+
+A heat map is a graphical representation that uses colors to visualize the density or intensity of values in a two-dimensional dataset. It typically represents values as a grid of rectangular cells, with each cell colored according to its corresponding value. Heat maps are useful for identifying patterns, trends, and areas of high or low concentration within the dataset, providing an intuitive and visual understanding of the data distribution.
+
+DATA ANALYSIS AND EXPLORATION:
+
+Heat maps are commonly used for data analysis and exploration. They help identify patterns, trends, and clusters within large datasets, enabling users to gain insights and make informed decisions based on the visual representation of data density or intensity
+
+ RISK ASSESSMENT AND MANAGEMENT:
+ Heat maps can be utilized in risk assessment and management processes. By representing risks or vulnerabilities with different colors based on their severity or impact, heat maps provide a comprehensive overview of potential risks, facilitating prioritization and mitigation strategies.
+
+FINANCIAL ANALYSIS:
+Heat maps are valuable in financial analysis, especially in portfolio management and stock market analysis. They can display the performance of different assets or investment options, enabling investors to quickly identify hotspots or areas of high returns or risk.
+
+GEOGRAPHIC AND SPATIAL ANALYSIS:
+Heat maps are ideal for visualizing and analyzing geographic or spatial data. They can depict population density, distribution of disease outbreaks, crime rates, or any other variable across different regions, allowing for effective spatial analysis and decision-making
+
+USER BEHAVIOR AND INTERACTION:
+Heat maps are often used in user experience (UX) design and website
+ optimization. By tracking and visualizing user interactions and behavior, such as mouse clicks or scrolling patterns, heat maps can identify popular or neglected areas on webpages, helping improve website usability and conversion rates
+
+			 Histogram
+A histogram is a visual representation of data distribution using bars. It displays the frequency or count of observations within different intervals or bins. The height of each bar represents the number of data points falling within that interval.
+ 
+Histograms help analyze
+ patterns, outliers, and overall characteristics of a dataset.
+
+when to use a  Histograph?
+
+Data Analysis:
+Histograms are widely used in data analysis to understand the distribution of a variable. They help identify patterns, trends, and anomalies in the data
+
+ Descriptive Statistics:
+Histograms provide a visual summary of the central tendency (mean, median, mode) and dispersion (range, variance, standard deviation) of a dataset
+
+ Quality Control:
+ Histograms are valuable in quality control processes to monitor the
+ distribution of product characteristics. They can detect deviations, identify potential issues, and aid in decision-making for process improvements.
+
+Market Research:
+ In market research, histograms can be used to analyze consumer preferences, such as product ratings or survey responses, to identify
+ popular or unpopular choices.
+
+ Financial Analysis:
+ Histograms are useful in financial analysis to examine variables such as stock returns, sales figures, or revenue distribution. They can reveal
+ patterns, outliers, and potential risks.
+
+ Resource Allocation:
+ Histograms are employed in resource management to analyze resource utilization, such as employee workload distribution or equipment usage. They help optimize resource allocation and identify areas that may require adjustments or improvements.
+
+			line chart
+
+A line chart is a simple graph that displays
+ the relationship between two variables over
+ a period of time. It uses a line to connect
+ data points, illustrating the trend or pattern
+ in the data. By plotting values on the chart, it
+ provides a visual representation of how the
+ variables change and helps in understanding
+ the overall progression
+
+
+a = np.array([2,4,6])
+b = a[0:2]
+print(b)
+
+b)
+a = np.array([2, 4, 6, 8])
+print(a)
+b = a[1:]
+print(b)
+
+a = np.array([2, 4, 6, 8])
+print(a)
+b = a[:3]
+print(b)
+
+
+a = np.array([2, 4, 6, 8])
+b = a[0:4]
+print(b)
+c = a[:4]
+print(c)
+d = a[0:]
+print(d)
+e = a[:]
+print(e)
+
+a = np.array([[2, 4, 6, 8], [10, 20,
+30, 40]])
+print(a)
+b = a[0:2, 0:3]
+print(b)
+
+
+a = np.array([[2, 4, 6, 8], [10, 20,
+30, 40]])
+b = a[:,:] #[all rows, all columns]
+print(b)
+
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+print(arr[-3:-1])
+
+arr = np.array([1, 2, 3, 4, 5, 6, 7])
+print(arr[::2])
+
+
+a)
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+newarr = arr.reshape(4, 3)
+print(newarr)
+b)
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+newarr = arr.reshape(2, 3, 2)
+print(newarr)
+c)
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+newarr = arr.reshape(2, 2, -1)
+print(newarr)
+d)
+arr = np.arange(10)
+arr.reshape(2, -1)
+e)
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+newarr = arr.reshape(-1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EDA Project Due date: 17 May
+INTRODUCTION TO PYTHON - Pyhton Libraries ---> Due Date: 10 May
+
+EDA Practise File - Bank Telemarketing Campaign Case Study --> Due Date: 03 May 2024
+
+
+
+p(y=1/x) = 1
+
+
+fraud detection, disease prediction, churn prediction, 
+
+step1: 
+step2:
+
+decision taking steps etc..
+
+Advants:
+classifica and regressiong tasks
+large datasets with high dimensionality, enhance the accuracy
+
+Instance, tree-1, tree-2, tree-n
+class-a, class-b, class-c
+
+what is entropy ???
+
+

@@ -1,0 +1,30 @@
+ADF Scenarios
+1)Handling errors
+2)Dynamically GetMetada (childitems) ->foreach(activity.childitems)->copydata(source->item.name())
+3)Incremental copy or delta or incremental data load from input files to output files:
+In copydata give source with start date and end date 
+4)Delte files using adf: getMetadata(childitems)with end date->foreach(activity.childitems)->delete activity(item.name())
+5)Process fixed length text files: In dataflow Sourceactivity->derivedColumn to derive using substring expressions->select activity to select columns
+->sink to output the data
+6)Log Pipeline details: In stored procedure -> System variables with all the pipeline details are added
+7)Duplicate row removal: Aggregate the source, groupby empid, aggregate columns condition is columnName!=empid, $$=$$
+8)Increment keys from existing source:
+9)RunningTotal in ADF: Add Window transformation to source with no partitions,no range,sort by quantity, and window col =sum(quantity)
+10)Log Pipeline Extension:
+11)SCD Type1:Need to study properly and also the Check the AlertRow which runs the upsert mens update and insert property.
+12)Get count of files in folder: getMetadata activity with childitems->set variables variable=len(getMetadata.childitems)->if condition
+13)
+
+Your data flow will execute on your own Azure data bricks cluster for scaled out data processing using spark.
+ADF internally handles all the code translation, spark optimization and execution of transformation.
+Compute type: general purpose, compute optimized, memory optimized
+poly data is to stage the data for some time if you need the target is datawarehouse.
+Mapping data flow debug mode:
+A cluster with eight cores of general compute with a 60-minute time to live will be spun up when the debug mode on.
+One GitHub account can have multiple repositories, but a GitHub repository can be associated with only one data factory.
+Collaboration Branch(Master), Features Branch(Implementation), Pull Request to pull code from Features->Master
+---You cannot publish the code from Features Branch. So, need to pull it to master branch and then publish the code.
+Create Pull Request->Merge Pull Request->Confirm Merge
+Azure DevOps
+Organization(Account)->Project->Repositories->Branches
+

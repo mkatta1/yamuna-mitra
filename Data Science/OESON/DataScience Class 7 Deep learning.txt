@@ -1,0 +1,97 @@
+Deep learning:
+Artifical neural network 
+
+from sklearn.preprocessing import onehotencoder
+import pandas as pd
+data = {'category':['cat', 'dog', 'cat', 'bird', 'dog']}
+df = pd.dataframe(data)
+encoder = Onehotencoder(sparse_output=False, handle_unknown='ignore')
+encoded_data = encoder.fit_transform(df[['category']])
+
+If the accuracy ka rate is not correct it performs re-calculations till the time it adjusts it value. We can give until 250 times to try or loop to find out the value.
+
+every edges and grid are checked in hidden layers
+Identify edges, 
+
+Activation function is Mostly non-linear aspect! it mainly depends on the INPUT DATASET, in this function different level of calculated methods are used.
+Mostly we use 2-3 but we have 5-6 activation functions.
+Is activation function non-linear?
+
+Different Activation function is a linear function that tries to understand the relationship between the each and every variable.
+
+Links carry signals from one node to another, boosting or damping them according to each link's 'weight'.
+
+Classification and NLP is part of deep learning method
+
+To analyse the text data to make easy understanding of the TEXT DATA.
+CHAT BOTS are developed based on NLP
+Google translator, Voice Search based on NLP techniques.
+Some are based on Machine learning, some are based on deep learning and some are based on both of them.
+
+ML to train the model and deep learning to enhance the result/output.
+
+IN NLP we have many approaches, one is ML, other is deep learning, 
+also rule based, statistical based approach.
+
+In Rule base approach, a structure is involved.
+In statistical based approach, a statistical model is involved.
+ReLU most easiest activation function used by any of the researcher. Here, if the input is different from the output then it is represented as zero.
+
+Training deep learning models:
+1.Forward propagation:
+2.Loss Function: It occurs as a measurement of error.
+3.Backward propagation: It returns back to adjust its values to give the actual output with more accuracy. Until it reaches its accuracy it is there will be a loss function.
+
+FNN means simple neural network or artificial neural network:
+feedforward neural networks works as a forward propagation manner.
+one type of artificial neural network which is generated artificially on the basis different calculations and functions that we create a out MODEL. why it is "forward" because it is 
+
+APPLICATIONS OF CNN:
+--------------------
+1.Moving object detection, facial recognition, find the people without helmet in traffic etc using CNN and RNN
+Sigmoid and Tanh functions are used.
+
+2.In medical field, used to check pneumonia, brain tumor 
+
+3.crop prediction, if there is any decease or not? 
+
+4.input text generated output images
+
+Scripting part with comments are missing in most of the code files:
+about the dataset needs to be explained
+mention the elements
+
+PYCHARM:
+https://www.jetbrains.com/pycharm/download/?section=windows
+
+CNN is a grid based system:
+optimizer, loss function, activation function
+
+1.install tensorflow, numpy and matplotlib
+2. recall all the datapoints
+3. tensorflow,keraas dataflow, layers, datasets for our analysis purpose
+4. layers function, models training
+5. import dataset as train and test. Train images and labels
+6. test images and test lables from CIFAR10 DATASET
+
+TENSORFLOW is a machine learning framework, machine learning models and deep learning models
+KERAS api 
+
+what is scrapping a dataset ?
+
+
+
+RNN is short term memory storage
+
+LSTM algorithm
+
+long short term memory
+it works on the gate system, also known as gates recurring system
+forget gate: cleans memory for the new dataset, 
+
+
+
+
+
+
+

@@ -1,0 +1,96 @@
+Optimizing performance of the Azure Integration Runtime:
+https://learn.microsoft.com/en-us/azure/data-factory/concepts-integration-runtime-performance
+
+Cluster type, ClusterSize, Custom shuffle partition, TimeToLive, 
+
+Best practices of cluster configurations:
+https://learn.microsoft.com/en-us/azure/databricks/compute/cluster-config-best-practices
+
+Spark configuration in spark tab, Logging tab, Init Scripts, Environment variables, Cluster log delivery:
+https://learn.microsoft.com/en-us/azure/databricks/compute/configure#--databricks-runtime-versions
+
+https://learn.microsoft.com/en-us/azure/databricks/init-scripts/#init-script-types
+types of init scripts: Cluster-scoped/ Global 
+Cluster-scoped: run on every cluster configured with the script. This is the recommended way to run an init script.
+
+Connect to cloud object storage using Unity Catalog:
+https://learn.microsoft.com/en-us/azure/databricks/connect/unity-catalog/
+
+
+All-purpose clusters and job clusters, Cluster mode(single/multi), On-demand and spot instances, Protect spot instances from preemption with decommissioning, Autoscaling, Databricks Runtime versions, Basic batch ETL,  
+
+Day 13 of Recorded session:
+
+To get back the deleted files within retention period. Check the option "show deleted files" in the following container which shows the deleted files. Select the file ->click undelete option to delete the file
+
+Click Change tier -> to select hot, cool, archive
+
+Flatten hierarchy option chosen in sink would make target filename different from source filename. Usually if we don't specify the target filename then source filename is used by default.
+
+NOTE: No need to maintain servers or write code in ADF
+
+In Monitor tab, go to Pipeline runs to check for Triggered runs and Debug runs can be seen.
+
+In Manage tab,--> Factory settings tab --> Show billing report by pipeline or by factory
+
+Diff between 
+Manage ACl on file file level means Add policy on file level like Read, write, deleted in ADLS GEN@ but in in in blob storage is  this is not found 
+
+Day 14 of Recordings:
+
+In Self-hosted Integration Runtime, we have 3 types of runtimes
+1. Linked self-hosted: You can use an existing self-hosted integration runtime that exists in another resource. This way you can reuse your existing infrastructure where self-hosted integration runtime is setup.
+
+Diff bw SharedIR vs LinkedIR:
+ShareIR: self-hosted IR running on an ADF1 is being shared with other ADF2.
+LinkedIR: ADF1's self-hosted IR is being used by another ADF2. So in this same IR in here is called LinkedIR.
+
+2. self-hosted for on-premises/private network
+
+3. Azure Integration runtime: Use this for data flows, data movement, external and pipeline activities in a fully managed, serverless compute in Azure.
+
+In Azure self-hosted IR setup -> Virtual network (Enabling Managed Virtual Network ensures that the Azure Integration Runtime compute is provisioned within it, and can access data securely using Private Endpoints. Learn more) -> enable interactive authoring (Interactive authoring capability is used during authoring for functionalities like Test connection / Browse and Preview data / Import parameter / Import schema inside managed Virtual Network.) 
+
+Manage tab -> on Custom IR edit mode -> Dataflow Runtime tab -> Compute Custom Properties -> Select Shuffle Partitions under property name, input value of your choice like 250/500... etc.
+ 
+Use the below configuration only for Azure Integration runtime
+Custom Integration Runtime setup:
+computeSize: custom
+compute type: General purpose/ Memory optimized
+Core Count: 4workerCores(+4 Drivercores)/8workerCores(+8 Drivercores)/16workerCores(+16 Drivercores)/32workerCores(+16 Driver cores)/64workerCores (+16 Driver cores)/ 128workerCores (+16 Driver cores)/ 256workerCores (+16 Driver cores) 
+
+4 worker cores is small
+8 worker cores is medium
+16 worker cores is large
+
+Time to live: 0,5,10,15,30,1hour,4hours
+
+
+In compute type:
+---------------
+General purpose:
+General purpose clusters are the default selection and will be ideal for most data flow workloads. These tend to be the best balance of performance and cost.
+
+
+Memory optimized:
+If your data flow has many joins and lookups, you may want to use a memory optimized cluster. Memory optimized clusters can store more data in memory and will minimize any out-of-memory errors you may get. Memory optimized have the highest price-point per core, but also tend to result in more successful pipelines. If you experience any out of memory errors when executing data flows, switch to a memory optimized Azure IR configuration.
+
+
+The Azure Resource Manager (ARM) template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. For Custom deployment check the below:
+Custom deployment:
+Deploy from a custom template
+Common templates:
+- Create a Linux vitual machine
+- Create a window virtual machine
+- Create a web app
+- Create a SQL database
+- Azure Landing zone
+
+Start with a QuickStart template or template spec
+
+This template was created by a member of the community and not by Microsoft. Each template is licensed to you under a license agreement by its owner, not Microsoft. Microsoft is not responsible for these templates and does not screen for security, compatibility, or performance. Community templates are not supported under any Microsoft support program or service, and are made available AS IS without warranty of any kind.
+
+
+
+
+

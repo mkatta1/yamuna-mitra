@@ -1,0 +1,215 @@
+
+- The starting point in any statistical analysis is to read data using the language of statistics.
+
+- This language uses the so called 'descriptive statistics' to establish and organized and meaningful display of data with the goal being to reduce the flood of data being presented down to few statistics that can fully describe the data.
+
+Descriptive Statistics - used to describe the basic features of data in a study.
+
+1. Measure of Frequency: Count, Percent, Frequency
+
+2. Measure of Central Tendency: to describe the entire data like a central value.
+3. Measure of Dispersion: if you have data with dispersed data. Then how data is dispersed from the central value. Range, Variance, Standard Deviation
+4. Measure of Position: Percentile, Quartile, Decils
+
+Inferential statistics - used to make judgement, observe difference between groups, draw inferences, reach conclusion beyond the immediate data
+a. Hypothesis Testing
+b. Correlation
+
+what is mean, median, outliers, distribution, population mean (mu), population standard deviation, population, 
+variance1 = (individual_Value - mean)^2
+variance1 = (individual_Value - mean)^2
+standard deviation = variance/N 
+standard error
+
+- Median is less effected by outliers and skewed data
+
+other ways the variables
+ 
+varibale: 
+categorical (nominal sameValueCategories, Ordinal valuesAreOrdered), 
+continuous (interval someNumericalValues, Ratio 0 is unacceptableValue)
+
+- Categorical variables represent types of data which may be divided into groups. Examples of categorical variables are race, sex, age group, type1-type2-type3 flag data
+Categorical data are restricted to a set of values and can also be string data sometimes.
+
+- Continuous data is data that can take any value. Height, weight, temperature and length are all examples of continuous data. Some continuous data will change over time; the weight of a baby in its first year or the temperature in a room throughout the day.
+Continuous data can be a inifinite range. NumericalValues can be with +ve & -ve values. Example of Ratio 0 as unacceptableValue is weight, height, salary as zero!
+
+--------------------------------------------
+TypeOfVariable, BestMeasureOfCentralTendency
+--------------------------------------------
+Nominal, Mode
+Ordinal, Median
+Interval/Ratio (not skewed), Mean
+Interval/Ratio (skewed), Median
+
+
+non-numerical is categorical data???? - No
+numerical values is continuous???? - No
+
+set = {a,b,c} restricted values are categorical data
+set = {3,2,1} restricted values are categorical data
+
+marks, grade, g
+80, c, 3
+90, b, 3
+150, a, 1
+
+- Here both grade and g are categorical data
+
+- 5 star, 4 star , 3 star , 2 star is an ordinal data example like the above g column
+
+- Interval value +200 or -205 etc any number can be there
+- Ratio with 0 is unacceptableValue like weight, height, zero salary ....etc
+- 
+
+Type of Variable, Best measure of central tendency
+Nominal, Mode
+Ordinal, Median
+Interval/Ratio(not skewed), Mean
+Interval/Ratio (skewed), Median
+
+Measure of Dispersions:
+-----------------------
+describe how much our data is either spread out or squeezed. the two most important dispersions we will cover are variance and standard deviation.
+
+The distance of how far the data is away from the mean is the measure of dispersion. We don't want to MODEL the data where the columns are deviating too much from the mean because that causes a problem.
+
+example:
+0,1,1,1,4,5,6,6,7,10,10,27,42,70
+
+median 6, 
+Q1 1
+Q2 6
+Q3 10
+MAX 70
+
+Quartiles are another way 
+List:
+0,1,1,1,4,5,6,6,7,10,10,27,42,70
+
+0,1,1,1: Q1 it is the medain(median) 1/4
+4,5,6: Q2 2/4
+6,7,10,10: Q3 it is the medain of (Q3-Q4) 3/4
+27,42,70: Q4
+
+Q1 is 1/4th position
+Q3 is the 3/4th position
+
+variance: variance is a measure of how spread-out all our data points are.A high variance suggests a 
+How far is each&every individual value away from every other value.
+
+To know how far each&every value is away from eachother value
+
+0,1,1,1,4,5,6,6,7,10,10,27,42,70
+
+here 42, 70, 27 should not be 
+
+standard deviation:
+------------------
+- How far away from the mean value is standard deviation.
+- Higher the standard deviation then poor is the data.
+- it is our last measure of spread. It's very commonly used in statistics. 
+- The standard deviation describes the average distance we can expect 
+
+more sd is not good
+zero sd is not good becoz all are same values
+
+standard deviation and the empirical rule
+-1 sd to +1 sd
+-2 sd to -2 sd
+-3 sd to -3 sd
+
+empirical rule helps to decide your boundaries.
+-2 sd/sigma to +3 sd/sigma is the range we going to use.
+
+0.3 values are called outliers
+
+
+calculating variance 
+data analysis, descriptive analysis,inputrange as inputcolumn, checkBox's like (check labels in firstrow, outputrange as any other column outside & summary statistics)
+
+sd distance= 199
+
+
+
+****************************************************************************************************************************************************
+
+Normal (Gaussian) Distribution:
+-------------------------------
+
+1) Symmetrical
+2) The mean, median, mode are the same
+3) Has tails that approach the x-axis
+4) Distribution follows the Emprirical Rule(68% SD1, 95% SD2, 98% SD3)
+
+Non-normal Distributions:
+-------------------------
+Types: Bi-modal, parabolic(change is constant here), flat
+
+Our task would be to change these non-normal distributions to NormalDistributions to study the data.
+
+
+Skewness:
+---------
+Skewness is usually described as a measure of a dataset's Symmetry OR Lack of Symmetry. A perfectly symmetrical data set will have a skewness of 0. The normal distribution has a skewness of 0. A positive skewness indicates that the size of the right-handed tail is larger than the left-handed tail and vise versa.
+
+Types: 
+Negative skew (Right-side curve but the tail is in the left-side due to outliers), Normal, Positive Skew (Left-side curve but the tail is in the right-side due to outliers)
+- Median is by descriptive value!!
+Distribution = how many values are close to each other 
+
+Have outliers skew's data
+
+Kurtosis:
+--------
+The peaketsness tells how outliers are behaving in the data. if there are any frequent changes or fluctuations in the values in the given outliers. Then you then kurtosis.
+
+Kurtosis is a measure of the combined sizes of the two tails. It measures the amount of probability in the tails. The value is often compared to the kurtosis of the normal distribution which is equal to 3. If the kurtosis is greater than 3, then the dataset has heavier tails than a normal distribution (LEPTOKURTIC). If the Kurtosis is less than 3, then the dataset has lighter tails than a normal distribution (PLAYKURTIC).
+
+
+change in the outliers is consistent. we donot change huge changes in the outlier values in PLAYKURTIC curve. If the tails are abruptly ending then we say it as PLAYKURTIC curve.
+
+Leptokurtic (riskier, Big swings Eg: sharemarket), mesokurtic, platkurtic (Few swings Eg: MutualFunds)
+If kurtosis is equal to 3 
+greater than 3 is leptokurtic
+
+histogram is to know the distribution of the data.
+To get histogram graph in excel:
+Insert -> recomended charts -> Select the default histograph 
+
+chart design:
+change the 
+
+we define min, max value
+
+
+"HISTOGRAM is used to find the distribution of the data"
+
+Bins are in X-axis
+Amplitude or frequency of the bins are in Y-axis
+ X          Y
+---	    --	
+B1 = [0 5] = 2 --> between - (0-5) i have   
+B2 = [5 10] = 3 --> between - (5-10) i have 
+B3 = [10 12] = 2 --> between - (10-12) i have 
+
+
+
+Bins on X- axis
+Frequency on Y-axis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

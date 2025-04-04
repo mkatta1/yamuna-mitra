@@ -1,0 +1,158 @@
+CRM SOFTWARE INSIGHTS:
+
+Dashboard is with customers data of how we got the lead like (WhatsApp, facebook, instagram etc..) in day, week, month
+In LEADS, 
+Initial contact --> create it with customer basic details --> it gives statistics, media, products, setup
+Discussions, Decision making, Contract discussion
+
+Add a workflow by setting up a pipeline related to online store, consulting, services, marketing, travel agency
+
+In CHAT, 
+we Add channels like (WhatsApp, facebook, instagram etc..)
+Template & Bots, here we can create chat templates and sales-bots
+Easy Templates in 3 steps: choose a template --> build a bot --> setup a trigger
+Templates are like: 
+- Respond to incoming conversations
+- Let your customers know when you'll be back online and take a message
+- Alert a team member when a client wants more than 5 minutes
+- Get notified when it will be 24 Hours since a client replied
+- Assign conversation to a user based on a client's answer
+- Generate new conversations from comments on your posts 
+- Auto-close conversation that were left over 5 days or more
+- Notify your customers about special offers, event reminds and more
+- Add an 'opt-out' tag when clients wants to unsubscribe from your messages
+- Set up actions based on the words in a client's message
+
+In Calendar,
+My Tasks, Overdue Tasks, Completed Tasks, All Tasks, Deleted Tasks 
+
+
+In Lists: 
+Full list, contacts without tasks assigned, contacts with overdue tasks, no leads linked, deleted
+
+In Stats: 
+Win-Loss Analysis, Consolidated report, Report by activities, Activity Log, Call report, Goal report
+Initial contact, Discussions, Decision making, Contract discussion
+
+
+
+TOPIC 1: Mobile Communication: Components of BSS and OSS
+https://www.youtube.com/watch?v=ekQNpNQSIwU
+
+CRM SYSTEM
+Call center, Order Management, Disputes(retention), Contact Management
+
+Provisioning and Service Fulfillment
+N/W Inventory, Service Activations, Work Force Management
+
+Rating and Billing
+Rating -> plans -> billing -> bill generation -> bill/payments collection
+
+Interconnect Billing
+
+Mediation
+Aggregators, Data Collectors, Aggregators
+	||
+	\/
+Switch
+||
+\/
+S57 Signalling and Monitoring
+||
+\/
+Revenue Assurance
+Test Calls, Fraud Usage and Identification
+
+
+TOPIC 2: Mobile Communication: BSS and OSS
+BSS(Business Support System) AND OSS (Operation Support System)
+https://www.youtube.com/watch?v=Rxok2lenMkM
+
+In this series of BSS and OSS we will learn about:
+1. what is BSS and its importance?
+2.CRM(Customer Relationship Management)
+3.Mediation
+4.Rating Billing
+5.Revenue Assurance in Brief
+6.Fraud Management in Brief
+
+For every Telco Operator, the business mainly depends on the products that are purchased by the subscribers or users/
+- Like Different Postpaid Plans
+- VAS Product (Value added services like CRBT, Data, specialized packs )
+- Prepaid plans
+- International plans
+- Providing internet services to corporate offices
+- Interconnection services etc.
+
+BSS, OSS, NMS, N
+
+Telecom BSS: Business support system are set of software applications which mainly handles commercials aspects. customer interactions for the respective TELCO Operators.
+
+
+CM: The subscribers or customers interacts with the CRM, i.e. customer relationship management. This is the first and most critical step for the telco Operator as the satisfied customer stays with the Telco. It is basically responsible for customer management and is responsible for the entire cycle.
+
+PM: Product management mainly refers to the product catalogue, it is very important for Telco's to come up with different products that attract the subscribers.
+There can be different plans like giving discount while roaming in international countries and specific plans per country depending upon the IOT (Inter Operator Tariff) that are agreed between the Telco's.
+
+RM: This is the very important functions which basically targets on increasing the revenue of the operators. Mainly the revenue assurance team works on identifying the revenue leakages and fix the revenue leakage. It is also responsible for testing the new features before the release of the product to the market so that effective revenue can be realized. Fraud Management, is also one part as this is the area where potential revenue leakage can happen.
+
+OM: Order Management is the initial lifecycle for sourcing the subscriber data into different system after the successful validation of subscribers. A unique account is created per subscriber the data which flows into different elements associated to BSS.
+
+Interfaces to BSS System
+------------------------
+BSS
+Call usage - CDR
+Credit checks
+Payment gateways
+IVR
+Lookup of Address in DB
+Banking systems
+General Ledgers
+Inventory management (SIMS/Hardware)
+Billing and Printing
+
+TOPIC 3: Mobile Communication: LTE Architecture in detail
+https://www.youtube.com/watch?v=xn4uGbeo8cA
+
+flexibility of radio frequency deployment since LTE can be deployed in various bandwidth configuration (1,4,3,5,10,15,20 MHz)
+
+multiple input multiple output (MIMO)
+
+LTE offers TDD and FDD solutions as well
+
+E-Ue <-> E-UTRAN (Evolved Universal Terrestrial Radio Access Network) <-> Core Network (Evolved Packet Core)
+
+E-Ue <--X2--> E-Ue <-> E-UTRAN  <==S1-C==> S1-U <-> MME <==S6a==>HSS <-> PRCF <-> PGW <==SGi==> P DN Internet
+
+E-Ue <-> E-UTRAN  <==S1-U==> SGW <--S5--> PGW <==SGi==> P DN Internet
+
+HSS <-----> IP network IMS internet Apps
+
+Packet Switched (IP) network mainly comprises two parts
+- radio network
+- core network
+
+evolution of new 4G architecture is called as SAE (S A E)
+- SAE is not upgrading the 2G or 3G network but is completely a new architecture that is being designed for 4G
+- For High mo 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,218 @@
+Query folders and multiple files:
+----------------------------------
+Read subset of files in folder using multiple file paths
+The example below reads the 2017 NYC Yellow Taxi data files from the csv/taxi folder using 2 file paths first one with full path to the file containing data from month January and second with a wildcard reading months November and December which returns the total fare amount per payment type.
+
+SELECT 
+    payment_type,  
+    SUM(fare_amount) AS fare_total
+FROM OPENROWSET(
+        BULK (
+            'csv/taxi/yellow_tripdata_2017-01.csv',
+            'csv/taxi/yellow_tripdata_2017-1*.csv'
+        ),
+        DATA_SOURCE = 'sqlondemanddemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIRSTROW = 2
+    )
+    WITH (
+        payment_type INT 10,
+        fare_amount FLOAT 11
+    ) AS nyc
+GROUP BY payment_type
+ORDER BY payment_type;
+
+
+Read all files from specific folder:
+------------------------------------
+If the path provided in OPENROWSET points to a folder, all files in that folder will be used as a source for your query. The following query will read all files in the csv/taxi folder.
+
+SELECT
+    YEAR(pickup_datetime) as [year],
+    SUM(passenger_count) AS passengers_total,
+    COUNT(*) AS [rides_total]
+FROM OPENROWSET(
+        BULK 'csv/taxi/',
+        DATA_SOURCE = 'sqlondemanddemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIRSTROW = 2
+    )
+    WITH (
+        vendor_id VARCHAR(100) COLLATE Latin1_General_BIN2, 
+        pickup_datetime DATETIME2, 
+        dropoff_datetime DATETIME2,
+        passenger_count INT,
+        trip_distance FLOAT,
+        rate_code INT,
+        store_and_fwd_flag VARCHAR(100) COLLATE Latin1_General_BIN2,
+        pickup_location_id INT,
+        dropoff_location_id INT,
+        payment_type INT,
+        fare_amount FLOAT,
+        extra FLOAT,
+        mta_tax FLOAT,
+        tip_amount FLOAT,
+        tolls_amount FLOAT,
+        improvement_surcharge FLOAT,
+        total_amount FLOAT
+    ) AS nyc
+GROUP BY
+    YEAR(pickup_datetime)
+ORDER BY
+    YEAR(pickup_datetime);
+
+
+Note:
+
+All files accessed with the single OPENROWSET must have the same structure (i.e., number of columns and their data types).
+
+Traverse folders recursively:
+------------------------------
+Serverless SQL pool can recursively traverse folders if you specify /** at the end of path. The following query will read all files from all folders and subfolders located in the csv/taxi folder.
+
+FROM OPENROWSET(
+        BULK 'csv/taxi/**', 
+        DATA_SOURCE = 'sqlondemanddemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIRSTROW = 2
+    )
+
+
+Multiple wildcards:
+--------------------
+You can use multiple wildcards on different path levels. For example, you can enrich previous query to read files with 2017 data only, from all folders which names start with t and end with i.
+
+
+ Note:
+Note the existence of the / at the end of the path in the query below. It denotes a folder. If the / is omitted, the query will target files named t*i instead. There is a maximum limit of 10 wildcards per query.
+
+FROM OPENROWSET(
+        BULK 'csv/t*i/yellow_tripdata_2017-*.csv',
+        DATA_SOURCE = 'sqlondemanddemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIRSTROW = 2
+    )
+
+
+	Use file metadata in serverless SQL pool queries
+------------------------------------------------------------------
+
+Sometimes, you may need to know which file or folder source correlates to a specific row in the result set.
+
+You can use function filepath and filename to return file names and/or the path in the result set. Or you can use them to filter data based on the file name and/or folder path. These functions are described in the syntax section filename function and filepath function.
+
+SELECT
+    nyc.filename() AS [filename]
+    ,COUNT_BIG(*) AS [rows]
+FROM  
+    OPENROWSET(
+        BULK 'parquet/taxi/year=2017/month=9/*.parquet',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT='PARQUET'
+    ) nyc
+GROUP BY nyc.filename();
+
+
+The following example shows how filename() can be used in the WHERE clause to filter the files to be read. It accesses the entire folder in the OPENROWSET part of the query and filters files in the WHERE clause.
+
+Your results will be the same as the prior example.
+
+SELECT
+    r.filename() AS [filename]
+    ,COUNT_BIG(*) AS [rows]
+FROM OPENROWSET(
+    BULK 'csv/taxi/yellow_tripdata_2017-*.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV',
+        PARSER_VERSION = '2.0',
+        FIRSTROW = 2) 
+        WITH (C1 varchar(200) ) AS [r]
+WHERE
+    r.filename() IN ('yellow_tripdata_2017-10.csv', 'yellow_tripdata_2017-11.csv', 'yellow_tripdata_2017-12.csv')
+GROUP BY
+    r.filename()
+ORDER BY
+    [filename];
+
+
+Filepath:
+
+The filepath function returns a full or partial path:
+
+When called without a parameter, it returns the full file path that the row originates from. When DATA_SOURCE is used in OPENROWSET, it returns path relative to DATA_SOURCE.
+When called with a parameter, it returns part of the path that matches the wildcard on the position specified in the parameter. For example, parameter value 1 would return part of the path that matches the first wildcard.
+
+The following sample reads NYC Yellow Taxi data files for the last three months of 2017. It returns the number of rides per file path. The OPENROWSET part of the query specifies which files will be read.
+
+SELECT
+    r.filepath() AS filepath
+    ,COUNT_BIG(*) AS [rows]
+FROM OPENROWSET(
+        BULK 'csv/taxi/yellow_tripdata_2017-1*.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV',
+        PARSER_VERSION = '2.0',
+        FIRSTROW = 2
+    )
+    WITH (
+        vendor_id INT
+    ) AS [r]
+GROUP BY
+    r.filepath()
+ORDER BY
+    filepath;
+
+
+The following example shows how filepath() can be used in the WHERE clause to filter the files to be read.
+
+You can use the wildcards in the OPENROWSET part of the query and filter the files in the WHERE clause. Your results will be the same as the prior example.
+
+SELECT
+    r.filepath() AS filepath
+    ,r.filepath(1) AS [year]
+    ,r.filepath(2) AS [month]
+    ,COUNT_BIG(*) AS [rows]
+FROM OPENROWSET(
+        BULK 'csv/taxi/yellow_tripdata_*-*.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV',
+        PARSER_VERSION = '2.0',        
+        FIRSTROW = 2
+    )
+WITH (
+    vendor_id INT
+) AS [r]
+WHERE
+    r.filepath(1) IN ('2017')
+    AND r.filepath(2) IN ('10', '11', '12')
+GROUP BY
+    r.filepath()
+    ,r.filepath(1)
+    ,r.filepath(2)
+ORDER BY
+    filepath;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

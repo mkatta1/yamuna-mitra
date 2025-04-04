@@ -1,0 +1,283 @@
+Azure Synapse Q&A
+What are the key components of Azure Synapse?
+Cover Synapse SQL, Spark, Pipelines, Data Integration, and Power BI integration.
+
+Format style:
+-------------
+Rules, gradient, field value
+
+Apply to:
+--------
+Values only, 
+
+WINDOWS + "." ====> for emojis
+
+Pareto principle about IF, CALCULATE functions is enough for DAX
+
+Home work Problems:
+==================
+1. calculate proportion of USA & UK amount as a percentage
+2. Make a visual (graph or table) showing country what percentage of boxes are shipped to them. So the total should add up to 100%. Do not use Pie or donut charts.
+3. Calculate shipment count where boxes shipped are under 100. Show this as a value and percentage too.
+
+
+What are the differences between Synapse SQL pool and serverless SQL pool?
+- Explain dedicated SQL pools (pre-provisioned and optimized for performance) versus serverless SQL (on-demand and cost-effective for ad hoc queries).
+
+What is a data pipeline in Azure Synapse?
+- Discuss its role in orchestrating ETL processes, including data movement and transformation.
+
+How does Azure Synapse integrate with Power BI?
+- Mention real-time dashboard capabilities and seamless connectivity for reporting.
+
+Intermediate Level Questions:
+=============================
+1.What are the primary differences between Azure Synapse Analytics and Azure Data Factory?
+- Highlight how Synapse combines data warehousing and big data, while Data Factory focuses on ETL orchestration.
+
+2.How do you optimize query performance in Synapse?
+- Discuss techniques like:
+- Using distribution types (hash, round-robin, or replicated).
+- Employing query hints.
+- Partitioning and indexing tables.
+
+3.What are distribution types in Synapse, and when do you use each?
+Explain the three distribution types and their use cases:
+- Hash distribution: For large tables with evenly distributed keys.
+- Round-robin: Default, evenly distributed data.
+- Replicated: For small, frequently accessed tables.
+
+4.Explain the concept of PolyBase in Azure Synapse.
+- PolyBase allows querying external data directly without moving it into Synapse.
+
+5.How do you manage costs in Azure Synapse?
+- Discuss cost management practices like using serverless SQL pools for infrequent queries, scaling resources, and monitoring with Azure Cost Management.
+
+
+Advanced Level Questions:
+=========================
+1.What is the difference between Synapse Spark and Synapse SQL? When would you use each?
+- Highlight that Spark is suited for big data and machine learning workloads, while SQL is for structured data analysis.
+
+2.How does Azure Synapse handle real-time data processing?
+- Explain the use of Event Hubs, Azure Data Lake, and serverless SQL pools.
+
+3.How do you implement security in Azure Synapse Analytics?
+Discuss:
+- Role-based access control (RBAC).
+- Managed identities.
+- Data encryption (at-rest and in-transit).
+- Network security configurations.
+- Explain how Synapse integrates with Azure Data Lake.
+
+Talk about seamless querying of data stored in Data Lake using serverless SQL or Spark.
+What are the challenges in implementing Azure Synapse, and how do you address them?
+
+Mention challenges like data skew, query performance, and costs, with solutions such as proper distribution, query tuning, and workload monitoring.
+
+
+Scenario-Based Questions:
+=========================
+How would you design a data pipeline to ingest, transform, and analyze data in Azure Synapse?
+- Detail the steps using Synapse Pipelines, external tables, and SQL pools.
+
+A customer reports slow query performance. How would you troubleshoot in Synapse?
+- Cover methods like analyzing the query plan, checking resource usage, and optimizing table distributions.
+
+How would you set up a hybrid data architecture with on-premises and Azure Synapse?
+- Discuss tools like Azure Data Factory for data movement, Synapse for analytics, and VPN or ExpressRoute for secure connectivity.
+
+Describe how you would implement a machine learning pipeline in Azure Synapse.
+- Outline steps using Synapse Spark, Azure Machine Learning, and data preparation.
+
+How would you migrate an existing on-premises data warehouse to Azure Synapse?
+- Include steps like assessing the existing setup, data migration with Azure Data Factory, and post-migration validation.
+- These questions test your theoretical knowledge, practical experience, and problem-solving capabilities in working with Azure Synapse Analytics.
+
+
+Give an example of when to use external tables, and SQL pools in synapse?
+ANSWER IN CHATGPT
+
+How do you analyzing the query plan
+ANSWER IN CHATGPT
+
+How do you check resource usage in synapse?
+ANSWER IN CHATGPT
+
+Examples of using PolyBase in synapse?
+ANSWER IN CHATGPT
+
+Diff bw PolyBase and T-Sql?
+ANSWER IN CHATGPT
+
+Do we use T-Sql in Synapse?
+ANSWER IN CHATGPT
+
+How do you optimize table distributions in Azure synapse?
+- Optimizing table distributions in Azure Synapse is critical to achieving efficient query performance and resource utilization. Distribution refers to how data is spread across the nodes in a Synapse dedicated SQL pool. Here’s a comprehensive guide on optimizing table distributions:
+
+1. Understand the Distribution Types
+Azure Synapse offers three types of distributions for tables:
+
+Hash Distribution:
+
+Rows are distributed across nodes based on a hash of a distribution column.
+Best for:
+Large fact tables.
+Tables that are frequently joined or aggregated on the distribution column.
+Minimizing data movement during queries.
+Round-Robin Distribution:
+
+Rows are evenly distributed across nodes, but without regard to the data.
+Best for:
+Staging tables or temporary data.
+Small-to-medium tables where even distribution is sufficient.
+Replicated Distribution:
+
+The entire table is copied to all nodes.
+Best for:
+Small dimension tables frequently joined with large fact tables.
+Tables with < 2 GB in size to avoid high storage overhead.
+2. Key Steps to Optimize Table Distribution
+a. Analyze Query Patterns
+Frequent Joins or Aggregations: Use hash distribution on the columns used in joins or aggregations to minimize data movement.
+No Strong Query Patterns: Use round-robin for general-purpose workloads.
+Small Lookup Tables: Use replicated for small dimension tables accessed by all nodes.
+b. Choose an Appropriate Distribution Column for Hash Distribution
+Column Characteristics:
+Should have a high cardinality (many unique values).
+Avoid skewed distributions (e.g., columns with many nulls or repeated values).
+Choose a column used in joins or filters to reduce data movement.
+Common Mistakes:
+Avoid low-cardinality columns, as they can lead to data skew and unbalanced processing.
+c. Monitor Data Skew
+Use the DBCC PDW_SHOWSPACEUSED command to check distribution data sizes.
+If some distributions are significantly larger than others, consider changing the distribution column.
+3. Use Partitioning Along with Distribution
+For very large tables, consider combining distribution with partitioning.
+Partition tables based on date or other range-based columns to further improve query performance.
+4. Avoid Excessive Data Movement
+Design table distributions to align with join and filter operations in your queries.
+For example:
+If two large tables are joined, ensure they use the same hash-distributed column to avoid data movement.
+5. Minimize Use of Round-Robin Distribution
+Use round-robin distribution for:
+Staging tables where the data is temporary.
+Tables that don’t require specific query performance optimizations.
+Avoid it for large fact tables, as it may result in significant data movement.
+6. Balance Storage and Query Performance
+Avoid using replicated tables for large datasets, as they consume significant storage and increase data loading time.
+Use replicated tables only for dimension tables with minimal size.
+7. Optimize Indexing for Distributed Tables
+Combine distribution optimization with appropriate indexing strategies:
+Clustered columnstore indexes (default for large tables).
+Clustered or non-clustered indexes for frequently queried columns.
+8. Test and Tune
+Analyze Query Performance: Use Query Performance Insight and sys.dm_pdw_request_steps to understand data movement and identify bottlenecks.
+Iterate and Adjust: Change distribution strategies based on performance analysis.
+Examples
+Scenario 1: Large Fact Table with Frequent Joins
+Use hash distribution on a high-cardinality column such as customer_id.
+Scenario 2: Staging Table
+Use round-robin distribution for simplicity and to evenly distribute data.
+Scenario 3: Small Lookup Table
+Use replicated distribution for a small product_dim table to eliminate data movement in joins.
+By carefully selecting the appropriate distribution strategy, you can significantly enhance query performance, minimize data movement, and optimize resource utilization in Azure Synapse.
+
+
+Why do we use data factory to migrate an existing on-premises data warehouse to Azure databricks? why not use Azure databricks itself?
+ANSWER IN CHATGPT
+
+Why do we use data factory to migrate an existing on-premises data warehouse to Azure Synapse? why not use Azure Synapse itself?
+answer)
+While Azure Synapse Analytics is a powerful platform for data warehousing and analytics, Azure Data Factory (ADF) is better suited for migrating on-premises data warehouses to Azure Synapse for several reasons:
+
+1. ETL/ELT Orchestration
+Azure Data Factory Strengths:
+It is specifically designed for Extract, Transform, and Load (ETL) or Extract, Load, and Transform (ELT) processes.
+It provides a visual interface and pre-built connectors for extracting data from on-premises databases and other systems, transforming it as needed, and loading it into Azure Synapse.
+Azure Synapse Limitations:
+While Synapse has some data integration features, its focus is on analyzing data rather than orchestrating complex data migration workflows.
+2. Connectivity to On-Premises Sources
+Azure Data Factory Strengths:
+
+ADF has Integration Runtimes that support direct connectivity to on-premises systems, enabling secure data extraction.
+It supports a wide range of connectors (e.g., SQL Server, Oracle, MySQL) and can handle hybrid scenarios.
+Azure Synapse Limitations:
+
+Synapse does not natively provide a mechanism to securely connect to on-premises data sources for extraction.
+3. Scalability and Parallelism
+Azure Data Factory Strengths:
+
+ADF is optimized for large-scale data movement and can handle parallelized, high-volume migrations efficiently.
+It can automate and schedule migrations, enabling incremental loads or full data refreshes.
+Azure Synapse Limitations:
+
+Synapse is not designed for orchestrating large-scale data transfers from multiple sources.
+4. Transformation Capabilities
+Azure Data Factory Strengths:
+
+ADF allows for complex data transformations using data flows or custom scripts.
+Transformation logic can be offloaded to ADF, simplifying data preparation before loading it into Synapse.
+Azure Synapse Limitations:
+
+While Synapse supports SQL-based transformations, its functionality is more suited to post-load transformations rather than pre-load.
+5. Cost-Effectiveness
+Azure Data Factory Strengths:
+
+ADF is cost-effective for one-time or incremental data migrations. You only pay for data transfer and transformation activities.
+Azure Synapse Limitations:
+
+Using Synapse for data ingestion might lead to inefficiencies and higher costs since it’s primarily built for data analysis.
+6. Incremental Data Loads and Scheduling
+Azure Data Factory Strengths:
+
+ADF provides features like change data capture (CDC), incremental data loads, and robust scheduling for recurring migrations.
+Azure Synapse Limitations:
+
+Synapse does not offer out-of-the-box capabilities for automating and scheduling data migrations from on-premises systems.
+7. Monitoring and Error Handling
+Azure Data Factory Strengths:
+ADF has built-in monitoring tools to track data migration progress, identify bottlenecks, and handle errors gracefully.
+Azure Synapse Limitations:
+Synapse’s focus is on querying and analyzing data; it lacks specialized monitoring features for data migration workflows.
+When to Use Azure Synapse Directly
+While Azure Synapse isn't typically used for initial migrations, it can handle:
+
+Loading data from cloud-based sources or Azure Blob Storage.
+Querying data directly using PolyBase after staging it in Azure Data Lake or Blob Storage.
+Conclusion
+Azure Data Factory is purpose-built for data integration and migration tasks, making it the ideal tool to securely and efficiently migrate on-premises data to Azure Synapse. Once the data is in Azure, Synapse takes over as the primary platform for data warehousing, analytics, and insights.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

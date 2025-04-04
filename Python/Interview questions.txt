@@ -1,0 +1,923 @@
+{
+  "__index_level_0__": 7,
+  "cat_id": "HOBBIES",
+  "d": 489,
+  "date": 1338422400000000,
+  "dept_id": "HOBBIES_1",
+  "id": "HOBBIES_1_008_CA_1_evaluation",
+  "item_id": "HOBBIES_1_008",
+  "state_id": "CA",
+  "store_id": "CA_1",
+  "value": 12
+}
+7	"HOBBIES"	2012-05-31	"HOBBIES_1"	HOBBIES_1_008_CA_1_evaluation
+
+2024-04-10 21:56:10.618 -0700
+2024-04-10 21:56:25.827
+
+
+1) lambda is no specific & one line functions
+res = (lambda x,y: x*y)(2,3)
+print(res)
+
+output: 6
+
+2) list is an object if "listone" memory loction same memory location of "listtwo". So if "listone" is update "listtwo" will get update
+
+listone = [10, 20, 30, 40, 50];
+listtwo = listone;
+listtwo[0] = "a";
+print(listone);
+
+3) palindrome
+to test this use slice method
+txt = "rever";
+revTxt = txt[::-1];
+if txt == revTxt:
+	print(txt + "is a palindrome")
+else:
+	print(txt + "is not a palindrome")
+
+4) don't use arrays default method min, max. USE your own code
+
+list = [1,2,3,4,5]
+
+#print(min(list))
+#print(max(list))
+
+min = list[0]
+max = list[0]
+for i in range(len(list)):
+  if list[i] < min:
+     min = list[i]
+ 
+  if list[i]> max:
+     max = list[i]
+
+print(min)
+print(max)
+
+5) find the total sum of values in the list
+list = [10,20,30,3,45,56]
+
+default function is print(sum(list))
+
+total = 0;
+
+for num in list:
+  total = total + num
+
+print(total)
+
+6) Count how many times if a number repeated in the list 
+
+defualt method print(list.count(3))
+
+list = [1,3,4,5,3,2,3,4,10,]
+num =3;
+count = 0;
+
+for item in list:
+  if item == num:
+    count = count +1;
+
+print(count)
+
+7)
+i =0;
+while i< 3:
+  print(i)
+  i +=1;
+else:
+  print(0)
+
+output: 0, 1, 2, 0
+
+8) Print values in descending order until ZERO
+
+def test(x):
+  if x == 0:
+    return 0;
+  else:
+    return test(x-1)
+
+a = test(3)
+print(a)
+
+9)
+data = "4202 raey wen yppaH";
+print(data[::-1])
+
+output: Happy new year 2024
+
+10) Print if the item is in the list
+
+list = [1,2,3,4,5];
+item = 2;
+
+one line Answer: print(item in list)
+
+matchFound = False;
+for num in list:
+  if num == item:
+   matchFound = True;
+   break;
+
+print("Match found"+ matchFound)
+
+11) return duplicates in list
+
+list = [1,2,1,3,4,1,3,1,4];
+
+unqList = [];
+dupList = [];
+
+for num in list:
+  if num not in unqList:
+  	unqList.append(num)
+  else:
+     if num not in dupList:
+        dupList.append(num)
+
+print(dupList)
+
+12)
+num1 = 1_00 --> this is 100 becoz instead of representing a big number 1,00 we do like this python
+num2 = 2_0 --> this is 20 becoz instead of representing a big number 20 we do like this python
+
+print(num1 * num2)
+
+Output: 2000
+
+13) Strings are immutable
+
+x = 'abc'
+x.replace('a','1') --> here it x will not be changed but it adds new string '1'
+x + 'def' --> here x will not be changed but it adds new string 'def'
+print(x)
+
+output: abc
+
+x = 'abc'
+x = x.replace('a','1') --> here we are assigning the changed value of x
+x +'def'
+print(x)
+
+output: 1bcdef
+
+14) To create a list with a given range
+x = 3;
+y = 10;
+
+lst = list(range(x, y+1));
+print(lst)
+
+15) How to remove duplicate values in a list
+numbers = [1,2 3,1,2,1,4]
+print(set(numbers)) --> convert this list to "set" which will automatically removes duplicates. As set doesn't support duplicates.		
+				OR
+
+unqNums = []
+
+for num in numbers:
+   if num not in unqNums:
+      unqNums.append(num)
+
+print(unqNums)
+
+16) Code output??
+x = [x+1 for x in range(3)] #1 2 3
+x.reverse() # 3 2 1
+x.extend(x) # 3 2 1 3 2 1
+print(x)
+
+output:  [3, 2, 1, 3, 2, 1]
+
+17) Multiply list items (OR)
+Multiply the results in the list and print the output 
+
+list = [1,2,3,4,5];
+result = 1;
+
+for item in list:
+  result = result * item;
+
+print(result)
+
+18) Swap first item and last item
+list = [1,2,3,4,5]
+print(list)
+
+list[0], list[-1] = list[-1], list[0] --> Here are assigning the values at a time!
+print(list)
+
+output: 
+[1,2,3,4,5]
+[5,4,3,2,1]
+
+19) Try insert an element in index 4 if not possible then inset it into index 3. Doesn't throw any error
+list = [1,2,3]
+
+list.insert(4,3)
+print(list)
+
+output: 1,2,3,3
+No error thrown 
+
+20) #How to convert a list into a dictionary
+data = ["java","python","reactjs"]
+
+print(data)
+
+data = {item: len(item) for item in data}
+#here item is key, len(item) is value
+
+print(data)
+
+#output:
+["java","python","reactjs"]
+
+21)  How to remove items from a dictionary
+
+productData = {
+  "title": "OnePlus mobile",
+  "price": 2500,
+  "reviews": 2000,
+  "rating": 4.5,
+  "stock": 2541
+}
+
+productData.pop("rating") --> Here variableName.pop("key") to delete a particular key
+print(productData)
+
+output: "title": "OnePlus mobile", "price": 2500, "reviews": 2000, "stock": 2541
+
+del productData["price"] ---> here "del" keyword deletes particular key or delete complete dictionary by only giving the variableName like "productData"
+print(productData)
+
+output:
+
+productData.clear() --> here "clear" method is used to delete "all keys insdie" the variable 
+print(productData)
+
+output:
+
+
+22) Here pop deletes based upon the index value
+
+data = [1,2,3]
+data.pop(2)
+print(data)
+
+output: [1,2]
+
+data = [2,1,3]
+data.pop(2)
+print(data)
+
+output: [2,1]
+
+So, to resolve this we do this below where 1.We get the index of the element 2.Pop out the element as we have index from step1 3. Inset where ever you want now
+
+hotbar = [ 'Torch',
+'Rock',
+'Potion',
+'Sword',
+'Shield']
+
+index = hotbar.index('Sword')
+item = hotbar.pop(index) --> pop the item 'Sword' 
+hotbar.insert(0,item) --> insert the item at the first position
+
+23) Here remove deletes the first occurence of the value given
+
+data = [1,2,3,2,1]
+data.remove(2)
+print(data)
+
+output: [1,3,2,1]
+
+24) Loop list with index, value
+
+data = ["python", "java","c","php"]
+
+print(tuple(enumerate(data))) --> If we give list to "enumerate" it will give like this (index, item)
+
+output1:
+------
+(0,'python'), (1,'java'), (2, 'c'), (3, 'php')
+ 
+for i, item in enumerate(data):
+  print(i, item)
+
+output2:
+------
+0 python
+1 java
+2 c
+3 php
+
+25) Rest API - POST data
+
+from flask import Flask, jsonify, request
+app = Flask(__name__)
+
+@app.route('/auth/login', methods = ['POST'])
+
+def login():
+  email = request.json['email']
+  password = request.json['pword']
+
+  if email == 'contact@softwareschool.co' and pword == "test1234":
+     return jsonify({'result' : 'SUCCESS', 'msg': 'Login success'})
+  else:
+     return jsonify({'result': 'FAILED', 'msg': 'Invalid login credentials'})
+
+# driver function
+
+if __name__ == '__main__':
+  app.run(debug = True)
+
+
+26) Move all '1's to the back! 
+
+numbers = [1,2,1,0,1,4,2];
+print("", numbers)
+for num in numbers:
+  if num ==1 :
+     numbers.remove(num)
+     numbers.append(num)
+print(""+ numbers)
+
+
+1) predict
+
+def main(a):
+  a = a + '2' --> it adds the 2
+  a =  a * 2 --> it returns two times
+  return a
+
+print(main("python"))
+
+output: 
+python2
+python2python2
+
+2) Swap the values in a list
+a= 10;
+b= 20;
+
+[a,b] = [b,a]
+
+print(a)
+print(b)
+
+3) How to find a value in a list
+
+data = ["python","java","reactjs", "springboot"];
+
+print('java' in data); --> Returns TRUE or FALSE
+
+if 'python' in data:
+  print('python in data')
+else:
+  print('python not in data')
+
+if 'devops' not in data:
+  print('devops not in data')
+
+
+4) 
+myList = ["a","b","c","d","e","f","g","h","i"]
+
+# listName[startPosition: endPosition : step]
+print(myList[:]) # complete list
+
+print(myList[:5]) #up to 5 --> ['a','b','c','d','e']
+
+print(myList[3:6]) # between 2 indexes
+
+print(myList[::2]) # Alternative element --> ['a','c','e','g','i']
+
+print(myList[::-1]) # Backwords --> ['i','h','g','f','e','d','c','b','a']
+
+5) one line code to create a newList from a mulitiplied oldList
+
+numbers = [1,2,3,4,5,6,7,8,9]
+
+newnumbers = [num*5 for num in numbers]
+
+print(newnumbers)
+
+6) We use try,catch blocks to avoid application crash due to errors
+try:
+   a= 100;
+   print(a/b);
+except Exception as err:
+   print(err)
+
+a) How to catch full error message from a try,except exception block
+
+import traceback
+
+try:
+  x = 1/0
+except Exception as e:
+  m1 = e
+  m2 = traceback.format_exc()
+  print(m1)
+  print(m2)
+
+b)
+try:
+  1/0
+except Exception as err:
+  print(f"unexpected {err=}, {type(err)=}) 
+
+c) create a custom error in MODERN python
+
+class OhNo(Exception):
+     pass
+
+raise OhNo("That bad thing happend")
+
+7) usage of list
+myList = ["a","b","c","d","e","f","g"]
+
+print(myList[0]) # select 0th element
+print(len(myList)) # number of elements in list
+myList.append("j") # add new element at end of the value
+print(myList)
+print(len(myList))
+myList[5]= "ff"; #update value at specified index
+print(myList)
+myList.revers() #reverse list
+print(myList)
+
+8) How to use single variable for multiple inputs
+def addNumbers(*nums): --> This gives a tuple of numbers
+    return nums;
+
+print(addNumbers(10,5,525,5))
+print(addNumbers(10,5))
+print(addNumbers(1,2,3,4,5,6,7,8,9,10))
+
+9) We use tuple for context variables becoz it is constant and not updatable
+list = [1,2,"Anji", "Python"]
+list[1] = "abcd";
+
+tuple = (1,2,"Anji","Python")
+tuple[1] = "abcd";
+
+10)  __name__
+
+11)
+import requests --> 3rd party library
+
+websites = [
+	"https://www.softwareschoolg.co",
+	"https://www.softwareshchool.co"
+	]
+try:
+  print("\n #######################\n")
+  response = requests.head(website); # not like "get method", "head" will not take response burden
+  if response.status_code == 200: # if response code is "2" then website is working. Otherwise like 500 then there is an error
+      print("website is working fine")
+  else:
+      print(response.status_code)
+      print("send an email to admin")
+
+except Exception as err:
+   print(str(err))
+
+
+12) What is the largest element in the list?
+
+list = ["python","javascript","java","springboot"]
+
+print(max(list, key = len))
+
+maxstr = "";
+
+for item in list:
+  if len(item)< len(maxstr):
+     maxstr = item;
+
+print(maxstr)
+
+13) Filter data based upon a condition
+numbers = [1,2,3,4,5,6,7,8,9,10]
+
+def check_even(number):
+  if number % 2 == 0:
+     return True
+  return False
+
+filterData = filter(check_even, numbers);--> It accepts only True. Means if check_even = True
+print(filterData)
+
+Another method:
+
+print(filter(lamdba x: x%2 ==0, numbers))
+
+14) File handling
+fileData = open("file1.txt", "r") --> Here "r" is the read mode!!
+print(fileData.read())
+fileData.close()
+# if error happens the file not be closed as well OR  developer forgets to close!!
+# memory management
+# System becomes slow if we don't close the file. So the solution is to use "with"
+# Using "with" keyword will close all the objects automatically without any intervention
+# using "with" keyword execution block
+
+SOLUTION:
+--------
+with open("file1.txt","r") as fileData:
+     print(fileData.read())
+
+15) To make proper word casing
+
+wishes = "WISH yOu a happy NeW yeaR 2023"
+
+print(wishes.title())
+
+
+16) Web Scrapping
+
+import requests
+from bs4 import BeautifulSoup
+
+URL = "https://www.amazon.in/"
+htmlCode = requests.get(URL)
+
+soup = BeautifulSoup(htmlCode.content, "html.parser")
+mobiles = soup.find_all("span", class_="a-size-medium a-color-base")
+
+for mobile in mobiles:
+    print(mobile.text)
+    print("#############")
+
+
+17) pandas cleaning, 
+- data cleaning consists of 
+- mobile should have 10 digits & not empty & not alphabets
+- name must be ALPHABETS & should not have special characters
+- proper email
+
+
+import pandas as pd
+data = pd.read_csv('data.csv')
+print(data)
+
+18)
+data = "oediv eht ekil esaelp";
+print(data[::-1].title())
+
+#data[start:end:step]
+
+19)
+
+******************************* DATATYPES & Builtin functions *******************************
+
+convert list to tuple
+l = [1,2,3]
+t = tuple(l)
+print(l,t)
+
+output:
+[1,2,3] (1,2,3)
+
+convert tuple to list
+
+t = (1,2,3)
+l1 = list(t)
+print(l1)
+
+output:
+[1,2,3]
+
+itemgetter to sort a list:
+--------------------------
+
+sort list of tuples by position
+sorted item by position
+reverse = True
+
+form operator import itemgetter
+l1 = [('Bob', 25), ('Sue', 33), ('Joe', 18), ('Jill', 27)]
+
+l2 = sorted(l1, key=itemgetter(1)) # '1' is for position
+l3 = sorted(l1, key=itemgetter(1), reverse = True)
+
+print(l2)
+print(l3)
+
+*************************** 
+
+# 1: value swapping
+
+role = 45
+
+level, role = role, level
+
+print(f'Level: {level}\nRole: {role}' )
+
+# 2: Join method
+
+inv =['Iron sword', 'Health Potion', 'Wooden Shield', 'Stick']
+
+print(f"you have {', '.join(inv)}")
+
+# 3: Line Continuation 
+
+a_variable = True
+b_variable = True
+c_variable = False
+
+if a_variabe == True \
+and b_variable == True \
+and c_variable = False:
+     print('Like for more!')
+
+
+# 4. Any function
+
+enemies = [
+      {'type':'Orc', 'health':0},
+      {'type':'Orc', 'health':0},
+      {'type':'Orc', 'health':0},
+      {'type':'Orc', 'health':4},
+      {'type':'Orc', 'health':1}
+] 
+
+if any([enemy['health'] for enemy in enemies]):
+   print('The battle is not over!')
+else:
+   
+
+#5)
+Breaking python loops:
+
+Diff bw break and continue keywords in python
+
+languages = ['C++','Javascript', 'Python', 'Ruby', 'Rust']
+
+type1:
+-----
+for lang in languages:
+   print(lang)
+print('Done')
+
+output: All elements are printed
+
+type2:
+------
+for lang in languages:
+     print(lang)
+     break
+
+print(Done)
+
+output: C++
+
+type3:
+------
+for lang in languages:
+     print(languages)
+     continue
+
+print('Done')
+
+output: printed everyting
+
+type4:
+------
+for lang in languages:
+   if lang == 'Ruby':
+      continue
+   print(lang)
+print('Done')
+
+output: Prints data until Ruby but not Ruby it says let's break this iteration
+
+#6) 
+def func(**k)
+
+	print(k)
+	return
+func(a=1, b=2, c=3)
+
+output: {a:1, b:2, c:3}
+
+def func(**k)
+
+	ans = k['a']*k['b']+k['c']
+	print(k)
+	return
+func(a=1, b=2, c=3)
+output: 5
+
+def func(**k)
+
+	ans = k['a']*k['b']+k['c']
+	print(k)
+	return
+func(c=3, b =2, a=1)
+output: 5
+
+#7) 
+Type1: List Comprehension used to get last names in the list
+-----
+
+names = ['Bobyy C.Brown', 'Chris Stevens', 'Jacob G.Smith',
+'John Paul Davis']
+
+last = [n.split(' ')[-1] for n in names]
+
+output: ['Brown', 'Stevens', 'Smit', 'Davis']
+
+
+Type2: f-Strings
+-----
+
+name='Bob'
+age = 34
+
+s = f'{name} is {age} years old.'
+print(s)
+output: Bob is 34 years old
+
+Type3: Unpacking
+-----
+
+inputs = ['John', 'smith', 'United States', 'Blue', 'Brown', 29]
+
+first, last, *_, age = inputs
+
+print(f'{first} {last} is {age} years old')
+
+output:
+------
+John Smith is 29 years old
+
+#8) List Comprehension
+
+names = ['Daniel','Mike','William']
+
+#List Comprehension
+length = [len(name) for name in names]
+print(length)
+
+# Dictionary Comprehension
+length = {name:len(name) for name in names}
+
+print(length)
+
+#9) rfind checks the last occurence of the given input 
+
+x = 'abcABC'
+y = x.title() #'Abcabc'
+z = y.rfind('b')
+print(z)
+
+output: 4?
+
+#10) Dictionary Tip
+https://www.youtube.com/shorts/G3viys9PbHs
+p1 = {'xp':3976,'level':3}
+p2 = {'xp':1123,'level':1}
+p3 = {'xp':0}
+player_db = [p1,p2,p3]
+
+for p in player_db:
+    lvl = p['level']---> this throws an error as there is no LEVEL in p3!
+    print(f'Level {lvl}')
+
+for p in player_db:
+   lvl = p.get('level', 0)
+   print(f'Level {lvl}')
+
+#11) Number of players?
+
+user_input = 11
+if user_input%2 ==1:
+   err = 'Must be even number of players!'
+   raise Exception(err) # raise tries to force an error to occur
+
+team_a_size = user_input/2
+team_b_size = team_a_size
+
+print(f'Team A:{team_a_size} players')
+print(f'Team B:{team_b_size} players')
+
+#12) 
+x = [1,2,3]
+x.insert(4,3)
+print(x)
+
+
+*************************** 
+
+
+
+
+3 PROJECTS IN PYTHON
+
+Project #1: File Organizer
+
+import os
+import shutil
+
+#specify the directory to organize
+directory = os.getcwd() + '\\file_organizer\\'
+ 
+#create a dictionary to hold the file extension
+
+file_extensios = {'pdf': 'PDFs','png':'Images','jpg':'Images', 'gif':'Images','doc':'Documents', 'docx': 'Documents','txt':'Documents','csv':'Data','xlsx':'Data','zip':'Archives','rar':'Archives','exe':'Executables','mp3':'Music','wav':'Music','mp4': 'Videos','avi':'Videos','flv':'Videos','wmv':'Videos'}
+
+Project #2: Unit Convertor
+
+impot tkinter as tk
+
+def convert:
+
+# Define the conversion functions
+
+    input_value = float(input_entry.get())
+    from_unit = from_unit_var.get()
+    to_unit = to_unit_var.get()
+
+# Define conversion rates
+
+   conversion_rate = {
+         ("Miles","Kilometers"): 1.60934,
+         ("Kilometers","Miles"): 0.621371,
+         ("Pounds","Kilograms"): 0.453592,
+         ("Kilograms","Pounds"): 2.2046,
+         ("Inches","Centimeters"): 2.54,
+         ("Centimeters","Inches"): 0.393701
+}
+
+# Perform the conversion
+      result = input_value * conversion_rates[()]
+      result_label.config(text=f"{result}")
+
+
+# Create the main window
+root = tk.Tk()
+root.title("Unit Converter")
+
+# create the widgets
+input_label = tk.label(root, text="Value:")
+(root)
+so on ......
+
+Project 3# QR code generator 
+
+import qrcode
+
+qr = qrcode.QRCode(
+     version=1,
+     error_correction = qrcode.constants.ERR
+     box_size = 10,
+     border = 4
+     )
+
+qr.add_data(text)
+qr.make(fit=True)
+img = qr.make_image(fill_color="",)
+img.save(file_name)
+
+# Input text to generate QR code for 
+text = "https://b001.io"
+
+# File name to save the QR code image
+file_name = "qr_code.png"
+
+# Generate the QR code
+generate_qr_code(text, file_name)
+print(f"QR code saved as {file_name}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

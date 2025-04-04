@@ -1,0 +1,127 @@
+use role accountadmin;
+use database demo_db;
+use schema public;
+
+
+remove @mycsvstage;
+--put file://c:\data\EMP_20210929.csv @mycsvstage;
+--put file://c:\data\EMP_20211001.csv @mycsvstage;
+put file://c:\data\EMP_20211002.csv @mycsvstage;
+
+truncate table STG_EMP;
+
+COPY INTO STG_EMP(
+ empid
+,name
+,salary
+,Designation  
+,office_location
+,file_name
+,file_row_number  
+,insert_ts
+,hk_empid 
+,change_hk
+)
+FROM ( 
+ SELECT t.$1,t.$2,t.$3,t.$4,t.$5
+      ,metadata$filename
+      ,metadata$file_row_number
+      ,CAST(current_timestamp as timestamp) 
+      ,CAST(MD5(
+                 NVL(CAST($1 as varchar),'null')  ) as varchar 
+     ) as hk_empid
+      ,CAST(MD5(
+     NVL(CAST($2 as varchar),'null') || '||'||
+     NVL(CAST($3 as varchar),'null') || '||'||
+     NVL(CAST($4 as varchar),'null') || '||'||
+     NVL(CAST($5 as varchar),'null') 
+      ) as varchar 
+   ) as change_hk
+      from @mycsvstage/ t )
+       pattern = '.*EMP.*[.]csv.gz'
+       on_error = 'skip_file'
+  ;
+      
+
+MERGE INTO EMP e
+USING (
+    SELECT * FROM ( 
+    SELECT distinct   -- new rows
+         s.hk_empid
+        ,s.change_hk 
+        ,s.empid
+        ,s.name
+        ,s.salary
+        ,s.Designation  
+        ,s.office_location
+        ,s.file_name
+        ,s.file_row_number  
+        ,s.insert_ts
+        ,current_timestamp as update_ts  
+        , 1 rn
+      FROM stg_emp s
+      LEFT Outer JOIN emp e
+    ON e.hk_empid = s.hk_empid
+            where e.hk_empid IS NULL   
+     UNION ALL
+     SELECT * FROM (
+      SELECT           -- exists rows
+         s.hk_empid
+        ,s.change_hk 
+        ,s.empid
+        ,s.name
+        ,s.salary
+        ,s.Designation  
+        ,s.office_location
+        ,s.file_name
+        ,s.file_row_number  
+        ,s.insert_ts
+        ,current_timestamp as update_ts 
+        ,row_number() over (partition by s.hk_empid order by s.file_row_number desc ) rn
+      FROM stg_emp s JOIN  emp e
+    ON e.hk_empid = s.hk_empid
+            and e.change_hk != s.change_hk 
+         ) where rn =1
+  )
+
+) s  ON (e.hk_empid = s.hk_empid and  e.change_hk != s.change_hk)
+ when matched then update
+ set e.name            = s.name
+ ,e.salary          = s.salary 
+ ,e.Designation     = s.Designation
+ --,e.prev_office_location = e.office_location
+ ,e.prev_office_location = case when s.office_location = e.office_location 
+                                 then e.prev_office_location 
+          else e.office_location 
+          end
+ ,e.office_location = s.office_location
+ ,e.file_name       = s.file_name
+ ,e.file_row_number = s.file_row_number
+ ,e.insert_ts       = s.insert_ts
+ ,e.update_ts       = s.update_ts
+ when not matched then 
+          insert(
+     hk_empid
+,change_hk 
+,empid
+,name
+,salary
+,Designation  
+,office_location
+,file_name
+,file_row_number  
+,insert_ts
+,update_ts
+          ) values(
+    hk_empid
+          ,change_hk 
+          ,empid
+          ,name
+          ,salary
+          ,Designation  
+          ,office_location
+          ,file_name
+          ,file_row_number  
+          ,insert_ts
+          ,update_ts
+   );    

@@ -1,0 +1,163 @@
+use role accountadmin;
+use database demo_db;
+use schema public;
+create or replace  file format mycsvformat;
+create or replace  stage mycsvstage
+file_format =mycsvformat;
+                      
+create or replace TRANSIENT TABLE STG_EMP (
+ hk_empid varchar,
+    Change_HK varchar,
+    empID NUMBER(38,0),
+ NAME VARCHAR(30),
+ SALARY NUMBER(20,2),
+ DESIGNATION VARCHAR(16777216),
+ OFFICE VARCHAR(30),
+ INSERT_TS TIMESTAMP_NTZ(9),
+ FILE_NAME VARCHAR(200),
+ FILE_ROW_NUMBER NUMBER(38,0)
+); 
+
+
+create or replace TRANSIENT TABLE EMP (
+ hk_empid varchar,
+    Change_HK varchar,
+    empID NUMBER(38,0),
+ NAME VARCHAR(30),
+ SALARY NUMBER(20,2),
+ DESIGNATION VARCHAR(16777216),
+ OFFICE VARCHAR(30),
+ INSERT_TS TIMESTAMP_NTZ(9),
+    UPDATE_TS TIMESTAMP_NTZ(9),
+ FILE_NAME VARCHAR(200),
+ FILE_ROW_NUMBER NUMBER(38,0)
+); 
+
+
+use role accountadmin;
+use database demo_db;
+use schema public;
+
+remove @mycsvstage;
+put file://c:\data\EMP_20210928.csv @mycsvstage;
+
+truncate table STG_EMP;
+
+
+COPY INTO STG_EMP(
+ empid
+,name
+,salary
+,Designation  
+,office
+,file_name
+,file_row_number  
+,insert_ts
+,hk_empid 
+,change_hk
+)
+FROM ( 
+ SELECT t.$1,t.$2,t.$3,t.$4,t.$5
+      ,metadata$filename
+      ,metadata$file_row_number
+      ,CAST(current_timestamp as timestamp) 
+      ,CAST(MD5(
+                 NVL(CAST($1 as varchar),'null')  ) as varchar 
+     ) as hk_empid
+      ,CAST(MD5(
+     NVL(CAST($2 as varchar),'null') || '||'||
+     NVL(CAST($3 as varchar),'null') || '||'||
+     NVL(CAST($4 as varchar),'null') || '||'||
+     NVL(CAST($5 as varchar),'null') 
+      ) as varchar 
+   ) as change_hk
+      from @mycsvstage/ t )
+       pattern = '.*EMP.*[.]csv.gz'
+       on_error = 'skip_file'
+  ;
+      
+
+MERGE INTO EMP e
+ USING 
+ (
+   SELECT * FROM 
+    (  SELECT * FROM 
+    (
+  SELECT  
+    s.hk_empid
+   ,s.change_hk 
+   ,s.empid
+   ,s.name
+   ,s.salary
+   ,s.Designation  
+   ,s.office
+   ,s.file_name
+   ,s.file_row_number  
+   ,s.insert_ts
+   ,CAST(current_timestamp as timestamp) update_ts    
+   ,row_number() over (partition by s.hk_empid order by s.file_row_number desc ) rn    
+    FROM stg_emp s
+    LEFT Outer JOIN emp e
+     ON e.hk_empid = s.hk_empid
+    where e.hk_empid IS NULL
+        ) WHERE rn =1    
+          UNION ALL
+        select * from 
+  (
+    SELECT distinct 
+     s.hk_empid
+    ,s.change_hk 
+    ,s.empid
+    ,s.name
+    ,s.salary
+    ,s.Designation  
+    ,s.office
+    ,s.file_name
+    ,s.file_row_number  
+    ,s.insert_ts
+    ,CAST(current_timestamp as timestamp) update_ts  
+    ,row_number() over (partition by s.hk_empid order by s.file_row_number desc ) rn
+    FROM stg_emp s JOIN  emp e
+     ON e.hk_empid = s.hk_empid
+    and e.change_hk != s.change_hk 
+     ) where  rn =1
+  
+    )
+
+ ) s  ON (e.hk_empid = s.hk_empid and  e.change_hk != s.change_hk)
+when matched then update
+  set e.name            = s.name
+  ,e.salary          = s.salary 
+  ,e.Designation     = s.Designation
+  ,e.office          = s.office
+  ,e.file_name       = s.file_name
+  ,e.file_row_number = s.file_row_number
+  ,e.insert_ts       = s.insert_ts
+  ,e.update_ts       = s.update_ts
+when not matched then 
+     insert(
+      hk_empid
+   ,change_hk 
+   ,empid
+   ,name
+   ,salary
+   ,Designation  
+   ,office
+   ,file_name
+   ,file_row_number  
+   ,insert_ts
+   ,update_ts
+          ) values(
+     hk_empid
+          ,change_hk 
+          ,empid
+          ,name
+          ,salary
+          ,Designation  
+          ,office
+          ,file_name
+          ,file_row_number  
+          ,insert_ts
+          ,update_ts
+   );                      
+select * from emp; 

@@ -1,0 +1,208 @@
+pdays: last date the client was contacted after the campaign 
+campaign: if the campaign has happened then 1
+poutcome: outcome of the previous marketing campaign
+emp.var.rate: employment variation rate
+
+ENCODING (categorical to numerical)
+-------- 
+unique values to my variables 
+scikit is used for label & one hot encoding method??
+
+list = ['Red', 'Blue', 'Green', 'Yellow']
+
+1.label encoding eg: 2 0 1 3
+2.one hot encoding Eg: 0010 100 0100 0001
+3.binary creates no.of rows on the basis of no.of elements. Rows represents the element in the list & column represents its position. Eg: 
+4.ordinal (it is based on the same concept of ordinal datatype)
+5.frequency/ count
+methods in machine learning:
+
+unique elements are used to quote in the list. So, if we have 4 unique elements in the list, we use this 4
+
+feature scaling: mekae different techniques on the same scale. dividend into 1.normalization & 2.standardization To make largerger range or larger unit value
+normalization
+standardization
+scaling
+
+diff bw standardization vs normalization
+
+Preprocessing techniques are comes under this
+
+supervised data sets can be seen the below algorithm models.
+classic, associateion rule unsupers that cannot be fixed output throughout the analysis
+
+			ML MODEL
+Regressions			Classification
+Continuous			Discrete/categorical values
+Linear Regression		Logistic
+Multiple regression		DT
+Polynomical			RF
+Decission tree			SVMachine
+Random Forrest regression	Daive Bays
+Support vector regression
+
+Linear Regression Model:
+-----------------------
+Involves 2 variables
+-> Independent (features)
+-> Dependent (Target)
+statistical 
+To quantify the relationship bw two or more variables
+Only two columns are required for simple linear regression. y = mx + c
+y is the dependent variable, x is the independent variable, m is the slope, c is the intercept.
+
+If there is a negative slope then the variables are not related to each other.
+Farmer => yield of potatoes (Target)=> nitrogen fertilizer (Feature)
+
+potatoes (y) = m (fertilizers) + c 
+
+scikit is the sklearn library which is used for the Machine learning algorithm process. It provides the efficiency for the data analysis and the modeling purpose for a different datasets using all algorithms. For different type of support using different type of algorithm.
+Like clustering method, linear regression, splitting method, all these types are performed using sklearn.
+
+train dataset = feature dataset
+feature variable = independent variables
+
+Example:
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+# Data
+years = np.array([2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]).reshape(-1,1)
+sightings = np.arrays([5,8,12,15,19,22,26,32,36,40])
+
+#Fit linear regression model
+model = LinearRegression()
+model.fit(years, sightings)
+
+# Predict future sightings
+future_years = np.array([2024,2025,2026,2027,2028]).reshape(-1,1)
+predicted_sightings = model.predict(future_years)
+
+# plotting
+plt.scatter(years, sightings, color='blue', label='Actual Sightings')
+plt.plot(years,model.predict(years), color='red', label='Fitted Line')
+plt.xlabel('Year')
+plt.ylabel('Number of Sightings')
+plt.title('Alien Sightings Over Time')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+NOTE: IF THE INPUT IS NOT GIVEN then we need to try different models and then try to compare between them that which gives us the best results.
+FIRST we need to make sure "WHAT IS THE OBJECTIVE?"
+
+trend analysis for the data points.
+
+m is the coefficient which incluenced the sore v.
+
+Note:
+polynomial regression, multiple regression can be used if the the data is not increasing exponentially.
+
+multiple & polynomial is consider based upon the number of variables being used.
+
+LOGISTIC REGRESSION:
+------------------
+It is kind of classification models works on binary value with two conditions. 
+If student "pass or fail" based on => no.of hours they have studied.
+1. In Input part -> we collect the data points.
+2. Model -> Based on probability factor.
+3. Probability -> logistic function. (we convert the score into probability by using logistic function which is S-shaped Curve)
+4. Threshold value is the cutoff value. If the probability value is above threshold then student is pass or otherwise he is fail.
+S-shaped is same as the sigmoid function.
+
+Example:
+input(x) = performance score of the player
+output(y) = p means probability the player would be selected
+
+p = 1/1+e^-(mx+c) 
+
+mx + c => it is a linear combination, c is the intercept, m is the coefficient which a number to show how much it influences the score that has no prediction.
+e standards for exponent, it represents the natural logarithmic value
+which is 2.718
+e^- here -ve sign means we take the exponent with negative point of the linear combination.
+probability value p is => 0 / 1
+
+		NAIVE BAYES
+		-----------
+
+Based on the "Bayes probability theorem OR Bayes theorem" Naive Bayes algorithm works.
+@50:00 minutes
+
+
+1. P(A) -> Win the Match
+2. New Information -> Players, Weather, Past Match, Fitness, Pitch
+3. P(B) -> Naive -> will adjust the new p
+4. Prediction : P(A/B) = P(B/A) * P(A)/P(B)
+
+P(A/B) = what is the probability to win the match based on multiple new conditions.
+P(B/A) = Based on these new conditions whether your team is going to win or not?
+
+Difference between Logistic vs Naive Bayes:
+------------------------------------------
+
+1. In logistic regression we check the linear relationship between the input & output variable.
+2. Here we predict the possibilities and can handle BINARY OR MULTI CLASS CALLISIFICATION
+3. We are calculating the analysis based on the probability. Here we are comparing the probability value.
+
+1.BUT in all the variables are independent of each other.
+2. Here it is based on frequency of features like how many times each features has occurred or that feature is creating an importance. The frequency of the features to calculate the probabilities and make predictions.
+3. Here we are calculating the probability value.
+4. Also all the variables are not dependent on anyone!
+
+
+
+There is a comparison level 
+ 
+Binary model like 
+
+Hi,
+
+I am interested for this role.
+I am currently in perth
+
+Analyse on the basis of numbers of values then use Regression
+Invest/notinvest then it is a decision it is a categorical model
+
+
+
+import pandas as pd
+
+# Read the file without unnecessary headers
+data = pd.read_csv("your_file.csv", skiprows=2)  # Assuming 2 rows need to be skipped as headers
+
+# Remove summary rows
+data = data[~data['Column'].str.contains('Total|Subtotal')]
+
+# Remove incorrect rows (header, footer)
+data = data[~data['Column'].str.contains('Header|Footer')]
+
+# Remove extra rows (column number, indicators, blank rows, page no.)
+data = data.dropna()  # Remove rows with any missing values
+
+# Merge columns if needed
+data['Full Address'] = data['State'] + ', ' + data['City']
+
+# Split columns if needed
+data[['State', 'City']] = data['Address'].str.split(',', expand=True)
+
+# Add column names if missing
+# Rename columns consistently if needed
+# Delete unnecessary columns if needed
+# Align misaligned columns if needed
+
+# Display the cleaned dataset
+print(data.head())
+
+#print the head of the data frame.
+#print the information of variables to check their data types.
+#convert the age variable data type from float to integer.
+#print the average age of customers.
+
+#drop the customer id as it is of no use.
+#Extract job in newly created 'job' column from "jobedu" column.
+#Extract education in newly created 'education' column from "jobedu" column.
+#drop the "jobedu" column from the dataframe.
+
+

@@ -1,0 +1,6 @@
+Change Data Capture
+
+Capture engine
+source engine
+target engine, talend cdc manager
+sql server

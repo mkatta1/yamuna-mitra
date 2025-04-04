@@ -1,0 +1,16 @@
+Apache Airflow: The Hands-On Guide
+Business Communication Skills: Business Writing & Grammar
+
+The Complete Communication Skills Master Class for Life
+
+Complete Agile Scrum Master Certification Training
+
+Stored Procedure concepts:
+Setting the Definer, Procedure Permission, Passing Parameters, Multiple Parameters,
+Select Into Variables, Out Parameters, Inout Parameters, The If Statement, Local Variables
+Implementing Account Withdrawal, Transactional Withdrawal, Errors and Warnings
+Handling Errors, While Loops, Labelled Loops
+
+Triggers:
+Validating with Triggers, Triggers and Transactions, Triggers Exercise, Triggers Solution
+

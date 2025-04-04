@@ -1,0 +1,337 @@
+		SNOWFLAKE ARCHITECTURE
+
+High level CLOUD SERVICES: Brain of the system- Managing infrastructure, Access 				control, security, Optimizer, Metadata etc.
+
+Mid level QUERY PROCESSING: Muscle of the system- MPP Massive Parallel processing Virtual warehouses Sizes like XS,S,M,L,XL,4XL which are 2powerOfN servers. Multi-Clustering would be multiple XS OR S OR M OR L OR XL OR 4XL to form a cluster :)
+
+Low level STORAGE 	: Hybrid Columnar Storage- Saved in blobs (Storage like s3  or azure etc..)
+			CONFIGURING WAREHOUSE BY UI
+By enabling Query Acceleration: Accelerate outlier queries with additional flexible compute resources
+By enabling Multi-cluster Warehouse: Scale compute resources as query needs change
+By enabling Mode: Auto-Scale
+Min Clusters1, Max Clusters: 3
+Scaling Policy: Standard (usually) but  other option is Economy
+
+Advanced options: Enable Auto Resume, Auto Suspend (after 10 mins etc.), WarehouseType: Standard (in common), other option is snowpark-optimized for ML complex code.
+
+			CONFIGURING WAREHOUSE BY CODE
+CREATE OR REPLACE WAREHOUSE COMPUTE_WAREHOUSE
+WITH
+WAREHOUSE_SIZE = XSMALL
+MAX_CLUSTER_COUNT = 3
+AUTO_SUSPEND = 300
+INTIALLY_SUSPEND = TRUE
+COMMENT = 'This is our second warehouse'
+
+Two types of scaling policies:
+Standard (default) policy: Starts additional clusters immediately during queue or more queries detected. It is done at 2 to 3 consecutive checks at 1 minute interval.
+
+Economy policy: Estimates at least 6 mins to start and only after 5 yo 6 consecutive full checks.
+
+Loading data into a table from s3 bucket:
+COPY INTO LOAN_PAYMENT
+	FROM s3://bucketsnowflakes3/Loan_payments_data.csv
+	file_format = (type = csv
+			field_delimiter = ','
+			skip_header=1);
+
+
+Cloud Computing
+
+			Application -> Databases, tables etc.
+
+Software-as-a-service (SAS)
+			Software		|\	Snowflake
+			Data			| | Managing data storage,
+			Operating system	|/Vitual warehouses,Upgrades/Metadata
+
+			Physical servers	|
+			Virtual machines	| Cloud providers like
+			Physical storage	| Aws, Azure, GCP
+
+Loading Data using two methods:
+
+Bulk loading: 
+	 - For large volumes of data
+	 - Uses warehouses
+	 - Loading from stages
+	 - COPY command
+	 - Transformations possible
+
+continuous loading: 
+	 - To load small volumes of data
+	 - Automatically once they are added to stages
+ 	 - Latest results for analysis
+	 - Snowpipe (severless feature)
+
+Stages are database objects in a schema which provide (location and credentials). Don't get confused with the warehouse stages. Stages are of two types:
+
+External Stage: External cloud provider like S3, azure, gcp etc. Database object is created in schema. Costs vary if it is a different region, 
+
+Internal Stage: The storage is on-premise, local storage maintained by snowflake
+
+
+Example code:
+
+CREATE OR REPLACE DATABASE MANAGE_DB;
+CREATE OR REPLACE SCHEMA EXTERNAL_STAGES;
+CREATE OR REPLACE STAGE MANAGE_DB.EXTERNAL_STAGES.AWS_STAGE
+	URL = 's3://bucketsnowflakes3'
+	credentials = (aws_key_id='ABCD_DUMMY_ID' aws_secret_key='1234abcd_key');
+
+DESC STAGE MANAGED_DB.EXTERNAL_STAGES.AWS_STAGE;
+
+ALTER STAGE aws_stage
+	SET aws_key_id='XYZ_DUMMY_ID',aws_secret_key='987xyz'
+
+// publicly accessible staging area
+CREATE OR REPLACE STAGE MANAGE_DB.EXTERNAL_STAGES.AWS_STAGE
+	URL = 's3://bucketsnowflakes3'
+
+//LIST files in stage
+LIST @aws_stage;
+
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS
+(
+ORDER_ID VARCHAR(30),
+AMOUNT INT,
+PROFIT INT,
+QUANTITY INT,
+CATEGORY VARCHAR(),
+SUBCATEGORY VARCHAR()
+);
+
+// First copy command
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS
+	FROM @aws_stage
+	file_format = (type = csv field_delimiter=',' skip_header=1);
+
+//copy command with fully qualified stage object
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS
+	FROM @MANAGE_DB.external_stage.aws_stage
+	file_format = (type = csv field_delimiter=',' skip_header=1);
+
+// List files contained in stage 
+LIST @MANAGED_DB.external_stages.aws_stage;
+
+output:
+Loan_payments_data.csv
+OrderDetails.csv
+sampledata.csv
+
+// Copy command with specified file(s)
+
+COPY INOT OUR_FIRST_DB.PUBLIC.ORDERS
+	FROM @MANAGED_DB.external_stages.aws_stage
+	file_format = (type =csv field_delimiter = ',' skip_header=1)
+	files = ('OrderDetails.csv');
+
+// copy command with pattern for file names
+
+COPY INOT OUR_FIRST_DB.PUBLIC.ORDERS
+	FROM @MANAGED_DB.external_stages.aws_stage
+	file_format = (type =csv field_delimiter = ',' skip_header=1)
+	pattern= '.*Order.*csv';
+
+CHECK HOME PAGE OF SNOWFLAKE WITH SUBSET OF functions in documentation!!
+
+$$$$$$$$$$$$$$$$$$$$$$ TRANSFORMING DATA $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS_EXT
+	FROM (select s.$1, s.$2 from  .external_stages.aws_stage s)
+	file_format= (type= csv field_delimiter= ',' skip_header=1)
+	files=('OrderDetails.csv');
+
+// example1 - table
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS_EX (
+	ORDER_ID VARCHAR(30)
+	AMOUNT INT
+	)
+//example2 - table
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS_EX (
+	ORDER_ID VARCHAR(30)
+	AMOUNT INT
+	PROFIT INT,
+	PROFITABLE_FLAG VARCHAR(30)
+	)
+
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS_EX
+	FROM ( select 
+		s.$1,
+		s.$2,
+		s.$3,
+		CASE WHEN CAST(s.$3 as int)<0 THEN 'not profitable' ELSE 'profitable' END
+		from @MANAGED_DB..aws_stage s)
+	file_format= (type = csv field_delimiter=',' skip_header=1)
+	files=('OrderDetails.csv');
+
+SELECT * FROM OUR_FIRST_DB.PUBLIC.ORDERS_EX
+
+// Example 3 - table
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS_EX (
+	ORDER_ID VARCHAR(30)
+	AMOUNT INT
+	PROFIT INT,
+	PROFITABLE_FLAG VARCHAR(30),
+	CATEGORY_SUBSTRING VARCHAR(5)
+	)
+
+
+// Example 3 - copy command using a sql function - subset of functions available
+
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS_EX
+	FROM ( select 
+		s.$1,
+		s.$2,
+		s.$3,
+		substring(s.$5,1,5)
+		from @MANAGED_DB..aws_stage s)
+	file_format= (type = csv field_delimiter=',' skip_header=1)
+	files=('OrderDetails.csv');
+
+// Example 4 - Table with 4 columns
+
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS_EX (
+	ORDER_ID VARCHAR(30)
+	AMOUNT INT
+	PROFIT INT,
+	PROFITABLE_FLAG VARCHAR(30)
+	)
+
+// Example 4 - Using subset of columns
+
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS_EX (ORDER_ID, PROFIT)
+	FROM( select
+		s.$1,
+		s.$2,
+		s.$3
+		from @MANAGE_DB.external_stages.aws_stage s)
+	 file_format = (type = csv field_delimiter= ',' skip_header=1)
+	files=('OrderDetails.csv');
+
+// Example 5 - Table Auto increment
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS_EX (
+	ORDER_ID number autoincrement start 1 increment 1,
+	AMOUNT INT,
+	PROFIT INT,
+	PROFITABLE_FLAG VARCHAR(30)
+	)
+
+// Example 6 - Table Auto increment
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.ORDERS_EX (
+	ORDER_ID number autoincrement start 1 increment 1,
+	AMOUNT INT,
+	PROFIT INT,
+	PROFITABLE_FLAG VARCHAR(30)
+)
+
+// Example 6 - Table Auto increment_ID
+COPY INTO OUR_FIRST_DB.PUBLIC.ORDERS_EX (PROFIT, AMOUNT)
+	FROM ( select
+		s.$2,
+		s.$3
+		from @MANAGE_DB.external_stages.aws_stage s)
+	file_format= (type= csv field_delimiter=',' skip_header=1)
+	files = ('OrderDetails.csv');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+TOPIC 1: DATA MIGRATION FROM ON PREMISE TO AZURE ADF
+
+Ref: https://towardsdatascience.com/move-data-from-on-premise-sql-server-to-azure-blob-storage-using-azure-data-factory-bbf67e4e5fde
+
+- Create a user and a database in SQL SERVER MANAGEMENT STUDIO(SSMS) and give "sql server authentication mode" for the access and give access to the user as well.
+- Using Self hosted integration runtime we give the credentials to this runtime software on onPremise and also in the Azure cloud.
+- Choose MICROSOFT-SQLSERVER as a source in adf pipeline 
+
+TOPIC 2: DATA MIGRATION FROM ON PREMISE DB TO AWS S3 BUCKET using CDC approach
+Ref: https://medium.com/@vivekrajyaguru1993/setting-up-aws-dms-service-for-data-ingestion-from-on-premises-db-to-aws-with-cdc-approach-5cb4f5ed7a
+
+AWS Management Console->S3 Console-> create bucket
+IAM ROLE-> IAM console->create Role(DMS) as AmazonS3FullAccess Policy
+DMS: Data Migration Service
+
+Create a replication Instance: It is a server used by AWS DMS for data ingestion.
+AWS DMS CONSOLE -> Create replication instance, instance type, vpc, security group, userid&password for instance
+
+AWS DMS CONSOLE -> Create Source endpoint(on-premise db)->select DB&credentials -> Test connection
+
+AWS DMS CONSOLE -> Create Target endpoint(S3 bucket) -> Give endpoint address,port, uid&password
+
+Create a replication task: The replication task is the process of ingesting data from the on-premise db to S3 using CDC.
+AWS DMS CONSOLE -> Create task button-> specify task settings(name, sourceEndpoint,targetEndpoint,replicationInstance, and CDC mode) -> Configure the mapping rules to ingest to correct S3 bucket!!! -> Start replication task and monitor its progress in the AWS DMS console :) :) :)
+
+AWS DMS automatically creates a Standby in case of any failure like a robust disaster recovery mechanism!!
+
+TOPIC 3: DATA MIGRATION FROM ON PREMISE DB TO DATABRICKS

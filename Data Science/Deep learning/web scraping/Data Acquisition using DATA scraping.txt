@@ -1,0 +1,784 @@
+Zomato cuisine 1.1:
+==================
+Fetch the cuisine_id of 'Mexican' cuisine using Zomato API
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+params={'city_id':1}
+user_key="deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent": "curl/7.43.0",'Accept': 'application/json','user-key':user_key}
+response=requests.get(basic_api+'/cuisines', headers=header, params=params)
+data = response.json()
+for i in range(len(data['cuisines'])):
+    if(data['cuisines'][i]['cuisine']['cuisine_name'] = 'Mexican'):
+	print(data['cuisines'][i]['cuisine']['cuisine_id'])
+
+
+Zomato cuisine 1.3:
+==================
+Fetch the entityid of entitytype of place cannaught place.
+print the entityid and entitytype
+
+output format:
+-------------
+entity_type entity_id
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+params={'query':'Connaught Place'}
+user_key="deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent": "curl/7.43.0",'Accept': 'application/json','user-key':user_key}
+response=requests.get(basic_api+'/locations', headers=header, params=params)
+data = response.json()
+print(data['location_suggestions'][0][''], data['location_suggesions'][0][''])
+
+Zomato cuisine 1.4
+==================
+fetch the top 10 best-rated restaurant serving 'mexican' cuisine present in Connaught place.
+print the restaurant name, user rating and restaurant id.
+
+output format:
+-------------
+name_1 rating_1 id_1
+name_1 rating_1 id_1
+name_2 rating_1 id_2
+name_3 rating_1 id_3
+.....
+....
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+user_key="deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent": "curl/7.43.0",'Accept': 'application/json','user-key':user_key}
+res=requests.get(basic_api+'/search', headers=header, params=para)
+text = res.json()
+for i in text['restaurants']:
+    print(i['restaurant']['name'], i['restaurant']['user_rating']['aggregate_rating'], i['restaurant']['R']['res_id'])
+
+Zomato cuisine 1.5:
+===================
+fetch the category id of category type 'cafes' using tomato api.
+print the category_id
+
+output format:
+-------------
+category_id
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+user_key="deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent": "curl/7.43.0",'Accept': 'application/json','user-key':user_key}
+res=requests.get(basic_api+'/search', headers=header, params=para)
+text = res.json()
+for i in range(len(data['categories'])):
+    if data['categories'][i]['categories']['name'] == 'cafes':
+	print(data['categories'][i]['categories']['id'])
+
+
+Zomato cuisine 1.6:
+==================
+fetch the best-rated restaurant serving 'mexican' cuisine with category type 'cafes' present in Connaught place using Zomato api.
+print the restaurant name, user rating and restaurant id.
+
+output format:
+-------------
+name_1 rating_1 id_1
+name_1 rating_1 id_1
+name_2 rating_1 id_2
+name_3 rating_1 id_3
+.....
+....
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+user_key="deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent": "curl/7.43.0",'Accept': 'application/json','user-key':user_key}
+para={'entity_id':104, 'entity_type':"subzone", 'cuisines':[73], 'sort':'rating', "count":10, 'order': 'desc', "category": "6"}
+res=requests.get(basic_api+'/search', headers=header, params=para)
+text = res.json()
+for i in text['restaurants']:
+    print(i['restaurant']['name'], i['restaurant']['user_rating']['aggregate_rating'], i['restaurant']['R']['res_id'])
+
+
+
+
+FILE 10:
+-------
+
+Zomato restaurant 2.2
+
+fetch the details of "Pa Pa Ya" restaurant using Zomato api
+print the user rating, the average cost for two, cuisines and address of "Pa Pa Ya" restaurant.
+
+output format:
+--------------
+user_rating
+average_cost_for_two
+cuisines
+address
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+params={"res_id": 18241524}
+user_key = "deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent":"curl/7.43.0",'Accept': 'application/json', 'user-key':user_key}
+response=requests.get(basic_api+'/restaurant', headers=header, params=params)
+data = response.json()
+print(data['user_rating']['aggregate_raing'])
+print(data['average_cost_for_two'])
+print(data['cuisines'])
+print(data['location']['address'])
+
+FILE 14:
+========
+Zomato distance 3.1
+-------------------
+fetch the cuisine_id of cuisine 'BBQ' using Zomato 
+print the cuisine_id
+
+output_format:
+-------------
+cuisine_id
+
+import requests
+basic_api = 'https://developers.zomato.com/api/v2.1'
+params={'city_id':1}
+user_key = "deacdd5cb34d052c59e8491eb2699851"
+header={"User-agent":"curl/7.43.0",'Accept': 'application/json', 'user-key':user_key}
+response=requests.get(basic_api+'/cuisine',headers=header, params=params)
+data = response.json()
+for i in range(len(data['cuisines'])):
+    if(data['cuisines'][i]['cuisine']['cuisine_name'] == 'BBQ')
+	print(data(['cuisines'][i]['cuisine']['cuisine_id'])
+
+
+FILES 15 TO FILE 18:
+===================
+so ooooooooooonnnnnnnnnnn...............
+
+================================================================================
+			DATA WRANGLING
+			--------------
+
+1.Print Body tab
+----------------
+you are given the HTML content of a webpage, your task is to:
+print all the contents of the body tag(including body tag)
+note: you are provided the HTML content inside variable html
+
+output format:
+--------------
+<body> ...........</body>
+
+CODE:
+-----
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Learning Beautiful Soup</title></head>\
+<body><h1> About Us </h1><div class = "first_div"><p>Coding Ninjas Website</p>\
+<a href="https://www.codingninjas.in/">Link to Coding Ninjas Website</a>\
+<ul><li>This</li><li>is</li><li>an</li><li>unordered</li><li>list.</li></ul>\
+</div><p id = "template_p">This is a template paragraph tag</p>\
+<a href = "https://www.facebook.com/codingninjas/">\
+This is the link of our Facebook Page</a></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+data = BeautifulSoup(html, 'head.parser')
+print(data.body)
+
+2.Attributes of div tag:
+-----------------------
+Task is to print the name of all attributes of first div tag of the page
+note: you are provided the html content inside variable html
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Learning Beautiful Soup</title></head>\
+<body><h1> About Us </h1><div class = "first_div"><p>Coding Ninjas Website</p>\
+<a href="https://www.codingninjas.in/">Link to Coding Ninjas Website</a>\
+<ul><li>This</li><li>is</li><li>an</li><li>unordered</li><li>list.</li></ul>\
+</div><p id = "template_p">This is a template paragraph tag</p>\
+<a href = "https://www.facebook.com/codingninjas/">\
+This is the link of our Facebook Page</a></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+data = BeautifulSoup(html, 'html.parser')
+ans = data.div.attrs
+for ele in ans:
+    print(ele)
+
+3.strings of li:
+----------------
+print the strings(only text without tag names) of all li tags separated by a space.
+note: you are provided the HTML content inside variable html
+
+output format:
+--------------
+li_text li_text2 li_text3 ...
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Learning Beautiful Soup</title></head>\
+<body><h1> About Us </h1><div class = "first_div"><p>Coding Ninjas Website</p>\
+<a href="https://www.codingninjas.in/">Link to Coding Ninjas Website</a>\
+<ul><li>This</li><li>is</li><li>an</li><li>unordered</li><li>list.</li></ul>\
+</div><p id = "template_p">This is a template paragraph tag</p>\
+<a href = "https://www.facebook.com/codingninjas/">\
+This is the link of our Facebook Page</a></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+data = BeautifulSoup(html, 'html.parser')
+ans = data.find_all('li')
+for ele in ans:
+    print(ele.text, end = " ")
+
+
+4.href of A tag:
+----------------
+print the href of all the <a> tags on the page in different lines.
+note: you are provided the HTML content inside variable html
+
+OUTPUT FORMAT:
+-------------
+a1_href
+a2_href
+a3_href
+.
+.
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Learning Beautiful Soup</title></head>\
+<body><h1> About Us </h1><div class = "first_div"><p>Coding Ninjas Website</p>\
+<a href="https://www.codingninjas.in/">Link to Coding Ninjas Website</a>\
+<ul><li>This</li><li>is</li><li>an</li><li>unordered</li><li>list.</li></ul>\
+</div><p id = "template_p">This is a template paragraph tag</p>\
+<a href = "https://www.facebook.com/codingninjas/">\
+This is the link of our Facebook Page</a></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+data = BeautifulSoup(html, 'html.parser')
+ans = data.find_all('a')
+for ele in ans:
+    print(ele.attrs['href'])
+
+
+5. descendants and children:
+-----------------------------
+print the difference between the number of descendants and the number of children of the html tag
+note: you are provided the HTML content inside variable html
+
+output format:
+--------------
+difference
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Navigate Parse Tree</title></head>\
+<body><h1>This is your Assignment</h1><a href = "https://www.google.com">This is a link that will take you to Google</a>\
+<ul><li><p> This question is given to test your knowledge of <b>Web Scraping</b></p>\
+<p>Web scraping is a term used to describe the use of a program or algorithm to extract and process large amounts of data from the web.</p></li>\
+<li id = "li2">This is an li tag given to you for scraping</li>\
+<li>This li tag gives you the various ways to get data from a website\
+<ol><li class = "list_or">Using API of the website</li><li>Scrape data using BeautifulSoup</li><li>Scrape data using Selenium</li>\
+<li>Scrape data using Scrapy</li></ol></li>\
+<li class = "list_or"><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">\
+Clicking on this takes you to the documentation of BeautifulSoup</a>\
+<a href="https://selenium-python.readthedocs.io/" id="anchor">Clicking on this takes you to the documentation of Selenium</a>\
+</li></ul></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+data = BeautifulSoup(html, 'html.parser')
+li1 = list(data.html.children)
+li2 = list(data.html.descendants)
+print(len(li2) - len(li1))
+
+6. name of tags with ID:
+------------------------
+print the name of all the tags in different lines that have an id attribute
+output format:
+--------------
+tag1
+tag2
+.
+.
+
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Navigate Parse Tree</title></head>\
+<body><h1>This is your Assignment</h1><a href = "https://www.google.com">This is a link that will take you to Google</a>\
+<ul><li><p> This question is given to test your knowledge of <b>Web Scraping</b></p>\
+<p>Web scraping is a term used to describe the use of a program or algorithm to extract and process large amounts of data from the web.</p></li>\
+<li id = "li2">This is an li tag given to you for scraping</li>\
+<li>This li tag gives you the various ways to get data from a website\
+<ol><li class = "list_or">Using API of the website</li><li>Scrape data using BeautifulSoup</li><li>Scrape data using Selenium</li>\
+<li>Scrape data using Scrapy</li></ol></li>\
+<li class = "list_or"><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">\
+Clicking on this takes you to the documentation of BeautifulSoup</a>\
+<a href="https://selenium-python.readthedocs.io/" id="anchor">Clicking on this takes you to the documentation of Selenium</a>\
+</li></ul></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+data = BeautifulSoup(html, 'html.parser')
+ans = data.find_all(id = True)
+for i in ans:
+    print(i.name)
+
+7. next sibling:
+----------------
+
+print all content of the next siblings of the tag that have id as "li2"(in different lines)
+note: content includes the complete html of tag
+output format:
+--------------
+content_sibl1
+content_sibl2
+.
+.
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Navigate Parse Tree</title></head>\
+<body><h1>This is your Assignment</h1><a href = "https://www.google.com">This is a link that will take you to Google</a>\
+<ul><li><p> This question is given to test your knowledge of <b>Web Scraping</b></p>\
+<p>Web scraping is a term used to describe the use of a program or algorithm to extract and process large amounts of data from the web.</p></li>\
+<li id = "li2">This is an li tag given to you for scraping</li>\
+<li>This li tag gives you the various ways to get data from a website\
+<ol><li class = "list_or">Using API of the website</li><li>Scrape data using BeautifulSoup</li><li>Scrape data using Selenium</li>\
+<li>Scrape data using Scrapy</li></ol></li>\
+<li class = "list_or"><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">\
+Clicking on this takes you to the documentation of BeautifulSoup</a>\
+<a href="https://selenium-python.readthedocs.io/" id="anchor">Clicking on this takes you to the documentation of Selenium</a>\
+</li></ul></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+
+data = BeautifulSoup(html, 'html.parser')
+page = data.find("li", {"id" : "li2"})
+temp = list(page.next_siblings)
+for ele in temp:
+    print(ele)
+
+8. Parents of title:
+--------------------
+Print content of all the parents of the title tag(linewise)
+
+output format:
+--------------
+parent1
+parent2
+parent3
+.
+.
+
+
+
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Navigate Parse Tree</title></head>\
+<body><h1>This is your Assignment</h1><a href = "https://www.google.com">This is a link that will take you to Google</a>\
+<ul><li><p> This question is given to test your knowledge of <b>Web Scraping</b></p>\
+<p>Web scraping is a term used to describe the use of a program or algorithm to extract and process large amounts of data from the web.</p></li>\
+<li id = "li2">This is an li tag given to you for scraping</li>\
+<li>This li tag gives you the various ways to get data from a website\
+<ol><li class = "list_or">Using API of the website</li><li>Scrape data using BeautifulSoup</li><li>Scrape data using Selenium</li>\
+<li>Scrape data using Scrapy</li></ol></li>\
+<li class = "list_or"><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">\
+Clicking on this takes you to the documentation of BeautifulSoup</a>\
+<a href="https://selenium-python.readthedocs.io/" id="anchor">Clicking on this takes you to the documentation of Selenium</a>\
+</li></ul></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+
+data = BeautifulSoup(html, 'html.parser')
+page = data.find("title")
+temp = list(page.parents)
+for ele in temp:
+    print(ele)
+
+9. Next Element:
+----------------
+print the string which is present inside the isecond <a> tag using beautifulSoup's next_element property.
+
+Output format:
+--------------
+string_next_element
+
+
+## HTML Code is provided in variable html
+
+html = '<!DOCTYPE html><html><head><title>Navigate Parse Tree</title></head>\
+<body><h1>This is your Assignment</h1><a href = "https://www.google.com">This is a link that will take you to Google</a>\
+<ul><li><p> This question is given to test your knowledge of <b>Web Scraping</b></p>\
+<p>Web scraping is a term used to describe the use of a program or algorithm to extract and process large amounts of data from the web.</p></li>\
+<li id = "li2">This is an li tag given to you for scraping</li>\
+<li>This li tag gives you the various ways to get data from a website\
+<ol><li class = "list_or">Using API of the website</li><li>Scrape data using BeautifulSoup</li><li>Scrape data using Selenium</li>\
+<li>Scrape data using Scrapy</li></ol></li>\
+<li class = "list_or"><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">\
+Clicking on this takes you to the documentation of BeautifulSoup</a>\
+<a href="https://selenium-python.readthedocs.io/" id="anchor">Clicking on this takes you to the documentation of Selenium</a>\
+</li></ul></body></html>'
+
+## Print the required output in given format
+from bs4 import BeautifulSoup
+
+data = BeautifulSoup(html, 'html.parser')
+page = data.find_all("a")[1]
+print(page.next_element)
+
+10.book names from first page:
+------------------------------
+print the title of all 20 books which are present on first page of this website
+output format:
+------------
+book1 name
+book2 name
+book3 name
+.
+.
+code:
+-----
+import requests
+response = requests.get('https://books.toscrape.com/')
+html = response.text
+
+from bs4 import BeautifulSoup as bsp
+data = bsp(html, 'html.parser')
+page = data.find_all('article', {'class': 'product_pod'})
+
+for ele in page:
+   print(ele.h3.a['title'])
+
+
+print the names of all categories which are present this website.
+output format:
+--------------
+category1 name
+category2 name
+category3 name
+.
+.
+
+http://books.toscrape.com/
+
+code:
+-----
+
+import requests
+response = requests.get('https://books.torscrape.com/')
+html = response.text
+
+from bs4 import BeautifulSoup as bsp
+data = bsp(html, 'html.parser') 
+page = data.find('ul', {'class': 'nav nav-list'})
+temp = page.li.ul.find_all('li')
+for ele in temp:
+     print(ele.a.string.strip())
+
+
+11. All Book Names:
+-------------------
+print the title of all books which are present on first 10 pages of this website
+
+output format:
+-------------
+book1 name
+book2 name
+book3 name
+.
+.
+## Print the required output in given format
+## You are given page links in variable allPages, use this
+
+allPages = ['http://books.toscrape.com/catalogue/page-1.html',
+            'http://books.toscrape.com/catalogue/page-2.html',
+            'http://books.toscrape.com/catalogue/page-3.html',
+            'http://books.toscrape.com/catalogue/page-4.html',
+            'http://books.toscrape.com/catalogue/page-5.html',
+            'http://books.toscrape.com/catalogue/page-6.html',
+            'http://books.toscrape.com/catalogue/page-7.html',
+            'http://books.toscrape.com/catalogue/page-8.html',
+            'http://books.toscrape.com/catalogue/page-9.html',
+            'http://books.toscrape.com/catalogue/page-10.html']
+
+# print the required output in given format
+
+import requests
+from bs4 import BeautifulSoup as bsp
+for ele in allPages:
+    response = requests.get(ele)
+    html = response.text
+    data = bsp(html, 'html.parser')
+    page = data.find_all('article', {'class':'product_prod'})
+
+    for k in page:
+	print(k.h3.a['title'])
+
+
+12. book details:
+-----------------
+
+## Print the required output in given format
+## You are given page links in variable allPages, use this
+## Column names of your dataframes should be as per given in the variable column_names
+
+allPages = ['http://books.toscrape.com/catalogue/page-1.html',
+            'http://books.toscrape.com/catalogue/page-2.html']
+
+column_names = ['Title', 'Link', 'Price', 'Quantity in Stock']
+
+import re
+import requests
+from bs4 import BeautifulSoup as bsp
+import pandas as pd
+
+books_details = []
+for url in allPages:
+    base_url = 'http://books.toscrape.com/catalogue/'
+    response = requests.get(url)
+    data = bsp(response.text, 'html.parser')
+    arr = data.find_all('article', {'class' : 'product_pod'})
+    for ele in arr:
+        title = ele.h3.a['title'].strip()
+        book_url = base_url + ele.h3.a['href'].strip()
+        #print(book_url)
+        response = requests.get(book_url)
+        data = bsp(response.text, 'html.parser')
+        price = data.find('p', {'class':'price_color'}).string.strip()
+        quantity = data.find('p', {'class':'instock availability'}).text.strip()
+        price = float(re.search('[\d.]+', price).group())
+        quantity = int(re.search('\d+', quantity).group())
+        books_details.append([title, book_url, price, quantity])
+
+
+for ele in books_details:
+    for i in ele:
+        print(i, end = " ")
+    print()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

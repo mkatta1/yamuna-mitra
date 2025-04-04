@@ -1,0 +1,91 @@
+- Usually this can be also a rather complicated process
+- Data sharing without actual copy of the data & uptodate
+- Shared data can be consumed by the own compute resources
+- Non-snowflake-Users can also access through a reader account
+
+
+Server1, Server2, Server3	 Read only Server2 (Account 2 : Consumer)
+\_______________________/======>
+Account 1 : Producer
+
+
+Two methods of creating a data share:
+
+1) SQL commands:
+
+- Create a stage, table, database, schema etc...
+- Create a share object and grant priveleges to the above objects!!!
+- SHOW GRANTS TO SHARE [shareName]; --> to know priveleges and its types to share object
+- Add consumer account to the share. So that he will also get the privileges that are needed as well
+Eg: ALTER SHARE ORDERS_SHARE ADD ACCOUNT = kaa74702;-->account Id number!!
+
+ 
+
+
+2) Using UI
+
+1) First click on the top right corner profile -> Switch Role -> Choose "Account Admin"
+2) Top pane click on shares ->  Inbound & Outbound shares
+3) click on "Add Consumers"-> choose "reader" or "Full" . For non snowflake user we use "Reader" but for others we use "Full"
+4) Create, Edit & Drop Shares 
+5) Create share -> give sharename, dbName, SchemaName, tableName or viewName
+Outbound contain our created shares!!
+Inbound contain others created shares!!
+
+
+Sharing with Non Snowflake users , 
+New reader account -> Independant instance with own url & own compute resources, 
+share data -> share database & tables, 
+create uses -> As administrator create user & roles
+create database -> In reader account create database from share
+
+Notes to follow:
+1) Using+data+sharing
+2) Create+reader+account
+3) Sharing database and schema -> share+entire+db+or+schema
+4) Sharing+views
+5) Secure+views
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

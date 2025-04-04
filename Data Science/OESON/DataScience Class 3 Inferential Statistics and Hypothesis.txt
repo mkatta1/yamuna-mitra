@@ -1,0 +1,139 @@
+Inferential statistics:
+---------------------
+
+conclude or get results we assisting with credibility .
+are there resulsts accurate? --> we are inferencing these
+hypothesis testing
+
+Partial Sample:
+--------------
+
+Surveys sent = 12,000
+Surveys completed = 298
+
+Law of Large Numbers:
+---------------------
+
+Smaller sample tends to be far away from the mean(population)!
+if size increase then sample mean tends to population mean!!
+
+As our sample size grows, its mean tends towards the average of the whold population.
+
+probability of getting a 5 in dice is 1/6 = 16.67%
+probability of getting a 2 in dice is 1/6 = 16.67%
+Expected Mean = 3.5
+
+Average after 1 roll:
+---------------------
+
+Sample Mean (mu) = 2
+number of samples (n) = 1
+
+2(1) = 2
+
+Average after 10 rolls:
+---------------------
+
+Sample Mean (mu) = 3.1
+number of samples (n) = 10
+
+1(3)+ 2(2)+3(1)+4(1)+5(1)+6(2) = 3+4+3+4+5+12 = 31
+
+Hypothesis Test:
+---------------
+
+Assumption 1: Our population mean and variance is the same as sample 1 (the 5-year sample)
+
+hypotheses
+significance level
+statistical test
+test and  calculate the p-value
+draw a conclusion about the null hypothesis
+
+hypothesis 2 types:
+----------------
+null hypothesis: states that there is no difference between two parameters.
+alternative hypothesis: there is a difference betweent the two parameters.
+eg: 7year warranty sold better than 5 year warranty
+
+Our confidence level sets the probability of our test correctly failing to reject the null hypothesis assuming the null hypothesis is true.
+confidence level = 95%
+
+common confidence level:
+------------------------
+
+alpha = 0.1 for 90%
+a1pha = 0.05 for 95%
+
+1-confidencelevel = alpha value
+so, if confidence level = 0.95
+Alpha value = ? it is 0.05
+
+28 minutes
+
+TWO TAIL T TEST:
+----------------
+Rejecting and Failing to Reject H0 :
+-----------------------------------
+
+confidence level = 95%
+Alpha value = 5% = one T is 2.5%, another T is 2.5%
+
+confidence interval 95% of expected samples
+
+one T = 7 year revenue is growing up
+another T = 5 year warranty revenue is growing up
+
+Here we are challenging the already proven results.
+
+t-Test two sample assuming Equal Variances:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

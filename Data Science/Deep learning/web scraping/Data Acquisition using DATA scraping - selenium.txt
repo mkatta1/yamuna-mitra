@@ -1,0 +1,93 @@
+1. All plans in Delhi NCR
+-------------------------
+find all the plans of airtel in Delhi NCR(Find Price)
+link: https://paytm.com/recharge
+
+2. Search and print prices:
+---------------------------
+search iPhone in the search bar and give the prices of first 4 results
+link: https://paytm.com/
+
+3.list of trains:
+------------------
+find list of all trains from delhi to Amritsar for tomorrow
+link: https://paytm.com/
+
+4. find accuracy in BST
+-----------------------
+Click on BST and find out the accuracy of the first 10 questions of BST
+link: https://practice.geeksforgeeks.org/
+
+5. Problem titles:
+------------------
+find the problem title of 15th question of the first 2 data structures
+link: https://practice.geeksforgeeks.org/
+
+
+6. scrape first 5 posts:
+-----------------------
+open coding ninjas Instagram handle and print the post content(including comments) of the first 5 posts.
+link: https://www.instagram.com/coding.ninjas/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

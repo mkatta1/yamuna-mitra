@@ -1,0 +1,1421 @@
+1
+1
+
+00:00:00,520  -->  00:00:01,410
+<v Instructor>Hello, and welcome</v>
+2
+
+2
+
+00:00:01,410  -->  00:00:03,390
+to the challenging parts of this course.
+3
+
+3
+
+00:00:03,390  -->  00:00:05,290
+Part five, on Boltzmann machines.
+4
+
+4
+
+00:00:05,290  -->  00:00:07,350
+And part six on autoencoders.
+5
+
+5
+
+00:00:07,350  -->  00:00:08,187
+Because in the following two parts
+6
+
+6
+
+00:00:08,187  -->  00:00:10,800
+we are gonna make a recommended system.
+7
+
+7
+
+00:00:10,800  -->  00:00:13,830
+In fact, we're gonna make two recommended systems.
+8
+
+8
+
+00:00:13,830  -->  00:00:15,445
+One recommended system that will predict
+9
+
+9
+
+00:00:15,445  -->  00:00:18,580
+if a user is going to like yes or no,
+10
+
+10
+
+00:00:18,580  -->  00:00:19,413
+a movie.
+11
+
+11
+
+00:00:19,413  -->  00:00:21,850
+And another recommended system that is going to predict
+12
+
+12
+
+00:00:21,850  -->  00:00:24,420
+the rating of a movie by a user.
+13
+
+13
+
+00:00:24,420  -->  00:00:27,010
+So the first one predicts a binary outcome,
+14
+
+14
+
+00:00:27,010  -->  00:00:28,960
+one or zero, that is yes or no.
+15
+
+15
+
+00:00:28,960  -->  00:00:30,870
+And a second one predicts a rating
+16
+
+16
+
+00:00:30,870  -->  00:00:32,080
+from one to five.
+17
+
+17
+
+00:00:32,080  -->  00:00:34,590
+And this way you have the two recommended systems
+18
+
+18
+
+00:00:34,590  -->  00:00:36,610
+that are mostly used in the industry.
+19
+
+19
+
+00:00:36,610  -->  00:00:39,163
+Nowadays many companies build some recommended systems,
+20
+
+20
+
+00:00:39,163  -->  00:00:41,317
+and most of the times these recommended systems
+21
+
+21
+
+00:00:41,317  -->  00:00:43,410
+either predicts if the user,
+22
+
+22
+
+00:00:43,410  -->  00:00:46,440
+the customer, is going to like, yes or no, the product.
+23
+
+23
+
+00:00:46,440  -->  00:00:48,730
+Or some other recommended systems can predict
+24
+
+24
+
+00:00:48,730  -->  00:00:52,405
+a rating or a review of some certain product.
+25
+
+25
+
+00:00:52,405  -->  00:00:53,880
+So there we go.
+26
+
+26
+
+00:00:53,880  -->  00:00:56,830
+We are about to create these two recommended systems.
+27
+
+27
+
+00:00:56,830  -->  00:00:59,530
+And so we're gonna make the recommended system
+28
+
+28
+
+00:00:59,530  -->  00:01:01,837
+that predicts a binary outcome yes or no
+29
+
+29
+
+00:01:01,837  -->  00:01:04,150
+with our Boltzmann machines.
+30
+
+30
+
+00:01:04,150  -->  00:01:06,090
+The neural network that we will implement
+31
+
+31
+
+00:01:06,090  -->  00:01:07,320
+in this part five.
+32
+
+32
+
+00:01:07,320  -->  00:01:10,040
+And then we'll implement the other recommended system
+33
+
+33
+
+00:01:10,040  -->  00:01:12,170
+that predicts the rating from one to five
+34
+
+34
+
+00:01:12,170  -->  00:01:13,160
+in the next part.
+35
+
+35
+
+00:01:13,160  -->  00:01:17,060
+The last part of this course, part six, on autoencoders.
+36
+
+36
+
+00:01:17,060  -->  00:01:19,870
+However for both these recommended systems
+37
+
+37
+
+00:01:19,870  -->  00:01:21,120
+for both these parts,
+38
+
+38
+
+00:01:21,120  -->  00:01:23,390
+we're gonna start with the same data set.
+39
+
+39
+
+00:01:23,390  -->  00:01:25,520
+This is the most real world data set
+40
+
+40
+
+00:01:25,520  -->  00:01:26,760
+that you can find online.
+41
+
+41
+
+00:01:26,760  -->  00:01:29,190
+It's of course, the movie lens data set.
+42
+
+42
+
+00:01:29,190  -->  00:01:30,403
+And speaking of this data set,
+43
+
+43
+
+00:01:30,403  -->  00:01:32,280
+the first thing that we're gonna do right now,
+44
+
+44
+
+00:01:32,280  -->  00:01:33,113
+in this tutorial,
+45
+
+45
+
+00:01:33,113  -->  00:01:36,170
+is to go online to have a look at this data set.
+46
+
+46
+
+00:01:36,170  -->  00:01:40,450
+So, this data set is available on this website
+47
+
+47
+
+00:01:40,450  -->  00:01:43,023
+grouplens.org/datasets/movielens.
+48
+
+48
+
+00:01:45,160  -->  00:01:48,150
+So this data set was created by GroupLens research.
+49
+
+49
+
+00:01:48,150  -->  00:01:50,170
+And as we can see on this page
+50
+
+50
+
+00:01:50,170  -->  00:01:51,830
+you have several data sets
+51
+
+51
+
+00:01:51,830  -->  00:01:53,910
+with different amounts of ratings.
+52
+
+52
+
+00:01:53,910  -->  00:01:55,564
+So for example this one contains
+53
+
+53
+
+00:01:55,564  -->  00:01:57,570
+one hundred thousand ratings.
+54
+
+54
+
+00:01:57,570  -->  00:02:01,290
+Then this one contains 24 million ratings.
+55
+
+55
+
+00:02:01,290  -->  00:02:02,950
+So that's the largest one I think.
+56
+
+56
+
+00:02:02,950  -->  00:02:04,770
+And then you have some older data sets,
+57
+
+57
+
+00:02:04,770  -->  00:02:06,390
+and that's the one we're going to use,
+58
+
+58
+
+00:02:06,390  -->  00:02:09,450
+with another one hundred thousand ratings.
+59
+
+59
+
+00:02:09,450  -->  00:02:11,110
+From one thousand users
+60
+
+60
+
+00:02:11,110  -->  00:02:13,720
+and one thousand, seven hundred movies.
+61
+
+61
+
+00:02:13,720  -->  00:02:16,720
+And again, an old data set with 1 million ratings.
+62
+
+62
+
+00:02:16,720  -->  00:02:19,430
+So I strongly recommend to have a look at these data sets,
+63
+
+63
+
+00:02:19,430  -->  00:02:21,330
+download them, and of course I recommend
+64
+
+64
+
+00:02:21,330  -->  00:02:23,060
+to practice on these data sets,
+65
+
+65
+
+00:02:23,060  -->  00:02:25,000
+and test your different neural networks
+66
+
+66
+
+00:02:25,000  -->  00:02:27,150
+besides the ones that we're going to make,
+67
+
+67
+
+00:02:27,150  -->  00:02:30,790
+to see if you manage to get some better performance results.
+68
+
+68
+
+00:02:30,790  -->  00:02:32,130
+So to download these data sets,
+69
+
+69
+
+00:02:32,130  -->  00:02:32,963
+well that's very simple,
+70
+
+70
+
+00:02:32,963  -->  00:02:34,900
+you just need to click on the links here,
+71
+
+71
+
+00:02:34,900  -->  00:02:36,610
+and so the one that we're going to work with
+72
+
+72
+
+00:02:36,610  -->  00:02:40,470
+is this ML100K, but I'm going to download this one too,
+73
+
+73
+
+00:02:40,470  -->  00:02:43,540
+because this one contains the informations of the users
+74
+
+74
+
+00:02:43,540  -->  00:02:46,320
+and the movies, so it contains additional informations,
+75
+
+75
+
+00:02:46,320  -->  00:02:49,640
+which maybe can be useful to make the recommended systems
+76
+
+76
+
+00:02:49,640  -->  00:02:51,410
+even more robust.
+77
+
+77
+
+00:02:51,410  -->  00:02:54,730
+So there we go, that's the only real-world data set
+78
+
+78
+
+00:02:54,730  -->  00:02:57,340
+with that many ratings you can find online,
+79
+
+79
+
+00:02:57,340  -->  00:02:59,990
+and so each time you want to test your neural networks
+80
+
+80
+
+00:02:59,990  -->  00:03:01,210
+for recommended systems,
+81
+
+81
+
+00:03:01,210  -->  00:03:03,950
+I highly recommend to use these data sets,
+82
+
+82
+
+00:03:03,950  -->  00:03:06,490
+as you can see they are used for not only education
+83
+
+83
+
+00:03:06,490  -->  00:03:08,224
+and development, but also for new research,
+84
+
+84
+
+00:03:08,224  -->  00:03:11,024
+and in that case, you know, the purpose of this data set
+85
+
+85
+
+00:03:11,024  -->  00:03:13,800
+serves as a benchmark, so that you can compare
+86
+
+86
+
+00:03:13,800  -->  00:03:16,510
+the different performances of your models.
+87
+
+87
+
+00:03:16,510  -->  00:03:17,400
+Okay, so good?
+88
+
+88
+
+00:03:17,400  -->  00:03:19,460
+Now let's move back to Python.
+89
+
+89
+
+00:03:19,460  -->  00:03:21,250
+All right, and now the important thing to understand
+90
+
+90
+
+00:03:21,250  -->  00:03:23,599
+is that even if we're going to make two different
+91
+
+91
+
+00:03:23,599  -->  00:03:26,280
+recommended systems, well, we have
+92
+
+92
+
+00:03:26,280  -->  00:03:27,866
+a common data preprocessing phase,
+93
+
+93
+
+00:03:27,866  -->  00:03:29,700
+that's what we're going to do first.
+94
+
+94
+
+00:03:29,700  -->  00:03:32,860
+And so this data preprocessing phase takes five tutorials,
+95
+
+95
+
+00:03:32,860  -->  00:03:35,041
+and these first five tutorials are going to be the same
+96
+
+96
+
+00:03:35,041  -->  00:03:38,860
+for our Boltzmann machine and our autoencoders.
+97
+
+97
+
+00:03:38,860  -->  00:03:40,877
+And so these are going to be the next five tutorials
+98
+
+98
+
+00:03:40,877  -->  00:03:42,300
+after this one.
+99
+
+99
+
+00:03:42,300  -->  00:03:43,945
+So in these next five tutorials we're going to
+100
+
+100
+
+00:03:43,945  -->  00:03:45,730
+import the data set,
+101
+
+101
+
+00:03:45,730  -->  00:03:47,735
+prepare the training set and the test set.
+102
+
+102
+
+00:03:47,735  -->  00:03:49,357
+We're going to get the number of users
+103
+
+103
+
+00:03:49,357  -->  00:03:51,840
+and the number of movies, because we're going to need them.
+104
+
+104
+
+00:03:51,840  -->  00:03:55,140
+And then we're going to convert our data into an array
+105
+
+105
+
+00:03:55,140  -->  00:03:58,890
+where we have our users in lines, and movies in columns.
+106
+
+106
+
+00:03:58,890  -->  00:04:00,570
+And finally, in the last step of this
+107
+
+107
+
+00:04:00,570  -->  00:04:02,877
+common data preprocessing phase, we will convert
+108
+
+108
+
+00:04:02,877  -->  00:04:05,370
+the data into torch.Tensors.
+109
+
+109
+
+00:04:05,370  -->  00:04:07,720
+And then, after these five tutorials
+110
+
+110
+
+00:04:07,720  -->  00:04:10,053
+we will start the steps that are specific
+111
+
+111
+
+00:04:10,053  -->  00:04:12,050
+to Boltzmann machines.
+112
+
+112
+
+00:04:12,050  -->  00:04:12,883
+That is, you know, we're going to
+113
+
+113
+
+00:04:12,883  -->  00:04:15,730
+start dealing with binary ratings,
+114
+
+114
+
+00:04:15,730  -->  00:04:18,070
+then create an architecture of a neural network,
+115
+
+115
+
+00:04:18,070  -->  00:04:20,370
+that will be a Restricted Boltzmann Machine
+116
+
+116
+
+00:04:20,370  -->  00:04:23,060
+that, I remind, is a probabilistic graphical model,
+117
+
+117
+
+00:04:23,060  -->  00:04:25,290
+so right now, you're really taking it the next level,
+118
+
+118
+
+00:04:25,290  -->  00:04:28,219
+this part is probably going to be the most advanced part
+119
+
+119
+
+00:04:28,219  -->  00:04:30,580
+in terms of techniques of this course.
+120
+
+120
+
+00:04:30,580  -->  00:04:32,712
+And so, hold tight, everything is going to be fine.
+121
+
+121
+
+00:04:32,712  -->  00:04:35,270
+All right, so before we start this
+122
+
+122
+
+00:04:35,270  -->  00:04:38,080
+common data preprocessing phase, let's set the right
+123
+
+123
+
+00:04:38,080  -->  00:04:39,210
+folder as working directory.
+124
+
+124
+
+00:04:39,210  -->  00:04:40,780
+So I'm going to File Explorer,
+125
+
+125
+
+00:04:40,780  -->  00:04:42,710
+to my Deep Learning A-Z folder,
+126
+
+126
+
+00:04:42,710  -->  00:04:44,712
+then Volume 2 - Unsupervised Deep Learning,
+127
+
+127
+
+00:04:44,712  -->  00:04:47,750
+and Part 5 - Boltzmann Machines.
+128
+
+128
+
+00:04:47,750  -->  00:04:49,340
+All right, before you were with Kirill
+129
+
+129
+
+00:04:49,340  -->  00:04:51,382
+for the intuition lectures, and now you're with me
+130
+
+130
+
+00:04:51,382  -->  00:04:54,100
+to implement our Boltzmann machine.
+131
+
+131
+
+00:04:54,100  -->  00:04:54,933
+And there we go.
+132
+
+132
+
+00:04:54,933  -->  00:04:57,610
+So that's the folder we want to set as working directory,
+133
+
+133
+
+00:04:57,610  -->  00:05:00,940
+so let's do it right now, set console working directory,
+134
+
+134
+
+00:05:00,940  -->  00:05:02,870
+here we go, we are now ready to start,
+135
+
+135
+
+00:05:02,870  -->  00:05:06,190
+but first, let's explain what is inside this folder.
+136
+
+136
+
+00:05:06,190  -->  00:05:09,457
+So first of all, you have this PDF file, that is,
+137
+
+137
+
+00:05:09,457  -->  00:05:11,490
+a file available online.
+138
+
+138
+
+00:05:11,490  -->  00:05:13,922
+And that contains all the theory behind
+139
+
+139
+
+00:05:13,922  -->  00:05:16,550
+the neural network that we are about to make.
+140
+
+140
+
+00:05:16,550  -->  00:05:20,280
+So I strongly encourage to have a look at this PDF file,
+141
+
+141
+
+00:05:20,280  -->  00:05:22,580
+if you can read it, that's really, really good.
+142
+
+142
+
+00:05:22,580  -->  00:05:25,970
+It contains all the theory, explains on the intuitive level,
+143
+
+143
+
+00:05:25,970  -->  00:05:28,550
+but also it goes into the math pretty much in detailed.
+144
+
+144
+
+00:05:28,550  -->  00:05:30,740
+We're going to have a look at this PDF in a second,
+145
+
+145
+
+00:05:30,740  -->  00:05:33,690
+and then of course, we have our two data sets,
+146
+
+146
+
+00:05:33,690  -->  00:05:35,042
+the 1 million ratings data set,
+147
+
+147
+
+00:05:35,042  -->  00:05:38,020
+and the 100K ratings data set.
+148
+
+148
+
+00:05:38,020  -->  00:05:40,788
+So remember, we're going to train our RBM on this one,
+149
+
+149
+
+00:05:40,788  -->  00:05:42,630
+the one hundred thousand ratings,
+150
+
+150
+
+00:05:42,630  -->  00:05:45,630
+but of course you can practice on this data set as well,
+151
+
+151
+
+00:05:45,630  -->  00:05:48,490
+if you want to evaluate more the performance.
+152
+
+152
+
+00:05:48,490  -->  00:05:51,440
+All right, and then of course we have our RBM python file
+153
+
+153
+
+00:05:51,440  -->  00:05:52,908
+which is, of course, this one.
+154
+
+154
+
+00:05:52,908  -->  00:05:54,320
+So now what we're going to do
+155
+
+155
+
+00:05:54,320  -->  00:05:56,910
+is have a quick look at this paper
+156
+
+156
+
+00:05:56,910  -->  00:05:58,314
+on Restricted Boltzmann Machines.
+157
+
+157
+
+00:05:58,314  -->  00:05:59,550
+Here it is.
+158
+
+158
+
+00:05:59,550  -->  00:06:00,530
+This paper is called
+159
+
+159
+
+00:06:00,530  -->  00:06:02,702
+An Introduction to Restricted Boltzmann Machines,
+160
+
+160
+
+00:06:02,702  -->  00:06:06,666
+and as you can see, it contains first an introduction,
+161
+
+161
+
+00:06:06,666  -->  00:06:09,500
+then all you need to know about graphical models,
+162
+
+162
+
+00:06:09,500  -->  00:06:11,490
+because a Restricted Boltzmann Machine
+163
+
+163
+
+00:06:11,490  -->  00:06:13,400
+is a probabilistic graphical model,
+164
+
+164
+
+00:06:13,400  -->  00:06:16,130
+so you have here the theory of graphical models,
+165
+
+165
+
+00:06:16,130  -->  00:06:18,987
+with Undirected Graphs and Markov Random Fields.
+166
+
+166
+
+00:06:18,987  -->  00:06:20,440
+Then, what do you have?
+167
+
+167
+
+00:06:20,440  -->  00:06:22,760
+You have a section on Unsupervised Learning,
+168
+
+168
+
+00:06:22,760  -->  00:06:25,140
+well that's great, because now we're in Volume 2
+169
+
+169
+
+00:06:25,140  -->  00:06:27,910
+Unsupervised Deep Learning, so I strongly recommend
+170
+
+170
+
+00:06:27,910  -->  00:06:29,470
+to read that as well.
+171
+
+171
+
+00:06:29,470  -->  00:06:31,705
+And so as I told you, you have the mathematics,
+172
+
+172
+
+00:06:31,705  -->  00:06:33,870
+the mathematical details on
+173
+
+173
+
+00:06:33,870  -->  00:06:35,720
+the computations of the likelihood,
+174
+
+174
+
+00:06:35,720  -->  00:06:39,430
+The KL-divergence, and some optimization theory,
+175
+
+175
+
+00:06:39,430  -->  00:06:43,044
+which is of course very useful for Boltzmann machines.
+176
+
+176
+
+00:06:43,044  -->  00:06:46,850
+And then you have some theory about MCMC techniques,
+177
+
+177
+
+00:06:46,850  -->  00:06:49,040
+Markov chain Monte Carlo techniques,
+178
+
+178
+
+00:06:49,040  -->  00:06:49,920
+so that's very important,
+179
+
+179
+
+00:06:49,920  -->  00:06:51,718
+because we're going to use Gibbs sampling
+180
+
+180
+
+00:06:51,718  -->  00:06:54,300
+to estimate the gradient of the likelihood,
+181
+
+181
+
+00:06:54,300  -->  00:06:57,440
+and Gibbs sampling is based on MCMC.
+182
+
+182
+
+00:06:57,440  -->  00:06:59,106
+We'll see that with the random walk.
+183
+
+183
+
+00:06:59,106  -->  00:07:01,390
+Then you have the definition of a Markov chain,
+184
+
+184
+
+00:07:01,390  -->  00:07:04,740
+so that's, if you want to go deeper in mathematics,
+185
+
+185
+
+00:07:04,740  -->  00:07:06,720
+in details, and then you have of course
+186
+
+186
+
+00:07:06,720  -->  00:07:08,600
+Gibbs sampling that's very important.
+187
+
+187
+
+00:07:08,600  -->  00:07:11,390
+That's at the heart of Boltzmann machines,
+188
+
+188
+
+00:07:11,390  -->  00:07:13,930
+and of course we will remind the intuition behind
+189
+
+189
+
+00:07:13,930  -->  00:07:17,600
+Gibbs sampling, when we implement our Boltzmann machines.
+190
+
+190
+
+00:07:17,600  -->  00:07:18,710
+So here, there you go, you have
+191
+
+191
+
+00:07:18,710  -->  00:07:20,730
+some more mathematical details, you have everything,
+192
+
+192
+
+00:07:20,730  -->  00:07:24,030
+and finally, you have, of course,
+193
+
+193
+
+00:07:24,030  -->  00:07:26,050
+our Restricted Boltzmann Machines.
+194
+
+194
+
+00:07:26,050  -->  00:07:27,720
+So after all the theory you have now,
+195
+
+195
+
+00:07:27,720  -->  00:07:29,270
+the formula for the energy
+196
+
+196
+
+00:07:29,270  -->  00:07:32,085
+that we're going to try to minimize, because we're trying to
+197
+
+197
+
+00:07:32,085  -->  00:07:35,610
+minimize the free energy, and that is
+198
+
+198
+
+00:07:35,610  -->  00:07:37,381
+by maximizing the log likelihood.
+199
+
+199
+
+00:07:37,381  -->  00:07:39,740
+So here you have the architecture
+200
+
+200
+
+00:07:39,740  -->  00:07:41,470
+of the Restricted Boltzmann Machines,
+201
+
+201
+
+00:07:41,470  -->  00:07:44,232
+with the visible nodes, that's our input,
+202
+
+202
+
+00:07:44,232  -->  00:07:46,910
+which are going to be the ratings of the movies
+203
+
+203
+
+00:07:46,910  -->  00:07:49,170
+by the users, and the users are going to be
+204
+
+204
+
+00:07:49,170  -->  00:07:51,840
+the different observations going into the network,
+205
+
+205
+
+00:07:51,840  -->  00:07:53,010
+one by one.
+206
+
+206
+
+00:07:53,010  -->  00:07:55,770
+And here you have the hidden nodes, and so all this
+207
+
+207
+
+00:07:55,770  -->  00:07:57,839
+makes the architecture of the RBM,
+208
+
+208
+
+00:07:57,839  -->  00:08:01,070
+and that's exactly what we're going to make, in Python,
+209
+
+209
+
+00:08:01,070  -->  00:08:02,330
+by building a class.
+210
+
+210
+
+00:08:02,330  -->  00:08:04,170
+And mostly this class will contain
+211
+
+211
+
+00:08:04,170  -->  00:08:06,040
+the Contrastive Divergence technique,
+212
+
+212
+
+00:08:06,040  -->  00:08:08,430
+that will be used to maximize the likelihood.
+213
+
+213
+
+00:08:08,430  -->  00:08:10,709
+And speaking of the Contrastive Divergence technique,
+214
+
+214
+
+00:08:10,709  -->  00:08:13,070
+I think it comes right after that,
+215
+
+215
+
+00:08:13,070  -->  00:08:15,300
+well, first you have the Gradient of the Log Likelihood,
+216
+
+216
+
+00:08:15,300  -->  00:08:17,354
+that you know we are trying to approximate.
+217
+
+217
+
+00:08:17,354  -->  00:08:20,510
+And we approximate it with, there we go,
+218
+
+218
+
+00:08:20,510  -->  00:08:22,710
+The Contrastive Divergence technique.
+219
+
+219
+
+00:08:22,710  -->  00:08:25,150
+So in this class, that we're going to call RBM,
+220
+
+220
+
+00:08:25,150  -->  00:08:28,520
+we will implement the Contrastive Divergence technique.
+221
+
+221
+
+00:08:28,520  -->  00:08:32,190
+And so that leads us to the algorithm we will implement
+222
+
+222
+
+00:08:32,190  -->  00:08:35,360
+in the following lectures, which is this algorithm,
+223
+
+223
+
+00:08:35,360  -->  00:08:38,870
+Algorithm 1, k-step contrastive divergence.
+224
+
+224
+
+00:08:38,870  -->  00:08:42,720
+We will implement this exact same algorithm,
+225
+
+225
+
+00:08:42,720  -->  00:08:45,340
+so if you want you can already try to implement it yourself,
+226
+
+226
+
+00:08:45,340  -->  00:08:47,470
+just by following the logic here.
+227
+
+227
+
+00:08:47,470  -->  00:08:48,850
+And so this is this algorithm,
+228
+
+228
+
+00:08:48,850  -->  00:08:50,900
+that is at the heart of our RBM.
+229
+
+229
+
+00:08:50,900  -->  00:08:52,370
+So this is very important,
+230
+
+230
+
+00:08:52,370  -->  00:08:53,700
+that you have a look at this first.
+231
+
+231
+
+00:08:53,700  -->  00:08:56,630
+But don't worry, we will explain everything step by step,
+232
+
+232
+
+00:08:56,630  -->  00:08:58,640
+and each time we will take a step back to explain
+233
+
+233
+
+00:08:58,640  -->  00:09:01,470
+what we do, so that we never get lost.
+234
+
+234
+
+00:09:01,470  -->  00:09:03,350
+All right, so let's do this, but first
+235
+
+235
+
+00:09:03,350  -->  00:09:06,140
+let's take care of this common data preprocessing phase,
+236
+
+236
+
+00:09:06,140  -->  00:09:08,270
+and that's what we'll do in the next tutorial.
+237
+
+237
+
+00:09:08,270  -->  00:09:10,203
+Until then, enjoy deep learning!

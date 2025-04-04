@@ -1,0 +1,253 @@
+Identify the volume of the data
+- Total record count
+- Record count per day/week/month
+
+Quality of data
+- Duplicates
+- Missing values
+- Invalid/Unidentified data in columns
+
+Join data from multiple sources
+Summarize/Aggregate data
+
+Ability to get business value
+- Right columns exist
+- Transformations
+- Aggregations
+- Identify additional data required
+
+
+
+
+select 
+	location_id,
+	count(1) as numberOFRecords
+from openrowset(
+	bulk 'url',
+	format ='csv',
+	parser_version = '2.0'
+	firstrow = 2,
+	fieldterminator = ',',
+	rowterminator='\n'
+	)
+	with (
+		location_id 
+
+	) as [result]
+	group by location_id
+group by location_id
+having count(1)>1
+
+
+
+			**** data quality checks **********
+
+select top 100 *
+from openrowset(
+	bulk 'url'
+	format = 'parquet'
+	parser_version = '2.0'
+	data_source = 'nyc_taxi_data_raw'
+	) as [rsult]
+
+2)
+
+select min(total_amount) as min_total_amount,
+	max(total_amount) as max_total_amount,
+	avg(total_amount) as avg_total_amount,
+	count(1) as total_amount_of_records,
+	count(total_amount) as not_null_total_number_of_records
+from openrowset(
+	bulk 'url'
+	format = 'parquet'
+	parser_version = '2.0'
+	data_source = 'nyc_taxi_data_raw'
+	) as [rsult]
+
+
+
+3) 
+select payment_type, description
+from openrowset(
+	bulk 'payment_type.json',
+	data_source= 'nyc_taxi_data_raw',
+	field_terminator='0x0b' ---------> ???????
+	)
+	with
+	(
+		jsonDoc NVARCHAR(MAX)
+	) AS payment_type
+	CROSS APPLY OPENJSON(jsonDoc)
+	WITH(
+	payment_type SMALLINT()
+	VARCHAR(20) '$.payment_type_desc' ---->??????????
+
+);
+
+
+
+
+			*** joining files **********
+When you join two files then you are joining two openrowset functions becoz its a table valued function.
+
+
+select top 100 *
+from openrowset(
+	bulk 'sdfparqut/year=2020/month=01/'
+	format = 'parquet',
+	data_source = 'nyc_taxi_...'
+	) as [result]
+---> Before joining tables you need to check if the id's on the both doesn't have any data quality issues.
+
+Example:
+select top 100 *
+from openrowset(
+	bulk 'sdfparqut/year=2020/month=01/'
+	format = 'parquet',
+	data_source = 'nyc_taxi_...'
+	) as [result]
+WHERE PULOCATIONID IS NULL 
+
+
+2) example of joining two openrowset functions
+
+select taxi_zone.*, trip_data.*
+from openrowset(
+	bulk 'sdfparqut/year=2020/month=01/'
+	format = 'parquet',
+	data_source = 'nyc_taxi_...'
+	) as trip_data
+WHERE PULOCATIONID IS NULL 
+
+	JOIN
+from openrowset(
+	bulk 'abfss://..../.csv'
+	format = 'csv',
+	parser_version = '2.0',
+	firstrow = 2
+	)
+	with (
+		location_id smallint 1,
+		borough varchar(15) 2,
+		zone varchar(50) 3,
+		service_zone varchar(15) 4
+	) as taxi_zone 
+on trip_data.PULOCATIONID = taxi_zone.PULOCATIONID
+
+		****transform data ****
+
+-- no.of trips made by duration in hours
+
+DATEDIFF(datepart, startdate, enddate)
+
+datepart can be year, quarter, month, dayofyear, day, week, hour.....
+
+
+select
+datediff(minute, pickup_datetime, dropoff_datetime) / 60 as from_hour,
+datediff(minute, pickup_datetime, dropoff_datetime) /60) +1 as to_hour,
+count(1) as number_of_trips
+from
+openrowset(
+	bulk '',
+	format = 'parquet',
+	data_source = 'nyc_data_raw'
+	) as trip_data
+group by datediff(minute, pickup_datetime, dropoff_datetime) / 60 as from_hour,
+datediff(minute, pickup_datetime, dropoff_datetime) /60) +1 as to_hour
+order by from_hour, to_hour;
+
+		****assignment****
+with v_payment_type as
+(
+ select cast(json_value(jsonDoc, '$.payment_type') as smallint) pyament_type,
+	cast(json_value(jsonDoc, '$.payment_type_desc') as varchar(15) payment_type_desc
+from openrowset(
+	bulk '.json',
+	data_source = 'nyc_data_raw',
+	format = 'csv',
+	parser_version = '1.0',
+	fieldterminator = '0x0b',
+	rowterminator = '0x0a'
+	)
+	with
+	(
+	  jsonDoc NVARCHAR(MAX)
+	) AS payment_type
+),
+v_taxi_zone as
+(
+  select *
+ from
+	openrowset()
+	with() as [result'
+),
+v_trip_data as
+(
+select * from
+openrowset() as [result]
+)
+select v_taxi_zone.borough, count(1) as total_trips, sum(), sum(), cast(sum)...
+from 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

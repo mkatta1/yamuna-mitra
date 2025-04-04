@@ -1,0 +1,179 @@
+Topic 5: 
+In Google, search for azure databricks mount adls gen2 dbutils.fs.mount
+-- To check the authentication documents for the azure adls
+1. Authenticate ADLSGen2 account
+2. Mount a filesystem in the storage account
+3. Write a JSON file containing IOT of the new container
+
+
+In Scala,
+
+def getStringFromWidget(property: String): String = (
+	dbutils.widgets.text(property, "", "")
+	dbutils.widgets.get(property)
+)
+
+def setSparkADLSConfigs(): Unit = {
+  val tenantId = dbutils.secrets.get(scope = "key-vault-secrets", key = "tenant-id")
+
+Topic 4: VIDEO RECORDING 41 is with DataFrame Basics
+
+SparkContext is an object that tells spark how and where to access a cluster.
+
+SparkSession(spark 2.x) is the entry point for reading data and execute SQL queries over data and getting the results. It is the entry point for SQLContext and HiveContext to use the DataFrame API (sqlContext).
+
+
+Topic 3:
+
+Instead of defining the query with a string, we can use the PySpark API:
+
+Here python lib is integrating with the spark api
+import pyspark.sql.functions as f
+
+retDF = (
+
+df.groupBy(f.year("Date").alias("year"))
+.agg(f.count("Date").alias("count"), f.mean("Rate").alias("mean"))
+.sort(f.desc("year"))
+)
+
+display(retDF.head(4))
+
+
+
+
+
+
+Topic 2:
+container = "raw"
+storageAccount = "testblobstoragedemo300"
+accessKey = ""
+accountKey = "fs.azure.account.key.{}.blob.core.windows.net".format(storageAccount)
+
+# Set the credentials to Spark configuration
+spark.conf.set( accountKey, accessKey)
+
+# Set the access key also in SparkContext to be able to access b blob in RDD.
+# Hadoop config options set using spark.conf.set(...) are not accessible via SparkContext...
+# This means that while they are visible to the DataFrame and Dataset API, they are not visible to the RDD API.
+
+spark._jsc.hadoopConfiguration().set(
+accountKey, accessKey)
+
+mountPoint = "/mnt/" +container
+extraConfig = {accountKey: accessKey}
+
+# Mount the drive for native python
+inputSource = "wasbs://{}@{}.blob.core.windows.net".format(container, storageAccount)
+mountPoint = "/mnt/"+ container
+extraConfig = {accountKey: accessKey}
+
+print ("Mounting: {}".format(mountPoint))
+
+try:
+  dbutils.fs.mount(
+	source = inpurSource,
+	mount_point = str(mountPoint),
+	extraConfig = {accountKey: accessKey}
+)
+print("=> Succeeded")
+except Exception as e:
+	if "Directory already mounted" in str(e):
+	  print("=> Directory {} already mounted".format(mountPoint))
+	else:
+	  raise(e)
+
+
+- click on re-execute with maximum limits to display all records
+- Bar, Scatter, Map, Line, Histogram, BoxPlot, Pie, Area, Pivot
+
+Example2:
+You need to create a SqlContext by creating a TempView on top of dataFrame
+
+df.createOrReplaceTempView("xrate")
+
+df = spark.sql("select year(date) as year, count(date) as count, mean(rate) as mean FROM xrate GROUP BY year(date) ORDER BY YEAR DESC")
+display(df)
+			OR
+%sql
+write the query
+
+Example:
+Get the file https://timeseries.surge.sh/usd_to_eur.csv 
+
+inputFilePath = "wasbs://{}@{}.blob.core.windows.net/{}".format(container, storageAccount, "/usd_to_eur.csv")
+df = spark.read.format("csv").load(inputFilePath, header = True, inferSchema=True)
+display(df)
+
+
+
+
+
+
+
+
+print("Spark version", sc.version, spark.sparkContext.version, spark.version)
+print("python version", sc.pythonVer)
+
+%scala
+println("spark version"+ sc.version)
+println("spark version"+ spark.version)
+println("spark version"+ spark.sparkContext.version)
+println("spark version"+ scala.util.Properties.versionString)
+
+import requests
+r = requests.get("https://timeseries.surge.sh/usd_to_eur.csv")
+df = spark.read.csv(sc.parallelize(r.text.splitlines()), header=True, inferSchema = True)
+display(df)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

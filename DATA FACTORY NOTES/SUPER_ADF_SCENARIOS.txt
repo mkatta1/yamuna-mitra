@@ -1,0 +1,271 @@
+om bhageshwaray ber beray hum hat swaha
+
+copy data from sql to blob?
+copy data from sql to sql?
+validating copied data and adding new columns while?
+Converting JSON Files to CSV and appending date to ?
+Copy Files from blob to blob using getmetadata, filter and?
+copy multiple files from blob to blob dynamically?
+copy rest api data to sql db?
+copy rest api data to data lake?
+
+
+how to compare records of two dataFrames
+https://www.youtube.com/watch?v=sIs93EZBlJ0&list=PLWf6TEjiiuIA9lqUuNsJgLe5GvUXHLLqA&index=30
+https://www.youtube.com/watch?v=TKHpy1Oyfm8&list=PLWf6TEjiiuIA9lqUuNsJgLe5GvUXHLLqA&index=41
+https://www.youtube.com/watch?v=N3YYA3O6fhw&list=PLWf6TEjiiuIA9lqUuNsJgLe5GvUXHLLqA&index=42
+
+PLAYLIST:
+https://www.youtube.com/watch?v=PEUghmYJLBU&list=PLtlmylp_ZK5zdGe7KLM0axsSb_4LimVRX
+
+PLAYLIST2:
+https://www.youtube.com/watch?v=pa4R_Yo0w7c&list=PLNRxk1s77zfgXfQKyScXtbn2MdFkvJtgH
+
+QUESTION: How to delete files more than 30 days old?
+getmetadata1(childitems) -> foreach (->getmetadata2=@item().name, itemname & lastmodifieddatae) items = @activity('getmetadata1').output.childitems
+
+getmetadata2->if condition 
+condition:
+@less(activity('Get Metadata2').output.lastModified,formatDateTime(adddays(utcNow(),-20),'yyy-MM-ddThh:mm:ssZ'))
+
+If the above condition is true then -> DELTE ACTIVITY(activity('Get Metadata2').output.ItemName
+
+QUESTION: Delete files more than 1mb from blob storage?
+It is similar to the above one with the if condition changed and instead of lastModifieddate we use 'SIZE'
+@greater(activity('GetMetadata2').ouptput.size,250)
+
+QUESTION: Archive File after load?
+COPY Data 1(source to database data copy) 		  --------\   DELETE activity
+COPY DATA 2 (move the file from to another folder)--------/
+
+QUESTION: Load data from fixed length csv to asql?
+USE DATAFLOW:
+SOURCE -> DERIVED TRANSFORMATION -> SELECT TRANSFORMATION -> SINK
+IN DERIVED: we need to separate the values in a single column using substring(col,pos,endpos)
+In SELECT: we select only required columns
+
+4th VIDEO is left
+
+QUESTION: Load JSON with Nested Hierarchy to CSV file?
+In source, go to source options -> JSON settings & select the Documents Form as "Array of Documents" and the other options available are Single document, Document per line
+
+source->flatten transformation-> sink transformation
+
+flatten transformation:
+unroll by = Sales
+unroll root = Sales
+In mapping, add mapping as fixed mapping where:
+Sales.Item = Item
+Sales.Qty = Qty
+Sales.value = value
+
+sink transformation:
+output to single file = sales_json.csv (give name of the file as you wish)
+single partition
+
+Load CSV file to JSON with Nested Hierarchy?
+souce -> DERIVED (For Sales column, Add subcolumns)-> AGGREGATE transformation
+
+DERIVED TRANSFORMATION:
+Add Subcolumns like Sales Expression "@(Item_id = Item, Qty_value = Qty, Value_num = Value)"
+
+As these subcolumns are coming columns but not like arrays. Our target is to get the subcolumns as arrays using "AGGREGATE TRANSFORMATION"
+
+AGGREGATE transformation:
+Groupby
+SOID,SODATE,Country
+
+Aggregate:
+Column name is Sales = collect(sales)
+Here collect is used to convert item values into an array
+
+
+QUESTION: Merge multiple rows into a single row?
+
+sample data:
+ItemId,VartId,ItemName,VartName,WhNo,Zone,Bin
+1,1,BajajCT,Black,Wh001,Z001,8001
+1,2,BajajCT,Red,Wh001,2001,B002
+1,3,BajajCT,Silver,Wh001,Z001,8003
+2,1,Hero Su,Black,Wh001,Z002,B001
+2,2,Hero Su,Red,Wh001,Z002,B002
+
+output:
+ItemId,ItemName,VartName
+1,[BajajCT],[Black,Red,Silver]
+2,[Hero Su],[Black,Red]
+
+Source -> aggregate1 -> Derived Column -> Sink
+
+In aggregate, 
+Groupby: ItemId,ItemName
+Aggregate: VarName = collect(VarName)
+
+Derived Column:
+Here we are replacing: 
+,->|
+""->''
+[->?''
+]->''
+
+replace(replace(replace(replace(toString(VartName),'""',''),'[,''),']',''),',','|')
+
+Sink transformation:
+File name option: Output to single file
+Output to single file: Iteminfo.csv
+partition option: Single partition
+
+QUESTION: Get Latest file from a folder?
+getmetadata1 -> foreach (-> getmetadata2 ->ifcondition{TRUE->setVariable1,setVariable2})-> copy data
+
+getmetadata1:
+get the childitems and lastModified of the folder
+foreach:
+Get the childitems ouptput into this activity as an array input (@activity('getmetadata1').ouptput.childitems)
+
+getmetadata2:
+get the childitems and lastModifieddate of the files inside the folder
+ifcondition:
+compare the pipeline parameter with the getmetadata2 lastModifieddate for the latest file
+ @greater(formatDate(getmetadata1),formatDate(parameter))
+TRUE:
+setVariable1:
+Parameter1 as fileName: getmetadata2.ouptput.fileName
+Parameter2 as LastModified: getmetadata2.output.lastModifieddate
+
+copy data:
+in source, fileName = @variable.fileName
+
+QUESTION: copy data as per file size?
+Copy files of different sizes to different folders SOURCE(Blob) to Sink(Blob):
+1) File Size <1KB to FolderName: 1KB
+2) File Size > 1KB & <2KB to FolderName: 2KB
+3) File Size > 2KB to FolderName: morethan2kb
+
+In getmetadata2, (itemName,Size)
+In copy data, Sink dataset -> FileName & FileSize parameters are added to dataset
+FileName = @activity('Get Metadata2').output.itemName
+FileSize = 
+@if(less(getmetadata2.output.size,1000),'1KB',
+if(less(getmetadata2.output.size,2000),'2KB'),'morethan2kb')
+
+QUESTION: Split Single Row Into Multiple Rows?
+
+ItemId, ItemName,VartName
+3,Hero HF DLX Mudguard,Black|Red
+4,Hero HF DLX Wiser,Black
+2,Hero Super SPLD Mudguard,Black|Red|Blue
+1,Bajaj CT100 Mudguard,Black|Red|Silver
+
+source -> derived transformation -> flatten transformation
+
+derived transformation:
+convert VartName column from string to array
+split(VartName,'|')
+
+flatten transformation:
+convert your array into multiple rows.
+Unroll by, Unroll to -> VartName
+
+
+
+QUESTION:
+How to create reusable pipeline for collecting the required columns from n no of files 
+from adls to SQL. ex I have 10 files in every files I have 20 columns but I want onl 15 columns. I need to do this activity repeatly so you can create pipeline for reusable.
+
+2. In adls, I have different CSV files in Adls ex India, aus, eng, sa cricket teams.
+I want only Indian cricket team realted files. for this purpose how to create a pipeline.
+Answer: 
+
+getmetadata1 -> foreach -> ifcondition (-> copy data)
+ifcondition:
+@contains(item().name,'India')
+
+copy data:
+In source, filename = @item().name
+In sink, sn_filename = @item().name
+
+QUESTION:
+HOW TO COPY 30 FILES FROM BLOB TO SQL BY CREATING A NEW TABLE?
+select excel file 
+In worksheet mode with sheet name or Index. We will go with "sheet index = 0" which selects first sheet.
+Process: getmetadata->foreach->copy data
+copydata:
+In source, select the excel sheet index as 0 from worksheet mode and filename = @item().name
+In Sink, select table as none from AZUREsqlDB linkedservice as we don't have existing table. 
+TableName = @replace(item().name,'.xlsx','')
+Table option: Auto create table
+
+HOW TO COPY DATA FROM THE MULTIPLE EXCEL SHEETS INTO A SINGLE SQL TABLE?
+config.csv
+India
+Us
+UK
+
+Employee.csv
+lookup activity: unselect first row only option and it provides 3 rows of config.csv file to the foreach
+
+lookup -> foreach -> copy data
+
+we need to loop foreach activity through 'value array' is @activity('Lookup1').output.value
+
+add a dataset with parameter as sheetname which will be dynamic sheetname in the "worksheet mode" 
+
+SheetName = @dataset().sheetName
+Copy data activity:
+Source: SheetName = @item.sheetName()
+
+COPY DATA FROM MULTIPLE EXCEL SHEETS TO MULTIPLE TABLES?
+
+Here we are creating the Config&Emp tables instead of read the data from a file
+
+Lookup -> foreach -> ifcondition -> TRUE_copydata -> FALSE_copydata
+
+ifcondition: @contains(item().sheetname,'Emp')
+TRUE_copydata: source dataset will be an excel file name is SourceData.xlsx and worksheet mode sheetIndex is 0
+Add parameter sheetname to the excel dataset = @dataset().sheetname
+sheetname = @item().sheetname
+SINK: dbo.EMPTBL
+FALSE_copydata: source dataset will be SourceData.xlsx and worksheet index is 0 SINK: dbo.DEPTBL
+
+
+lookup: read from a table and give the rows as output
+foreach: read the output of the lookup
+
+@activity('Lookup1').output.value
+
+sheetnames are Emp-India, Emp-USA, Emp-UK,Dept-India,Dept-USA,Dept-UK
+
+DeptId,DeptName
+1,Inventory
+2,Production
+
+EmpId,EmpName
+
+
+CREATE TABLE ConfigTbl
+(
+SheetName Varchar(max)
+)
+INSERT INTO ConfigTbl
+Values('Emp-India'),('Emp-UK'),('Emp-USA'),('Dept-India'),('Dept-UK'),('Dept-USA')
+
+select * from ConfigTbl
+go
+
+CREATE TABLE EMPTBL
+(
+id Int,
+Name Varchar(max),
+DOB DATE,
+Salary INT,
+Country Varchar(max)
+)
+
+CREATE TABLE DEPTTBL
+(
+DeptId Int,
+DeptName Varchar(max)
+)
+
+QUESTION: CACHE DATASET IN ADF & CACHE Lookup IN ADF

@@ -1,0 +1,121 @@
+Azure Databricks Pricing details:
+https://azure.microsoft.com/en-gb/pricing/details/databricks/
+
+Connect to cloud object storage using Unity Catalog:
+https://learn.microsoft.com/en-us/azure/databricks/connect/unity-catalog/#--create-an-external-location
+
+Data Access Control
+Data Audit
+Data Lineage
+Data Discoverability
+UC Metastore Prerequisites
+UC Metastore
+UC Object Model(Data Explorer UI)
+Accessing External Data Lake
+UC Catalogs, Schema, External&ManagedTables
+
+
+UC is a databricks offered unified sol for implemeneting data governance (DG) in the data lakehouse
+
+data governance is for managing (AUIS)availability, usability, integrity and security of the data.
+
+Data Access control: controling whom to access the data
+Data Audit: How much, how much time are they using, how many resources, how many people using
+Data Lineage: to identify the [trustworthyness] of the data means track back the data to its source to ensure the authenticity and to identify [potential issues] in the data
+Data Discoverability: to identify the right dataset for your project.
+
+1 UC with 1 Metastore for managing many workspaces, even each workspaces have hiveMetastore its better to use UC for the LIneage and AuditLog benefits.
+
+UC means centralized Metastore, UserManagement and Access control on both databricks tables and Cloud object store. Data Explorer provides a searchable data catalog.
+
+UC Metastore is only stored in Databricks itself. So, only Managed Tables are stored in a default storage called ADLS Gen2 Container. UC also needs to be given the Storage Blob Data Contributor Role on the storage account in order R&W to storageAcc.
+Access Connector is used.
+This system ManagedIdentity is recommended instead of other blah blah blah.
+
+UC can only be created on Premium tier.
+
+workspace->Gen2->AccessConnector->RoleStorageBlobDataContributor->UC Metastore
+-> Enable workspace for UC
+
+profile->manageAccount->AccountConsole or accounts.azuredatabricks.net
+Next-> Data->create Metastore with ADLSGen2 Container->AccessConnector->Assign to workspaces
+
+Databricks Access Connector-> Properties-> copy ID & paste it on databricks Metastore creation -> Enable Delta Sharing if you want to share your data outside of your organization
+
+ManageAccount->Account Console -> Data-> Metastore Configuration changes
+
+Runtime 11.3LTS or more is needed for UC
+
+UC supports Single User(all languages), Shared(Python, SQL) but not the option of [No isolation shared]
+
+				METASTORE
+				||
+				\/
+StorageCredential, External location, Catalog, Share, Recipient, Provider
+					||
+					\/
+				Schema(database)
+					||
+					\/
+			View, Table, Function
+				||
+				\/
+			External, Managed
+	
+
+
+Metastore is Top level container, only one per region, paired with Default ADLS Storage
+
+UC is Logical container within Metastore. one UC per businessUnit or per dev environment.
+
+Schema(database) is a next level container in UC with views, tables, functions.
+
+Example, In DataBricks -> CREATE EXTERNAL TABLE on the data produced by ADF -> Consume within Databricks
+
+OR
+
+In Databricks -> Create Table using external location -> consume within ADF using this data by creating a schema on it.
+
+- Managed tables can only be Delta format
+- Stored in the default Storage
+- Deleted data retained for 30 days
+- Benefits from automatic maintenance and performance improvements
+
+select * from catalog.schema.table;
+
+Commands to use the catalogs and schemas:
+select current_catalog()
+show catalogs()
+select current_schema()
+show schemas()
+use catalog demo_catalog()
+use schema demo_schema()
+
+To access data from the managed tables in dataframe, we use:
+%python
+df = spark.table('demo_catalog.demo_schema.circuits')
+Under System-> Information_schema gives ALL OBJECTS information and audit details within UC metastore whereas other catalogs also contains information_schema which are confined to those catalogs only!!!
+
+Steps to access external locations:
+- Create (Acess Connector, Data lake Storage)
+- Assign Storage blob data contributor role
+- Create Storage Credential
+- Create External location
+
+To get AUDIT information of your metastore you need to setup "Diagnostic settings in your Azure Databricks service"  Go to Azure Databricks Service -> Under Monitoring, click Diagnostic settings -> +Add Diagnostic settings (Databricks Unity Catalog)
+Then send logs to one of your Destination choices:
+- Log analytics workspace
+- Storage Account
+- Event Hub
+- partner solution 
+
+
+- Data Lineage is not available for Legacy Hive Metastore or files in cloud object Storage.
+- The lineage visualization is computed on a 30 day rolling window. If you run a job 30 days ago and didn't run afterwards , that lineage will not be shown.
+- Not all column level lineage is captured, only Limited column level lineage is seen.
+
+Manage Unity Catalog object ownership & Transfer ownership:
+https://learn.microsoft.com/en-us/azure/databricks/data-governance/unity-catalog/manage-privileges/ownership#transfer-ownership
+
+
+

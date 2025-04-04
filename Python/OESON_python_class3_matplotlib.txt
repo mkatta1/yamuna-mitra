@@ -1,0 +1,347 @@
+matplotlib is an amazing visualzation lib in python for 2d plots of arrays
+- matplotlib is a multi-platform data visualization lib built on numpy arrays and designed to work with the broader SciPy stack. It was introduced by John Hunter in the year 2002.
+- One of the greatest benefits of visualization is that it allows us visual access to huge amounts of data in easily digestible visuals.
+- Matplotlib consists of several plots like line, bar, scatter, histogram etc.
+
+
+custom colours, labels, title, statcis, interactive plots, among diverse field of datascience.
+
+
+Basic
+Plots of arrays and fields (bar,histogram, scatter plot, pie&linechart, tree chart)
+Statistics plots
+Unstructured co
+
+A bar chart is a graph that uses rectangular bars to represent data in 
+
+- s
+- displaying survey results
+- comparing categories
+- visualizing budget allocations
+- showing ranking like good, bad etc..
+############################################
+#importing matplotlib module:
+from matploglibt import pyplot as plt or
+import matplotlib.pyplot as plt
+
+
+from matploglibt import pyplot as plt or
+import matplotlib.pyplot as plt
+
+#data
+category = ['a','b','c'] 
+values =[23,45,88]
+
+#creating a bar
+plt.bar(category, values)
+plt.title('Bar chart')
+plt.xlabel('Category')
+plt.ylabel('Value')
+plt.show()
+
+A h
+
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+xpoints = np.array([0,6])
+ypoints = np.array([0,250])
+plt.plot(xpoints, ypoints)
+plt.show()
+
+############################################
+
+#Three lines to make our compiler able to draw:
+import sys
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+xpoints = np.array([0, 6])
+ypoints = np.array([0, 250])
+
+plt.plot(xpoints, ypoints)
+plt.show()
+
+#Two  lines to make our compiler able to draw:
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
+
+plot() function is used to draw points(marker) in a diagram
+by default, the plot() function draws a line from point to point
+the function takes parameters for specifying points in the diagram
+parameter 1 is an array containing the points on the x-axis
+parameter 2 is an array containing the points on the y-axis
+
+If we need to plot a line from  (1,3) to (8,10), we have to pass arrays[1,8] and [3,10] to the plot function
+
+############################################
+import sys
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+xpoints = np.array([1,8])
+ypoints = np.array([3,10])
+
+plt.plot(xpoints, ypoints)
+plt.show()
+
+#two lines to make our compiler able to draw:
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
+
+Marker:
+You can use the keyword argument "marker" to emphasize each point with a specified marker:
+Mark each point with a circle:
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+ypoints = np.array([3,8,1,10])
+plt.points(ypoints, marker = 'o')
+plt.show()
+
+Mark each point with a star:
+plt.plot(ypoints, marker = '*')
+
+#Three lines to make our compiler able to draw:
+import sys
+import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+ypoints = np.array([3, 8, 1, 10])
+
+plt.plot(ypoints, linestyle = 'dashed')
+plt.show()
+
+#Two  lines to make our compiler able to draw:
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
+
+############################################3
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.array([80,85,90,95,100,105,110,115,120,125])
+y = np.array([240,250,260,270,280,290,300,310,320,330])
+plt.plot(x,y)
+plt.xlabel("Average pulse")
+plt.ylabel("Calorie Burnage")
+plt.show()
+
+create a tile for a plot
+title() function to set a title for the plot
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.plot(x,y)
+plt.title("sports watch data")
+plt.xlabel("average pulse")
+plt.ylabel("calorie burnage")
+plt.show()
+
+set font properties for title and labels:
+----------------------------------------
+
+you can use the "fontdict" parameter in xlabel(), ylabel(), and title() to set font properties for the title and labels.
+  
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.array([80, 85, 90, 95, 100, 105, 110, 115, 120, 125])
+y = np.array([240, 250, 260, 270, 280, 290, 300, 310, 320, 330])
+
+font1 = {'family':'serif','color':'blue','size':20}
+font2 = {'family':'serif','color':'darkred','size':15}
+
+plt.title("Sports Watch Data", fontdict = font1)
+plt.xlabel("Average Pulse", fontdict = font2)
+plt.ylabel("Calorie Burnage", fontdict = font2)
+
+plt.plot(x, y)
+plt.show()
+
+Position the Title
+You can use the loc parameter in title() to position the title.
+
+Legal values are: 'left', 'right', and 'center'. Default value is 'center'.
+plt.title("Sports Watch Data", loc = 'left')
+
+#grid() function to add grid lines to the plot
+
+plt.grid(color = 'green', linestyle = '--', linewidth = 0.5)
+
+display only grid lines on y-axis:
+plt.grid(axis = 'y')
+
+display only grid lines on x-axis:
+plt.grid(axis = 'x')
+
+
+display grid lines lines on both x&y axis:
+plt.grid()
+
+##################################################################
+$display multiple plots
+
+with the subplot() function you can draw multiple plots in one figure:
+
+draw 2 plots:
+------------
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+#plot 1:
+x = np.array([])
+y = np.array([])
+plt.subplot(1, 2, 1)
+#the figure has 1 row, 2 columns, and this plot is the first plot.
+plt.plot(x,y)
+
+#plot 2:
+x = np.array([0,1,2,3])
+y = np.array([10,20,30,40])
+
+plt.subplot(1, 2, 2)
+#the figure has 1 row, 2 columns, and this plot is the second plot.
+plt.plot(x,y)
+plt.show()
+
+#Two  lines to make our compiler able to draw:
+plt.savefig(sys.stdout.buffer)
+sys.stdout.flush()
+
+##################################################################
+
+now we need to add a set of axes
+add_axes()
+(left, bottom, width, and height)
+- for layout or subplot we use this add_axes()
+- fig = plt.figure()
+ax = fig.add_axes([0.1,0.2,0.8,0.9])
+ax.plot(x,y,'puple')
+ax.set_xlabel('')
+ax.set_ylabel('')
+ax.set_title('')
+
+BOX PLOT:
+
+example1: scatter plot
+import seanorn as sns
+import matplotlib.pyplot as plt
+height = [62, 64, 69,75,..]
+weight = [120,136,148,175,137,165,154,172,200,187]
+sns.scatterplot(x=height, y=weight)
+
+example 2: create a count plot
+gender = ["Female","Female","Female","Female","Male", "Male", "Male", "Male", "Male", ... ]
+
+WORKING WITH DATAFRAMES
+-----------------------
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv("ABC.csv")
+sns.countplot(x="Categorical_column", data=df)
+plt.show()
+
+matplotlib is for highly customized plots
+diff bw functionalities, easy-to-use
+
+seaborn is built on top of matplotlib
+to enhance the visualizes like style, professional looks etc..
+
+no build in support for statistics in matplot
+but seabron for statistical visuzliation
+
+integrating is 
+
+matplot has more control
+
+seaborn is more advance than matplotlib
+
+example3: TIPS dataset
+import pandas as pd
+import seaborn as sns
+
+tips = sns.load_dataset("tips")
+tips.head()
+
+num,total_bill,tip,sex, smoker, day, time, size
+0,16.99,1.01, Female, No, Sun, Dinner, 2
+1,10.34,1.66, Female, No, Sun, Dinner, 2
+2,16.99,1.01, Female, No, Sun, Dinner, 2
+3,16.99,1.01, Female, No, Sun, Dinner, 2
+4,16.99,1.01, Female, No, Sun, Dinner, 2
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.scatterplot(x="total_bill", y="tip", data=tips)
+plt.show()
+
+# A scatter plot with hue
+sns.scatterplot(x="total_bill", y="tip", data=tips, hue= "smoker")
+--> here thrid variable to know how many smoker among them!!
+plt.show()
+
+Setting hue order
+----------------
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.scatterplot(x="total_bill", y= "", hue="", hue_order)
+
+Setting hue colors
+----------------
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+hue_colors = {"Yes":"black","No":"red"}
+
+sns.scatterplot(x="total_bill", y= "", hue="", hue_order)
+
+color, matplotlib name, matplotlib abbreviation
+
+displot for single variable distributions
+relplot for two variable comparisions
+
+
+##################################################################
+
+
+
+##################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

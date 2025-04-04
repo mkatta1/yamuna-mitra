@@ -1,0 +1,146 @@
+Timings:7pm to 9pm
+Duration: 3Months 
+Price : Rs 4999
+( Emi Available)
+Contact Numbers:
+9154083255
+
+What is Data Science in Telugu
+https://www.youtube.com/watch?v=ATgogrQWPFQ
+
+https://www.youtube.com/watch?v=xd39AJgAA80
+
+Pandas Power Full Library for data analysis:
+https://www.youtube.com/watch?v=zepfiunTHag
+
+Matplotlib and richest data EDA:
+https://www.youtube.com/watch?v=DOWdaecfRFw
+
+
+Full Stack Python Recorded Content
+
+What is Datascience?
+Datascience is the study of data to extract meaningful insights for business.
+
+The core of datascience is predictive model. The input to this predictive model is the past data. With probability may lie or may not with 100% accuracy.
+predictive models to predict future. An associate probability 
+create the model.
+To create predictive models we will be learning Machine Learning.
+AI talks about physical devices which are doing artificial tasks like human.
+more data then more accurate predictions.
+preprocessing --> ss--> constructing the model-->optimization of the model --> deployment of the model
+
+DS applies to both big and small data. interperts the knowledge using ML models.
+
+Minakshi Gautam's Expertise:
+Predictive modeling in marine maintenance
+Research on drone tech, specialized in the field of federated learning
+International research paper published in reputed journals like springer
+Researching on Google's Algorithm BERT(NLP)*
+
+
+phd, nlp, mtech, b.tehc cs
+
+An area that manages, manipulates, extracts, and interprets knowledge from tremendous amount of data
+Data science (DS) is multidisciplinary field of study with goal to 
+
+Lots of data warehoused
+- Web data, e-commerce
+- Financial transactions, bank/credit transactions
+- online trading and purchasing
+- social network
+
+Benefits of DS:
+--------------
+Identify opportunities, better decisions, improve performance, fight with competitors, target audiences, best practices, data analysis
+
+- google 20PB a day, facebook 60TB of daily logs, eBay 6.5PB of userData + 50TB/day, 1000 GENOMES project: 200TB
+- Cost of 1TB of disk: $35, Time to read 1 TB disk: 3 hrs (100 MB/s)
+
+big data has 3V's data velocity, data variety, data volume
+
+data variety and complexity: The diversity of sources, formats, quality, structures... etc
+semi structure data (xml) - graph data, social network, semantic web (RDF), streaming data
+
+What to do with these data?
+- Aggregation and Statistics: DataWarehousing and OLAP
+- Indexing, Searching, and Querying: Keyword based search, pattern matching(XML/RDF)
+- Knowledge discovery: Data Mining, Statistical Modeling
+
+perform statistics, knowledge discovery (data mining, statistical modeling)
+
+As a Data Scientist we have roles like:
+Statistician, data mining engineer, data analyst, ML engineer, business analyst
+
+Indexing, Searching, and Querying
+
+ML works with structured data
+Deep Learning works with unstructured data
+
+1.5 million predictive analysts by 2025
+
+1. statistical modelling
+2. python programming, excel, tableau
+3. Machine learning(structured data), deep learning(unstructured data images, text, audio)
+
+Predictive analysis:
+1. define problem statement
+2. data collection
+3. data cleaning
+4. data analysis
+5. build predictive model (after 70% accurate data model then send to next stage)
+6. validate the model (validate the above model)
+7. deployment
+8. monitoring the model
+
+What is AI?
+It is the sciend and engineering of making intelligen machines, especially intelligent computer programs. It is realted to the similar task of using computers to understand human intelligence, but AI does not have to confine itself to methods that are biologically observable.
+
+Neural Network, also known as artificial neural networks (ANNs) or simulated neural Networks
+
+Noisy Data --> Knowledge Insights --> Working Algorithms Applications
+
+ComputerScience: programming
+Maths : statistics, algebra, matrix
+business: growth, structuring, hierarchy
+
+DATA SCIENCE LIFE CYCLE
+1.Understanding the business problem --> 2.Preparing the data --> 3.Exploratory Data Analysis (EDA) --> 4.Modeling the data --> 5.Evaluating the model --> 6.Deploying the model--> BACK TO POINT 1.
+
+
+Data Science Road Map
+
+Basic Python --> Stats & probability --> Advanced python --> Data Visualizatio --> Machine Learning n --> Data Manipulation --> Deployment --> Deep learning --> projects --> Interview Preparation --> Placements
+
+
+Applications we use in data science:
+
+1.Customer analytics
+2. Fraud detection
+3. Risk Management
+4. Stcok prediction, stock recognition
+5. Image Recognition
+6. Speech Recognition
+7. healthcare, industries, education, manufacturing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

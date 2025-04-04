@@ -1,0 +1,46 @@
+diff bw thashinput and tbufferinput
+tAssert and tAssertCatcher
+tStatCatcher and statistics
+
+Pyspark: Reducebykey VS Groupbykey, Dataset VS dataframe, Coalesce, Map/FlatMap, No.of duplicates in table, row duplicates,
+joins in spark, spark architecture, YARN vs MapReduce, Broadcast variable, Adaptive query execution spark 3.0
+And all transformations and actions
+sortings explained: https://www.linkedin.com/pulse/spark-sql-3-common-joins-explained-ram-ghadiyaram/
+
+Interview questions:
+1)About Git setup and multiple users using the same code repo
+2)how did you handled the issues of job failures and error handling in pyspark
+3)
+All the articles are here of spark:
+https://www.linkedin.com/pulse/learn-apache-spark-databricks-step-guide-deepak-rajak/
+
+Adaptive Query execution, Data purning, colease:
+https://www.linkedin.com/pulse/spark-30-adaptive-query-execution-dynamic-partition-pruning-rajak/
+Lineage,shuffles,pipelines,tungsten,purning,predicate pushdown,constant pushdown
+https://www.linkedin.com/pulse/catalyst-tungsten-apache-sparks-speeding-engine-deepak-rajak/
+Memory management in spark:
+https://www.linkedin.com/pulse/apache-spark-memory-management-deep-dive-deepak-rajak/
+Everything about RDD:
+https://www.linkedin.com/pulse/anatomy-apache-sparks-rdd-deepak-rajak/
+Data Ingestion details:
+https://www.linkedin.com/pulse/generic-data-ingestion-process-apache-spark-deepak-rajak/?trackingId=ijT2%2FfV6ysjbYXP1oHuNow%3D%3D
+Joins in spark:
+https://www.linkedin.com/pulse/spark-sql-3-common-joins-explained-ram-ghadiyaram/
+When to Cache and Persist:
+
+Common use cases for caching are scenarios where you will want to access a large data set repeatedly for queries or transformations. Some examples include:
+
+1. DataFrames commonly used during iterative machine learning training.
+
+2. DataFrames accessed commonly for doing frequent transformations during ETL or building data pipelines.
+
+When Not to Cache and Persist:
+
+Not all use cases dictate the need to cache. Some scenarios that may not warrant caching your DataFrames include:
+
+1. DataFrames that are too big to fit in memory.
+
+2. An inexpensive transformation on a DataFrame not requiring frequent use, regardless of size
+
+As a general rule we should use memory caching judiciously, as it can incur resource costs in serializing and deserializing, depending on the StorageLevel used.
+

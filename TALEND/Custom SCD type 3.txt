@@ -1,0 +1,41 @@
+Custom SCD type 3:
+truncate table stg_customer;
+
+Note: stg_customer stage table gets truncated all the time in a project. 
+
+cust_key, cust_id, cust_name, cust_loc, cust_loc_prev
+2, 1, Mr ABCD, Hyderabad, null
+
+cust_key, cust_id, cust_name, cust_loc, cust_loc_prev
+2, 1, Mr ABCD, Bangalore, Hyderabad
+
+cust_key, cust_id, cust_name, cust_loc, cust_loc_prev
+2, 1, Mr ABCD, India, Bangalore
+
+No changes to job building like SCD TYPE 2. Only change would be filter conditions on the insert and update components
+
+In Insert Component, Var.cust_check.equals("New")
+Cust_loc_prev = ""
+
+In Update component, 
+Var.cust_check.equals("Old") && Var.loc_check.equals("Diff")
+cust_loc = row1.cust_loc
+cust_loc_prev = row2.cust_loc
+Here row2.cust_loc is the lookup Dim_customer column
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

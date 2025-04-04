@@ -1,0 +1,837 @@
+HOW TO ACQUIRE BANKING/CAPITAL MARKET/ INVESTMENT BANKING DOMAIN KNOWLEDGE?
+www.moneycontrol.com
+clear NCFM exams
+www.investopedia.com
+www.investing.com
+www.binance.com
+www.coinmaketcap.com
+
+
+In Jira, Burnup charts are located in projects -> select the project --> Reports --> select Burnup Chart 
+
+Agile estimation: It is the process for estimating the effort required to complete a task in the product backlog.
+Types of estimation: Absolute and Relative Estimation
+
+- Absolute Estimation is done using a fixed unit of measurement
+- Each story is estimated independently in No of hours or no of days only by the members who is working on it.
+
+User Story:
+-----------
+AS A User
+I WANT to have online Student enquire form
+SO THAT I can get enquiries from students
+
+members, estimation
+john developer, 5 hours
+Mary QA, 1 hour
+Total, 6 hours
+
+UNKNOWN FACTORS work gets effected
+- technical uncertainties
+- emergency leave of john
+- learning time
+-- effects the sprint goal
+-- effects the product delivery
+-- not finishing task in time will generate stress to the developer who estimated the story
+
+We can solve the above problem using Relative Estimation
+
+RELATIVE ESTIMATION
+-------------------
+Relative estimation is the process of estimating task completion, not by units of time or no of days, but rather by comparing with other tasks in terms of:
+- complexity, risk, implementation, deployment, interdependencies
+Each task is estimated by all the members in the team like 1,3,5,8,11 points.
+1 point may be equal to 5 hours or 8 hours
+
+Advantage of relative estimation:
+- more flexible in nature
+- no single person will be responsible for estimation
+- it gives chance for requirement changes
+- it gives time for learning due to technical uncertainities
+
+CAPACITY PLANING IN AGILE:
+=========================
+Capacity planning is the type of planning which helps scrum teams to understand how many story points they can accomplish within each sprint.
+
+Filling Backlog --> Backlog Refinement --> Release Planning 
+		-----------------------------
+			||
+			\/
+Sprint Planning <--> Sprint Review & Retrospective <--> On going sprint <-->
+               -------------------------------
+			||
+			\/
+		Testable Product
+
+
+Capacity Planning
+-----------------
+Product Backlog
+
+User Stories, Estimation
+------------------------
+User Story 1, 8 points
+User Story 2, 8 points
+User Story 3, 4 points
+User Story 4, 8 points
+User Story 5, 4 points
+User Story 6, 13 points
+User Story 7, 8 points
+User Story 8, 8 points
+User Story 9, 4 points
+
+Sprint planning
+---------------
+
+Things to consider while doing capacity planning
+------------------------------------------------
+- duration of the sprint
+- public holidays within the sprint
+- planned holidays of each members within the sprint
+- percentage of allocation of each member to the team
+- time spent by member to attend scrum ceremonies/meetings
+- time spent by each member in learning and development
+
+ACTUAL AVAILABILITY OF EACH MEMBER:
+-----------------------------------
+Actual Availability of Peter assuming that he is allocated 100 percent to Team
+
+Deduction Factors, Deduction in Hours
+--------------------------------------
+Time spent for learning and development -- 15%, 15% of 72 hours = 10.8 hours
+Time spent for attending Scrum Ceremonies -- 10%, 10% of 72 hours = 7.2 Hours
+Planned leaves - 1 day, 8 hours
+Total Deduction, (10.8 + 7.2 + 8) =26 Hours
+
+------------------------------------------------------
+Sprint Duration, 14 Days
+Weekend holidays, 14-4 = 10days
+public holidays, 1 day(8 hours)
+max available hours for each per in this sprint, 9 * 8 = 72 hours
+
+------------------------------------------------------------
+Actual hours available for peter in sprint 2
+
+Maximum available hours - total deduction of peter
+72 hours - 26 hours = 46 hours
+
+-----------------------------------------------------------------
+==================================================================
+SCRUM PRODUCT OWNER:
+------------------- 
+- a scrum product owner is member of the scrum team
+- a scrum product owner is a person who is accountable for maximizing the value of the product resulting from the work of the scrum team
+- He acts as a liaison/communication bridge between requirement sources and the development team
+
+[Business owners, end users, market research]
+		|| Product Owner
+		\/
+
+scrum team members: product owner, scrum master, business analyst, developers, QA/Testers, Design members
+
+
+Roles and Responsibilities:
+--------------------------
+To create:
+- product vision
+- product strategy
+- product road map
+
+Managing the product backlog:
+- breaking down requirements into epics and user stories
+- prioritize the backlog
+- to have all the information in the user stories
+
+Overseeing development stages:
+- release planning
+- refinement
+- sprint planning
+- daily stand up
+- accept or reject the story
+- sprint review
+- sprint retrospective
+
+CREATE PRODUCT VISION, STRATEGY AND ROADMAP
+-------------------------------------------
+Product Vision:
+It describes the future state that would be achieved by developing and deploying a product.
+
+Product Strategy:
+It is plan on how to achieve the product vision
+
+Product Roadmap:
+Is a high-level vision timeline of the product development, It shows how a product or solution will develop over time. Roadmaps are useful for planning, prioritizing, and measuring progress of the product build.
+
+		PRODUCT ROADMAP TITLE
+			Roadmap Tagline
+	MILESTONE	MILESTONE	MILESTONE	MILESTONE
+	milestone	milestone	milestone	milestone
+	description	description	description	description
+Breakdown High Level Requirements to Epics and Further down to User Stories
+Adds to Product Backlog
+	||
+	\/
+MANAGING THE PRODUCT BACKLOG
+----------------------------
+Product Backlog			Product Backlog
+Epics, User Stories		Epics, User Stories
+Epic1, User Story1		Epic2, User Story5
+Epic1, User Story2		Epic2, User Story6
+Epic1, User Story3 ------\	Epic2, User Story7
+Epic1, User Story4 PRIORITY	Epic2, User Story8
+Epic2, User Story5 BACKLOG	Epic1, User Story1
+Epic2, User Story6 ------/	Epic1, User Story2
+Epic2, User Story7 		Epic1, User Story3
+Epic2, User Story8		Epic1, User Story4
+Epic3, User Story9		Epic3, User Story9
+Epic3, User Story10		Epic3, User Story10
+Epic3, User Story11		Epic3, User Story11
+Epic3, User Story12		Epic3, User Story12
+
+					||
+					\/
+
+Makes sure that each user story will have all the required information	
+		||
+		\/
+Information in each User Story:
+------------------------------
+- Scope
+- Acceptance Criteria
+- Pre-condition
+- UX/UI Link
+- Supporting Images
+- Supporting Documents if any
+
+
+Release Planning
+-----------------
+  Based on the velocity of the team
+  ----------------------------------
+- which feature can be released will be decided
+- the epics which are part of this feature will be decided
+- how many sprints is required to release this feature will be decided
+- duration of each sprint will be decided
+
+Release 1: Feature 1: 3 months - Epic 1,2,3
+-------------------------------------------
+Sprint 1, Sprint 2, Sprint 3
+Duration: 1 month, Duration: 1 month, Duration: 1 month
+
+Refinement - Communicating Requirements to Development Team
+-----------------------------------------------------------
+- Product owner explains user stories to Dev Team
+- splitting of user stories if required
+- he removes user stories that no longer required
+- estimate user story (add story points by dev team)
+
+Sprint Planning:
+---------------
+- the product owner describes the objective(or goal) of the sprint
+- product owner will decide on the user stories which is required to be taken into the sprint to achieve the sprint goal
+- product owner will answer any clarification raised by the development team regarding the user stories taken in the sprint
+
+PRODUCT BACKLOG 	--> SPRINT BACKLOG
+Epic2, Epic1, Epic3 	    Epic2, Epic1
+
+OVER SEEING DEVELOPMENT STAGES
+------------------------------
+  ATTENDS DAILY STAND UP
+  ----------------------
+- to clarify if any questions arises from the team regarding the user stories in the sprint
+- to understand the progress being made on the user stories in the sprint
+- to help the team if any blockers/Impediments arises
+
+  ACCEPT/REJECT THE USER STORY
+  ----------------------------
+
+|-------------------Scope & AC Not Met-------No----|
+						  \/
+Story is Developed ----> Story is Tested ---> PO Verify Story -----yes----> PO Sign off story -----> Story is Done
+
+---------------------Scope & Ac Met--------------
+
+
+Sprint Review
+A sprint review is a meeting held at the end of a sprint, during which the team show what was done in the sprint to the stakeholders
+- the product owner invites the required stakeholders to showcase them the features developed in the sprint to get feedback
+- to use the feedback in upcoming sprints
+
+Sprint Retrospective:
+Sprint Retrospective is a meeting held at the end of a sprint to discuss what went well during the previous sprint and what can be improved for the next sprint.
+- the product owner understand "" and "" in the previous sprint and he will accordingly help the team to set up the action plan for next sprint
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------
+================================================================== 
+
+
+
+Requirement Gathering techniques:
+Interviews
+Questionnaires or Surveys
+Document Analysis
+User Observation
+Workshops
+Brainstorming
+
+preparation for 1-1 interview:
+- research about the client/person whom you are about to meet
+- define the objectives of the meeting
+- determine the location/line of the meeting
+- send a meeting invite at least 3 to 4 days prior
+- determine how requirement is captured in the meeting
+- ***Be prepared to record the meeting for further reference
+
+Product level ----------- Themes/Large Epic
+Release level ----EPIC 1/Feature 1 and EPIC2
+Sprint level -----Story1 Story2 Story3
+Daily level ------  Task1 Task1
+
+Eg: A school has large EPICs like LOGIN, Attendance, Finance modules 
+
+Create Issue
+Project: school management software
+Issue Type: Epic
+Summary: Development of Login Module for School Management Software
+Description:
+Epic Description--To create login module for school mngt software
+Desired outcome and/or benefits:
+all the users will be able to successfully access the school mngt software with secure login
+Business Value:
+It increases the revenue and secures the information of school mngt
+In Scope
+Prerequisite/Precondition
+
+Theme describes the large focus area (it's a collection of EPIC's that derive a common goal and business value can be best estimated at this level!!)
+EPIC describes the components of vision or product goal. It's a large chunck of work which cannot be delivered in one sprint.
+A small EPIC may be with 2 Sprints to complete it.
+Backlog Refinement ???????????????????
+LARGE EPIC's might take a quarters or years which requries POs leadership.
+
+What is a User Story?
+- Simple, clear, short description of customer valued functionality
+- User stories capture Who, what and why of any requirement
+INVEST - independent negotiable valuable estimable sizeable small to be completed in a sprint testable
+
+User story template:
+===================
+title:					priority:
+as a [type of user], I want [goal] so that
+
+[value]
+
+notes:
+assumptions:
+constraints:
+
+Eg:
+checkout using credit card
+as a book shopper, I can checkout using my credit card so that I can purchase a selected book.
+
+notes: support master card, visa, amex
+constraints: must use bank of America bank payment gateway
+estimate: 13 pts
+priority: 25
+
+BDD - behaviour driven development
+
+Acceptance criteria:
+-------------------
+checkout using credit card
+- test with valid master card, visa, amex - passes
+- test with valid other cards - fails
+- test with expired cards - fails
+- test with invalid cvv - fails
+- test with invalid zip - fails
+
+what I want, validate this work, code this feature, details of this feature
+
+Additional documentation:
+--------------------------
+- the conversation might lead to additional documentation
+- just in time documentation
+- just enough documentation
+- HLD document
+- detailed design document
+- test plan
+- use cases
+when to split user stories
+--------------------------
+- split stories that are dependent on each other
+- split stories that are too big
+- split stories into spikes if complex or risky
+- split compound stories
+- a good rule of thumb is to watch out for conjunctions:
+  - as a restaurant seeker I need to be able to find a restaurant that fit my taste and budget and is close to my location and that makes online reservations so that I can plan a dinner outing with friends.
+
+SHOULD NOT HAVE MORE THAN 8 story points!
+
+break epics into stories
+- as a frequent flyer I want to book flights customized to my preferences, so I save time
+note: ask further questions to breakdown into more stories
+- as a frequent flyer I want to book a trip using miles so that I can save money
+- as a frequent flyer I want to easily book a trip I take often so that I can save time
+- as a premium frequent flyer I want to request an upgrade so I can be more comfortable
+
+how to split user stories
+--------------------------
+- stories should represent some level of end to end functionality
+- do not split into task like design, code frontend, code middle tier, code backend
+- deliver cohesive subset of all layers
+- do simplest thing that could possibly work
+
+User story consists of:
+summary
+user story
+scope
+pre-requisite
+acceptance criteria
+UI/UX Attachment
+
+
+
+As a <user role>
+I want <goal>
+so that <benefit>
+
+project name; school management software
+requirement; to develop a login functionality for student in school management software
+Scope:
+Precondition/Pre Request:
+Acceptance Criteria:
+Scenario 1:
+Scenario 2:
+Scenario 3:
+Scenario 4:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Types of Banks:
+---------------
+Saving
+commercial -- for business people to give short term loans
+Industrial banks -- industrial/ development banks are collecting money by issuing shares and provide the long term loans
+land mortgage --- land development banks which give finance the agricultural sectors 
+central/ federal/ -- Reserve bank of India / Reserve bank of Australia they doesn't deal with the public  but with the other banks
+national
+co-operative --- gives credit to small farmers, small scale industries, or employees
+exchange ---- related with the foreign trade, like remittance , gold, silver, helping import and export trade
+consumers ---only seen in rich nations like US, Germany for customers who buys TV, CARS, WASHING MACHINE ETC.. repayment is in easy installments
+
+Types of bank accounts
+----------------------
+
+savings accounts---- 
+certificates of deposit--- like FDs, 
+checking accounts or--- 
+current accounts
+money market deposit accounts ??????--- with high minimum balance, personal loans with high rate of interest
+
+Types of loans
+--------------
+Personal Loan
+Home Loans
+property loan
+business loan
+vehicle loan
+education loan
+
+types of deposits
+-----------------
+savings account--- we don't earn interest here
+current account---we earn interest here
+fixed deposit
+Recurring------ we get interest for the recurring deposits of every month  
+Deposits
+
+Other terminology
+-----------------
+Account balance
+adjustable rate
+APR--- Annual Percentage Rate i.e. yearly interest paid by the borrowers 
+APY
+assets
+ATM fees
+auto loan
+ACH
+ATM card
+available balance
+balance due
+beneficiary
+certificate of deposit
+checking account
+credit card/limit/score/rating
+current balance
+debit
+deposit
+early withdrawal
+penalty
+eBills
+ECP/EDV/EFT/EMV
+external accounts
+FDIC
+Fixed rate
+HELOC
+Indexed rate
+
+
+
+Investment banking: It helps individuals or organizations raise capital and provide financial consultancy services to them
+- Related to the creation of capital for other companies, governments, and other entities.
+
+Functions of Investment Banking:
+--------------------------------
+- They act as intermediaries between security issuers and investors and help new companies to go public. They provide various types of financial services.
+i) trading or trading securities (exchange of money and securities)
+ii) mergers and acquisitions
+iii) advisory which involves helping organizations in M&As,;
+iv)  new issues or IPOs, where these banks help new firms go public.
+largest investment banks
+-------------------------
+- Bank of America
+- Barclays Capital
+- Citigroup Investment Banking
+- JP Morgan
+- Goldman Sachs
+- Morgan Stanley
+- Citigroup
+- UBS
+- Credit Suisse
+- and many more are there
+
+Initial Public Offering(IPO)
+- An initial public offering () is the first time a company issues shares to the public. This is when a private company decides to go 'public'
+- It could be a new, young company or an old company which decides to be listed on an exchange and hence goes public
+- IPOs provide companies with an opportunity to obtain capital by offering shares through the primary market.
+- Companies hire investment banks to market, gauge demand, set the IPO price and date, and more.
+- The company which offers its shares, known as an 'issuer'
+- After listing on the stock exchange, the company becomes a publicly-traded company and the shares of the firm can be traded freely in the open market.
+
+Need of IPO
+- To raise capital for growth and expansion of company
+- Allowing owners and early investors to sell their shares to make money
+- Greater public awareness
+
+What is the IPO procedure?
+- Selecting an investment bank - decide value of company and share
+- Creating the prospectus: it includes financial records, future plans for the company, potential risks in the market and expected share price range
+- SEBI approval: Securities and Exchange Board of India (SEBI) depending upon prospectus it gives approval and tell date and time. If reject tell to change prospectus
+- Stock exchange approval: Listing is the process where securities are allowed to deal on a recognized stock exchange e.g BSE/NSE
+- Subscription of shares: Investors who wish to apply for shares have to fill out and submit the IPO application form
+- Listing- The shares are allotted to different investors based on the demand and price quoted in their IPO application forms.
+
+How is an IPO issued?
+- During an initial public offering (IPO), a company issues its shares to public shareholders for the first time
+- The shares are allotted to different investors based on the demand and price quoted in their IPO application forms. Once this is done, investors get the shares credited to their demat account. In case of oversubscription means if the demand for shares is higher than the number of shares investors may not get the number of shares they originally wanted. They may get fewer shares after a lottery is done. Some investors may not even get any shares. In such cases, these investors get a refund of their money.
+
+
+1. what is share/stock/equity
+- a share represents a unit of equity ownership in a company
+- if you are a shareholder of a company, you hold a percentage of ownership of the issuing company in proportion to the shares you have bought.
+- a stock (also known as equity) is a security that represents the ownership of a company. Units of stock are called "shares."
+
+2. types of share
+- common stock is a security that represents ownership in a company
+- in a liquidation, common stockholders receive whatever assets remain after creditors, bondholders, and preferred stockholders are paid.
+- these shares typically come with voting rights
+- this type of share gives certain preferential rights as compared to other types of share
+- they get first preference when it comes to the payout of dividend, i.e. a share of the profit earned by the company
+- no voting rights
+- in a liquidation, preferred stockholders have a greater claim to a company's assets and earnings.
+
+3. common share vs preferred
+having company ownership; 	having company ownership
+voting rights; 			no voting rights
+dividend is variable; 		dividend is fixed
+In the event that a company goes bankrupt, the preferred shareholders need to be paid second;
+				In the event that a company goes bankrupt, the preferred shareholders need to be paid first
+
+The returns of a common share are most commonly based on the increase or decrease of the share price, including an optional dividend paid out.
+				Returns on a preferred share are mainly based on its mandatory dividends.
+
+
+What is CAPITAL MARKET?
+CAPITAL MARKET has Primary Market and Secondary Market
+
+Primary Market has company and Investors(here the shares/ipo's are sold only once ???????)
+		||
+		\/
+	Stock Exchange
+		||
+		\/
+	Secondary Market
+	
+
+Payment gateways are software and servers that transmit transaction information to acquiring banks and responses from issuing banks (such as whether a transaction is approved or declined)... Payment gateways usually charge those who use them a per transaction fee
+
+A payment gateway is the technology that captures and transfers payment data from the customer to the acquirer.
+
+A payment gateway is what keeps the payments ecosystem rolling smoothly, as it enables online payments for consumers and businesses.
+
+what is Insurance? Type of Insurance
+Insurance is defined as the equitable transfer of the risk of a loss from one entity to another in exchange for payment. Insurance company, which sells the policy is referred as INSURER while the person or company who avails the policy is called the INSURED.
+
+what is premium? how is premium calculated?
+premium is defined as the amount to be charged for a certain amount of insurance coverage or policy the insured has bought.
+Premium for the insurance is determined by on the basis of two factors
+The frequency of claims
+The severity of claims (cost of each claim)
+
+Different sectors like Life Insurance, Automobile Insurance, Property Insurance, Health Insurance etc.
+On the other hand, there are some complex functionalities involved like policy administration, claim, underwriting etc., which make the insurance domain much different from the other domains.
+
+Importance of testing
+- creating a new policy till the final claims settlement
+- application is fit for use end to end flow
+- testing a n insurance domain application is necessary to ensure if the insurance product is as per the local customer requirements or not.
+- The insurance industry is widely divided into various sub-industries like Life, Auto, Property, and Health etc. Each sub-industry has different functional areas and modules to be tested.
+
+Insurance company is spread across different business areas like Policy Administration, Underwriting, Claim Management System etc. Each area has its own process and standards to be followed.
+
+Testing of claim admin system involves:
+- claim life cycle
+- claim assessment
+- claim processing and transaction
+- policy surrender processing
+- maturity processing
+- payout set-up
+
+Few functionalities are listed below
+- policy workflows or policy life cycle
+- financial and non-financial transactions
+- document management and processing
+- coverage change
+- premium due date alert
+- cancellation, renewals of policies
+- modification of customer personal details
+- policy lapse processing
+
+Risk Management plays a key role in the success of any insurance company
+From the testing perspective the following pointers are to be considered while testing:
+- quick and detailed quote to their customers
+- Provide benefit details to the customer
+- check the rate system structure of the competitors
+- batch job schedule and run
+
+Tips to Test Insurance Domain Application
+1) Role management
+2) Information Interface:
+While testing an insurance application, you need to verify if the information is updated correctly through the front end as well as stored successfully in the back-end system or database. Also, the saved information is fetched without any error on the front end of the database
+3) Number Factor:
+Insurance is a number game and many entities in the insurance domain are sensitive to these numbers.
+A small change in the premium may cause a big difference in the end result. So check all the decimal points and appropriate math calculations are important in insurance application testing.
+4) date factor:
+dates are as well very much crucial in the insurance application.
+Effective Date
+
+- Quote gets generated and the customer accepts those quotes.
+- policy number is generated with an appropriate plan in it.
+- all personal details and policy details are updated in the policy admin system.
+- members and their dependents are enrolled under the respective policy.
+- an appropriate commission is generated in the system.
+- brokers must be able to view their customer's information through the front end application.
+- customers must be able to view and modify their details through the online portal.
+
+Performance Testing in Insurance Domain
+---------------------------------------
+100% test coverage for your software ---> guarantee ---> faster time to market ---> continuous assurance ---> pay as you go pricing
+
+Test Scenarios for Insurance Application Testing
+------------------------------------------------
+- verify if the customer is able to enroll in the policy benefits successfully.
+- verify if the system allows modifying the existing policy for the addition of a new coverage or plan. 
+- verify if the system is able to modify or update the customer's personal details.
+- The system should be able to cancel the policy.
+- verify if the Agent's commission is calculated correctly.
+- verify if the when the payment is made more than the amount to be paid then the extra amount should be reverted back to the customer.
+- verify if the system is able to process the payment using NEFT, Cheque method etc. 
+- verify if the process of annuitant change is completed successfully.
+- verify if a New Payee is successfully updated in the system. 
+- verify if any error message is displayed while adding incorrect rider code in the policy.
+- verify if the Riders are added successfully to the existing policy.
+- verify if the member enrollment is processed successfully for a policy.
+- verify if the rates are generated as per the policy plan and structure.
+- verify if the policy generated in the Agent system is automatically available in the quoting system.
+- verify if the policy amendment is processed successfully.
+- verify if the In force Coverage on the policy.
+- verify if the policy can be searched using the policy number or the policy name.
+- verify if policy renewal is processed successfully as per the customer's request.
+- verify if the proposal is generated successfully for the associated policy plans and sent to the policy holder.
+- verify if the claim is processed successfully.
+- verify if the policy effective date is updated by adding a new plan.
+
+Integration Testing: Under Integration Testing all components that are developed are integrated and validated.
+
+Usability Testing: It ensures that differently able people should be able to use the system as normal user. For example, ATM with the hearing and Braille facility for disabled.
+
+Functional Testing: the usual software testing activities like TEST CASE preparation, test case review and test case execution is done during this phase.
+
+Security Testing: It ensures that the software does not have any security flaws. During test preparation, QA team needs to include both negative as well as positive test scenarios so as to break into the system and report it before any unauthorized individual access it. While to prevent from hacking, the bank should also implement a multi-layer of access validation like a one-time password. For SECURITY TESTING, automation tools like IBM APPSCAN and HPWebInspect are used Manual Testing tools like Proxy Sniffer, Paros proxy, HTTP watch, etc. are used.
+
+User Acceptance Testing: It is the final stage of testing done by the end users to ensure the compliance of the application with the real world scenario.
+
+Advantages and Disadvantages of Usability Testing...
+
+Sample Test Cases:
+For New users
+- Create a new user with valid and invalid data
+- Create a new user without data
+- Create a new user with existing branch data
+- Verify cancel and reset option
+- Update user with valid and invalid data
+- Update user with existing data
+- Verify cancel option
+- Verify deletion of the user
+
+For Admin:
+- Verify Admin login with valid and Invalid data
+- Verify Admin login without data
+- Verify all admin home links
+- Verify Admin change password with valid and invalid data
+- Verify Admin change password without data
+- Verify Admin change password with existing data
+- Verify Admin logout
+
+For customers and visitors
+- Verify all visitor or customer links
+- Verify customers login with valid and invalid data
+- Verify customers login without data
+- Verify banker's login without data
+- Verify banker's login with valid or invalid data
+
+Project Explanation of the Banking Project
+Approach
+Methodology
+Testing Phases
+Importance of testing
+
+
+
+
+
+
+1. What is Investment Bank
+2. what is the role of Investment Bank?
+3. what is merge and Acquisition?
+4. what is capital market
+5. what is primary market and secondary market
+6. what is IPO
+7. what is issue price
+8. what is trading
+9. what are types of security/asset
+10. what is share/equity/stock
+11. different types of share
+12. what is bond and its type
+13. what is mutual fund
+14. what is SIP
+15. what is mean by commodities and its type
+16. what is mean by currency market
+17. what are different order type
+18. what are different product type
+19. what is mean by stock exchange
+20. what is portfolio
+21. what is mean by derivative
+22. what is option and type
+23. what is premium value
+24. what is future
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

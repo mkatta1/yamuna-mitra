@@ -1,0 +1,79 @@
+Youtube video on pipeline creation using metadata from unitycatalog: https://www.youtube.com/watch?v=e95cdl_tfYM
+
+
+select s.name SchemaName, t.name TableName, 'select' + string_agg(case when st.name = 'geography' then null else '[' + c.name)
+from sys.schemas s
+join sys.tables t on t.shchema_id = s.schema_id
+join sys.columns c on c.object_id = t.object_id
+join sys.types st on st.user_type_id = c.user_type_id
+where t.name not in ('test')
+group by s.name, t.name
+order by 1,2
+
+select d.FQDN, d.DatabaseName,
+( 
+	select string_agg('''' + TableName + '''',',') from 
+	(
+		select TableName from TableExclusions
+	) as sub
+) as TableNameNotIn
+from SQLDatabases d
+Order by d.FQDN,d.DatabaseName
+
+Lookup(execute the above query)--> Execute Pipeline
+
+Parameters: 
+FolderName = @item().DatabaseName
+FQDN = @item().FQDN
+DatabaseName = @item().DatabaseName
+TableNameExclusions = @item().TableNameNotion
+
+
+
+
+
+Create with Power User Compute
+Create with Legacy Shared Compute
+
+To save cost, you can choose to use spot instances, also known as Azure Spot VMs by checking the Spot instances checkbox.
+
+GPU instance types graphics processing units (GPUs) but associated with like deep learning
+Autoscaling is not available for spark-submit jobs.
+Compute auto-scaling has limitations scaling down cluster size for Structured Streaming workloads. Databricks recommends using Delta Live Tables with Enhanced Autoscaling for streaming workloads.
+
+Spark configuration: https://spark.apache.org/docs/latest/configuration.html
+
+Databricks Runtime 13.3 LTS and above with Unity Catalog
+Store init scripts in Unity Catalog volumes.
+
+Databricks Runtime 11.3 LTS and above without Unity Catalog
+Store init scripts as workspace files. (File size limit is 500 MB).
+
+Databricks Runtime 10.4 LTS and below
+Store init scripts using cloud object storage.
+
+
+
+Best practices for guide: https://learn.microsoft.com/en-us/azure/databricks/clusters/cluster-config-best-practices
+
+Instance pool creation: https://learn.microsoft.com/en-us/azure/databricks/clusters/pools
+
+Default Policies:
+
+Long Term Support (LTS)
+Job Compute
+Legacy Shared Compute
+Personal Compute
+Power User Compute
+Shared Compute
+
+
+
+
+
+
+
+
+
+
+

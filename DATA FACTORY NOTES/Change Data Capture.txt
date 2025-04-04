@@ -1,0 +1,170 @@
+there are two types of CDC's in ADF. 
+
+**************************** TYPE 1 ****************************
+
+Traditionally if we enable CDC feature on a DB & Table then it would help to make CDC. This CDC feature helps to log, have separate tables for (Table Valued Functions & Tables)
+
+Note: So if the source has the capability then make use of it!
+
+Also we have a technique of watermark to do this i guess!
+
+Example:
+
+SourceTable: citizens
+1, maheer
+2, wafa
+
+SinkTable: citizensDW
+1, maheer
+2, wafa
+
+Step1:
+Enable cdc on both database and tables
+
+Check it now:
+
+Q)select name, is_cdc_enabled from sys.databases
+A) name, is_cdc_enabled
+   master, 0
+   sqldb-maheer, 0
+
+Enable CDC for SQL DB and table
+
+EXEC sys.sp_cdc_enable_db
+GO
+
+EXEC sys.sp_cdc_enable_table
+@source_schema = 'dbo',
+@source_name = 'citizens',
+@role_name = NULL,
+@supports_net_changes = 1
+
+To check if cdc is enabled
+
+select name, is_cdc_enabled from sys.databases
+
+select name, is_tracked_by_cdc from sys.tables
+
+Note: So from the above only source table is enabled for CDC
+
+All objects to manintain or track the changes happend there can be captured_columns, cdc_jobs, change_columns, change_Tables, ddl_history, index_columns, lsn_time_mapping
+
+
+Step2:
+In dataflow, select "source" transformation. Go to source options --> changeDataCapture ---> Type (1.Incremental column, 2.SQL Server CDC)
+			Column name:
+			Run mode: Incremental changes only (OR)
+				  Full on the first run, then incremental
+
+Here recomended way is rely on "2.SQL Server CDC: because it is a native capability. Also rely on "Full on the first run, then incremental"
+
+
+Step3:
+Select Sink table: citizendsDW
+In Sink transformation, Go to Settings Update method: I,D,Upsert, Update
+
+Key columns: List of columns = the primary key column
+
+Step4:
+In pipeline, select the DataFlow transformation containing this sink & source
+In Settings, Checkpoint Key helps you to keep the checkpoint for the previous executions and let us know what are all the changes happened!
+
+Step5:
+Checking the cdc job
+
+INSERT INTO dbo.citizens VALUES(3,'asi')
+UPDATE dbo.citizens SET NAME = 'maheer basha' WHERE id =1
+DELETE dbo.citizens WHERE id = 1
+
+
+**************************** TYPE 2 ****************************
+But before doing this first we need to do COPY ACTIVITY to do a full load copy from source to destination.
+Because if full copy is not done at target level before then CDC then it will not capture the changes happend to the source before CDC process is enabled.
+
+
+Change Data Capture (preview) in ADF --> click on New CDC (preview)
+--> Choose your sources
+CDC NAME: adfcdc1
+SOURCE TYPE: Azure SQL Database
+SOURCE LINKED SERVICE: Azure Sql Database1
+Source tables: dbo.citizens (SQL Server CDC)
+
+Target Type: Azure SQL Database
+Target linked service: Azure Sql Database
+Existing entities: target table
+
+Step2: Disable the automap to get the "column mappings" options. now this column mappings options.
+
+Instead of direct mapping, if we want to make any transformations other than the primary key column. We can do like First, Last, Standard Deviation, Average, Mean, Trim, Upper, Lower, Advanced
+Aggregate (Sum, Minimum, First, Last)
+
+
+Set Latency: In what kind of interval you want to check the data from source and move them.
+
+Options: Real-time, 15 minute, 30 minute, 1 hour, 2 hour
+
+
+Step3: While executing the CDC pipeline we can check the changes in the "Monitor Tab" --> Change Data Capture (preview) tab --> click on cdc_pipeline --> See changes Read & changes Write
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

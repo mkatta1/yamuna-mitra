@@ -1,0 +1,36 @@
+In standard edition, SQL support service is not available for the below:
+query accelartion, search optimization, materialized views
+
+Data replication & fail over:
+failover and failback
+redirecting client connections
+
+compute resource management:
+multi-cluster virtual warehouse
+
+extended time travel (upto 90 days)
+preiodic rekeying of encrypted data, column-level security, row-level security, object tagging (tags for resource usage tracking), access_history to audit through account usage, sooooo ooooon.....
+
+Overview of the Snowpipe REST endpoints to load data:
+https://docs.snowflake.com/en/user-guide/data-load-snowpipe-rest-overview
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

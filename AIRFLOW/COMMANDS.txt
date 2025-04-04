@@ -1,0 +1,12 @@
+command: venv\scripts\activate.bat
+
+source venv/bin/activate
+
+another command:
+(venv) C:\Users\mitra\dev\localairflow>pip install -U apache-airflow
+Collecting apache-airflow
+
+(venv) C:\Users\mitra\dev\localairflow\airflow
+
+
+(venv) C:\Users\mitra\dev\localairflow\airflow

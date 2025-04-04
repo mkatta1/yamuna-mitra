@@ -1,0 +1,7 @@
+Use Unity Catalog with your Delta Live Tables pipelines:
+https://learn.microsoft.com/en-us/azure/databricks/delta-live-tables/unity-catalog
+
+-- Databricks notebook source
+SELECT *
+  FROM formula1_dev.information_schema.tables
+ WHERE table_name = 'results';

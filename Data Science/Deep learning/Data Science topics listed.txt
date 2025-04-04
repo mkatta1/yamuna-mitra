@@ -1,0 +1,127 @@
+Automation experience using Python
+Natural Language Processing experience would be desirable
+Time series real time data processing would be ideal
+Markov chain experience is a desirable
+Scikit-learn, spacy and PyTorch experience would be a bonus
+
+Design, development and implementation of AI systems, with focus on NLP and LLM applications
+Engage and collaborate with internal and external stakeholders to shape AI system requirements
+Identify opportunities for implementing AI and ML in our operations and implement them
+Develop and refine algorithms to improve process efficiency and effectiveness
+Monitor model performance and continuously improve accuracy and reliability
+Staying up to date with developments in AI and ML, and incorporating new techniques and technologies into our AI system design
+Experience in NLP (including traditional NLP and NLU algorithms) and LLMs is essential
+Experience in platforms such as Snowflake, S3 and Sagemaker (beneficial)
+Familiarity with operations research techniques (linear programming, combinatorial optimisation, simulation) is well regarded
+Exceptional analytical and problem-solving skills and a passion for statistical modelling of real-world systems
+
+
+NINJAS - DATA SCIENCE:
+=====================
+
+Data Acquisition - Web Scrapping - Beautiful Soup
+Data Acquisition - Web Scrapping - Selenium -1
+Data Acquisition - Using Web APIs
+Data Acquisition - web crawler using scrapy
+automating codechef submissions(selenium)
+machine learning
+numpy, linear algebra, data visualisation, seaborn, pandas, k- nearest neighbours, face recognition, linear regression, sci-kit learn, Locally weighted regression (LOWESS), Maximum Likelihood Estimate(MLE), logistic regression, 
+Challenge - Chuk Norris Jokes
+
+- Descriptive Statistics
+
+[coding ninjas] - data science:
+==============================
+
+svm - support vector machines is a machine learning algorithm that classifies and analyzes data. SVMs are supervised learning models that use a hyperplane to find the maximum distance between classes in a data set. This distance is called the margin, and SVMs are designed to maximize the margin while minimizing classification errors.
+
+NLP can refer to either Natural Language Processing or Neuro-Linguistic Programming: 
+
+A machine learning technology that allows computers to understand, manipulate, and generate human language. NLP is used in many applications, including: 
+
+Neural networks, Tensor flow, Keras, LSTM, PCA, Unsupervised learning
+
+[Coding Blocks] Machine Learning Master Course:
+==============================================
+seaborn, pandas, k-nearest neighbours, locally weighted regression (LOWESS), Maximum Likelihood Estimate(MLE), Logistic Regression, PCA, Naive Bayes Classifier, K-means clustering, SVM- Support Vector Machines, Decision Trees & Random Forests, PyTorch, TensorFlow Intro, Project Ideas
+
+[Eduwiser] Data Science:
+========================
+
+Advaced predictive analysis using r and python, unsupervised machine learning, TEXT MINING, Deployment and advance programming
+
+[IIBM Institute] / ML-AI:
+=========================
+Deep Learning
+NLP
+Projects 
+
+ML/ TIME SERIES
+[IIBM Institute] / Tableau:
+==========================
+
+Graphs, Geo loc mapping, bar graph line graph & filters, data blending, data interpreters and cleaning, dashboard concepts, grouping and highlighters, cluster creating & modelling, hr analytics-attrition analysis
+
+Data Science A-Z Real - Life Data Science Exercises Included:
+============================================================
+part1: visualization: how to use tableau for data mining, advanced data mining with tableau
+part2: modelling: stats refresher, [linear, multiple linear, logistic regressions], building a robust geodemographic segmentation model, assessing your model, drawing insights from your model, model maintenance
+
+Part3: Data preparation: BI Tools, ETL Phase1&2, error handling, SQL Programming, ETL Phase 3 data wrangling after the load, handling errors during ETL(Phase 3)
+
+Part4: Communication: Working with people, presenting for data scientis, homework solutions
+
+
+Data Science A-Z Hands-On Artifical Neural Networks :
+==========================================================
+Already created a separate file for this as deep learning RNN techniques or something
+
+Deep Learning in Practice | basics and dataset design:
+======================================================
+
+Practical Machine Learning, Twitter-API & Map Visualization:
+===========================================================
+From Zero to first Twitter Bot, ML project sentiment analysis of tweets, sentiment model we created, visualize the data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

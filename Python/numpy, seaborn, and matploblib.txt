@@ -1,0 +1,11 @@
+numpy, seaborn, and matploblib
+
+seaborn is built on top of matplotlib
+
+import seaborn as sns
+penguins = sns.load_dataset("penguins")
+sns.set(rc=>{ #set figure size and passin rc=> into a dictionary
+    'figure.figsize': (11.7,8.27) # set width and height in a tuple
+)
+
+sns.hisplot() --> plot in right directions

@@ -1,0 +1,142 @@
+Scheduling Requirements:
+ability to monitor, ability to alert in case of failures, ability to re run during failed pipelines, and scheduled to run at regular intervals
+
+SOLUTION ARCHITECTURE:
+
+	Development/ Monitoring / Management & Security
+	___________________________________________________________________
+
+Data				COMPUTE					DATA
+Integration								Visualization
+	___________________________________________________________________
+Synapse		Synapse Data	SparkPool	Dedicated	Serverless	Power
+Pipelines	Flows				SQL Pool	sql pool	-bi
+
+	___________________________________________________________________
+
+				STORAGE
+
+	DataLake Storage	Metastore	Synapse Link
+	Gen2
+
+
+NYC TAXI
+ Data	=======> Bronze
+		Layer
+		||
+		||
+		\/
+		Discovery ===>Analysis
+
+
+- We have data discovery requirements before taking it further using OPENROWSET function offered by serverless sql pool to discover data directly from the files.
+- Also create external tables and views to make job of the analysts easier.
+- Later process the data to ingest to ingest into the Silver Layer. Data in the Silver layer will have schema applied as well toad in the columnar format parquet. Will create partitions where ever applicable and also external tables or views to process.
+- Will then create aggregations required to load into Gold Layer. Here we create external tables and views to query the data using T-sql :):):)
+
+
+Azure Cosmos Db container			Azure Synapse container
+
+Transactional store	Analytical Store	Spark pool is for Machine learning
+Row store optimized	Column Store		and Bigdata analytics
+for transactional	optimized for
+reads and writes	analytical queries	Serverless sql pool is for "Data 						Exploration" and "BI Reporting"
+
+	Auto Sync  =============> Azure Synapse Link/ HTAP ===>
+
+
+
+We also need to do operational data reporting on the data sent from the devices in the taxis. To do this we will enable Synapse link in cosmos db container to create analytical store and then use spark pool as well as serverless sql pool to query this data via synapse links/ Hybrid Transactional and Analytical Processing (HTAP) capabilities.
+
+
+Topics:
+
+1) Serverless sql pool Architecture
+2) Features & Use Cases
+3) Cost control
+4) Connecting to azure data studio
+5) T-SQL Support
+
+Serverless sql pool is a serverless distributed query engine to query data over your data lake using T-sql. This distributed query engine is called Polaris which uses T-sql.
+
+users <---> Control node (driver node)
+		||
+		||
+		\/
+		compute node, compute node, compute node
+
+Using azure synapse, no need to ingest first to query. Instead we can start querying directly fromt the storeage itself.
+
+With the help of "synapse link" we can query directly from cosmos db, data verse, and sql server 2022 (currently in preview).
+
+Serverless sql pool - supported data sources:
+
+Azure storage account: Delimited - csv, tsv etc; JSON, Parquet, Delta Lake
+
+Using synapse link we can access below:
+Cosmos: SQL API, Mongo Db api
+DataVerse: sql server 2022 (perview)
+
+what kind of data, how many compute resources and quality of the data this info is known by data discovery & exploration.
+
+- create logical data warehouse using server sql pool and create db objects lik external tables and views on the data in "spark tables, cosmos db or dataverse"
+
+- tsql is used for transformations 
+- serverless sql pool won't have the same benefits like Dedicated sql pool tables which have indexes and optimized distribution of data for retrieval etc...
+
+Billed for data processed in a) Amount read, b)  Amount of intermediate results, c) Amount of data written
+Minimum of 10 MB per query, currently $6.25 per 1TB
+
+Develop->sqlScript-> select * from sys.dm_external_data_processed; 
+This gives daily, weekly and monthly data processed in MB's
+
+From the below query we can see the configurations for the daily, weekly, and monthly.
+
+select * from sys.configurations
+where name like 'Data Processed %';
+
+output:
+configurationid, data processed daily/weekly/monthly in TB, value, minimum, maximum, value_in_use, description, is_dynamic
+
+sp_setDataProcessed_limit is a stored procedure to pass parameters that daily, weekly and monthly and also the limits in terabytes, and it'll set the values for us.
+
+sp_set_data_processed_limit
+	@type = N'monthly',
+	@limit_tb = 2; ---> this is terabytes limit
+sp_set_data_processed_limit
+	@type = N'weekly',
+	@limit_tb = 1;
+sp_data_preocessed_limit
+	@type = N'daily',
+	@limit_tb = 1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

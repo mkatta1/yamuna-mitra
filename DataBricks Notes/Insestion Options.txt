@@ -1,0 +1,87 @@
+Input			---\ DLT-META API	 
+Onboarding json		---/Onboard_dataflow_specs
+Data quality rules json
+Silver transformation json	||
+				\/
+				Datalflow Spec
+				||
+				\/
+				DLT: DataflowPipeline
+			Bronze	Silver			Gold
+		Raw Ingestion->	Filtered, Cleaned,-> Final layer with most
+		and History	Augmented	refined aggregated data
+		
+DLT-META Stages
+OnboardingJob -> DLT Pipeline -> Workflows
+
+
+
+
+Shiva Darshanam | Telugu Full Movie HD |Saikiran|TanikellaBharani|Preeti Nigam#sri
+
+
+- DfReaderSchema uses both StructType or DDL Formatted string methods.
+
+- Instead of Append or mergeinto or update options in Delta, we use insertInto in insert data :
+
+- For SINGLE LINE JSON, nested schema of json example:
+   name_schema = StructType(fields=[StructField("forename", StringType(), True),
+		      			 StructField("surname", StringType(), True)])
+   drivers_schema = StructType(fields=[StructField("driverId", IntegerType(), False),
+				       StructField("name", name_schema),
+				       StructField("dob", DateType(), True)
+				       StructField("url", StringType(), True)
+- For MULTI LINE JSON, example:
+	df = spark.read.schema(schema=schema).option("multiline", True).json(path)
+
+
+NOT OKAY METHOD 1: 
+BECOZ we need to drop all the partitions manually, we're letting spark to find the partition and overwrite it while trying to insert the data!!
+
+for race_id_list in resulsts_final_df.select("race_id").distinct().collect():
+  if(spark._jsparkSession.catalog().tableExists("f1_processed.results")):
+    spark.sql(f"ALTER TABLE f1_processed.results DROP IF EXISTS PARTITION ( race_id = {race_id_list.race_id})")
+
+
+BEST METHOD 2:
+Here it finds the partition (race_id's) to overwrite the particular data!!!
+
+
+Step1:
+spark.conf.set("spark.sql.sources.partitioOverwriteMode","dynamic")
+
+Step2:
+if (spark._jsparkSession.catalog().tableExists("f_processed.results")):
+	results_final_df.write.mode("overwrite").insertInto("f1_processed.results")
+else:
+	results_final_df.write.mode("overwrite").partitionBy('race_id').format("parquet").saveAsTable("f1_processed.results")
+
+
+$$$$$$$$$$$$$ INCREMENTAL LOAD IMPROVEMENTS $$$$$$$$$$$$$$$$$
+
+#partition_column = 'race_id'
+
+def re_arrange_partition_column(input_df, partition_column):
+column_list = []
+for column_name in results_final_df.schema.names:
+  if column_name != partition_column:
+    column_list.append(column_name)
+column_list.append(partition_column)
+
+print(column_list)
+output_df = results_final_df.select(column_list)
+return output_df
+
+
+def overwrite_partition(inpud_df, db_name, table_name, partition_column):
+  output_df = re_arrange_partition_column(input_df, partition_column)
+  
+  spark.conf.set("spark.sql.sources.partitionOverwriteMode","dynamic")
+  if (spark._jsparkSession.catalog().tableExists(f"{db_name}.{table_name}"))):
+    output_df.write.mode("overwrite").insertInto(f"{db_name}.{table_name}")
+  else:
+	output_df.write.mode("overwrite").partitionBy(partition_column).format("parque	t").saveAsTable(f"{db_name}.{table_name}")
+
+overwrite_partition(results_final_Df,"f1_processed','results','race_id)
+
+

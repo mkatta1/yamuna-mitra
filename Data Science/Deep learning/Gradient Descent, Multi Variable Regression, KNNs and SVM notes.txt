@@ -1,0 +1,449 @@
+Gradient Descent Definition:
+----------------------------
+Gradient descent is an optimization algorithm used to find the values of parameters (coefficients) of a function (f) that minimizes a cost function (cost).
+answer: TRUE
+
+You run gradient descent for 20 iterations with alpha=0.3 and compute cost function after each iteration. You find that the value of cost function decreases slowly and is still decreasing after 20 iterations. Based on this, which of the following conclusions seems most plausible?
+answer: It'be more wise to try a larger value of alpha (say alpha=1.0)
+description: a larger value for alpha should increase the rate convergence to the minimum of J(THEETA)
+
+Learning Rate:
+--------------
+If learning rate is high: There is alpha of risk Overshooting the lowest point.
+
+Choose the correct option for the statement below: With a very low learning rate:
+- A low learning rate is more precise.
+- Calculating the gradient is time-consuming, so it will take us a very long time to get to the bottom.
+
+As mentioned in the video what all are the changes we need to make in above function to make it applicable for n features?
+def step_gradient(points, learning_rate, m, c):
+    m_slope = 0
+    c_slope = 0
+    N = len(points)
+    for i in range (M):
+	x = points[i, 0]
+	y = points[i, 1]
+	m_slope += (-2/M) * (y - m * x -c)*x 
+	c_slope += (-2/M) * (y - m * x -c)
+   new_m = m - learning_rate * m_slope
+   new_c = c - learning_rate * c_slope
+   return new_m, new_c
+ANSWER:
+------
+- In function signature, instead of m and c, an array is passed having all m and last col as c
+- Instead of m_slope & c_slope we will have an array that starts with all 0
+
+Gradient Descent Types:
+----------------------
+select all variations of gradient descent that are discussed in the video?
+answer: Batch, Mini, Stochastic
+
+Stochastic means having a random probability distribution or pattern that may be analysed statistically but may not be predicted precisely.
+
+Which Gradient Descent:
+----------------------
+We compute the cost gradient based on the complete training set; hence, we sometimes also call it __________. In case of very large datasets, using this gradient descent can be quite costly since we are only taking a single step for one pass over the training set.
+answer: Batch gradient descent
+
+Match Statement to Types of Gradient Descent:
+--------------------------------------------
+Do proper match for below statements:
+------------------------------------
+1. Uses n data points instead of 1 sample at each iteration.
+2. Computes the gradient using a single sample.
+3. computes the gradient using the whole dataset.
+
+Types of Gradient Descent:
+-------------------------
+A: Mini-batch gradient descent
+B: Stochastic gradient descent
+C: Batch gradient descent
+
+ANSWER:
+------
+3 ------> C
+2 ------> B
+1 ------> A
+
+
+ 
+=============================		================================
+
+from sklearn import datasets
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from collections import Counter
+
+dataset = datasets.load_breast_cancer()
+X_train, x_test, Y_train, y_test = train_test_split(dataset.data, dataset.target, test_size = 0.2, random_state = 0)
+
+clf = KNeighborsClassifier(n_neighbors=7)
+clf.fit(X_train, Y_train)
+
+clf.score(x_test, y_test)
+
+def train(x,y):
+    return
+
+def predict(x_train, y_train, x_test, k):
+    distance = []
+    for i in range(len(x_train)):
+        distances.append(1)
+    return 0
+
+def predict(x_train, y_train, x_test_data, k):
+    predictions = []
+    for x_test in x_test_data:
+        predictions.append(predict_one(x_train, y_train, x_test, k))
+    return predictions
+
+y_pred = predict(X_train, Y_train, X_test, 7)
+accuracy_score(Y_test, y_pred)
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
+def train(x,y):
+    return
+
+def predict(x_train, y_train, x_test, k):
+    distance = []
+    for i in range(len(x_train)):
+        distance = ((x_train[i,:] - x_test)**2).sum()
+        distances.append([distance, i])
+    distances = sorted(distances)
+    targets = []
+    for i in range(k):
+        index_of_training_data = distances[i][1]
+        targets.append(y_train[index_of_training_data])
+    return 0
+
+def predict(x_train, y_train, x_test_data, k):
+    predictions = []
+    for x_test in x_test_data:
+        predictions.append(predict_one(x_train, y_train, x_test, k))
+    return predictions
+
+y_pred = predict(X_train, Y_train, X_test, 7)
+accuracy_score(Y_test, y_pred)
+
+a = [1,0,1,1,1,1,0]
+Counter(a).most_common(1)[0][0]
+output: [(1,5)]
+
+Counter({0:2, 1:5})
+
+K-NN Questions and Answers:
+==========================
+- K = 1 leads to OVERFITTING
+- It is advisable to take odd values of k while using KNN classifier to AVOID TIES
+- KNN does more computation on test time than on train time? TRUE
+There is no explicit training phase in KNN. It just takes data as input in its training phase. All the actual work, that is calculation of distance, comparisions and taking out nearest k neighbors is done at testing phase when test data is available.
+
+- what is the default value of k in KNN implemented in sklearn? = 5
+- which of the following is the general form of minkowski distance between points X, Y: pow(Sigma(pow((|Xi-Yi|), p)), 1/p)
+- k vs variance
+For k cross validation, smaller k value implies less variance TRUE
+
+- which of the following is a correct use of cross validation?
+selecting variables to include in a model, comparing predictions, selecting parameters in prediction function
+- which of the following is the default cross-validation splitting strategy used in crossvalscore of sklearn?
+3-FOLD
+
+- "Accuracy_score" is imported from which of the following:
+SKLEARN.METRICS
+
+- For two points (a,b) and (x,y) in 2D space, (|a-x|+ |b-y|) represents which distance MANHATTAN DISTANCE
+- which of the following techniques is used generally for feature selection in case of KNN? BACK ELIMINATION ALGORITHM
+- In which of the following cases, do we need to handle separately to use KNN? 
+answer: Categorical data which has a feature, which can have values that don't have natural ordering.
+- which of the following is the best way to handle categorical data which has a feature that can have any value from {cricket, hockey, basketball}?
+answer: make separate columns for cricket basketball and hockey with binary entry representing if the sport occurs for the data point or not
+
+- A KD Tree (also called as K-Dimensional Tree) is a binary search tree where data in each node is a K-Dimensional point in space. In short, it is a space partitioning data structure for organising points in a K-Dimensional space. It is used in Nearest Neighbours algorithm. True or False?
+answer: TRUE
+
+- we are doing O(n) work on each data-point in our implemented brute force method. Till which of the following will KD-Tree reduce the work done on each data-point
+answer: O(log(n))
+
+- select the options which are among the pros of KNNs
+answer: Versatile - useful for Classification and Regression,
+Simple algorithm, Intensitive to outliers
+
+- select the options which are among the cons of KNNs
+answer: computationally expensive
+high memory requirement
+predicting stage might be slow
+
+description: Fourth options is actually a benefit of using KNN and cons were asked.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+SVC MODEL
+--------
+Increasing the value of C while using the SVC model of sklearn.svm does which of the following?
+- Decision boundary tries to separate the data points and reduce wrong classification in the training data.
+- It supports overfitting
+
+If there are n data points and m features then what will be the total number of features after choosing the landmarks as discussed in the video?
+answer: n
+
+SVM KNN similarity:
+------------------
+After selecting landmark points, all left to do in the SVM algorithm is very similar to KNN (K Nearest Neighbours). True or False?
+answer: False
+description: Because unlike in KNN, in SVM how much far away is a data point from a landmark also matters.
+
+Gaussian Kernel:
+----------------
+what does it mean when '1' is returned as a value from the similarity function while using Gaussian Kernel?
+answer: The points being considered are exactly similar
+description: the term on the power of e becomes 0 when two-exactly same points are compared and hence results in 1
+
+quick results SVM:
+-----------------
+which of the following kernel will be preferred for quick results if we originally have 40,000 data-points and 1000 features?
+answer: linear kernel
+Linear Kernel is the fastest among others mentioned here and considering the amount of data.
+
+new features Linear Kernel:
+--------------------------
+we have a dataset of m data-points and n features where m>n (we have sufficiently more data-points than the features). Number of new features after performing the operations of linear kernel will be?
+answer: n
+description: linear kernel does not affect our features and keep them exactly same.
+
+Effect of sigma:
+---------------
+Let's consider two situations one with sigma as 10 (case A) and the other with sigma as 1 (case B). Which of the following is/are true?
+- In case A points will have effect even farther away
+- In case B points will have effect only in its vicinity
+
+Guassian kernel:
+--------------
+Increasing the value of sigma in the equation of gaussian kernel makes the graph
+answer: less steeper
+
+landmarks chosen for conversion of parameters in SVM are actually
+- training data-points
+
+diagonal value 1:
+-----------------
+when we convert testing data into new dimensions (as done in SVM), the matrix containing values of similarity functions for each data point will always have all values as 1 in its diagonal? FALSE
+description: this is true in case of training data
+
+SVM PREDICTION:
+--------------
+we have 3 classes in our dataset i.e. A,B and C. we train a One Vs All SVM model for our classifications. The first classifier is for A and not A, second for B and not B and third is for C and not C. If the results are: first-(0.6), second-(0.89) and third-(0.5). what class should be predicted?
+answer: B
+
+which requires most computational power among the following?
+answer: one vs one technique
+
+move to higher dimensions:
+--------------------------
+suppose that we have m classes in our dataset and n training data-points, then how many classifiers will be needed for prediction of a testing data-points in one Vs, all technique?
+answer: m
+
+grid search
+------------
+
+what is the output of the following code?
+output because of line 5.
+import numpy as np
+a = np.arange(1,3,0,2)
+b = np.arage(4,6,0,2)
+xx, yy = np.meshgrid(a,b)
+(xx**yy**xx).shape[0]
+
+answer: 10
+
+gamma low underfitting:
+----------------------
+If gamma is too low in the svm, SVC model used in the video then which of the following will happen?
+answer: underfitting
+
+cross_validation:
+-----------------
+assume that a cross_validation process is splitting the data into 5 parts. How many times will it run the process of selecting a test data and a training data and checking on that?
+answer: 5
+
+c gamma pair:
+-------------
+how many values of (value of c, value of gamma) will be tried by the grid search if the grid has value as shown?
+grid = { 'c': [1e2, 1e3, 1e4, 1e5],
+	 'gamma': [1e-3, 5e-4, 1e-4, 5e-3]}
+answer: 16
+
+linear DB:
+---------
+which of the following will give linear decision boundaries?
+answer: linear kernel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+return 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

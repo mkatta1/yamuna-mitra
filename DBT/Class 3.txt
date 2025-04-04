@@ -1,0 +1,312 @@
+MACROS, CUSTOM TESTS AND PACKAGES
+- Macros are jinja templates created in the macros folder
+- There are many built-in macros in DBT
+- You can use macros in model definitions and tests
+- A special macro, called test, can be used for implementation
+- dbt packages can be installed easily to get access to a plethora of macros and tests
+
+there are both generic and custom macro tests. Macros live in macros folder which is a separate folder. 
+
+STEP1:
+Create a file in macros called "no_nulls_in_columns.sql" to check if there are any nulls in columns.
+
+no_nulls_in_columns.sql:
+
+{%macro no_nulls_in_columns(model) %}
+	SELECT * FROM {{}} WHERE
+	{% for col in adapter.get_columns_in_relation(model) -%}
+		{{ col.column }} IS NULL OR
+	{% endfor %}
+	FALSE
+{% endmacro %}
+
+
+Please check the ginger documentation for this type of codes of if&for loop condtions etc... There are also various adapter types available in ginger documentation.
+"IS NULL OR" checks if there are columns with nulls or else to run the loop for other columns check!!!!
+FALSE is to terminate the loop
+
+STEP2:
+Create a file in tests folder as "no_null_in_dim_listings.sql"
+
+{{ no_nulls_in_columns(ref('dim_listings_cleansed')) }}
+
+Run the code: dbt test --select dim_listings_cleansed
+
+
+	CUSTOME GENERIC TESTS are MACROS with special signature
+
+
+In test folder, we have the file dim_listings_minimum_nights.sql
+
+SELECT
+	*
+FROM
+	{{ ref('dim_listings_cleansed') }}
+WHERE minimum_nights < 1
+LIMIT 10
+
+Go to macros folder, create positive_value.sql macro
+
+{% test positive_value(model, column_name) %}
+SELECT
+	*
+FROM
+	{{ model }}
+WHERE
+	{{ column_name }} < 1
+{% endtest %}
+
+
+STEP3:
+
+Now add a new generic column "minimum_nights" in schema.yml file
+
+- name: minimum_nights
+  tests: 
+    - positive_value
+
+STEP4:
+
+Now run the command in dbt terminial
+
+dbt test --select dim_listings_cleansed
+
+
+DBT utils and third-party packages get updated rapidly. Please make sure that you install the latest version of dbt-utils. You can see the latest tested dbt-utils version on our GitHub page (https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/tree/main)/packages.yml file. In this source file, there is also a dbt-expectations package installed, which you can ignore for now; we will get to this later in the course.
+
+
+
+When you use the latest version of dbt_utils, using the surrogate_key macro now returns an error saying there's a newer version: generate_surrogate_key.
+
+In case you run into this error in the next lecture, please use generate_surrogate_key and it should work fine.
+
+
+
+Also, if you use the dbt Power User VSCode extension, please quit VSCode for the time you execute dbt deps in the next lecture. Some students reported that the dbt Power User extension has a bug that breaks the dbt deps command's execution.
+
+
+
+
+			Installing Third-party packages
+
+Jumpstart your warehouse
+
+In the website hub.getdbt.com , you will get the packages you need to install.
+Packages like dbt_utils for core expectations, audit_helper for audit
+You can also add more sophisticated testing capabilities with the package called "Great Expectations".
+
+Copy the below code in packages.yml file to install "dbt utils" package. Run the command "dbt deps" to install the package.
+
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 0.8.0
+
+
+Tests Overview:
+
+- There are two types of tests: Singular and generic
+- Singular tests are SQL queries stored in tests which are expected to return an empty result set.
+- There are four built-in generic tests:
+ a) Unique
+ b) Not_null
+ c) Accepted_value
+ d) Relatioships
+- Uou can define your own custom generic tests or import tests from dbt packages
+
+Singular Tests are tests you define in the form of SQL files in the "tests" directory.
+
+Check Test.md first then Macros-CustomTests-Packages.md 
+
+
+DBT Documentation: Read Documentation.md, input_schema.png
+
+- How to document models
+- Use documentation generator and server
+- Add assets and markdown to the documentation
+- Discuss dev vs prod documentation serving
+
+i) Documentations can be defined two ways:
+- In yaml files (like schema.yml)
+- In standalone markdown files
+ii) Dbt ships with a lightweight documentation web server
+iii) For customizing the landing page, a special file, overview.md is used
+iv) You can add your own assets (like images) to a special project folder.
+
+
+Execute the command> dbt docs generate
+
+You can see the results in "target/catalog.json"
+check this file using the command> less catalog.json
+As the above documentation is hard to understand we can check this in the website using the command> dbt docs serve
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

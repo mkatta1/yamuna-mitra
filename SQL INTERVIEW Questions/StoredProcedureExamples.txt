@@ -1,0 +1,253 @@
+use ap;
+go
+create proc spInvoiceReport
+as
+select vendorName, InvoiceNumber, InvoiceDate, InvoiceTotal-Credential-PaymentTotal as InvoiceAmtDue
+from Invoices JOIN Vendors
+on Invoices.VendorID = Vendors.VendorID
+where InvoiceTotal-CreditTotal-PaymentTotal > 0
+order by vendorName;
+
+go
+spInvoiceReport;
+EXEC spInvoiceReport;
+
+alter proc spInvoiceReport
+with encryption
+as
+select vendorName, InvoiceNumber, InvoiceDate, InvoiceTotal-Credential-PaymentTotal as InvoiceAmtDue
+from Invoices JOIN Vendors
+on Invoices.VendorID = Vendors.VendorID
+where InvoiceTotal-CreditTotal-PaymentTotal > 0
+order by vendorName;
+
+*********** Stored Procedures with input parameters *******************
+
+use northwind;
+gp
+create proc spFindCustomer
+    @Company nvarchar(40) = '%'
+as
+begin
+    select ContactName, Phone
+    from Customers
+    where companyName LIKE @Company;
+end
+go
+EXEC spFindCustomer 'Berg%'
+
+2)
+
+CREATE PROC spVendorState
+    @state varchar(20) = NULL
+AS
+BEGIN
+    IF @state IS NULL
+       SELECT * FROM Vendors;
+    ELSE
+       SELECT * FROM Vendors
+       WHERE VendorState = @state;
+END
+GO
+EXEC spVendorState; --> executed without input which makes it as NULL
+EXEC spVendorState 'CA'; --> executed with input values as 'CA'
+
+3) Input parameters and Return variables
+
+CREATE PROC spVendorInvoices
+   @DateVar smalldatetime = NULL,
+   @VendorVar varchar(40) = '%'
+as
+IF @DateVar IS NULL
+   SELECT @DateVar = MIN(InvoiceDate) FROM Invoices;
+DECLARE @InvCount int;
+SELECT @InvCount = COUNT(InvoiceID)
+FROM Invoices
+JOIN Vendors ON Invoices.VendorID = Vendors.VendorID
+WHERE (InvoiceDate >=@DateVar) AND (VendorName LIKE @VendorVar);
+RETURN @InvCount;
+
+4)
+CREATE PROCEDURE selectallcustomers @city nvarchar(30), @postalcode nvarchar(10)
+AS
+SELECT * FROM WHERE City = @city and postalcode = @postalcode
+go;
+
+EXEC selectallcustomers @city = 'london' and @postalcode = 'wa1 1dp';
+
+
+Procedures have similar structure as functions: they accept parameters and perform operations when we call them. But, the difference between them is that SQL stored procedures are simpler to write or create, whereas functions have a more rigid structure and support fewer clauses.
+- we can define any number of input parameters 
+- SQL stmts are placed between BEGIN and END
+5)
+DELIMITER //
+CREATE PROCEDURE procedure_name(parameter1 datatype, parameter2 datatype, ....)
+BEGIN
+-- SQL statements
+END
+DELIMITER;
+
+EXAMPLE:
+-------
+
+CREATE TABLE CUSTOMERS (
+   ID INT NOT NULL,
+   NAME VARCHAR (20) NOT NULL,
+   AGE INT NOT NULL,
+   ADDRESS CHAR (25),
+   SALARY DECIMAL (18, 2),       
+   PRIMARY KEY (ID)
+);
+
+
+INSERT INTO CUSTOMERS VALUES 
+(1, 'Ramesh', 32, 'Ahmedabad', 2000.00),
+(2, 'Khilan', 25, 'Delhi', 1500.00),
+(3, 'Kaushik', 23, 'Kota', 2000.00),
+(4, 'Chaitali', 25, 'Mumbai', 6500.00),
+(5, 'Hardik', 27, 'Bhopal', 8500.00),
+(6, 'Komal', 22, 'Hyderabad', 4500.00),
+(7, 'Muffy', 24, 'Indore', 10000.00);
+
+DELIMITER //
+CREATE PROCEDURE GetCustomerInfo(IN CustomerAge INT)
+  BEGIN
+	SELECT * FROM CUSTOMERS WHERE AGE = CustomerAge;
+  END //
+DELIMITER ;
+
+CALL GetCustomerIfo(25)
+
+6)
+Procedure with IN parameter
+---------------------------
+IN is the default parameter of the procedure that will receive input values. We can pass the values as arguments when the stored procedure is being called.
+
+These values are read-only, so they cannot be modified by the stored procedure.
+
+DELIMITER //
+CREATE PROCEDURE GetCustomerSalary(IN CustomerID Int)
+   BEGIN
+      SELECT SALARY FROM CUSTOMERS WHERE ID = CustomerID;
+   END
+DELIMITER;
+
+CALL GetCustomerSalary(6);
+
+7) Procedure with OUT parameter :
+   -----------------------------
+The OUT parameter is used to return the output value from the procedure.
+
+Note that when using an OUT parameter, we must specify the keyword OUT before the parameter name when passing it to the stored procedure
+
+DELIMITER //
+CREATE PROCEDURE GetDetails(OUT total INT)
+  BEGIN
+    SELECT COUNT(AGE) INTO total FROM CUSTOMERS
+      WHERE AGE = 25;
+  END //
+DELIMITER;
+
+Calling the created procedure and passing the 'total' parameter
+CALL GetDetails(@total);
+
+Here, we are using the SELECT statement and getting the count
+SELECT @total;
+
+Verification:
+------------
+To verify weather the procedure is created, we can use the following query −
+SHOW CREATE PROCEDURE GetDetails;
+
+8) Procedure with INOUT parameter :
+------------------------------
+
+To declare an INOUT parameter in a stored procedure, we need to specify the INOUT keyword before the parameter name.
+
+In the following query, we provide two INOUT parameters to the stored procedure: cust_id and curr_Salary. These two are used as both an input and output parameters.
+
+DELIMITER //
+CREATE PROCEDURE increaseSalary(INOUT Cust_Id INT, INOUT INT)
+   BEGIN
+      SELECT SALARY INTO curr_Salary From CUSTOMERS WHERE ID = Cust_Id,
+      SET curr_salary = curr_salary * 1.1;
+      UPDATE CUSTOMERS SET SALARY = curr_Salary WHERE ID = Cust_Id;
+   END //
+DELIMITER;
+
+Verification:
+-------------
+
+SET @customerID = 1;
+SET @salary = 0.0;
+CALL increaseSalary(@customerID, @salary);
+
+SELECT @salary AS update_salary;
+
+
+Advantages of Stored Procedures:
+--------------------------------
+
+Following are the advantages of stored procedures −
+
+Improved Performance: Stored procedures are pre-compiled and stored on the server, so they can be executed more quickly than SQL statements that are sent from client applications.
+
+Code Reuse: Stored procedures can be called from different client applications, which means that the same code can be reused across different applications. This reduces development time and maintenance costs.
+
+Reduced Network Traffic: Because stored procedures are executed on the server, only the results are returned to the client, which reduces network traffic and improves application performance.
+
+Better Security: Stored procedures can be used to enforce security rules and prevent unauthorized access to sensitive data. They can also limit the actions that can be performed by users, making it easier to maintain data integrity and consistency.
+
+Simplified Maintenance: By storing SQL code in a single location, it becomes easier to maintain and update the code. This makes it easier to fix bugs, add new functionality, and optimize performance.
+
+Drawbacks of Stored Procedures:
+-------------------------------
+Following are the disadvantages of stored procedures −
+
+Increased Overhead: Stored procedures can consume more server resources than simple SQL statements, particularly when they are used frequently or for complex operations.
+
+Limited Portability: Stored procedures are often specific to a particular database management system (DBMS), which means they may not be easily portable to other DBMSs.
+
+Debugging Challenges: Debugging stored procedures can be more challenging than debugging simple SQL statements, particularly when there are multiple layers of code involved.
+
+Security Risks: If stored procedures are not written correctly, they can pose a security risk, particularly if they are used to access sensitive data or to perform actions that could compromise the integrity of the database.
+
+
+********************* DECLARE CURSOR STATEMENT *********
+
+https://www.tutorialspoint.com/sql/sql-cursors.htm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

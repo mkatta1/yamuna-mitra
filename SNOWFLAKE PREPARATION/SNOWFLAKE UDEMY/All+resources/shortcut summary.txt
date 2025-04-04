@@ -1,0 +1,313 @@
+Snowflake account: KJ00617
+
+cache or caching concepts
+scalling out concepts
+diff bw caching vs materialized view
+
+
+
+
+    VALIDATION_MODE = RETURN_ERRORS
+   VALIDATION_MODE = RETURN_5_ROWS
+ON_ERROR=CONTINUE
+select * from table(validate(orders, job_id => '_last'));
+select rejected_record from table(result_scan(last_query_id()));
+SPLIT_PART(rejected_record,',',2) as AMOUNT;
+SIZE_LIMIT=20000;
+
+ If you would like to continue loading when an error is encountered, use other values such as 'SKIP_FILE' or 'CONTINUE' for the ON_ERROR option. For more information on loading options, please run 'info loading_data' in a SQL client.
+
+ON_ERROR = 'SKIP_FILE' OR ON_ERROR='CONTINUE'
+after this use RETURN_FAILED_ONLY=TRUE
+
+In copy statement, after pattern='.*Order.*' we can have truncate command added like this:
+    pattern='.*Order.*'
+    truncatecolumns = true;
+
+ADD FORCE TO THIS if we want to perform copy even without any changes
+  >> FORCE = TRUE;
+
+select * from information_schema.load_history;-- locally
+select * from snowflake.account_usage.load_history;-- globally
+
+select * from snowflake.account_usage.load_history
+where schema_name = 'PUBLIC' AND
+table_name ='orders'
+and error_count>0;
+
+// Filter on specific table & schema
+SELECT * FROM snowflake.account_usage.load_history
+WHERE DATE(LAST_LOAD_TIME) <= DATEADD(days,-1,CURRENT_DATE)
+
+CREATE OR REPLACE STAGE MANAGE_DB.EXTERNAL_STAGES.JSONSTAGE
+    url = 's3://bucketsnowflake-jsondemo';
+
+CREATE OR REPLACE FILE FORMAT MANAGE_DB.FILE_FORMATS.JSONFORMAT
+    TYPE=JSON;
+
+//For json file query parse&analysis
+SELECT 
+    RAW_FILE:id::int as id, $1:first_name 
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+//Handling Nested data of json
+select raw_file:id::int as id
+        , raw_file:first_name::string as first_name
+        , raw_file:prev_company[0]::string as prev_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW
+union all
+select
+    raw_file:id::int as id
+    , raw_file:first_name::string as first_name
+    , raw_file:prev_company[1]::string as prev_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+//Dealing with hierarchy in json
+SELECT 
+    RAW_FILE:id::int as id,
+    RAW_FILE:first_name::STRING as First_name,
+    RAW_FILE:spoken_languages[2].language::STRING as First_language,
+    RAW_FILE:spoken_languages[2].level::STRING as Level_spoken
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW
+ORDER BY ID
+
+//
+select
+      RAW_FILE:first_name::STRING as First_name,
+    f.value:language::STRING as First_language,
+   f.value:level::STRING as Level_spoken
+from OUR_FIRST_DB.PUBLIC.JSON_RAW, table(flatten(RAW_FILE:spoken_languages)) f;
+
+// Quotes can be omitted in case of the current namespace
+SELECT * 
+FROM @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE
+(file_format => 'MANAGE_DB.FILE_FORMATS.PARQUET_FORMAT')
+
+
+    // Querying with conversions and aliases
+    
+SELECT 
+$1:__index_level_0__::int as index_level,
+$1:cat_id::VARCHAR(50) as category,
+DATE($1:date::int ) as Date,
+$1:"dept_id"::VARCHAR(50) as Dept_ID,
+$1:"id"::VARCHAR(50) as ID,
+$1:"item_id"::VARCHAR(50) as Item_ID,
+$1:"state_id"::VARCHAR(50) as State_ID,
+$1:"store_id"::VARCHAR(50) as Store_ID,
+$1:"value"::int as value
+FROM @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE;
+
+******************************************** PIPE ********************************************************************
+
+// Define pipe
+CREATE OR REPLACE pipe MANAGE_DB.pipes.employee_pipe
+auto_ingest = TRUE
+AS
+COPY INTO OUR_FIRST_DB.PUBLIC.employees
+FROM @MANAGE_DB.external_stages.csv_folder;  
+
+// MANAGE PIPE
+ALTER PIPE  MANAGE_DB.pipes.employee_pipe refresh;
+// Resume pipe
+ALTER PIPE MANAGE_DB.pipes.employee_pipe SET PIPE_EXECUTION_PAUSED = false;
+
+// Verify pipe is running again
+SELECT SYSTEM$PIPE_STATUS('MANAGE_DB.pipes.employee_pipe') 
+
+table(validate_pipe_load) --> This table function can be used to validate data files processed by Snowpipe within a specified time range
+
+// Snowpipe error message
+SELECT * FROM TABLE(VALIDATE_PIPE_LOAD(
+    PIPE_NAME => 'MANAGE_DB.pipes.employee_pipe',
+    START_TIME => DATEADD(HOUR,-2,CURRENT_TIMESTAMP())));
+
+-- Manage pipes -- 
+
+DESC pipe MANAGE_DB.pipes.employee_pipe; 
+
+SHOW PIPES; 
+
+SHOW PIPES like '%employee%'; 
+
+SHOW PIPES in database MANAGE_DB;
+
+SHOW PIPES in schema MANAGE_DB.pipes;
+
+SHOW PIPES like '%employee%' in Database MANAGE_DB;
+
+show pipes like '%employee%' in database manage_db;
+
+-- Changing pipe (alter stage or file format) --
+// Pause pipe
+ALTER PIPE MANAGE_DB.pipes.employee_pipe SET PIPE_EXECUTION_PAUSED = true;
+
+// Verify pipe is paused and has pendingFileCount 0 
+SELECT SYSTEM$PIPE_STATUS('MANAGE_DB.pipes.employee_pipe');
+
+// List files in stage
+LIST @MANAGE_DB.external_stages.csv_folder;  
+
+// COPY command history from table to see error massage
+
+SELECT * FROM TABLE (INFORMATION_SCHEMA.COPY_HISTORY(
+   table_name  =>  'OUR_FIRST_DB.PUBLIC.EMPLOYEES',
+   START_TIME =>DATEADD(HOUR,-1,CURRENT_TIMESTAMP())));
+
+********************************************************** TIVE TRAVEL   *******************************************************************
+
+
+UNDROP table OUR_FIRST_DB.public.customers; # undrop defualt retentionperiod is 1 day, in standard edition period is 0-1 day but in enterprise edition it is 0-90 days
+
+ALTER TABLE OUR_FIRST_DB.public.customers
+RENAME TO OUR_FIRST_DB.public.customers_wrong;
+
+// Using time travel
+SELECT * FROM OUR_FIRST_DB.public.time_travel at (OFFSET => -60*1);--> past 1 minute or 60 seconds
+SELECT * FROM OUR_FIRST_DB.public.test before (timestamp => '2021-04-16 07:30:47.145'::timestamp);
+
+// Using time travel for cloning
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.time_travel_clone
+CLONE OUR_FIRST_DB.public.time_travel at (OFFSET => -60*1.5)
+
+// // // Good method
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.public.test_backup as
+SELECT * FROM OUR_FIRST_DB.public.test before (statement => '019b9ef0-0500-8473-0043-4d830007309a')
+
+TRUNCATE OUR_FIRST_DB.public.test
+
+INSERT INTO OUR_FIRST_DB.public.test
+SELECT * FROM OUR_FIRST_DB.public.test_backup
+
+// Using time travel: Method 2 - before Query
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.time_travel_clone_of_clone
+CLONE OUR_FIRST_DB.public.time_travel_clone before (statement => '01b39f43-0001-3062-0000-faa100055626');
+
+***************************************** FAIL SAFE STORAGE ************************************************************
+// Fail safe storage
+table: snowflake.account_usage.storage_usage
+usage_date, storage_bytes, stage_bytes, failsafe_bytes
+
+table: snowflake.account_usage.table_storage_metrics
+****************************************************************************************************************************
+
+
+// Transient table creation outputs
+default retention_time = 1, enable_schema_evolution, is_hybrid, is_iceberg?
+
+// Create second temporary table (with a new name)
+CREATE OR REPLACE TEMPORARY TABLE PDB.public.temp_table ();
+
+// Creating transient schema and then table 
+CREATE OR REPLACE TRANSIENT SCHEMA TRANSIENT_SCHEMA;
+
+CREATE OR REPLACE TABLE TDB.TRANSIENT_SCHEMA.new_table ();
+ALTER TABLE TDB.TRANSIENT_SCHEMA.new_table
+SET DATA_RETENTION_TIME_IN_DAYS  = 2
+
+********************************************* zero copy Cloning   *******************************************************************************
+// Cloning Schema
+CREATE TRANSIENT SCHEMA OUR_FIRST_DB.COPIED_SCHEMA
+CLONE OUR_FIRST_DB.PUBLIC;
+
+// Cloning Database
+CREATE TRANSIENT DATABASE OUR_FIRST_DB_COPY
+CLONE OUR_FIRST_DB;
+
+CREATE OR REPLACE TABLE CUSTOMERS3 (
+    CUSTOMER_ID INT,
+    FIRST_NAME VARCHAR(40),
+    CREATE_DATE DATE,
+    INSERT_DATE DATE DEFAULT DATE(CURRENT_TIMESTAMP))    
+    
+alter task customer_insert 
+set schedule = '1 MINUTE';
+
+alter task customer_insert resume;
+show tasks;
+alter task customer_insert2 suspend;
+
+
+
+
+*********************** TASK PROCEDURE **********************************
+
+create or replace procedure customers_insert_procedure(create_date varchar)
+RETURNS string not null
+language javascript
+as
+    $$
+    var sqlCommand = 'INSERT INTO CUSTOMERS(CREATE_DATE) VALUES(:1);'
+    snowflake.execute(
+    {
+    sqlText: sqlCommand,
+    binds: [CREATE_DATE]
+    });
+    return "SUCCESSFULLY EXECUTED.";
+    $$;
+
+    CREATE OR REPLACE TASK CUSTOMERS_TASK_PROCEDURE
+    WAREHOUSE = COMPUTE_WH
+    SCHEDULE = '1 MINUTE'
+    AS CALL customers_insert_procedure(current_timestamp);
+
+    alter task CUSTOMERS_TASK_PROCEDURE suspend;
+
+    show tasks;
+
+    select * from customers;
+
+************************************************************************
+
+// Use the table function "TASK_HISTORY()"
+select *
+  from table(information_schema.task_history())
+  order by scheduled_time desc;
+
+
+// See results for a specific Task in a given time
+select *
+from table(information_schema.task_history(
+    scheduled_time_range_start=>dateadd('hour',-4,current_timestamp()),
+    result_limit => 5,
+    task_name=>'CUSTOMER_INSERT2'));
+
+// See results for a given time period
+select *
+  from table(information_schema.task_history(
+    scheduled_time_range_start=>to_timestamp_ltz('2021-04-22 11:28:32.776 -0700'),
+    scheduled_time_range_end=>to_timestamp_ltz('2021-04-22 11:35:32.776 -0700')));  
+  
+SELECT TO_TIMESTAMP_LTZ(CURRENT_TIMESTAMP) 
+
+
+
+
+Converts an input expression into the corresponding timestamp:
+
+TO_TIMESTAMP_LTZ (timestamp with local time zone)
+
+TO_TIMESTAMP_NTZ (timestamp with no time zone)
+
+TO_TIMESTAMP_TZ (timestamp with time zone)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

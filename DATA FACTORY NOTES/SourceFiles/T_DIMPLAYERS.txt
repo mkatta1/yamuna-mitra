@@ -1,0 +1,6 @@
+dimid,name,age,homecountry,iplteam,lastmodifieddate
+6,'Test',22,'SouthAfrica','DD',2020-10-07
+2,'Kohli',28,'India','kkr',2020-10-07
+3,'Watson','38','Australia','mi',2020-10-07
+5,'Tewatia',20,'India','rr','2020-10-07
+4,'Cummins',30,'Australia','kkr',2020-10-07

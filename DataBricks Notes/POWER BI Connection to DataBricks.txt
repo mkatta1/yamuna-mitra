@@ -1,0 +1,18 @@
+STEP1:
+Go to compute -> Databricks-cluster->Click Advanced options -> JDBC/ODBC connection details are: Server Hostname, port, Protocol, Http path, JDBC URL 
+--> Add these details in (GetData->Azure->AzureDatabricks)and choose Import/DirectQuery in powerbi
+STEP2:
+Copy & Paste the above details in Power BI. Now coneect the databricks using Username/password, Personal Access Token , and Azure Active Directory
+
+If you choose Azure Active Directory then Step3
+If you choose Personal Access Token then Step5
+
+STEP3:
+Go to EventLog of databricks cluster you can see the "Starting...." option for the connection
+
+STEP4:
+In powerbi, Options and settings --> Datasource settings -> DataSources in currentfile --> Azure Databricks
+
+STEP5:
+Get the Aceess token generated in the Databricks --> User profile settings--> Generate New Token --> Give the comments and the Life span in days -->copy paste this into your PowerBi Personal Access Token
+

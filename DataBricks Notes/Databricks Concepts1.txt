@@ -1,0 +1,46 @@
+Cluster Types -> https://learn.microsoft.com/en-us/azure/databricks/archive/compute/configure
+Cluster Config 
+Databricks Cluster
+Cluster Policy -> https://docs.databricks.com/administration-guide/clusters/policies.html
+
+Workflows:
+Child notebook
+Passing Parameters to notebooks
+Notebook Workflows -> https://learn.microsoft.com/en-us/azure/databricks/workflows/
+Databricks Jobs -> https://docs.databricks.com/workflows/jobs/create-run-jobs.html 
+https://docs.databricks.com/workflows/jobs/jobs-quickstart.html
+
+Data Ingestion- Multiple files:
+(Lap times & Qualifying) of Requirements, spark program
+
+Data Ingestion - JSON:-------------
+
+Incremental Loadssssssssss:
+First finish all the concepts.
+
+API References (check this out in the below webpage):
+https://spark.apache.org/docs/latest/api/python/reference/index.html
+
+Pandas API on Spark follows the API specifications of latest pandas release.
+SparkSQL API
+Pandas API
+Structured Streaming
+MLlib (DataFrame-based)
+Spark Streaming (legacy)
+MLlib (RDD-based)
+SparkCore API
+Resource Management
+Errors (classes, methods)
+Testing (dfEqual, pandasOnSparkEqual, SchemaEqual)
+
+
+
+
+
+Unity Catalog (UC):
+UC Metastore -> https://docs.databricks.com/data-governance/unity-catalog/create-metastore.html
+UC Setup
+Cluster Config for UC
+Create External datalake, external location, storage credential
+Create External Tables, Managed TAbles, workflow
+Data Discovery, Data Lineage, Data Access Control Overview

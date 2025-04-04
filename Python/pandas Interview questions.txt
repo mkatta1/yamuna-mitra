@@ -1,0 +1,337 @@
+1)
+Check values in pandas dataframe
+
+import pandas as pd
+
+data = pd.read_csv("data.csv")
+
+print(data['City'].values)
+
+print("Hyderabad" in data['City'].values)
+
+print("Delhi" in data['City'].values)
+
+
+2) 
+cleaning string data
+     anjI REddy
+           panDaS
+            JAVA
+           pYTHON
+       react Js
+      Spring boot
+          Name
+     Ani Reddy
+       Pandas
+         Java
+
+
+import pandas as pd
+df = pd.read_csv("data.csv")
+print(df)
+df["Name"] = df["Name"].str.title() --> Caps issue
+df["Name"] = df["Name"].str.strip() --> to remove spaces
+
+3) Cleaning mobile column
+Name, mobile
+m, +91 8019031313
+k, +91-8121 24231 3
+m, (+91) 812124-2313
+s, 0 81212-42313
+
+import pandas as pd
+data = pd.read_csv("users.csv")
+print(data)
+data['Mobile'] = data['Mobile'].str.replace("\D")
+print(data)
+
+4) How to merge csv files
+
+import pandas as pd
+
+pd.read_csv("orders.csv")
+pd.read_csv("products.csv")
+
+print(orders.columns)
+print(products.columns)
+
+data = pd.merge(orders, products, how='left', on=['product_id'])
+
+5) How to merge csv file and pick selected columns in target
+
+print(orders.columns)
+print(users.columns)
+
+data = pd.merge(users, orders, how = 'left', on=['user_id'])
+print(data)
+
+data = pd.merge(users, orders[['user_id', 'price']], how = 'left', on=['user_id'])
+
+6) CSV Import - from 1 hour to 1 min
+Instead of import a file manually from a postgres-sql
+
+import pandas as pd
+from sqlalchemy import create_engine
+
+db_config = {
+	'host': 'server',
+	'user': 'user name',
+	'password': 'password',
+	'database': 'db name'
+}
+
+df = pd.read_csv('your csv file.csv')
+engine  = create_engine(f"mysql+mysqlconnector
+		{db_config['user']}:
+		{db_config['password']}
+		@{db_config['host']}/
+		{db_config['database']}")
+
+
+df.to_sql('your table', engine, index=False, if_exists = 'append', method = 'multi')
+
+engine.dispose()
+
+7) 
+
+excluded = ['']
+for oem in oems:
+   print(oem)
+   if oem not in excluded:
+       data = vehicles[vehicles['make'] == oem]
+       vehs = data['vehicle_id'].unique().tolist()
+       sql = f"select * from my_table where vehicle_id "
+       folder_path = "data/" +oem
+	if not os.path.exists(folder_path):
+		os.makedirs(folder_path)
+		my_table = pd.read_sql_query(sql, engine)
+		new_df = my_table.groupby('vehicle_')
+		new_df.rename(columns={'vin: 'total''})
+		print()
+		new_df.to_csv(folder_path+ '/my_table_total')
+
+		result_df = my_table.groupby(['vehicle_id'])
+		result_df.columns=['vehicle_id','oem_options']
+		result_df.to_csv(folder_path+'/my_table_oem')
+		result_df.rename(columns={'package_id':'pem_'})	
+       
+import time
+psql -h
+
+8)
+DONOT USE THE BELOW FUNCTION:
+
+void anyFunction() {
+  if (wifi) {
+    if (login) {
+      if (admin) {
+         seeAdminproperty();
+        } else {
+           debugPrint('must be logged in')
+        } 
+     } else {
+          debugPrint('');
+     }
+    } else {
+          debugPrint('must be connected');
+   }
+}
+
+USE THIS BELOW FUNCTION:
+
+void anyFunction() {
+    if(!wifi) {
+        debugPrint('');
+        return;
+     }
+    if(!login) {
+       debugPrint('');
+       return;
+     }
+    if(!admin) {
+       debugPrint('');
+       return;
+     } else {
+       debugPrint('must be connected');
+     }
+
+
+************************************ FOR XML data ************************************
+
+parse XML to get node attributes 
+
+import xml.etree.ElementTree as ET
+import pandas as pd
+
+cols =["name","phone","email","date"]
+rows = []
+
+tree = ET.parse("/content/sample.xml")
+root = tree.getroot()
+
+for elem in root:
+   name = elem.find("name").text
+   phone = elem.find("phone").text
+   email = elem.find("email").text
+   date = elem.find("date").text
+
+rows.append({"name": name,
+             "phone": phone,
+             "email": email,
+              "date": date})
+df = pd.DataFrame(rows, columns=cols)
+
+df.to_csv('company.csv')
+
+
+2)
+
+<foo>
+   <bar>
+      <type> foobar="1"/>
+      <type> foobar="2"/>
+   </bar>
+</foo>
+
+parse = ET.parse('data/foo.xml')
+root = parse.getroot()
+
+for tag in root.findall('bar/type'):
+    value = tag.get('foobar')
+    print(value)
+
+
+************************************ FOR JSON data ************************************
+
+#python dictionary to JSON
+
+d = {
+     'channel_name': 'Pencil Programmer',
+     'subscribers' : 1520
+}
+
+json_string = json.dumps(d)
+print(json_string)
+
+
+#JSON to python dictionary
+json_string = '{"language": "python", "version": 12.1.1}'
+
+d =json.loads(json_string)
+print(d)
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+import json
+
+x = {
+  "name": "John",
+  "age": 30,
+  "married": True,
+  "divorced": False,
+  "children": ("Ann","Billy"),
+  "pets": None,
+  "cars": [
+    {"model": "BMW 230", "mpg": 27.5},
+    {"model": "Ford Edge", "mpg": 24.1}
+  ]
+}
+
+print(json.dumps(x))
+
+import json
+
+x = {
+  "name": "John",
+  "age": 30,
+  "married": True,
+  "divorced": False,
+  "children": ("Ann","Billy"),
+  "pets": None,
+  "cars": [
+    {"model": "BMW 230", "mpg": 27.5},
+    {"model": "Ford Edge", "mpg": 24.1}
+  ]
+}
+
+print(json.dumps(x))
+
+
+************************************ FOR NESTED JSON data ************************************
+
+1)
+import pandas as pd
+result = pd.json_normalize(
+       data["data"], "countries", ["state", "shortname",
+				  ["info", "capital"],
+				  ["info", "area"]]
+
+
+Retrieving nested JSON variable:
+-------------------------------
+
+
+import requests
+import json
+
+def astronauts():
+    response = requests.get("https://api.open.notify.org/astros.json")
+    data = json.loads(response.text)
+
+for num in data['people']:
+    print("space craft: " + num['craft'] + "astronaut: " + num['name'])
+
+
+astronauts()
+
+
+Querying Nested JSON:
+-------------------
+
+select * from user_profiles
+where (profile_data -> 'age')::int > 25;
+
+
+********************** Multiprocess and Threading *************
+1)
+how to web scraping using threading in python
+use python threading for large list of web pages to scrape
+create a task function that takes one parameter
+
+sites = ["google.com","youtube.com","facebook.com","twitter.com",....]
+create a task function that takes one parameter f""https://www.{url}
+
+
+import requests
+import time
+from concurrent.futures import ThreadPoolExecutor
+
+def io_task(url):
+   u = f'https://www.{url}'
+
+   try:
+      return requests.get(u).text
+
+   except Exception as e:
+      print(e)
+      return ""
+
+# Thread pool executor is the simplest way for pool of threads. threading interface of max_workers = 20 
+txt = ""
+with ThreadPoolExecutor(max_workers=20) as
+  for result in pool.map(io_task, sites):  # for result in pool.map(task, list) calls task each time pull back 10MB
+      tst += result
+print(f"returned a total of {len{txt}:_} text")
+
+
+
+
+
+
+
+
+
+
+
+
+
+

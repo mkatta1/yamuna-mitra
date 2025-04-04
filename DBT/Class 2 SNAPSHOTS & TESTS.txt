@@ -1,0 +1,375 @@
+dim_listings_w_hosts.sql CODE: 
+
+WITH dim_listings_cleansed 
+	AS ( 
+		SELECT * FROM {{REF ('dim_listings_cleansed') }} 
+		),
+dim_hosts_cleansed AS (SELECT * FROM {{REF('dim_hosts_cleansed')}})
+SELECT 
+	l.listing_id,
+	l.listing_name,
+	l.room_type,
+	l.minimum_nights,
+	l.price,
+	l.host_id,
+	h.host_name,
+	h.is_superhost as host_is_superhost,
+	l.created_at,
+	GREATEST(l.updated_at, h.updated_at) as updated_at
+FROM l
+LEFT JOIN h ON (l.host_id = h.host_id)
+	
+In dbt_project.yml, change the configurations as:
+
+models:
+  dbtlearn:
+    +materialized: view
+    dim:
+      +materialized: table
+    src:
+      +materialized: ephemeral
+
+DROP VIEW AIRBNB.DEV.SRC_HOSTS;
+DROP VIEW AIRBNB.DEV.SRC_LISTINGS;
+DROP VIEW AIRBNB.SRC_REVIEWS;
+
+
+CLASS 47 IS INCOMPLETE!!!!!!!!!!!
+
+
+Which materialization to use when you don't need any "actual" materialization of your model?
+Answer: Ephemeral
+
+
+		SOURCES-AND-SEEDS
+
+- Seeds are local files that we upload to the datawarehouse from dbt
+- Sources is an abstraction layer on the top of your input tables
+- Source freshness can be checked automatically
+
+For copying the data "csv" file in S3 bucket into dbt seeds using the below curl command
+
+step1:
+curl https://dbtlearn.s3.us-east-2.amazonaws.com/seed_full_moon_dates.csv -o seeds/seed_full_moon_dates.csv
+
+step2: Now from dbt copy this file into snowflake using the following command:
+dbt seed
+
+
+		MART LAYER
+mart folder conatins the tables and views which are usually accessibly by BI TOOLS.
+
+models--> mart folder --> mart_fullmoon_reviews.sql
+
+{{ config (
+	materialized = 'table'
+) }}
+
+WITH fct_reviews AS (
+	SELECT * FROM {{ ref('fct_reviews')}}
+),
+full_moon_dates AS (
+	SELECT * FROM {{ ref('seed_full_moon_dates')}}
+)
+
+SELECT r.*,
+CASE
+  WHEN fm.full_moon_date IS NULL THEN 'not full moon'
+  ELSE 'full moon'
+END AS is_full_moon
+FROM fct_reviews r
+LEFT JOIN full_moon_dates fm
+ON (TO_DATE(r.review_date) = DATEADD(DAY,1,fm.full_moon_date))
+
+
+		SOURCE YML FILE CONFIGURATION
+
+In models folder---> src folder ---> sources.yml
+
+sources.yml file we define the structure and the renaming:
+
+version: 2
+
+sources:
+  - name: airbnb
+    schema: raw
+    tables: 
+	- name: listings
+	  identifier: raw_listings
+
+	- name: hosts
+	  identifier: raw_hosts
+
+	- name: reviews
+	  identifier: raw_reviews
+	  freshness:
+		warn_after: {count: 1, period: hour}
+		error_after: {count: 24, period: hour}
+
+
+With the above we are adding an extra abstraction layer on top of this raw layer!!!! Here 'airbnb' is the namespace. "freshness" is to refresh the data if not then warns and sends error after 24 hour period. Please run the command "dbt source freshness" after the code written!!
+
+Instead of "select * from airbnb.raw_listings" we can use
+"SELECT * FROM {{ source('airbnb', 'listings') }}"
+
+with the command "dbt compile", dbt goes to all of your models, yml files, test and all.... and if all ther references & templates and everything is correct or not!!!
+
+		SOURCE STALENESS & SOURCE FRESHNESS
+ 
+
+			SNAPSHOTS
+
+- Understand how dbt handles type-2 slowly changing dimensions
+- Understand snapshot strategies
+- Learn how to create snapshots on top of our listings and hosts models
+
+
+	CONFIGURATION AND STRATEGIES
+
+- Snapshots live in the snapshots folder
+- Strategies:
+	- Timestamp: A unique key and an updated_at field is defined on 
+		     source model. These columns are used for determining 			changes.
+	- Check: Any change in a set of columns (or all columns) will be 		 picked up as an update.
+
+
+In dbt_project.yml file, we have the paths specified for particular models 
+
+#These configurations specify where dbt should look for different types of files.
+#The 'model-paths' config, for example, states that models in this project can be found in the "models/" directory. You probably won't need to change these!
+
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"	#directory which stores compiled SQL files
+clean-targets:		#directories need to be removed by 'dbt clean'
+- "target"
+- "dbt_packages"
+
+
+example: 
+UPDATE AIRBNB.RAW.RAW_LISTINGS SET MINIMUM_NIGHTS=30,
+updated_at=CURRENT_TIMESTAMP() WHERE ID=3176;
+
+afet any update or delte etc..
+
+---> The dbt command "dbt shapshot" will check difference between the RAW table and SNAPSHOT table and will update the SNAPSHOT TABLE!!!!
+
+
+There are two types of tests: singular and generic
+
+- Singular tests are SQL queries stored in tests which are expected to return an empty resultset
+
+- There are four built-in generic tests:
+a.unique
+b.not_null
+c.accepted_values
+d.Relationships
+
+- You can define your own custome generic tests or import tests from dbt packages
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

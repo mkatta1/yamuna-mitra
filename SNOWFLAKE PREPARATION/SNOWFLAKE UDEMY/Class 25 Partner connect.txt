@@ -1,0 +1,62 @@
+on top pane you can see partnerconnect to connect snowflake account to other tools.
+
+many options of tools icons to connect.
+For example:
+
+Stitch to connect to talend
+
+create your new trial account: Firstname, lastname, and email address
+
+Database: PC_STITCH_DB
+Warehouse: PC_STITCH_WH (X-small)
+system user: PC_STITCH_USER
+system password: Autogenerage & randomized
+system role: PC_STITCH_ROLE
+	Role public will be granted to the pc_stitch_role
+	Role pc_stitch_role will be granted to the sysadmin role
+
+Databases with USAGE privilege granted: SNOWFLAKE, UTIL_DB, DEMO_DB, SNOWFLAKE_SAMPLE_DATA .......soooooo  onnnnnnn...
+
+
+Another type of connection:
+
+No need to provide dabases like snowflake etc... 
+
+Just give the firstname, lastname details and your partener account has heen created and is ready to be activated!!!!!
+
+Click on Activate button!!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

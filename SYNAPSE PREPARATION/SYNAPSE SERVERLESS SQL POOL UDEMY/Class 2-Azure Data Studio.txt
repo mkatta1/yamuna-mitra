@@ -1,0 +1,202 @@
+Azure data studio provides development workspace as similar to SSMS.
+It is a CROSS-PLATFORM tool and it's available on mac OS, Windows and Linux
+
+How to connect to synapse serverless sql pool from Azure Data Studio:
+
+download azure data studio -> get the Serverless sql pool connection details from (Manage->SQL POOLS -> workspace SQL END POINT, connection strings and other configuration details as well!!
+
+In Azure data studio, you will get course snippets which means for example if you want to create a database then it will give you the statement/command needed to you as a prompt:):):)
+
+-- create a new db called demo
+-- connect to the 'master' database to run this snippet
+USE master
+GO
+IF NOT EXISTS (
+	SELECT [name]
+		FROM sys.databses
+		WHERE [name]=N'demo'
+)
+CREATE DATABASE 
+GO
+
+
+Note: You can convert this sql query into a notebook by clicking on export as a notebook
+
+		OPENROWSET FUNCTION 
+
+openrowset function is used to read data from azure storage without loading into tables and external tables. Supports csv, parquet, and delta file formats
+
+select * from openrowset(bulk 'blob file path',
+			 format = ['csv'| 'parquet' | 'delta') as [file]
+Here bulk is used to specify the url path.
+It supports bulk operations through a built-in BULK provider that enables data from a file to be read and returned as a rowset.
+
+Syntax:
+
+OPENROWSET
+( { BULK '', [DATA_SOURCE = <>, <>..]
+    FORMAT = 'CSV'
+    [<bulk_options>]
+    [,<reject_options>]}
+)
+WITH ({'column_name' 'column_type' ['column_ordinal' | 'json_path']})
+[AS] table_alias(column_alias,....n)
+
+<bulk_options> ::=
+[, FIELDTERMINATOR = 'char']
+[, ROWTERMINATOR = char'']
+[, ESCAPECHAR = 'char']
+[, FIRSTROW = 'first_row']
+[, FIELDQUOTE = 'quote_characters']
+[, DATA_COMPRESSION = 'data_compression_method']
+[, PARSER_VERSION = 'parser_version']
+[, HEADER_ROW = {TRUE | FALSE}]
+[, DATAFILETYPE = {'char' | 'widechar'}]
+[, CODEPAGE ={'ACP' | 'OEM' | 'RAW' | 'code_page'}]
+[, ROWSET_OPTIONS = '{"READ_OPTIONS": ["ALLOW_INCONSISTENT_READS"]}']
+
+<reject_options> ::=
+{
+  | MAXERRORS = reject_value,
+  | ERRORFILE_DATA_SOURCE = <data source name>,
+  | ERRORFILE_LOCATION = '/REJECT_Directory'
+}
+
+
+********** To check the data types automatically assigned by synapse *************
+
+Use the stored procedure here:
+
+EXEC SP_DESCRIBE_FIRST_RESULT_SET N'SELECT
+TOP 100 *
+FROM
+     OPENROWSET(
+	BULK ''URL''
+	FORMAT = ''CSV''
+	PARSER_VERSION = ''2.0''
+	HEADER_ROW = TRUE,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '\n'
+	) AS [result]'
+
+
+---- Use WITH clause to provide explicit data types
+
+SELECT * 
+FROM 
+   OPENROWSET (
+	BULK 'abfss://container@storageaccount.dfs.core.windows.net/raw/taxi_zone.csv',
+	FORMAT ='CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE,
+	ROWTERMINATOR = '\n',
+	FIELDTERMINATOR = ','
+	)
+	WITH (
+	LOCATION SMALLINT,
+	BROROUGH VARCHAR(30),
+	ZONE VARCHAR(50),
+	SERVICE_ZONE VARCHAR(15)
+	) AS [RESULT]
+
+
+-- specify utf collation 
+
+
+SELECT * 
+FROM 
+   OPENROWSET (
+	BULK 'abfss://container@storageaccount.dfs.core.windows.net/raw/taxi_zone.csv',
+	FORMAT ='CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE,
+	ROWTERMINATOR = '\n',
+	FIELDTERMINATOR = ','
+	)
+	WITH (
+	LOCATION SMALLINT,
+	BROROUGH VARCHAR(30) COLLATE Latin1_General_100_CI_AI_SC_UTF8,
+	ZONE VARCHAR(50) COLLATE Latin_General_100_CI_AI_SC_UTF8,
+	SERVICE_ZONE VARCHAR(15) COLLATE Latin_General_100_CI_AI_SC_UTF8
+	) AS [RESULT]
+
+
+-- Read data from a file without header and select columns at their respective positions
+
+SELECT * 
+FROM 
+   OPENROWSET (
+	BULK 'abfss://container@storageaccount.dfs.core.windows.net/raw/taxi_zone.csv',
+	FORMAT ='CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE,
+	ROWTERMINATOR = '\n',
+	FIELDTERMINATOR = ','
+	)
+	WITH (
+-- removed	LOCATION SMALLINT,
+	BROROUGH VARCHAR(15) 2,-->Here '2' represents the column position in the file
+	ZONE VARCHAR(50) 3,-->Here '3' represents the column position in the file
+-- removed	SERVICE_ZONE VARCHAR(15)
+
+		--- OR ---
+	ZONE VARCHAR(50) 3,-->Here '3' represents the column position in the file
+	BROROUGH VARCHAR(15) 2,-->Here '2' represents the column position in the file
+
+	) AS [RESULT]
+
+-- Fix Column Names
+
+SELECT * 
+FROM 
+   OPENROWSET (
+	BULK 'abfss://container@storageaccount.dfs.core.windows.net/raw/taxi_zone.csv',
+	FORMAT ='CSV',
+	PARSER_VERSION = '2.0',
+	FIRSTROW = 2, -- Replaced header_row because we start from 2nd row
+	ROWTERMINATOR = '\n',
+	FIELDTERMINATOR = ','
+	)
+ -- By providing positions we are ignoring the case sensitivity of column names
+	WITH (
+	location_id SMALLINT 1, 
+	borough VARCHAR(30) 2,
+	zone VARCHAR(50) 3,
+	service_ZONE VARCHAR(15) 4
+	) AS [RESULT]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+$$$$$$$$$$$$ Debugging & Identifying errors $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+NOTE: Change the parser_version = '1.0' to get the exact answers to your issue!!!
+
+Error seen:
+Bulk load data conversion error(truncating) for row2, column 3 (zone) in data file https://---------.csv
+
+
+SELECT * 
+FROM 
+   OPENROWSET (
+	BULK 'abfss://container@storageaccount.dfs.core.windows.net/raw/taxi_zone.csv',
+	FORMAT ='CSV',
+	PARSER_VERSION = '2.0',
+	FIRSTROW = 2, -- Replaced header_row because we start from 2nd row
+	ROWTERMINATOR = '\n',
+	FIELDTERMINATOR = ','
+	)
+ -- By providing positions we are ignoring the case sensitivity of column names
+	WITH (
+	location_id SMALLINT 1, 
+	borough VARCHAR(30) 2,
+	zone VARCHAR(50) 3,
+	service_zone VARCHAR(15) 4
+	) AS [RESULT]
+
+ 
+
+
+
+
+
+
+

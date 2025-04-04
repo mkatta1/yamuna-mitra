@@ -1,0 +1,6 @@
+id;name;gender;email;department;order_date
+1;Sage;Male;sage_wieser@cox.net;R&D;2012-05-15
+2;Kris;Female;kris@gmail.com;Test;2011-08-07
+3;Abel;Male;amaclead@gmail.com;HR;2014-04-16
+4;Mattie;Female;mattie@aol.com;Test;2012-09-10
+5;Bernardo;Female;bfigeroa@aol.com;Marketing;2013-02-25

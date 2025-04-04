@@ -1,0 +1,467 @@
+PCA reduces the dimensions by focusing on genes with the most variation.
+- Useful in plotting data with lot of dimensions onto a simple x/y plot.
+- however, we're not interested in genes with most variation. Instead on maxing the separability between the two groups so we can make the decisions.
+
+Linear Discriminant Analysis (LDA):
+----------------------------------
+LDA is like PCA, but it focuses on maximizing the separability among known categories
+
+LDA is like PCA, but focuses more on maximizing the separability among know categories.
+
+Eg: Reducing a 2-D graph to a 1-D graph with LDA
+LDA uses both genes to create new axis and project the data onto this new axis by maximizing the separation of two categories.
+
+PC is principal component is a new axis line with the maximum (sum of squared distances) = SS(distances) between the projected points and the origin.
+
+
+
+Steps to create new axis:
+------------------------
+1) Maximize the distance between means.
+2) Minimize the variation (which LDA calls "scatter" and is represented by each category.
+(mu1-mu2)^2 / s^2 + s^2
+
+
+Tokenization in Spacy:
+=====================
+
+import spacy
+nlp = spacy.blank("en")
+
+doc = nlp("Dr. Strange loves pav bhaji of Mumbai as it costs only 2$ per plate.")
+
+for token in doc:
+	print(token)
+
+>> doc[0]
+>> type(nlp)
+spacy.lang.en.English
+>> type(doc)
+spacy.tokens.doc.Doc
+>> type(token)
+spacy.tokens.token.Token
+
+doc = nlp("Tony gave two $ to Peter.")
+>> token0 = doc[0]
+>> dir(token0)
+spacy.tokens.token.Token
+
+>> token0.like_num
+False
+
+>> token2 = doc[2]
+>> token2.text
+'two'
+
+>> token2.like_email / .like_num / .like_url
+>> token3.is_currency
+True
+
+for token in doc:
+  print(token, "==>", "index: ", token.i, "is_alpha:", token.is_alpha,
+	"is_punct:", token.is_punct,
+	"like_num:", token.like_num,
+	"is_currency:", token.is_currency,
+	)
+
+>> 
+>> 
+>> 
+>> 
+NLTK library is used to perform NLP operations  
+
+
+NLP => Natural Language Processing
+Text Preprocessing -> Converting everything to lowercase 
+-> tokenization -> 1. sentence -> 2.words
+ 
+convert sentences into one line. convert this one line into word tokenization.
+summarization, sentiment analysis, word tokenization, text translation
+in all such cases we need word tokenization
+
+1.Frequency distribution where how many words are frequently used.
+2.Stop-Words removal like and, a, space, %, when, where, the, my, is --> these are the words not contributing anything to the analysis level are considered as STOP-WORDS.
+3.POS Tagging, POS means Parts Of Speech
+4.Bag Of Words (BOW) -> try to convert all the unique words into VECTOR FORMAT
+5.TF IDF -> Term Frequency Identification means how many times the word has occurred. IDF means Inverse Document Frequency where it finds to check if a particular word is found how many documents.
+6.Stemmer/ Lemmatization -> converts the any word into their Base word
+Eg: study, studying, studied -> Base word is stud
+Stemmer takes prefix/ suffix with such base word
+Drawback with Stemming is these base word "might not be having any meaning"
+There are 6 types of algorithms to get the stemming
+As here we have 3 words related to study, we will only consider  
+
+TF IDF -> 1/1, 2/2 -> 1,1 -> 1*1 -> 1
+sentiment analysis -> 1.positive 2.negative 3.neutral
+
+
+business analyst training
+aws data engineer training
+power bi training
+
+Q&A:
+----
+Challenge(s) in using words as features are -
+- context of words
+- similar meaning words
+- identifying root word
+
+Stopwords in nltk library are all in _____ case.
+answer: LOWER
+
+Punctuations is in ___ module
+answer: string
+
+select correct statement(s) about removing stop words from documents
+answer: they should be removed as they are present in all documents irrespective of topic of document.
+
+word tokenization of "Hey! How's work going?." is -
+answer: ['Hey','!','How',"'s",'work','going','?','.']
+
+CODE:
+-----
+sample_text = "Does this thing really work? Lets see."
+from nltk.tokenize import sent_tokenize, word_tokenize
+sent_tokenize(sample_text)
+word_tokenize(sample_text.lower())
+from nltk.corpus import stopwords
+stop = stopwords.words('english')
+stop
+
+import string
+punctuations = list(string.punctuation)
+stop = stop + punctuations
+
+clean_words = [w for w in words if not w in stop]
+clean_words
+
+from nlk.stem import PorterStemmer
+stem_words =["play","playig","player","played","happying"]
+ps =PorterStemmer()
+stemmed_words = [ps.stem(w) for w in stem_words]
+stemmed_words
+
+from nltk import pos_tag
+from nltk.corpus import state_union
+text = state_union.raw("2006-GWBush.txt")
+text
+pos = pos_tag(word_tokenize(text))
+pos
+
+from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
+lemmatizer.lemmatize("good", pos="a")
+lemmatizer.lemmatize("excellent", pos="n")
+lemmatizer.lemmatize("painting", pos="v")
+lemmatizer.lemmatize("painting", pos="n")
+
+def get_simple_pos(tag):
+    if tag.startswith('J'):
+	retun wordnet.ADJ
+    elif tag.startswith('V'):
+	return wordnet.VERB
+    elif tag.startswith('N'):
+	return wordnet.NOUN
+    elif tag.startswith('R'):
+	return wordnet.ADV
+    else:
+	return wordnet.NOUN
+
+
+
+BUILDING FEATURE SET:
+--------------------
+documents = [(clean_review(document), category) for document, category in documents]
+documents[0]
+
+training_documents = documents[0:1500]
+testing_documents = documents[1500:]
+
+a = [1,2]
+b = [3,4]
+a += b
+a
+
+all_words = []
+for doc in training_documents:
+    all_words += doc[0]
+
+import nltk
+freq = nltk.FreqDist(all_words)
+common = freq.most_commmon(3000)
+features = [i[0] for i in common]
+documents[0]
+
+def get_feature_dict(words):
+    features = {}
+    for  w in features:
+	current_features[w] = w in words_set
+    return current_features
+
+output = get_features_dict(training_documents[0][0])
+output
+
+training_data = [(get_feature_dict(doc), category) for doc, category in training_documents]
+testing_data = [(get_feature_dict(doc), category) for doc, category in training_documents]
+
+training_data[0]
+
+Classification using NLTK Navies Bayes:
+---------------------------------------
+from nltk import NaiveBayesClassifier
+classifier = NaiveBayesClassifier.train(training_data)
+nltk.classify.accuracy(classifier, testing_data)
+classifier.show_most_informative_features(15)
+
+
+POS TAG:
+-------
+what is POS tag of Raj in "Raj went for a walk"?
+Note: Fill answer in upper case
+ANSWER: NNP
+
+what is POS tag of raj in "raj went for a walk"
+note: fill answer in upper case
+answer: NN
+
+what is POS tag of Painting in "This painting is beautiful"?
+note: fill answer in upper case
+answer: NN
+
+what is POS tag of painting in "I have been painting since morning"?
+answer: VBG
+
+what does POS tag JJ stand for r?
+answer: adjective
+
+Lemmatizer used in video is WORDNET lemmitizer
+
+Lemmatizer needs POS tag to give different output for a word based on its context.
+answer: TRUE
+
+select datasets that NLTK corpus has
+- Twitter Sample
+- Genesis
+- NPS chat
+
+In the video, movie review data is stored in the form of 
+- array of tuples of words in a document and category
+
+NLTK classifier require data to be in this format:
+- array of tuples where each tuple has dictionary of features and catgory
+
+select correct statements:
+- NLTK classifiers require data in form of array of tuples, where each tuple has dictionary of features and categories
+- SKlearn classifiers require data in X Y format, X being a 2D array and Y being output
+
+CountVectorizer:
+choose correct statement(s) about CountVectorizer-
+- CountVectorizer helps in Feature Extraction
+- It convert a collection of text documents to a matrix of token counts
+
+CountVectorizerModule:
+CountVectorizer is in sklearn FEATURE_EXTRACTION text module
+
+CountVectorizer output:
+CountVectorizer produces a sparse matrix TRUE
+
+CountVectorizer stop words
+CountVectorizer can't take care of stop words and we need to do that part of pre processing before hand. FALSE
+
+count Bi-Grams
+--------------
+N-grams are combination of N keywords together. How many bi-grams can be generated from given sentence:
+"Today is a sunny day."
+answer: 4
+description: There are total 4 bi grams - "Today is", "is a", "a sunny" and "sunny day".
+
+N-grams
+-------
+Number of N-grams for a sentence with X words will be
+answer: X - N + 1
+
+Using N-Grams improves results significantly
+answer: FALSE
+Description: use of N-Grams in your feature space may not necessarily yield any significant improvement
+
+Term Frequency
+TF of term t is defined as -
+answer: Number of times term t occurs in document d.
+
+IDF
+Higher value of IDF for term t indicates
+answer: Term t is rare in all document collection.
+
+
+
+
+================================  NLTK =============================
+using sklearn classifiers within NLTK
+nltk.classify.accuracy(classifier, testing_data)
+classifier.show_most_informative_features(15)
+
+from sklearn.svm import SVC
+from nltk.classify.scikitlearn import SklearnClassifier
+svc = SVC()
+classifier_sklearn = SklearnClassifier(svc)
+classifier_sklearn.train(training_data)
+nltk.classify.accuracy(classifier_sklearn, testing_data)
+
+from sklearn.ensemble import RandomForestClassifier
+rfc = RandomForestClassifier()
+classifier_sklearn1 = SklearnClassifier(rfc)
+classifier_sklearn1.train(training_data)
+nltk.classify.accuracy(classifier_sklearn1, testing_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CODE:
+=====
+from nltk.corpus import movie_reviews
+movie_reviews.categories()
+len(movie_reviews.fileids())
+movie_reviews.fileids('neg')
+movie_reviews.words(movie_reviews.fileids()[5])
+
+documents = []
+for category in movie_reviews.categories():
+    for fileid in movie_reviews.fileids(category):
+	documents.append((movie_reviews.words(fileid), category))
+documents[0:5]
+
+import random
+random.shuffle(documents)
+documents[0:5]
+
+from nltk.stem import WordNetLemmatizer
+lemmatizer = WordNetLemmatizer()
+from nltk.corpus import wordnet
+def get_simple_pos(tag):
+    if tag.startswith('J'):
+	return wordnet.ADJ
+    elif tag.startswith('V'):
+	return wordnet.VERB
+    elif tag.startswith('N'):
+	return wordnet.ADV
+    else:
+	return wordnet.NOUN
+
+from nltk import pos_tag
+w = "better"
+pos_tag([w])
+
+from nltk.corpus import stopwords
+import string
+stops = set(stopwords.words('english'))
+punctuations = list(string.punctuations)
+stops.update(punctuations)
+stops, string.punctuation
+
+
+def clean_review(words):
+    output_words = []
+    for w in words:
+	if w.lower() not in stops:
+	   pos = pos_tag(w)
+	   clean_word = lemmatizer.lemmatize(w, pos = get_simple_pos(pos[0][1]))
+	   output_words.append(clean_word.lower())
+   return output_words
+
+documents = [(clean_review(document), category) for document, category in documents]
+
+documents[0]
+
+#COUNT VECTORIZER
+from sklearn.feature_extraction.text import CountVectorizer
+train_set = {"the sky is blue", "the sun is bright"}
+count_vec = CountVectorizer(max_features = 3)
+a = count_vec.fit_transform(train_set)
+a.todense()
+
+count_vec.get_feature_names()
+a = ["ad","is"]
+" ".join(a)
+
+categories = [category for document, category in documents]
+
+text_documents = [" ".join(document) for document, category in documents]
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(text_documents, categories)
+count_vec = CountVectorizer(max_features =3)
+x_train_features = count_vec.fit_transform(x_train)
+x_train_features.todense()
+
+count_vec.get_feature_names()
+x_train_features = count_vec.transform(x_test)
+x_train_features
+
+SKLEARN CLASSFIERS CODE:
+========================
+from sklearn.svm import SVC
+svc = SVC()
+svc.fit(x_train_features, y_train)
+svc.score(x_text_features, y_test)
+
+N-gram:
+=======
+
+
+
+
+
+STEMMING FEVER:
+--------------
+stemming algorithm used in video is -
+potter stemmer
+
+output of using porter stemmer on briefly is:
+briefli
+
+porter stemmer will always output a valid English dictionary word
+FALSE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

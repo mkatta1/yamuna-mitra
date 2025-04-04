@@ -1,0 +1,221 @@
+************************* QUOTENAME function   ***************************
+
+Let us say, we are using dynamic SQL to build our SELECT query as shown below
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = 'USA Customers'
+Set @sql = 'Select * from ' + @tableName 
+Execute sp_executesql @sql
+
+When we execute the above script, we get the following error
+Msg 208, Level 16, State 1, Line 1
+Invalid object name 'USA'.
+
+The query that our dynamic sql generates and executes is as shown below. To see the generate SQL statement, use Print @sql.
+Select * from USA Customers
+
+Since there is a space in the table name, it has to be wrapped in brackes as shown below
+Select * from [USA Customers]
+
+One way to fix this is by including the brackets in @tableName variable as shown below
+Set @tableName = '[USA Customers]'
+
+The other way to fix this is by including the brackets in @sql variable as shown below
+Set @sql = 'Select * from [' + @tableName +']'
+
+While both of the above methods give the result we want, it is extremely dangerous because it open doors for sql injection.
+
+If we set the brackets in @tableName variable, sql can be injected as shown below and SalesDB database is dropped
+
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = '[USA Customers] Drop Database SalesDB'
+Set @sql = 'Select * from ' + @tableName
+Execute sp_executesql @sql
+
+If we set the brackets in @sql variable, sql can be injected as shown below and SalesDB database is dropped
+
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = 'USA Customers] Drop Database SalesDB --'
+Set @sql = 'Select * from [' + @tableName +']'
+Execute sp_executesql @sql
+
+So, the right way to do this is by using QUOTENAME() function as shown below. 
+
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = 'USA Customers Drop Database SalesDB --'
+Set @sql = 'Select * from ' + QUOTENAME(@tableName)
+Execute sp_executesql @sql
+
+When we execute the above script we get the following error. SalesDB database is not dropped. The reason we get this error is because we do not have a table with name - [USA Customers Drop Database SalesDB --]. To see the sql statement use PRINT @sql.
+Invalid object name 'USA Customers Drop Database SalesDB --'.
+
+If we set @tableName = 'USA Customers', the query executes successfully, without the threat of SQL injection.
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = 'USA Customers'
+Set @sql = 'Select * from ' + QUOTENAME(@tableName)
+Execute sp_executesql @sql
+
+If you want to use sql server schema name "dbo" along with the table name, then you should not use QUOTENAME function as shown below.
+
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = 'dbo.USA Customers'
+Set @sql = 'Select * from ' + QUOTENAME(@tableName)
+Execute sp_executesql @sql
+
+The above query produces the following error
+Invalid object name 'dbo.USA Customers'
+
+Instead use QUOTENAME function as shown below
+
+Declare @sql nvarchar(max)
+Declare @tableName nvarchar(50)
+Set @tableName = 'USA Customers'
+Set @sql = 'Select * from ' + QUOTENAME('dbo') + '.' + QUOTENAME(@tableName)
+Execute sp_executesql @sql
+
+QUOTENAME() function 
+Takes two parameters - the first is a string, and the second is a delimiter that you want SQL server to use to wrap the string in.
+The delimiter can be a left or right bracket ( [] ), a single quotation mark ( ' ), or a double quotation mark ( " )
+The default for the second parameter is []
+
+QUOTENAME() function examples
+
+SELECT QUOTENAME('USA Customers','"') returns "USA Customers"
+
+SELECT QUOTENAME('USA Customers','''') returns 'USA Customers'
+
+All the following statements return [USA Customers]
+SELECT QUOTENAME('USA Customers') 
+SELECT QUOTENAME('USA Customers','[') 
+SELECT QUOTENAME('USA Customers',']')
+
+
+
+***************************************** Dynamic sql table name variable ************************************************************
+
+How to pass table name dynamically for stored procedure in sql server
+
+Create the following stored procedure. Notice we are passing table name as a parameter to the stored prcoedure. In the body of the stored procedure we are concatenating strings to build our dynamic sql statement. In our previous videos we discussed that this open doors for SQL injection. 
+
+Create procedure spDynamicTableName
+@TableName nvarchar(100)
+As
+Begin
+ Declare @sql nvarchar(max)
+ Set @sql = 'Select * from ' + @TableName
+ Execute sp_executesql @sql
+End
+
+So the obvious question that comes to our mind is, why are we not creating parameterised sql statement instead. The answers is we can't. SQL Server does not allow table names and column names to be passed as parameters. Notice in the example below, we are creating a parameterised query with @TabName as a parameter. When we execute the following code, the procedure gets created successfully.
+
+
+Create procedure spDynamicTableName1
+@TableName nvarchar(100)
+As
+Begin
+ Declare @sql nvarchar(max)
+ Set @sql = 'Select * from @TabName'
+ Execute sp_executesql @sql, N'@TabName nvarchar(100)', @TabName = @TableName
+End
+
+But when we try to execute it we get an error - Must declare the table variable "@TabName"
+Execute spDynamicTableName1 N'Countries'
+
+At this point, run the application and type the following text in the "Table Name" textbox and click "Load Data" button. Notice "SalesDB" database is dropped. Our application is prone to SQL injection as we have implemented dynamic sql in our stored procedure by concatenating strings instead of using parameters.
+Employees; Drop database SalesDB
+
+One way to prevent SQL injection in this case is by using SQL Server built-in function - QUOTENAME(). We will discuss QUOTENAME() function in detail in our next video. For now understand that by default, this function wraps that string that is passed to it in a pair of brackets.
+SELECT QUOTENAME('Employees') returns [Employees]
+
+Alter procedure spDynamicTableName
+@TableName nvarchar(100)
+As
+Begin
+ Declare @sql nvarchar(max)
+ Set @sql = 'Select * from ' + QUOTENAME(@TableName)
+ Execute sp_executesql @sql
+End
+
+At this point, type the following text in the "Table Name" textbox and click "Load Data" button. Notice you will see a message - Invalid object name 'Employees; Drop database SalesDB'. Also "SalesDB" database is not dropped. 
+Employees; Drop database SalesDB
+
+The entire text in "Table Name" textbox is wrapped in a pair of brackets by the QUOTENAME function and is treated as table name. Since we do have a table with the specified name, we get the error - Invalid object name.
+
+
+***********************************************************************
+Dynamic sql vs stored procedure
+
+Pros & cons of both:
+- Separating database logic from business logic
+- Network traffic
+- SQL Injection Attacks
+- Cached query plans reuse
+- Maintenance
+- Implementing flexible logic
+
+Create Proc myProcedure1
+as
+begin
+	select * from employees
+end
+go
+
+create proc myprocedure2
+as
+begin
+	declare @sql nvarchar(100)
+	set @sql = 'select * from employees'
+	execute sp_executesql @sql
+end
+go
+
+command> execute sp_depends employees
+output> name: dbo.myprocedure1, type: stored procedure
+ 
+
+***********************************************************************
+
+declare @sql nvarchar(max)
+declare @gender nvarchar(10)
+set @gender = 'Male'
+set @sql = 'select count(*) from employees where gender=@gender'
+execute sp_executesql @sql, N'@gender nvarchar(10)', @gender
+
+-- Dynamic sql with INPUT & OUTPUT Parameters
+Declare @sql nvarchar(max)
+Declare @gender nvarchar(10)
+Declare @count int
+set @gender = 'Male'
+set @sql = 'select @count = count(*) from employees where gender=@gender'
+execute sp_executesql @sql,
+	N'@gender nvarchar(10), @count int OUTPUT'
+	@gender, @count OUTPUT
+select @count
+
+create procedure spEmployeesCount 'Female', 0
+@gender nvarchar(10),
+@count int OUTPUT
+as
+Begin
+	Declare @sql nvarchar(max)
+	set @sql = 'select @count = count(*) from employees where gender=@gender'
+execute sp_executesql @sql, N'@gender nvarchar(10), @count in OUTPUT', @gender, @count OUTPUT
+Select @count
+End
+
+alter procedure spEmployeesCount 'Female', 0
+@gender nvarchar(10),
+@count int OUTPUT
+as
+Begin
+	Declare @sql nvarchar(max)
+	set @sql = 'select @count = count(*) from employees where gender=@gender'
+execute sp_executesql @sql, N'@gender nvarchar(10), @count in OUTPUT', @gender, @count OUTPUT
+Select @count
+End
+

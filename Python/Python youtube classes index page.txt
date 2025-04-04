@@ -1,0 +1,60 @@
+installation in cmd
+1. pip install pandas
+2. pip install requests
+3. pip install bs4
+
+220 projects on Machine learning
+https://amankharwal.medium.com/200-machine-learning-projects-36acfab206f1
+
+290 projects on Machine learning
+https://medium.com/coders-camp/230-machine-learning-projects-with-python-5d0c7abf8265
+
+Matplot library video:
+https://www.youtube.com/watch?v=DOWdaecfRFw
+
+Product-based-Companies-and-Startups:
+https://github.com/kiransagar1/400-Product-based-Companies-and-Startups
+
+Mini task: supermarket bill generation using python
+https://www.youtube.com/watch?v=_zb4xxmo5b4
+
+Oops Part 2 machine Learning Intro and Coding Tips
+https://www.youtube.com/watch?v=YNxrrfPafvg
+
+Pandas Power Full Library for data analysis:
+https://www.youtube.com/watch?v=zepfiunTHag
+
+Matplotlib and richest data EDA:
+https://www.youtube.com/watch?v=DOWdaecfRFw
+
+HTML part 1:
+https://www.youtube.com/watch?v=Dn9xrc6MdhA
+
+HTML part 2:
+https://www.youtube.com/watch?v=F8YS4fIjHMc
+
+Web Scraping and Flipkart Data Scraping Using BS4:
+https://www.youtube.com/watch?v=ON9RKQ8aG5U
+
+Power Bi ! Creating Dashboard with Zomato Data:
+https://www.youtube.com/watch?v=42M0MUvl7vk
+
+Multi Threading and Regex Advance Python:
+https://www.youtube.com/watch?v=Qs8dZkMeDbI
+
+Git and Github:
+https://www.youtube.com/watch?v=EZeqPgvYZWA
+
+Django framework???
+
+
+
+
+
+
+
+
+
+
+
+

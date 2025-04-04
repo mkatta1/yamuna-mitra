@@ -1,0 +1,139 @@
+Data warehouse Use Cases:
+
+Basis for reporting
+Enables business users to analyze data
+Reporting tools & Data visulization tools
+Predictive Analytics
+Using BigData
+
+Performance, Integrated, Strategic decisions, Easy to use, Data Quality, Accessible, Continuous Traning of Machine Learning Models
+
+
+							**** Using Indexes ****
+
+
+Data is not stored in a systematic order but just wherever there's some free space available. No particular order how it can be arranged on the disc space. So scanning or searching the data for different rows would be difficult.
+
+- Indexes help to make data reads faster!
+- Slower data writes because writing the data and updating the data much slower because now also the key needs to be maintained and we cannot write the data wherever we want to.
+- Additional storage requried if we put many different indexes. 
+
+
+
+
+
+
+
+						**** Using B-tree Indexes ****
+
+It a standard and default index followed in indexes.
+
+- Multi-level tree structure
+- Breaks data down into pages or blocks
+- Indexes should be used for high-cardinality (unique) columns like Surrogate key or Primary Key
+- Not entire table (costly in terms of storage)
+- If surrogatekey is made primary key then B-tree index created on this column automatically.
+
+
+Example:
+A(1)
+AB, AC (1) <---------> AD,AE(20)
+[ABA...,ABB...,...,ACA..,ACB.....,<---->15] <-----> .........
+
+
+Here (20) or (1) means the location of the row or record
+
+
+						**** Using Bitmap Indexes ****
+
+- Particularily good for dataware houses
+- Large amounts of data + low-cardinality
+- Very storage efficient
+- More optimized for read & few DML-operations
+- Good for not many repeating values (dimensionality)
+
+
+transaction_id [PK] integer, product_id character varying, customer_id integer, payment character varying, price numeric
+1,p0494,4,visa,18.29
+2,p0221,5,visa,1.49
+3,p0625,5,visa,5.89
+4,p0431,8,mastercard,11.59
+5,p0058,5,mastercard,12.39
+
+Row_id, Value			Bit
+1, visa				11100
+4, mastercard			00011
+
+Here 1 represents the data present in which row number of particular "value" column value!!
+0 represents no data in that particular row
+
+
+
+
+Differences between B-tree Index vs Bitmap Index
+
+B-tree Index				Bitmap Index
+------------				-------------
+
+Default index on Primary key		Slow to update
+
+Unique columns				Storage efficient
+(surrogate key, ful names)		Great read performance
+
+
+
+				**** Guidelines ****
+
+Should we put index on every column?
+- No! They come with a cost!
+- Storage + Create/Update timetaking
+- Only when necessary!
+- Avoid full table reads
+- small tables do not require indexes
+Only for large tables with low query performance and we need to filter the data a lot.
+
+transaction_id [PK], product_id, customer_id, payment, price
+1,p0494,4,visa,18.29
+2,p0221,5,visa,1.49
+3,p0625,5,visa,5.89
+4,p0431,8,mastercard,11.59
+5,p0058,5,mastercard,12.39
+
+
+On Which columns should we place an index?
+1.Large tables
+2.Columns that are used as filters on, let's say, the cusomer_id is very frequently, and this column is used to get 10% of the table
+
+Fact tables:	B-tree on surrogate key	,  Bitmap key on foreign keys
+
+Dimension table: Size of table, Are they used in serches a lot? choose based on cardinality		
+		(if in millions	
+		 then good but
+		not for small)
+
+Bitmap key on foreign keys becoz oftentimes used to filter the data, and it's also used to join to different tables and putting a key on this join column will also increase the performance. That's a additional benefits by placing a bitmap key on our foreign key.
+
+Ofcourse, again, it's depending on the cardinality. A huge range of different values in a huge dimension table then it would be more beneficial to B-tree index 
+
+
+************************** SYNTAX *****************************
+
+CREATE INDEX index_name ON table_name [USING method]
+(
+ column_name [ASC | DESC],
+ ....
+);
+
+Example:
+
+CREATE INDEX customer_id ON core.sales
+(
+	customer_id ASC
+);
+DROP INDEX core.customer_id_index
+
+SELECT * from core.sales
+WHERE customer_id=4;
+
+
+

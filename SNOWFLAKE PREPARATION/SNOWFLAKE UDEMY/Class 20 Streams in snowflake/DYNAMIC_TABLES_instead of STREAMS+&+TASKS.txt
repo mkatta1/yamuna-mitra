@@ -1,0 +1,3 @@
+Read this blog or article
+Snowflake: SCD2 with Dynamic Tables
+https://medium.com/snowflake/snowflake-scd2-with-dynamic-tables-9bea90fefd62

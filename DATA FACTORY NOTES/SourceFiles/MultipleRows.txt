@@ -1,0 +1,6 @@
+ItemId,VartId,ItemName,VartName,WhNo,Zone,Bin
+1,1,BajajCT,Black,Wh001,Z001,8001
+1,2,BajajCT,Red,Wh001,2001,B002
+1,3,BajajCT,Silver,Wh001,Z001,8003
+2,1,Hero Su,Black,Wh001,Z002,B001
+2,2,Hero Su,Red,Wh001,Z002,B002

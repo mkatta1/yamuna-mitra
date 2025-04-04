@@ -1,0 +1,41 @@
+def create_main_dataframe(separate_dataframes:dict):
+    """
+    Concats all per-room dataframes vertically. Creates final dataframe.
+    """
+    dataframes_to_concat = []
+
+    for i in separate_dataframes.values():
+        dataframes_to_concat.append(i)
+
+    df = pd.concat(dataframes_to_concat, ignore_index=True)
+    df = df.sort_values('ts_min_bignt') # All data is sorted according to ts_min_bignt. We want it to stream according to timestamp.
+   
+    df.dropna(inplace=True)
+    df["event_ts_min"] = pd.to_datetime(df["ts_min_bignt"], unit='s') # Create datetime column
+    return df
+
+
+def write_main_dataframe(df):
+    """
+    Writes the final dataframe to the local.
+    """
+    df.to_csv('/home/train/data-generator/input/sensors.csv', index=False)
+
+
+###############################################################################################################################
+
+import os
+import findspark
+from functools import reduce
+from pyspark.sql import DataFrame
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+from pyspark.sql.types import *
+
+findspark.init("/opt/manual/spark") # This is where local spark is installed
+spark = SparkSession.builder \
+        .appName("Spark Read Write") \
+        .master("local[2]") \
+        .getOrCreate()
+
+###############################################################################################################################

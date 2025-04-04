@@ -1,0 +1,35 @@
+- conditional formatting
+- select our ranges
+- select any rule from the drop down menu
+- Filter all columns to know if we have blanks in the data, also we can use ISBLANK(#give range), COUNTBLANK(#give range)
+- 
+tooltip is to add extra information to the graph
+
+We have options to transpose the value, arrange bar chart into descending or ascending order, to make diff bw rows and columns to transpose values.
+
+Top pane Analysis -> click on create calculated field
+
+GDP_per_capita = [Official est. GDP(billion US$)]/[Metropolitian Population]
+
+on the Y-axis right click -> edit axis -> Tick Marks "Minor", "Major" as None -> In General tab, Uncheck "Include zero"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

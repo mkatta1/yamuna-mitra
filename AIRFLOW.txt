@@ -1,0 +1,272 @@
+version: '3'
+x-airflow-common:
+  &airflow-common
+  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow:2.0.1}
+  environment:
+	&airflow-common-env
+	AIRFLOW__CORE_EXECUTOR: LocalExecutor
+	AIRFLOW_CORE_SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+	/*AIRFLOW__CELERY__RESULT_BACKEND:
+	AIRFLOW__CELERY_BROKER_URL:*/-->REDIS is necessary for celery so we delete them
+	AIRFLOW__CORE__FERNET__KEY:
+	AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION:'true'
+	AIRFLOW_CORE_LOAD_EXAMPLES:
+  volumes:
+	- ./dags:/opt/airflow/dags
+	- ./logs:/opt/airflow/logs
+	- ./plugins: /opt/airflow/plugins
+
+
+airflow-webserver:
+<<: *airflow-common
+command: webserver
+ports:
+	- 8080:8080
+healthcheck:
+	test: ["CMD","curl",""]
+	interval: 10s
+	timeout: 10s
+	retries: 5
+restart: always
+airflow-scheduler:
+	<<: *airflow-common
+	command: sceduler
+	restart: always
+airflow-worker:
+	<<: *airflow-common
+	command: celery worker
+	restart: always
+airflow-init:
+	<<: *airflow-common
+	command: version
+	environment:
+		<<: *airflow-common-env
+		_AIRFLOW_DB_UPGRADE:
+		_AIRFLOW_WWW_USER_CREATE:
+flower:
+	<<: *airflow-common
+	command: celery flower
+	ports:
+	  - 
+	healthcheck:
+		test
+
+_______________________________________
+mkdir ./dags ./logs ./plugins
+docker-compose up airflow-init
+docker-compose up -d (#in detached mode running containers in background)
+docker ps
+it checks for the containers running in here like webserver, scheduler,and postgres database
+
+##################################################################################
+
+Airflow core concepts:
+airflow is a workflow management platform, written in python
+workflow is seq of tasks
+In airflow, workflow is defined as DAG
+task is a unit in dag, represented as a node
+operator: 
+/\ This is called Bash operator, it is to run a bash command
+\/
+
+* This is called python operator, it is to run a python code
+/\
+\_/ This is customised operator
+
+This operators defines what actually being defined in the tasks.
+
+
+DAG run is called a Execution Date
+Task Instance is a particular point of time of the Execution Date a Task is executed
+DAG Run is a particular DAG instancesitation containing particular tasks and instances that run for a particular date and time ?????????/
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Task Lifecycle and Basic Architecture
+
+No_status = Scheduler created empty task instance
+Scheduled = scheduler determined task instance needs to run
+upstream_failed = the task's upstream task failed
+skipped = task is skipeed
+Queued = scheduler sent task to executor to run on the queue
+Running = Worker picked up a task and is now running it
+Worker contains computational resources. Once it is free of any task it will execute the task.
+No_status -> scheduler
+			-> Scheduled -> Executor -> Queued -> worker -> Running
+			-> Removed			
+			-> Upstream failed
+			-> Skipped
+========================================================================================
+To dump all the example DAG's from the docker
+
+#docker-compose down -v
+AND
+in compose.yml
+AIRFLOW_CORE_LOAD_EXAMPLES = 'false'
+after this execute
+#docker-compose up airflow-init
+docker-compose up -d
+
+PYTHON .py file
+
+from airflow import DAG
+from airflow.operators.bash import BashOperator
+
+default_args = {
+	'owner': 'coder2j',
+	'retries': 5
+	'retry_delay': timedelta(minutes=2)
+}
+
+with DAG(
+	dag_id ='our_first_dag',
+	default_args=default_args,
+	description = 'This is our first dag that we write',
+	start_date = datetime(2021,7,29,2),
+	scheduler_interval='@daily'
+) as dag:
+	task1 = BashOperator(
+		task_id='first_task',
+		bash_command="echo hello world, this is the first task!"
+      )
+	task2 = BashOperator(
+		task_id = 'second_task',
+		bash_command = "echo hey, I am task2 and will be running after task1
+	)
+	task3 = BashOperator(
+		task_id ='third_task',
+		bash_command = "echo hey, I am task3 and will be running after task1 at the same time as task2"
+
+
+
+	task1.set_downstream(task2)
+	task2.set_downstream(task3)
+OR WE CAN SAY LIKE
+	task1 >> task2
+	task1 >> task3
+OR ELSE
+	task1 >>[task2,task3]
+
+so the output will be:
+DAG -> first task -> second task
+
+
+What is Rendered, Log, All Instances????
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$ AIRFLOW Python Operator and XCom $$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+from datetime import datetime, timedelta
+
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+
+default_args = {
+	'owner': 'coder2j'
+	'retries' : 5,
+	'retry_delay' : timedelta(minutes=5)
+}
+
+def greet(name,age):
+	print(f"Hello World! My name is {name}, "
+		f"and I am {} years old!")
+
+
+with DAG(
+	default_args= default_args,
+	dag_id = 'our_dag_with_python_operator_v01',
+	description='Our first dag using python operator',
+	start_date=datetime(2021,10,6),
+	schedule_interval='@daily'
+
+) as dag:
+
+	task1 = PythonOperator(
+		task_id='greet',
+		python_callable=greet,
+		op_kwargs={'name':'Tom','age':20}
+	)
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+VIDEO 14:
+Load csv into Postgresql
+Postgressql hooks - query data
+Dynamic sql query with Airflow caros
+ASW S3 hooks -upload local file into
+keep project folder clean by Named temporary file
+
+
+
+VIDEO 13:
+What is Sensor Operator
+What is MinIO
+Setup MinIO in Docker container
+Create bucket and upload file
+Create Airflow Dag
+Check Amazon provider package doc
+Setup S3 sensor task
+S3 Sensor in practice
+
+
+VIDEO 12:
+What is Docker image extending and
+Install python requirements via extending airflow docker image
+Install python requirements via customizing airflow docker image
+When to use image extending or customizing
+
+VIDEO 11:
+What is Airflow Connection
+Manage Connection in Airflow Webserver UI
+Expose the Postgres Database ports
+Create a database using DBeaver
+Connect to Postgres
+Insert values use Postgres Operator
+Airflow DAG best practice
+
+
+VIDEO 10:
+What is Cron Expression
+Schedule DAG use Cron Expression Presets
+Create customized Cron Expression use crontab.guru
+Schedule DAG weekly use Cron Expression
+Customize Cron Expression to meet your need
+
+
+VIDEO 9:
+Create a simple Airflow DAG
+Set start date in the past and enable catchup
+Disable catchup by setting it to False
+Using backfill command to fill dag run in the past
+Backfilled dag run displayed in the airflow ui
+
+VIDEO 8:
+
+What is TaskFlow API
+How to write a dag using TaskFlow API
+Task with multiple outputs
+TaskFlow API takes care of XComs push and pull operations
+
+
+TaskFlow API
+AUTO CALCS INPUTS AND OUTPUTS
+
+dag_with_taskflow_api
+
+from airflow.decorators import dag, task
+
+default_args = {
+	'owner': 'coder2j',
+	'retries': 5,
+	'retry_delay': timedelta(minutes=5)
+}
+
+@dag()
+def hellow_world_etl():
+	pass
+
+ 
+

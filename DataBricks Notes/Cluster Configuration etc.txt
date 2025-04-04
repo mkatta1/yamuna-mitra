@@ -1,0 +1,140 @@
+2-8 workers: 28-112 GB Memory,
+8-32 Cores 1 Driver: 14 GB Memory, 4 Core
+
+DBU/hour: 2.25 - 6.75
+
+Cluster mode: High Concurrency/Standard/SingleNode
+
+Autopilot options: Enable autoscaling, Terminate after 20 minutes of inactivity
+
+worker type: Standard_DS3_v2 (14 GB Memory, 4 Cores)
+min workers: 2, Max workers: 8
+driver type: same as worker (14 GB Memory, 4 Cores)
+
+Databricks runtime version: 
+Runtime: 9.1 LTS (Scala 2.12, Spark 3.2.1)
+
+10.4 LTS (Scala 2.12, Spark 3.2.1)
+10.5 (Scala 2.12, Spark 3.2.1)
+11.0 (Scala 2.12, Spark 3.3.0)
+11.1 Beta (Scala 2.12, Spark 3.3.0)
+
+DBU/hour: 1.5 for Standard_DS3_v2
+
+Advanced options:
+Click, if you want to Enable Lake Storage credential passthrough
+
+spark--> 
+	spark config:
+		one key-value pair per line.
+		Example:
+		spark.speculation true
+		spark.kryo.registrator my.package.MyRegistrator
+
+	Environment variable:
+		SPARK_NICENESS = 0
+		JAVA_OPTS = -D....-D...-XX:MaxPermSize=256m...
+		JAVA_OPTS =  $JAVA_OPTS -D....
+
+
+
+Tags:
+Key, Value
+Vendor, Databricks
+Creator, mitra@microsoft.com
+ClusterName, databrickscluster002
+
+Logging:
+Destination: Cluster log path
+
+
+Init Scripts: To configure all your jars
+
+Init scripts
+Type, File path
+
+Destination, Init script path
+DBFS etc.. , dbfs:/
+
+
+
+Configuration: The above all details comes under "Configuration"
+Notebooks(0)
+Libraries: Install new/ Uninstall
+Event log:
+  Event Type, Time, Message
+  CREATING, 2022-07-12 07:19:43 IST, Cluster creation requested by 	sai@gmail.com
+
+Spark UI: UI not available for cluster in pending state.
+Driver logs: 
+Metrics
+Spark cluster UI - Master
+
+
+In a Databricks notebook, the Spark session is already defined as a global variable spark.
+
+Databricks Notebooks have some Apache Spark variables already defined.
+SparkContext: sc
+SQLContext/HiveContext: sqlContext
+SparkSession (spark 2.x): spark
+
+print("Spark version", sc.version, spark.sparkContext.version, spark.version)
+print("Python version", sc.pythonVer)
+
+# spark version 2.3.0, 2.3.0, 2.3.0
+# python version 3.5
+
+
+All purpose $492
+Jobs $1307
+Total spent 
+Delta 
+
+
+From what databricks runtime does we start using Unity Catalogue in databricks?
+- Why do we use ADF instead of using databricks connection string to data load from on-premise?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

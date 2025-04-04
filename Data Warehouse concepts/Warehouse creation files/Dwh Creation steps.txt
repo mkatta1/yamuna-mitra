@@ -1,0 +1,8 @@
+Fact table design
+1.Create DateKey
+2.Include product_FK (for product dimension)
+3.Payment dimension (Junk Dimension) --> for payment dimension
+4.Additional columns:
+- total_cost
+- Add total_price
+- Add profit

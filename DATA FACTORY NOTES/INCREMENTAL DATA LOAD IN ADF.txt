@@ -1,0 +1,488 @@
+Incrementally Upsert data using Azure Data Factory's Mapping Data Flows:
+https://www.mssqltips.com/sqlservertip/6729/azure-data-factory-mapping-data-flow-incremental-upsert/
+
+
+********* Copy Incremental data within Azure SQL DB - Multiple Tables
+Youtube link: https://www.youtube.com/watch?v=0Cnkd46F5pk
+
+STEP1:
+tables: products, sales, orders
+
+CREATE TABLE tbl_products_source(
+	ProductKey int,
+	PurchaseDate datetime,
+	Qty int,
+	Price float
+)
+
+CREATE TABLE tbl_products_target(
+	ProductKey int,
+	PurchaseDate datetime,
+	Qty int,
+	Price float
+)
+
+INSERT INTO tbl_products_source(ProductKey, PurchaseDate, Qty, Price)
+VALUES (1, '2022-05-21T16:49:39.000', 10, 100.78),
+(2, '2022-04-11T10:49:27.000', 20,1000.28),
+(1, '2022-03-14T13:49:31.000', 30,2100.68),
+(3, '2022-05-23T12:49:32.000', 55, 4100.32),
+(2, '2022-06-25T11:41:33.000', 12, 1100.88)
+
+select * from tbl_products_source
+
+select * from tbl_products_target
+
+select * from tbl_products_source where PurchaseDate > (select WaterMarkValue from tbl_watermark WHERE SourceTableName = 'dbo.tbl_products_source')
+
+--sales table
+CREATE TABLE tbl_sales_source(
+	ProductKey int,
+	SalesDate datetime
+	SalesAmount float
+)
+
+CREATE TABLE tbl_sales_target(
+	ProductKey int,
+	SalesDate datetime,
+	SalesAmount float
+)
+
+INSERT INTO tbl_sales_source (ProductKey, SalesDate, SalesAmount)
+VALUES (1, '2022-05-21T16:49:39.000', 100.78),
+(2, '2022-04-21T10:49:27.000', 1000.28),
+(1, '2022-03-21T13:49:31.000', 2100.68),
+(3, '2022-05-21T12:49:32.000', 4100.32),
+(2, '2022-06-21T16:49:33.000', 1100.88)
+
+select * from tbl_sales_source
+
+select * from tbl_sales_target
+
+
+select * from tbl_sales_source where SalesDate > (select WaterMarkValue from tbl_watermark WHERE SourceTableName = 'dbo.tbl_sales_source')
+
+
+-- Orders table
+
+CREATE TABLE tbl_orders_source(
+ ProductKey int,
+ orderDate datetime,
+ QTY int
+)
+
+CREATE TABLE tbl_orders_target(
+ ProductKey int,
+ orderDate datetime,
+ QTY int
+)
+
+INSERT INTO tbl_orders_source (ProductKey, orderDate, QTY)
+VALUES (1,'2022-05-21T16:49:39.000',10),
+(2,'2022-04-21T10:49:27.000',1000),
+(1,'2022-03-21T13:49:31.000',2100),
+(3,'2022-05-21T12:49:32.000',41),
+(2,'2022-06-21T11:49:33.000',11)
+
+select * from tbl_orders_source
+
+select * from tbl_orders_target
+
+select * from tbl_orders_source where orderDate > (select WaterMarkValue from tbl_watermark WHERE SourceTableName = 'dbo.tbl_orders_source')
+
+--water mark table
+
+CREATE TABLE tbl_watermark(
+	SourceTableName varchar(100),
+	TargetTableName varchar(100),
+	WaterMarkColumn varchar(50),
+	WaterMarkValue datetime,
+	SourceQuery varchar(1000),
+	IsActive int
+)
+
+insert into tbl_watermark( SourceTableName, TargetTableName, WaterMarkColumn, WaterMarkValue, SourceQuery, IsActive) values
+
+('dbo.tbl_products_source','dbo.tbl_products_target','PurchaseDate', '2021-01-01 00:00:00', 'select * from tbl_products_source where PurchaseDate > (select WaterMarkValue from tbl_watermark WHERE SourceTableName = ''dbo.tbl_products_source'')', 1), 
+
+('dbo.tbl_sales_source','dbo.tbl_sales_target','SalesDate', '2021-01-01 00:00:00', 'select * from tbl_sales_source where SalesDate > (select WaterMarkValue from tbl_watermark WHERE SourceTableName = ''dbo.tbl_sales_source'')', 1),
+
+('dbo.tbl_orders_source','dbo.tbl_orders_target','orderDate', '2021-01-01 00:00:00', 'select * from tbl_orders_source where orderDate > (select WaterMarkValue from tbl_watermark WHERE SourceTableName = 'dbo.tbl_orders_source')', 1)
+
+
+STEP2:
+
+Lookup ---> ForEach (----> CopydataActivity-->LookupActivity2)
+Activity   Activity
+
+Create Lookup Activity--> Go to settings & uncheck "First row only" because we trying to read multiple rows, select the dataset
+--> Use query:
+	select * from dbo.tbl_watermark
+	where isactive = 1
+
+Here "isactive" column is set to 1 for performing incremental load
+
+
+In ForEach Activity --> Go to settings & check "Sequential" option, 
+	Items = @activity('LookupActivity').output.value
+
+In (----> CopydataActivity), Go to Source, select "Use Query" instead of table because we need to pass the dynamic content into this query!
+
+Query: @item().sourceQuery
+
+Go to Sink, select the dataset with tablename dynaically by giving the below:
+
+Dataset Connection tab--> split(dataset().tablename,'.')[0]
+			  split(dataset().tablename,'.')[1]
+
+tablename = @item().TargetTableName
+
+STEP3:
+
+CREATE PROCEDURE sp_watermark (@tablename varchar(100), @maxdate datetime)
+as
+begin
+	updatae tbl_watermark set watermarkvalue = @maxdate
+		where targettablename = @tablename
+
+end
+
+In (----> CopydataActivity-->LookupActivity2), lookupactivity go to settings ---> Use query:
+
+SELECT ISNULL(MAX(@{item().WaterMarkColumn}), '@{item().WaterMarkValue}') as NewWaterMarkValue
+FROM @{item().TargetTableName}
+
+In (-> CopydataActivity->LookupActivity2->StoredProcedure), storedProcedure go to settings --> select the StoredProcedureName = [dbo].[sp_watermark]
+
+StoredProcedureParameters:
+maxdate = 
+@activity('GetNewWatermarkValue').output.firstRow.NewWatermarkvalue
+
+tablename = 
+@item().TargetTableName
+
+
+
+************** Incrementally copy new and changed files based on Last Modified Date in ADF: ***************
+
+In COPY DATA ACTIVITY, Source tab:
+File path type: wildcard file path = .csv
+Filter by last modified:
+a. Start time = addDays(utcnow()-2)
+b. End time = utcnow()
+
+**************************Incremental load or delta load from sql to file storage ************************** 
+
+STEP 1:
+
+create table data_src
+(
+	personId int,
+	name varchar(255),
+	lastModifytime datetime
+);
+
+insert into data_src (personId, name, lastModifyTime)
+vales 
+(1,'aaa','9/1/2017'),
+(2,'bbb','9/2/2017'),
+(3,'ccc','9/3/2017'),
+(4,'ddd','9/4/2017'),
+(5,'eee','9/5/2017');
+
+create table watermarktable
+(
+TableName varchar(255),
+WatermarkValue datatime
+);
+
+insert into watermarktable values ('data_src','1/1/2010 12:00:00 AM')
+
+CREATE PROCEDURE update_watermark @LastModifiedtime datatime, @TableName varchar(50)
+AS
+BEGIN
+	UPDATE watermarktable
+	SET [watermarkValue] = @Lastmodifiedtime
+	WHERE [TableName] = @TableName
+END
+
+STEP 2:
+
+In pipeline, Lookup activity_1_oldmark --> settings: source dataset is TableName = dbo.watermarktable (Purpose is to get the lastModifieddate)
+
+Lookup activity_2_newmark --> settings: Retrieve Latest lastModifieddate from a query instead of a Table like above Lookup activity_1_oldmark
+
+Query: select max(LastModifytime) as NewWatermarkvalue from data_src
+
+STEP3:
+
+Lookup activity_1_old
+		 \ -----\Copy Data Activity --> Stored Procedure Activity
+		 / -----/			(for updating watermark
+Lookup activity_2_new					table)
+
+In Copy Data Activity, in Source use Query
+
+Query: 
+select * from data_src where Lastmodifytime > '@{activity('Lkpactivity_1_oldmark').output.firstRow.Watermarkvalue}' and LastModifytime < = '@{activity('Lkpactivity_2_newmark').output.firstRow.NewWatermarkvalue}'
+
+
+File path = @CONCAT('Incremental -', pipeline().RunId,'.txt')
+Here Incremental is a file name + Runid . As Runid would be unique for each run so it makes the filename unique.
+
+
+We can update the watermark table using the "stored procedure activity"
+In StoreProcedure settings, parameters are
+Name: LastModifiedTime , Type: DateTime, Value: @{activity('LkpNewWatermarkActivity').output.firstRow.NewWatermarkvalue}
+
+Name: TableName, Type: string, value:
+@{activity('LkpOldWatermarkActivity').output.firstRow.TableName}
+
+
+Step4:
+To test the above pipeline's working we will inset the below records.
+
+INSERT INTO data_source_table
+VALUES (6, 'newdata','9/6/2017')
+
+INSERT INTO data_source_table
+VALUES (7, 'newdata','9/7/2017')
+
+
+
+
+**************************  ************************** ************************** 
+CREATE TABLE watermarktable(
+TableName VARCHAR(40),
+watermarkValue datetime
+)
+
+INSERT INTO watermarktable
+VALUES ('File_source','01/01/2000 01:00:00 AM')
+
+INSERT INTO FILE_SOURCE
+	(FileId, FileName, lastmodifytime)
+VALUES
+	(6, 'Computer Science','05/13/2022 12:35:00 AM'),
+	(7, 'Security', '06/14/2002 12:35:00 AM');
+
+LOOKUP(LOOKUP_WATERMARK TABLE) ====\ Copy data(Copy data) + Stored Procedure
+LOOKUP(LOOKUP_FILESOURCE)     =====/
+
+
+
+
+	FILE_SOURCE
+Field	FileName	Lastmodifytime
+1	History	06-05-2002 00:35
+2	Maths		07-05-2002 00:35
+3	Physics	08-05-2002 04:35
+4	Social	09-05-2002 00:35
+5	Science	10-05-2002 00:35
+
+
+	WATERMARK TABLE
+TableName	watermarkValue
+FILE_SOURCE	10-05-2022 00:35
+
+
+LOOKUP1 QUERY:
+SELECT TableName, WatermarkValue
+FROM WatermarkTable
+WHERE TableName =  '@{pipeline().parameters.TableName}'
+
+
+LOOKUP2 QUERY:
+SELECT MAX(LastModifyTime) AS LATESTWATERMARK
+FROM FILE_SOURCE
+
+SELECT MAX(@{pipeline().parameters.watermarkColumn}) AS LATESTWATERMARK
+FROM @{pipeline().parameters.TableName}
+
+COPYDATA ACTIVITY QUERY:
+
+SELECT * FROM FILE_SOURCE
+WHERE LastModifyTime > '@{activity{'Lookup_WatermarkTable'}.output.firstRow.watermarkValue}'
+AND
+LastModifyTime<='@{activity{'Lookup_FileSource'}.output.firstRow.LATESTWATERMARK}'
+
+
+--- CREATING 2nd Table at SourceDB which is used in the copy data tool
+
+CREATE TABLE MUSIC_SOURCE
+(ItemNo Integer,
+MusicType varchar(200),
+AddedDate DATETIME
+)
+
+INSERT INTO MUSIC_SOURCE
+VALUES(1,'Pop','06/11/2022 11:30:00 AM')
+,(2,'Rock','07/11/2022 08:50:00 AM')
+,(3,'Hip Hop','08/11/2022 04:00:00 AM')
+,(4,'Heavy Metal','09/11/2022 07:40:00 AM')
+
+
+
+
+One Lookup1 for fetching the last update DATE in the source and the other LOOKUP2 is the last INSERT DATE in the source
+
+LOOKUP1 QUERY alias ExtractLastUpdateDate :
+select max([Last_m]) as Last_m from tbluster
+
+LOOKUP2 QUERY alias ExtractLastLoadDate :
+select [LastLoadDate] as LastLoadDate from tblControl
+
+select * from tbluster
+
+LOOKUP1 + LOOKUP2 = COPY_DATA TOOL
+
+COPY_DATA TOOL QUERY  alias 
+select * from tbluster
+where Last_m>=
+'@{activity('ExtractLastUpdateDate').output.firstrow.Last_m}' and Last_m>
+'@{activity('ExtractLastLoadDate').output.firstrow.LastLoadDate}'
+
+
+TABLE_NAME = dbo.userdata
+MODIFIED_DATE = @{activity('ExtractLastUpdateDate').output.firstrow.Last_m}
+
+insert into [dbo].[tbluster] values('vinod','487589','05/01/2021');
+
+select * from tbluster
+where last_m <= '05/01/2021' and last_m > '03/01/2021'
+
+
+SECOND VIDEO:
+------------
+
+playersdata.txt
+dimid,name,age,homecountry,iplteam
+2,'kohli',28,'India','kkr'
+3,'watson',38,'Australia','mi'
+4,'cummins',30,'Australia','kkr'
+5,'Tewatia',20,'India','rr'
+6,'Test',22,'South Africa','dd'
+
+TABLE_NAME: T_DIMPLAYERS
+dimid,name,age,homecountry,iplteam,lastmodifieddate,hashcolumn
+6,'Test',22,'SouthAfrica','DD',2020-10-07,###
+2,'Kohli',28,'India','kkr',2020-10-07,###
+3,'Watson','38','Australia','mi',2020-10-07,###
+5,'Tewatia',20,'India','rr','2020-10-07,###
+4,'Cummins',30,'Australia','kkr',2020-10-07,###
+
+name+homecountry+ipl = hashcolumn
+
+1) To update, we compare source & target based on hash column
+2) To insert, we compare based on the id columns of both soure & target
+
+
+FLOW1:
+
+InputCSV + ComputeHash + LkupDimID (+InputAZSql) + NewRecords + AzSQLTblInsert
+
+									||
+FLOW2:									\/
+		Update + AlterRowEnableUpdates + AZSQLTblUpdate
+		NoUpdates+BlobFile
+
+ComputeHash: This is derived column tranformation editor
+Hash = toBinary(md5(name+homecountry+iplteam))
+dimidint= toInteger(dimid)
+datemodified =  currentDate()
+
+LkupDimId: This is a lookup transformation editor
+PrimaryStream = ComputeHash
+LookupStream = inputAZSql
+LookupCondition -> DimID of source file == DimId of target table
+
+NewRecords: This is a conditional split editor. Here we mention whether we perform INSERT/UPDATE
+
+SplitOn: FirstMatching condition
+Conditions:
+NewRecords-> isNull(@inputAZSql@dimid)
+Update -> !isNull(@inputAZSql@dimid) && notEquals(hashcolumn, Hash)
+
+It means if the @inputAZSql@dimid (alias lookup table aka target table) is not null ID AND if both source and lookup hashcolumn doesn't match then we need to do UPDATE.
+
+AzSQLTblInsert:
+Whenever the NewRecords condition from SplitOn is satisfied then we will insert the records to target
+
+FLOW2 is to perform UPDATE:
+
+AlterRowEnableUpdates: This is just to have alterRowTransformtion for this update before sink and the condition is updateIf = true()
+
+NoUpdates: This is a default condition 
+
+
+
+INCREMENTAL DATA LOAD IN DATABRICKS :
+------------------------------------
+
+from pyspark.sql import SparkSession
+sparkdriver = SparkSession.builder.master('local').appName('desktop').\
+			config('spark.jars.packages','mysql:mysql-connector-java:5.1.44').\
+			getOrCreate()
+df_mysql = sparkdriver.read.format('jdbc').\
+		options(url ='jdbc:mysql://localhost:3306',driver='com.mysql.jdbc.Driver',password='karna',user='root',dbtable='dbs').load()
+
+from pyspark.sql.functions import *
+
+f1 =sparkdriver.sql('show functions')
+#print(f1.count())
+#print(type(f1))
+#f1.show(296)--> to show all the list of predefined functions
+#f1.collect()
+#spardriver.sql('describe function <functionName>').collect()
+#df1 = df_mysql.withColumn("day",current_date())
+df1 = df_mysql.withColumn("day",to_date(current_date(),1))
+df1.write.partitionBy('day').mode('append').saveAsTable('calldatatable')
+#df1.show(5)
+print('success')
+
+
+
+
+
+
+
+
+
+
+
+#df_json = sparkdriver.read.format('json').option('multiline',True).load('c:\\Users\\karunakar\\Desktop\\j1.txt')
+
+
+/* 
+import requests
+import json
+
+jsonapidata = requests.request('GET','https://api.github.com/users/hadley/args')
+jsondata = jsonapidata.json()
+print(type(Len(jsonapidata.json())))
+print(Len(jsonapidata.json()))
+file=open('c:\\Users\\karunakar\\Desktop\\restapi3','a')
+
+for record in jsondata:
+	file.write("%s\n" %record)
+df_json = sparkdriver.read.format('json').Load('C:\\Users\\karunakar\\Desktop\\restapi3')
+df_json.count()
+df_json.printSchema()
+df_json.show(20)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

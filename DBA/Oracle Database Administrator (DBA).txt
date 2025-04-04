@@ -1,0 +1,35 @@
+Oracle Database Administrator (DBA) 	team in a BAU (Business as Usual) capacity
+Strong experience as an Oracle DBA in an enterprise environment.
+Expertise in Oracle Database platforms, Oracle Financials, E-Business Suite, and Middleware.
+Proficiency in database performance tuning, patching, and troubleshooting.
+Experience with Oracle Recovery Manager (RMAN) and Oracle Enterprise Manager (OEM).
+Understanding of security best practices and compliance standards for database management.
+
+
+Experience building APIs (we build REST and GraphQL APIs)
+Experience with SQL and databases (we use CockroachDB and PostgreSQL)
+Exposure to schema and/or policy languages eg. JSONSchema, Cuelang, Rego/OPA
+
+
+Database Administrator | 12-Month Fixed-Term Contract
+Maintain, optimise, and support SQL databases, including cloud-based environments.
+Assist with data migrations, system decommissioning, and upgrades across key business applications.
+Provide expertise on enterprise data platforms and modern data architecture.
+Ensure database security, performance, and integrity in line with best practices.
+Work collaboratively within an Agile environment to support business transformation initiatives.
+Support integrations with key enterprise systems, including HCM, payroll, and facilities management solutions.
+
+Key Requirements:
+
+Proven experience in database administration, with expertise in SQL Server and/or Azure SQL.
+Strong understanding of data migration processes and database lifecycle management.
+Familiarity with enterprise data systems and modern data architectures (e.g., Lakehouse technology).
+Experience supporting business-critical applications, such as HCM/payroll and content management systems.
+Ability to work effectively in an Agile environment and collaborate with cross-functional teams.
+
+What's on Offer?
+
+12-month fixed-term contract with a view to permanency.
+Opportunity to contribute to large-scale technology projects in a forward-thinking organisation.
+A collaborative and supportive work environment with a strong focus on innovation.
+

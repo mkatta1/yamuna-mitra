@@ -1,0 +1,190 @@
+Dimension tables are used to slice and dice our data.
+
+Group & Filter ("slice & dice")
+
+Dimension table:
+productId name category
+p001, sunglases, assecoirs
+p002, chocolat bar 70%, sweets
+p003, oat meal biscuits, sweets
+
+productpk, name, category
+1, sunglases, assecoirs
+2, chocolat bar 70%, sweets
+3, oat meal biscuits, sweets
+
+lookup table for dimension:
+
+productpk, productId
+1, p001
+2, p002
+3, p003
+
+
+select s.*, p.product_pk
+from sales_fact s
+left join product_dim as p
+on p.product_id = s.order_lineId
+
+
+
+			TYPES OF DIMENSIONS
+
+Date Dimension:
+One of the most common & most important dimensions.
+Meaningful surrogate key YYYYMMDD
+Extra row for noDate/null ==? 1900-01-01 (dim)
+
+Eg:
+
+Date_PK,Date,Month,ShortMonth,Year-Quarter,Year,Weekday,Is_Weekend
+20220101,2022-01-01,January,Jan,2022-Q1,2022,Saturday,1
+20220102,2022-01-02,January,Jan,2022-Q1,2022,Sunday,1
+20220103,2022-01-03,January,Jan,2022-Q1,2022,Monday,0
+
+
+
+Conformed Dimension: for one report, one analysis we use this type of model
+
+Conformed dimension is shared by multiple fact tables/ multipleStars. Purpose to compare facts across different fact tables. 
+Most typical example is a Time/Date dimension for it. We create an analysis so we can drill across this. Another dimension would be "Region" dimension.
+
+Example, a star schema of Sales Fact with multiple dimensions wanted to be compared with CostFact another star schema!!!
+
+		
+		 /\ Region_Dimension
+		 /	   \
+		/	     \
+Dimension--->SalesFact	     \_/
+		/|\	\	   CostFact
+		 |	 \	   /
+		 |	  \	  /
+		Dimension \_/    \_/
+	        	  Date_Dimension (Conformed dimension with shared 				  	attributes)
+
+Granularity for these two dimensions below could be different. For example, one dim have daily data other may be having mothly data but are joined using the foreign key
+
+SalesFact:
+SalesPK, Sales, DateFK
+1, $9K, 20220101
+2, $7K, 20220101
+3, $5K, 20220102
+
+CostFact:
+CostPK, Sales, DateFK
+1, $7K, 20220101
+2, $2K, 20220201
+3, $3K, 20220301
+
+Conformed Date dimension:
+
+Month, Cost, Sales
+jan, $50K, $67K
+feb, $55K, $71K
+Mar, $65K, $79K
+
+Conformed Region dimension:
+
+Country, Cost, Sales
+Spain, $50K, $67K
+Belgium, $55K, $71K
+wd, $65K, $79K
+
+From this it compare facts, so measures from those two independent fact tables.
+
+
+Degenerate Dimension: not a separate dimension
+
+- All relevant information have already been extracted(to other dimensions)
+- Attribute can be still useful
+
+
+Sales fact
+TransactionPK, Amount, PaymentFK
+1, $530, 234-032
+2, $553, 234-032
+3, $654, 234-033
+
+PaymentPK
+234-032
+234-033
+234-034
+
+
+Hierarchies Dimension:
+
+Focus on less hierarchies of data tables!!
+The transactional data is Often normalized. But analytical processing in a datawarehouse we are looking for high performace read the data and high usability.
+
+Normalized data is bad for usability and performance. We should try to flatten the data or denormalize the data
+
+Example: 
+
+ProductName, Category_id
+Milk, 1
+Printer, 2
+Red Towel, 3
+Green Towel, 3
+Blue Towel, 3
+
+Category_id, Category
+1, Groceries
+2, Electronics
+3, Household
+
+ProductId, ProductName, Category
+1, Milk, Groceries
+2, Printer, Electronics
+3, Towel, Household
+4, Green Towel, Household
+5, Blue Towel, Household
+
+
+
+If all the schemas denormalized then it is a snowflake schema.
+
+cust_id, CustName, Order_id, OrdLine, ProductFK, CategoryFK
+312, Franklin Miller, 2314, Sunglasses SU, 34, 2
+
+Role-playing dimension:
+
+Junk Dimension:
+
+Nulls in Dimension:
+
+- Nulls in FKs break referential integrity!
+- They don't appear in joins
+- Replace date with a dummy value
+
+Ex:
+Promo_PK PromoName		date_PK		date
+socialmedia 1			20220101	01/01/2022
+newsletter 2			20230101	01/01/2023
+websiteads 3			20240101	01/01/2024
+no promo -1			19000101	01/01/1900
+
+
+--- Nulls can be present in Facts
+example: If we have no sales in the weekend because our stores are closed then it would not make sense to use "ZERO". This would screw our average because average would appear lower than in general in times when the store is open. Conclusion, we can have nulls in the fact tables because it would work pretty well with the aggregations such as sum, average etc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

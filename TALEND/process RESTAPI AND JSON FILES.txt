@@ -1,0 +1,68 @@
+YOUTUBE VIDEO: https://www.youtube.com/watch?v=VbHWVCXn7EQ
+
+GO here for the below details, 
+https://developer.nytimes.com/apis
+
+URL: "https://api.nytimes.com"
+Relative path: "/svc/books/v3/lists/current/hardcover-fiction.json" --> Thsi is an END POINT
+HTTP Method: Get
+Access Type: XML
+
+Query parameters:
+name, value
+"api-key",""
+"secret-key", ""
+
+tExtractXMLField_1:
+XML field: body
+Loop XPath query: "/root/results"
+Mapping: list_name, "list_name"
+	published_date, "published_date"
+
+
+PART 2:
+YOUTUBE VIDEO: https://www.youtube.com/watch?v=HpHwLr3y7To
+
+tjava_1:
+
+System.out.println(TalendDate.getCurrentDate()+ ": The deom");
+String host = ;
+String apikey = ;
+String secret = ;
+
+context.url = host + apikey + secret;
+System.out.println(context.url);
+System.out.println("");
+
+
+tExtractJSONFields_1:
+Jsonfield: body
+Loop Jsonpath query: "$.results.books[*]"
+Mapping: column, Json query
+	rank, ""
+	title,
+	author,
+	price,
+
+
+tjavarow_1:
+output_row.rank= input_row.rank;
+output_row.title= input_row.title;
+outputrow.author= input_row.author;
+
+if()input_row.price ==0
+{
+output_row.price =100;
+}
+else
+output_row.price = input_row.price;
+
+
+
+
+
+
+
+
+
+

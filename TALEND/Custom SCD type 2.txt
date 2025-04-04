@@ -1,0 +1,104 @@
+Custom SCD type 2:
+
+Mapping:
+
+tPrejob --OnComponentOk--> tDBConnection(enable Auto commit) to see the changes happing!
+					    ------\
+stg_customer + lookup(dim_customer) -> tmap ------\ Insert(dim_customer)+Update(dim_customer)
+					    ------/
+
+In tdbinput component stg_customer, 
+
+"select stg_customer.cust_id
+	, stg_customer.cust_name
+	, stg_customer.cust_loc
+	from stg_customer"
+
+In tdbinput lookup component lookup(dim_customer),
+"select cust_key, cust_id, cust_loc
+from dim_customer"
+
+In tmap, join using cust_id column
+
+(cust_check)change_check variable: Relational.ISNULL(row2.cust_id)?"New":"Old"
+(loc_check)no_change_check variable: row1.cust_loc.equals(row2.cust_loc)? "Same": "Diff"
+
+Note: Here in the lookupTableComponent using the left outer join, this "Relational" operator it shows 'null' for new record and 'not null' for old record
+
+In Insert(dim_customer) component,
+FilterCondition : Var.change_check.equals("New") || (Var.change_check.equals("Old") && )
+Start_date = TalendDate.formatDate("dd-MM-yyyy", TalendDate.getCurrentDate())
+End_date = ""
+Active_flag = "Y"
+
+In Update(dim_customer) component,
+Here update is made using the cust_key (SurrogateKey/SequenceKey) not using the cust_id (functionalKey). 
+
+FunctionalKey you may have multiple entries for cust_id. So it is not a good idea to update it based uponit.
+
+FilterCondition: Var.cust_check.equals("Old") && Var.loc_check.equals("Diff")
+End_date = TalendDate.formatDate("dd-MM-yyyy", TalendDate.getCurrentDate())
+Active_flag = "N"
+
+Note: Insert component inserts both new records and the updated records. Update component only focuses on updating the old records date & flag. 
+
+CUST_KEY, CUST_ID, CUST_NAME, CUST_LOC, START_DATE, END_DATE, ACTIVE_FLAG
+1, 1, Mr ABCD , Hyderabad, 03-08-21, NULL, Y
+
+
+CUST_KEY, CUST_ID, CUST_NAME, CUST_LOC, START_DATE, END_DATE, ACTIVE_FLAG
+1, 1, Mr ABCD, Hyderabad, 03-08-21, 03-08-21, N
+2, 1, Mr ABCD, Bangalore, 03-08-21, 03-08-21, N
+
+CUST_KEY, CUST_ID, CUST_NAME, CUST_LOC, START_DATE, END_DATE, ACTIVE_FLAG
+1, 1, Mr ABCD, Hyderabad, 03-08-21, 03-08-21, N
+2, 1, Mr ABCD, Bangalore, 03-08-21, 03-08-21, N
+3, 1, Mr ABCD, USA, 03-08-21, null, Y
+
+talend sequenceKey (CUST_KEY) downside is we need to every time lookup @database for a latest bring up a new sequenceKey (CUST_KEY) + increment it on top of that.
+
+
+create table stg_customer
+(
+cust_id int not null,
+cust_name varchar(100) not null,
+cust_loc varchar(100) not null
+);
+
+
+create sequence seq_dim_customer
+start with 1 increment by 1;
+
+create table dim_customer
+(
+cust_key int default seq_dim_customer.nextval primary key,
+cust_id int not null,
+cust_name varchar(100) not null,
+cust_loc varchar(100) not null,
+start_date date,
+end_date date,
+active_flag varchar(1)
+);
+
+insert into stg_customer values (1, 'Mr ABCD', 'Hyderabad');
+commit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

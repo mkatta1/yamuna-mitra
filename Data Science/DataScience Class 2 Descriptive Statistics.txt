@@ -1,0 +1,11 @@
+Descriptive Statistics - used to describe the basic features of data in a study.
+
+Measure of Central Tendency: to describe the entire data like a central value.
+Measure of Dispersion: if you have data with dispersed data. Then how data is dispersed from the central value
+
+
+Inferential statistics - used to make judgement, observe difference between groups, draw inferences, reach conclusion beyond the immediate data
+a. Hypothesis Testing
+b. Correlation
+
+what is mean, median, outliers, distribution, 

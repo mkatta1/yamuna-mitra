@@ -1,0 +1,3 @@
+How Does Snowflake Computing Outmaneuver Other Cloud Data Warehouses?
+Ref: https://dataart.medium.com/how-does-snowflake-computing-outmaneuver-other-cloud-data-warehouses-7aef9dc21f41
+

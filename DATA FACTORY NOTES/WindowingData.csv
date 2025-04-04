@@ -1,0 +1,14 @@
+id,name,gender,country,salary,department
+1,maheer,male,india,2000,HR
+2,asmin,female,india,3000,HR
+3,wafa,male,india,1000,HR
+4,Sarfaraj,male,india,2000,Payroll
+5,Ayesha,female,india,4000,IT
+6,Pyarijaan,female,india,3000,IT
+7,Mahaboob,male,india,5000,IT
+8,Arfan,male,india,3000,IT
+9,shabbir,male,india,4000,IT
+10,Afrin,female,india,1000,Payroll
+11,Shahin,female,india,2000,Payroll
+12,Imam,male,india,4000,HR
+13,Shajarun,female,india,5000,Payroll

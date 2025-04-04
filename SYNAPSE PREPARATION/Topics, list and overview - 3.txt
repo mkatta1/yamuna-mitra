@@ -1,0 +1,21 @@
+CI-CD of DEDICATED SQL POOL in Azure Synapse Analytics:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-continuous-integration-and-deployment
+DEDICATED SQL POOL BEST PRACTICES:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql/develop-transaction-best-practices
+
+
+sp_executesql (Transact-SQL):
+https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-executesql-transact-sql?view=azure-sqldw-latest&preserve-view=true
+
+JSON INFORMATION:
+https://learn.microsoft.com/en-us/sql/relational-databases/json/optimize-json-processing-with-in-memory-oltp?view=sql-server-ver16#computedcol
+
+KUSTO QUERY LANGUAGE
+	query, syntax, https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/
+
+
+QUERY BEST PRACTICES:
+https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/best-practices
+
+CROSS-CLUSTER QUERIES AND SCHEMA CHANGES:
+https://learn.microsoft.com/en-us/azure/data-explorer/kusto/concepts/cross-cluster-and-schema-changes

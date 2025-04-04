@@ -1,0 +1,47 @@
+IncrementalLoad without ControlTable
+
+select * from product; #source table
+select * from products_inc; #target table
+
+sourc table
+product_id, product_name, product_price, created_on, modified_on
+
+target table
+product_id, product_name, product_type, product_price, created_on, modified_on
+
+product_inc(tDBInput) -> tjavaRow 
+
+product(tDBInput) -> 
+
+product_inc(tDBInput) query:
+"select max(created_n) created_on, max(modified_on) modified_on
+from products_inc"
+
+tjavaRow:
+context.last_success = TalendDate.formatDate("yyyy-MM-dd HH:mm:ss", input_row.modified_on);
+system.out.println("Last Modified / created on : "+ context.last_success);
+
+product(tDBInput) Query:
+"select * from product 
+where created_on>" +context.last_success + "'or modified_on >'" +context.last_success+ "'"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

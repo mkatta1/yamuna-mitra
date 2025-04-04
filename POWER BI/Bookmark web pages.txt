@@ -1,0 +1,111 @@
+https://www.5movierulz.homes/category/telugu-movies-2023
+
+Employee KPI's: https://blog.clearcompany.com/employee-key-performance-indicators#:~:text=Employee%20key%20performance%20indicators%20(KPIs,track%20to%20meet%20their%20goals.
+
+what is KPI's and what are its types??
+https://www.qlik.com/us/kpi#:~:text=KPI%20stands%20for%20key%20performance,the%20organization%20make%20better%20decisions.
+
+dynamic reports with parameters 
+https://learn.microsoft.com/en-us/training/modules/get-data/3b-parameters
+
+performancing tuning in power bi:
+https://learn.microsoft.com/en-us/training/modules/get-data/8-performance-issues
+
+Resolve data import errors:
+https://learn.microsoft.com/en-us/training/modules/get-data/9-import-errors
+
+Notes:
+Microsoft SQL Server, index creation, hardware upgrades, execution plan tuning, and data compression.
+
+AVERAGE takes the total and divides by the number of non-null values. If NULL is synonymous with zero in the data, the average will be different from the accurate average.
+
+
+Ensuring that the correct data types are used.
+
+Deleting unnecessary columns and rows.
+
+Avoiding repeated values.
+
+Replacing numeric columns with measures.
+
+Reducing cardinalities.
+
+Analyzing model metadata.
+
+Summarizing data where possible.
+
+###############################################################
+
+By the end of this module, you're able to:
+
+Review the performance of measures, relationships, and visuals.
+
+Use variables to improve performance and troubleshooting.
+
+Improve performance by reducing cardinality levels.
+
+Optimize DirectQuery models with table level storage.
+
+Create and manage aggregations.
+
+DAX QUERY:
+Sales YoY Growth % =
+VAR SalesPriorYear =  CALCULATE([Sales], PARALLELPERIOD('Date'[Date], -12, MONTH))
+VAR SalesPriorYear% = DIVIDE(([Sales] - SalesPriorYear), SalesPriorYear)  
+RETURN  SalesPriorYear%
+
+cardinality levels: https://learn.microsoft.com/en-us/training/modules/optimize-model-power-bi/4-reduce-cardinality
+
+Optimize DirectQuery models with table level storage:
+https://learn.microsoft.com/en-us/training/modules/optimize-model-power-bi/5-directquery-models
+
+Create and manage aggregations:
+https://learn.microsoft.com/en-us/training/modules/optimize-model-power-bi/6-aggregations
+
+movies:
+1) the wailing
+2) Gramam --> youtube movie
+3) sirf ek bandha kafi hai
+4) blood and choclate simply south in telugu
+5) John Luther --> aha
+6) yudham seyi 
+7) Chakra vyuham --> prime
+8) plan b --> 
+9) neevuevaro
+10) silence hindi --> zee 5
+
+11) kalidaas tamil --> zee 5
+12) the hit list --> youtube
+13) talvaar --> hotstar
+14) the last page --> youtube
+15) lost --> hotstar
+16) suzhal --> prime
+17) asalu --> etv win
+18) 143 hyderabad --> youtube
+19) lanka  --> youtube
+20) adhura --> prime
+
+1) scoop --> netflix
+2) kerala crime files --> hotstar
+
+from jio cinemas 
+asur 2
+mumbaikar
+coo
+bloody daddy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

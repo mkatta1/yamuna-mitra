@@ -1,0 +1,484 @@
+Cost function and loss function
+Cost function: entire dataset average on loss function. Means in some data points the lossfunction is different and so on..
+loss function: error percentage or something caused. Like 4% error in efficiency out of 100%.
+
+
+Bagging and boosting:
+Bagging: In one dataset, randomly we do bagging. In homogenous manner we bag the data. homogenous trees randomly of equal size.
+
+Boosting: It follows itterative methodology. Suppose in first itteration if we get 10% accuracy then in second itteration it tries to achieve more like 15% etc..so on..
+
+Covariance and correlation:
+
+Covariance:
+How linear relation is there in our data, is given by covaiance.
+Did the data spread linear? or congested to particular area etc..
+
+correlation:
+If we take two variables in a dataset which contains same strength then it is called correlation. How is the relation bw them in proportion, variance bw them
+
+Bias and Variance ???
+
+
+BAYE'S THEOREM:
+This theorem is used to decide yes or no in our future predictions
+
+P(A n B) = P(A,B) = P(A/B) P(B)
+P(A n B) = P(A,B) = P(B/A) P(A)
+
+P(A/B) = (P(B/A) P(A))/P(B)
+
+Baye's theorem is a way to figure out conditional probability.
+
+Baye's theorem (also known as Baye's rule) is a deceptively simple formulat used to calculate conditional probability. The Theorem was name after English mathematician Thomas Bayes (1701-1761)
+
+Example:
+A family has two children. Given that one of the children is a boy, what is the probability that both children are boys?
+Answer is in "Bayes theorem example 1" image
+
+
+Bernoulli Distribution:
+
+Interview answer should be "It is a discrete probability distribution with single trial and two possible outcomes."
+
+- Discrete probability distribution of a random variable which takes the value 1 with probability p and the value 0 with probability q = 1 - p, that is, the probability distribution of any single experiment that asks a yes-no or True-False question.
+
+- Bernoulli is always a single experiment/trial with n=1
+
+- Let's say in America 89% people have health insurance. According to Bernoulli distribution, 1 if they have health insurance and 0 otherwise. Here x represents the random variable which shows if an American has health insurance i.e. P(X=1) = 0.89
+
+- The Expected Value (mean) of Bernoulli Distribution = p
+E[X] = PR(X=1).1 + PR(X=0).0 = p.1 + q.0 =p
+
+- the variance of Bernoulli distribution = p(1-p)
+
+In this Bernoulli Distribution, they will work only once. So, this is a discrete probability or discrete execution. 
+Whereas there are other distributions which can be continuous execution.
+
+Example: Toss a coin for head/tail only once to know the output!
+
+
+BAIS AND VARIANCE:
+
+Check the graph of the below in the "Bais and variance example"
+Prediction Error x-axis, Model Complexity y-axis, HighBias-LowVariance, LowBias-HighVariance, TrainingSample, TestSample, 
+
+Bais: Diff bw the prediction by model vs correction by model
+Example: We predicted 20% correctness out of 100%. So the distance bw them is bais.
+
+Variance: How much the data distance is spread??
+
+Overfitting and Underfitting:
+
+Overfitting = High Bias + Low Variance. Here testing dataset have issues.
+Underfitting = Low Bias + Low Variance. Here training dataset have issues.
+
+R-square and Adjusted R-square:
+
+R-square:
+
+
+BINOMIAL DISTRIBUTION/ BINOMIAL EXPERIMENT:
+
+- In probability theory and statistics, the binomial distribution with parameters n and p is the Discrete Probability Distribution of the number of successes in a sequence of n independent experiments, each asking a yes-no question, and each with its own Boolean-valued outcome.
+
+- It is an integration of multiple Bernoulli distribution.
+
+- Trails are independent (outcome of one has no bearing on outcomes of others)
+
+- Probability of Success, p, is constant for trails
+
+- Let's say we pick 10 Americans at random. We want to calculate the particular number of Americans with health Insurance. So here n=10 and X = 3 (We want to calculate the health insurance of 3 Americans). We need to calculate P(X=3). Assume in America 89% people have health insurance.
+
+
+BOX PLOTS:
+
+To know outlers we use boxplots. there are also violent plots.
+Things exceeding Upper Whisker are not at all required.
+Q2 is the mean or the centerpoint InterQuandrant range.
+
+Example:
+Let the data range be: 199, 201, 236, 269, 271, 278, 283, 291, 301, 303, AND 341
+
+THEREFORE N=11 it is total no.of obeservations.
+NOW, CALCULATE Q1, Q2, Q3, Q4 AND IQR
+
+MEAN Q2 = SUM(ALL OBSERVATIONS)/N = 245
+
+Created using seaborn library.
+
+DESCRIPTIVE STATISTICS:
+----------------------
+
+CONGRATS... YOU HAVE QUALIFIED DESCRIPTIVE STATISTICS!
+LET'S HAVE QUESTIONS?
+
+sample, mean, mode, median, standard deviation, variance, range, interqudrant range. These all comes under descriptive statistics....
+
+
+CONFUSION MATRIX:
+----------------
+- To test if the given model is perfect or not!
+- To know the classification accuracy we use the confusion matrix 
+- PREDICTED VALUES
+- ACTUAL VALUES
+-True Negative (TN)
+- TRUE Positive (TP)
+- False Positive (FP)
+- Flase Negative (fN)
+
+
+n= total predictions, Actual: No, Actual: Yes
+Predicted:NO, True Negative, False Positive 
+Predicted:YES, Flase Negative, False Positive
+
+CLASSIFICATION OF ACURACY:
+-------------------------
+- ACCURACY
+
+Accuracy = TP + TN 
+	   -------
+	 tp + fp + fn + tn
+
+- PRESISION
+Presision = tp
+	   ------
+	  tp + fp
+- RECALL
+
+recall = tp
+	------
+	tp + fn
+
+
+*********************************************************************
+
+CONTINUOUS PROBABILITY DISTRIBUTION:
+---------------------------------
+Here we don't have proper mean fixed, standard deviation fixed....
+It's a collection of intervals
+Ex: School students having continours intervals for every 2 periods.
+
+- The probability of the random variable assuming a value within some given interval from x1 to x2 is defined to be the AREA UNDER THE GRAPH of the PROBABILITY DENSITY FUNCTION BETWEEN X1 and X2.
+
+UNIFORM, NORMAL, EXPONENTIAL distributions.
+
+
+
+NORMAL PROBABILITY DISTRIBUTION:
+---------------------------------
+- The NORMAL PROBABILITY DISTRIBUTION is the most important distribution for describing a continuours random variable.
+- It is widely used in statistical inference.
+- Has a wide variety of applications.
+- The distribution is symmetric; its skewness measure is zero.
+- The entire family of normal probability distributions is defined by its mean muSymbol and its standard deviation sigmaSymbol
+- The mean can be any numerical value: negative, zero, or positive.
+
+
+
+ex: heights of people, amounts of rainfall, test scores, scientific measurements...
+
+
+UNIFORM PROBABILITY DISTRIBUTION:
+---------------------------------
+- VALUE OF PROBABILITY AT ANY POINT IS 0
+- FOLLOWS THE DISTRIBUTION UNIFORMLY FOR ANY INTERVAL
+- VALUE FOR ANY POINT IN THE INTERVALS IS THE SAME
+
+continuous distributions:
+f(x) = { 1/b-a a<=x<=b, 0 otherwise
+
+
+**************************************************************************
+CROSS VALIDATION AND TYPES OF CV
+- CV (CROSS VALIDATION)
+- TRAIN/TEST SPLIT: If we split the data more should be given for training than testing. Like training data (>70%) and testing data (30%)
+- k-fold cross validation: Means k times cross validataion happens. Average value of the k times CV is used as a result. 
+
+CV is to overcome the disadvantages during the testing and training
+
+**************************************************************************
+				STATISTICAL DATA
+				----------------
+
+- The collection of data that is relevant to the problem being studied is commonly the most difficult, expensive, and time-consuming part of the entire research project
+
+- Statistical data are usually obtained by counting or measuring items.
+  - PRIMARY DATA are collected specifically for the analysis desired
+  - SECONDARY DATA have already been compiled and are available for             	statistical analysis
+
+- A VARIABLE is an item of interest that can take on many different numerical values: just like variables we created in python!
+- A constant has a fixed numerical value.
+- A POPULATION is the huge data we have collected.
+
+**************************************************************************
+			TYPES OF DATA
+			--------------
+
+ statistical data are usually obtained by counting or measuring items. most data can be put into the following categories:
+ 
+- qualitative: data concerned with descriptions, which can be observed but cannot be computed.
+(hair color, ethnic groups and other attributes of the population)
+
+- quantitative: Focuses on numbers and mathematical calculations and can be calculated and computed.
+(distance traveled to college, number of children in a family, etc.)
+
+**************************************************************************
+feature scalling and feature selection after doing this we send the data to modelData. These two are important then we can go to train/test data.
+
+If its a text data we normalize/standardize it into a binary format by statistical formula.
+
+feature selection: Here we select only the features needed for our model.
+
+**************************************************************************
+
+data collection & assembly --> data preprocessing --> data exploration & visualization --> model building --> model evaluation
+
+bar graphs, piecharts, box plots, histograms, lines, subplots, scatterplots, vinal plots.
+
+box plots is for outliers.
+Histograms is for to know if our data is distributed uniformly or skewed to left or skewed to right
+
+Line charts to know how our data got decreased or increased.
+Scatter plot is similar mechanism of lineChart but also to know if our data what are the different classes & how are they distributed!!
+
+Heap maps is to know how our data is co-related to each other respectively. We need to pick the highly co-related comparitevely so that we don't get the repetative stuff.
+
+**************************************************************************
+			DIMENSIONALITY REDUCTION
+
+		Dimensionality reduction Techniques
+
+Feature Selection				Dimensionality Reduction
+---------------					-----------------------
+					Components/FactorsBased	  ProjectionBased
+					----------------------	 ----------------
+Missing value Ratio			FactorAnalysis		ISOMAP
+Low Variance Filter			PrincipalComponentAnly	t-SNE
+High correlation Filter			IndependentCompneAlysis	UMAP
+Random Forest
+Backward Feature Extraction
+Forward Feature Selection
+
+
+Probability Distribution:
+------------------------
+	Probability (Mass) Function:
+	---------------------------
+	p(y) = P(Y=)
+	p(y) >= 0 \-/y
+
+	sigma p(y) = 1
+	ally
+
+	Cummulative Distribution OR Frequency Dion Function (CDF):
+	---------------------------------------
+	F() = P()	b
+	F(b) = P() = sigma p(y)
+		     y=-infinite
+	F(-infinite) = 0 F(infinite) = 1
+	F(y) is monotonically increasing in y
+F(y) is cumulative distribution function 
+
+K-Means Spectral and DBSCAN:
+---------------------------
+
+k-nn (k-nn nearest neighbor)
+
+InputValue--> KNN CLASSIFIER --> PREDICTED OUTPUT
+
+LASSO AND RIDGE REGRESSION:
+---------------------------
+
+DIFFERENCE B/W SUPERVISED AND UNSUPERVISED LEARNING:
+----------------------------------------------------
+
+
+Supervised Learning, Unsupervised Learning
+
+
+**************************************************************************
+
+THE LIFE CYCLE OF MACHINE LEARNING:
+----------------------------------
+
+Define a question --> Collect data --> Visualize data --> Train algorithm --> Test Algorithm --> Collect Feedback --> Refine the algorithm --> Loop 4-7 until the results are satisfying --> Use the model to make a prediction
+
+LINEAR REGRESSION:
+-----------------
+
+Y-axis: dependent variable
+X-axis: independent variable
+Line of regression
++ve line of regression
+The line of regression: Y=a0+a1X
++ve linear relation ship
+
+-ve line of regression
+The line of regression: Y= -a0+a1X
+
+-ve linear relation ship
+
+LOGISTIC REGRESSION:
+-------------------
+
+
+MEDIAN:
+------
+
+- The middle value when a variable's values are ranked in order; the point that divides a distribution into TWO EQUAL halves.
+- When data are listed in order, the median is the point at which 50% of the cases are above and 50% below it
+- Also called the 50th percentile.
+
+MODE:
+----
+
+- The most common data point is called the mode.
+- The combined IQ scores for classes A & B:
+ 80 87 89 93 96 97 102 103 105 106 109 109 109 110 111 115 119 120 127 128 131 131 140 162
+
+**IT IS POSSIBLE TO HAVE MORE THAN ONE MODE!**
+
+NAIVE BAYES:
+-----------
+
+P(A|B) = (P(B\A) P(A))/P(B)
+
+Frequency table for the weather conditions:
+-------------------------------------------
+
+Weather, Yes, No
+overcast, 5, 0
+Rainy, 2, 2
+Sunny, 3, 2
+Total, 10, 5
+
+
+Likelihood table weather condition: 
+-----------------------------------
+
+Weather, No, Yes
+Overcast, 0, 5, 5/14 = 0.35
+Rainy, 2, 2, 4/14 = 0.29
+Sunny, 2, 3, 5/14=0.35
+All, 4/14=0.29, 10/14=0.71
+
+
+POLYNOMIAL REGRESSION:
+---------------------
+We use polynomial regression when the simple linear regression or multi linear regression unable to cover most of the data points then we use this regression.
+Simple linear model y=b0+b1X, polynomial model y= b0+b1X1+b2X1^2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

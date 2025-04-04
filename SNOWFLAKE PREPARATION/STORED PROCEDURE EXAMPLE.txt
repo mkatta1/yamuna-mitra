@@ -1,0 +1,96 @@
+use role accountadmin;
+use warehouse compute_wh;
+use database demo_db;
+use schema  public;
+
+
+create or replace table test1(a number);
+create or replace  table test2(a number);
+
+insert into test1 values (1);
+insert into test2 values (2);
+
+select * from test1;
+
+select * from test2;
+
+create or replace view test1_vw as select * from test1;
+create or replace view test2_vw as select * from test2;
+
+select  * 
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' and table_type like '%TABLE' 
+and table_name like 'TEST%';
+
+select 'truncate table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' as sqlcommand
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' 
+and table_type like '%TABLE'
+and table_name like 'TEST%' ;
+
+
+
+
+
+create or replace procedure SP_SQL_RunBatchSQL(query varchar)
+returns varchar
+language sql
+as
+$$
+declare 
+    res resultset;     
+  begin
+     res := (execute immediate :query);
+     let cur cursor for res;
+     for row_variable in cur do
+         execute immediate row_variable.sqlcommand;
+     end for;
+     return 'Completed' ;
+  end;
+ $$; 
+ 
+ 
+select 'truncate table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' as sqlcommand
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC'
+and table_type like '%TABLE'
+and table_name like 'TEST%';
+ 
+-- truncate all tables from TEST schema 
+ 
+set qry1 = $$select 'truncate table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' as sqlcommand
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' and table_type like '%TABLE' and table_name like 'TEST%' ;$$;
+
+
+
+call SP_SQL_RunBatchSQL($qry1);
+
+select * from test1;
+
+select * from test2;
+
+call SP_SQL_RunBatchSQL($$select 'truncate table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' as sqlcommand
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' and table_type like '%TABLE' and table_name like 'TEST%' ;$$);
+
+
+call SP_SQL_RunBatchSQL($$select 'truncate table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' 
+                        as sqlcommand_one
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' and table_type like '%TABLE' and table_name like 'TEST%' ;$$);
+ 
+
+-- drop  all tables from pubic schema  start with 'TEST'
+
+
+set qry2 = $$select 'drop table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' as sqlcommand
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' and table_type like '%TABLE' and table_name like 'TEST%';$$;
+select $qry2;
+select 'drop table if exists ' || TABLE_SCHEMA ||'.'|| table_name ||';' as sqlcommand
+from information_schema.tables
+where TABLE_SCHEMA = 'PUBLIC' and table_type like '%TABLE' and table_name like 'TEST%';
+call SP_SQL_RunBatchSQL($qry2);
+desc table test1;
+desc table test2;

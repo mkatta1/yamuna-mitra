@@ -1,0 +1,25 @@
+Partitioning tables in dedicated SQL pool:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-tables-partition?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext
+
+Design guidance for using replicated tables in Synapse SQL pool:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/design-guidance-for-replicated-tables?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext
+
+
+Manageability and monitoring with dedicated SQL pool in Azure Synapse Analytics:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-manageability-monitoring?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext
+
+Tutorial: Use Pandas to read/write Azure Data Lake Storage Gen2 data in serverless Apache Spark pool in Synapse Analytics:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/spark/tutorial-use-pandas-spark-pool
+
+
+System stored procedures (Transact-SQL) and its types:
+https://learn.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/system-stored-procedures-transact-sql?view=sql-server-ver16
+
+https://www.javatpoint.com/stored-procedure-in-sql-server#:~:text=Types%20of%20Stored%20Procedures&text=SQL%20Server%20categorizes%20the%20stored,System%20Stored%20Procedures
+
+
+Different Types of SQL Server Functions: An Overview:
+https://www.dotnettricks.com/learn/sqlserver/different-types-of-sql-server-functions
+
+https://www.tutorialspoint.com/different-types-of-sql-functions
+

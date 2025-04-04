@@ -1,0 +1,213 @@
+https://github.com/Matticusau/SqlWorkloadGenerator/tree/master
+
+This problem comes when database is restored with "RESTORE WITH NORECOVERY" state or some times even sql services restart cause this trouble. So to fix this you just need to use below script to change recovery state to RECOVERY.
+RESTORE DATABASE YourDatabaseName WITH RECOVERY
+
+delete backup and restore history information for database
+right click --> restore db using device files "sample.bak" 
+
+There are 3 types of recovery:
+1. restore with recovery
+2. restore with norecovery
+3. restore with standby
+After this leave the database non-operational and do not roll back uncommitted transactions. Additional transaction logs can be restored.
+
+execute the sql command:
+RESTORE DATABASE SAMPLEDB WITH RECOVERY
+
+Always going to restoring mode and it is inaccessible when you try to access it it will say the db is inaccessible. 
+1. Drop and then REstore the backup
+2. Restore the db with other options 
+3. Choose the recovery state with no recovery restored 
+Different backup's are full backup and differential backup file
+
+
+
+********* Restoring SQL database backup to previous data version *********
+STEPS: RUN SCRIPT
+1)
+BACKUP DATABASE SampleDB TO  DISK = 'D:\BackupFolder\DBBackup.bak' WITH
+ NOINIT, 
+ NAME = N'Sample DB - FULL Backup'
+
+only CHOOSE the option OVERWRITE THE EXISTING DATABASE (WITH REPLACE)
+other options are PRESERVE THE REPLACTION SETTINGS (WITH KEEP_REPLICATION)
+Restrict access to the restored database (WITH RESTRICTED_USER)
+2)
+ RESTORE HEADERONLY FROM DISK = 'D:\BackupFolder\DBBackup.bak'
+3)
+ RESTORE DATABASE SampleDB  FROM DISK = 'D:\BackupFolder\DBBackup.bak' 
+ WITH REPLACE, FILE=2
+
+
+********* Backup file size bigger than database size solved SQL server ***
+
+Issue is caused because of NOINIT option. But this can be used as proper backup way to keep different version of databackup.
+
+Script used
+BACKUP DATABASE SampleDB TO  DISK = 'D:\BackupFolder\Sample.bak' WITH  
+NOINIT,  NAME = N'SAMPLEDB'
+
+RESTORE HEADERONLY FROM DISK = 'D:\BackupFolder\Sample.bak'
+
+
+**************** Export complete sql server database to csv **********
+
+Exporting complete SQL server database to CSV files. CSV cannot keep data for multiple worksheet as like excel files. So data for each table will be generated in separate files. SQL components used in this lecture are:
+• BCP (Bluck copy program)
+• xp_cmdshell
+• STUFF
+• FOR XML PATH
+
+Here 1st getting data as one cell value with comma separate 
+2nd column name separated value with numbering
+
+Script used in above lecture is:
+--------------------------------
+
+DECLARE @query1 varchar(MAX) DECLARE @query2 varchar(MAX) DECLARE @table varchar(MAX)
+SELECT ROW_NUMBER() over(
+ ORDER BY
+ (SELECT 1)) rownum, 'select ' + STUFF(
+ (SELECT ','+ 'Quotename(cast(' + ISNULL(COLUMN_NAME,'''''''') + ' as varchar(max)),''""'')' + ' as ""' + COLUMN_NAME + '"" '
+ FROM [Northwind].INFORMATION_SCHEMA.COLUMNS
+ WHERE TABLE_NAME = t.name
+ AND DATA_TYPE<>'image'
+ ORDER BY ordinal_position
+ FOR XML PATH('')),1,1,'') + ' FROM '+ '[Northwind].['+SCHEMA_NAME(schema_id)+'].['+t.name+']' AS col1,
+ 'select ' + STUFF(
+ (SELECT ','+ 'Quotename(''' +COLUMN_NAME + ''',''""'')'
+ FROM [Northwind].INFORMATION_SCHEMA.COLUMNS
+ WHERE TABLE_NAME = t.name
+ AND DATA_TYPE<>'image'
+ ORDER BY ordinal_position
+ FOR XML PATH('')),1,1,'') AS col2,
+ SCHEMA_NAME(schema_id) + t.name AS col3 INTO #temp
+FROM sys.tables t DECLARE @row int=0 WHILE
+ (SELECT count(1)
+ FROM #temp)>0 BEGIN
+SELECT top 1 @query1=col2,
+ @query2=col1,
+ @row=rownum,@table=col3
+FROM #temp DECLARE @sql varchar(8000)=''
+SELECT @sql = 'bcp "' + @query1 + ' union all ' + @query2 + '" queryout C:\CSV\' + @table + '.csv -c -t, -T -S'+ @@servername
+SELECT @sql EXEC master..xp_cmdshell @sql
+DELETE
+FROM #temp
+WHERE rownum=@row END
+DROP TABLE #temp
+
+Below is script to enable xp_cmdshell:
+-------------------------------------
+-- To allow advanced options to be changed.
+EXEC sp_configure 'show advanced options',
+ 1;
+
+GO -- To update the currently configured value for advanced options.
+RECONFIGURE;
+
+GO -- To enable the feature.
+EXEC sp_configure 'xp_cmdshell',
+ 1;
+
+GO -- To update the currently configured value for this feature.
+RECONFIGURE;
+
+GO
+
+
+************************************************************************
+HOW TO DISABLE NULL CONCATENATION ?
+
+Property you have to set is:
+
+SET CONCAT_NULL_YIELDS_NULL ON/OFF
+
+ON for disable NULL concatenation
+
+ 
+
+OFF for enabling NULL concatenation
+
+************************************************************************
+Quick SQL Server Performance Analysis using performance dashboard:
+-----------------------------------------------------------------
+
+To analyse SQL Server performance at given time. SQL Server standard reports provide quick peek, but still to get complete over view we have to traverse through different reports sequentially. Also for DBA who are new to performance tuning it’s difficult to make sense of different reports all together. 
+Solution: SQL performance dashboard report provide you great and quick in site on things happening in or to SQL Server also information makes much more sense as it is provided with proper formatting. 
+
+http://www.techsapphire.in/index/quick_performance_analysis_sql_server/0-188
+https://www.sqlshack.com/performance-dashboard-report-sql-server so on...
+Activity:
+1. Restoring Adventureworks database for demo
+2. Downloading load generator scripts for Adventureworks database
+(https://github.com/Matticusau/SqlWorkloadGenerator/tree/master)
+3. Setting execution policy for PowerShell.
+(Set-ExecutionPolicy Restricted)
+4. Downloading performance dashboard reports setup.
+5. Installing performance dashboard reports, running required scripts and deploying report.
+6. Running load on Adventureworks database.
+.\RunWorkload.ps1-SQLS"YOGESHMEHLA"-Database"AdventureWorks2012"-UserName sa-Password bimlamehla-TSQLFile
+"C:\CSV\SqlWorkloadGeneratormaster\SqlWorkloadGeneratormaster\SqlScripts\AdventureWorks2012BOLWorkload.sql"-Frequency"Fast"
+7. Analysing performance report.
+8. Hint for customization
+
+Using the Set-ExecutionPolicy Cmdlet
+
+The Set-ExecutionPolicy cmdlet enables you to determine which windows 
+PowerShell scripts (if any) will be allowed to run on your computer. Windows PowerShell has four different execution policies:
+ a. Restricted - No scripts can be run. Windows PowerShell can be used only in interactive mode.
+ b. AllSigned - Only scripts signed by a trusted publisher can be run.
+ c. RemoteSigned - Downloaded scripts must be signed by a trusted publisher before they can be run.
+ d. Unrestricted - No restrictions; all Windows Powershell scripts can be run.
+
+
+
+8. for customization of reports:
+Right click on database --> Reports 
+--> Standard Reports/ Custom Reports / performance_dashboard_main
+
+Right click on database --> Reports --> Standard Reports --> Activity - All Sessions
+
+************ SQL Server database migration DEA report *************
+
+Database Experimentation Assistant (DEA):
+Report provide you detailed information regarding queries, error, stats, etc captured during replay trace. 
+This report also contain plan information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+************************************************************************
+
+
+
+
+
+
+
+

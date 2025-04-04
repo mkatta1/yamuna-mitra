@@ -1,0 +1,46 @@
+Why sampling?
+Instead of analyzing or testing a huge database(10TB) it is better to analyse a sample (500GB).
+
+- Use-cases: Query development, data analysis etc.
+- Faster & more cost efficient (less compute resources)
+
+Two methods in data sampling:
+1) ROW or BERNOULLI method
+- Every row is choosen with percentage p. Eg: 50% taken from each row as a sample!!
+- More "randomness"
+- Smaller tables
+
+2) BLOCK or SYSTEM method (Snowflake recommended)
+- Every block is chosen with percentage p. Eg: micro partitions is choosen as blocks for a sample!!!
+- More effective processing
+- Larget tables
+
+
+
+CREATE OR REPLACE TRANSIENT DATABASE SAMPLING_DB;
+
+CREATE OR REPLACE VIEW ADDRESS_SAMPLE
+AS 
+SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCDS_SF10TCL.CUSTOMER_ADDRESS 
+SAMPLE ROW (1) SEED(27); -->Row sampling of 1% is taken here, seed is to reproduce this exact result to another developer if he executes this!!!!
+ 
+
+SELECT * FROM ADDRESS_SAMPLE;
+
+
+Using the below query, we can check the percentage of usage count/total_No.of_Rows 
+SELECT CA_LOCATION_TYPE, COUNT(*)/3254250*100
+FROM ADDRESS_SAMPLE
+GROUP BY CA_LOCATION_TYPE;
+
+
+
+SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCDS_SF10TCL.CUSTOMER_ADDRESS 
+SAMPLE SYSTEM (1) SEED(23);
+
+SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCDS_SF10TCL.CUSTOMER_ADDRESS 
+SAMPLE SYSTEM (10) SEED(23);
+
+
+
+

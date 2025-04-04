@@ -1,0 +1,390 @@
+Incrementally Upsert data using Azure Data Factory's Mapping Data Flows:
+https://www.mssqltips.com/sqlservertip/6729/azure-data-factory-mapping-data-flow-incremental-upsert/
+
+
+******************************************************************************************************************
+
+SCD TYPE1 VIDEO: https://www.youtube.com/watch?v=MzHWZ5_KMYo
+
+source: EMPLOYEES.CSV
+EMPID, NAME, COUNTRY, DEPARTMENT
+1,maheer,india,2
+2,asmin,india,1
+3,wafa,india,3
+4,sarfaraj,null,2
+5,mahaboob,india,4
+
+Target: tbl_employee
+
+empid,name,country,department
+1,ABCD,dfagag,1
+2,XYZ,vaskas,1
+
+Source->AlterRow
+
+In AlterRow, 
+Alterrow conditions: UpsertIF, 1=1
+
+In Sink,
+For first load choose the option "Allow Insert"
+From Second load choose the option "Allow Upsert"
+Key columns = empid
+
+Incremental load in ADF: https://www.mssqltips.com/sqlservertip/6729/azure-data-factory-mapping-data-flow-incremental-upsert/
+
+Step 1:
+CREATE TABLE [dbo].[pipeline_parameter](
+   [PARAMETER_ID] [int] IDENTITY(1,1) NOT NULL,
+   [server_name] [nvarchar](500) NULL,
+
+These columns were seen in all the tables
+upsert_key_column, incremental_watermark_value, incremental_watermark_column, process_type
+
+Step 2:
+Create a Source Query for the ADF Pipeline
+
+select   case
+         when process_type = 'FULL' then 'select * from ' + src_schema + '.' + src_name + ' where 1 = '
+         when process_type = 'Incremental' then 'select * from ' + src_schema + '.' + src_name + ' where ' + incremental_watermark_column + ' > ' 
+      end as SQLCommand,
+      case 
+          when process_type = 'FULL' then '1'
+         when process_type = 'incremental' then cast(isnull(incremental_watermark_value,'yyyy-MM-dd') as varchar(50))
+      end as WhereValue
+from
+      dbo.pipeline_parameter
+   where load_synapse = 1
+      AND process_type = 'incremental'
+
+Step 3:
+
+Add the ADF Datasets
+Next, lets head over to ADF and create the following datasets.
+
+Azure SQL Database source dataset, Azure Data Lake Storage Gen2 – Parquet, Azure Synapse Analytics – DW
+
+Step 4:
+
+Lookup(Get-Tables) --> ForEach (->DataFlow1->DataFlow2)
+
+In Lookup, choose "Query" from step 2 to get the results into Lookup.
+Let's begin with a look up to get the tables needed for the ADF pipeline. Here is where we will add the query that was created in the previous steps.
+
+In ->DataFlow1 (df_SQL_to_lake_incremental), 
+Parameters:
+FolderName: @item().FolderName
+FileName: @item().FileName
+SQLCommand: @item().SQLCommand
+WhereValue: @item().WhereValue
+FileName: @item().FileName
+
+AutoResolveIR
+comput type: Compute Optimized
+Core count: 16 (+16 Driver cores)
+
+In actual dataflow df_SQL_to_lake_incremental,
+Mapping: SourceTransformation (SourceSQL)-> SinkTransformation (dstLake)
+
+SourceSQL -> source options tab-> Query: "{$SQLCommand}'($WhereValue)'"
+dstLake -> 
+
+
+In ->DataFlow2 (df_upsert_to_Synapse),
+
+Please follow the similar parameter configurations of DataFlow1 in this dataflow as well.
+
+FolderName: @item().FolderName
+upsert_key_column: @item().upsert_key_column
+Mapping: source-> AlterRow1 -> Sink
+
+In AlterRow1 transformation, 
+AlterRow conditions: UpsertIf = true()
+
+
+
+
+
+
+SCD TYPE2 VIDEO https://www.youtube.com/watch?v=Xzs6OWJT3kc
+
+Remove Duplicate Rows using Mapping Data Flows in Azure Data Factory:
+https://www.youtube.com/watch?v=YDRn_arRtjA
+
+IN PIPELINE, we need to set the "CUSTOM sink ordering" where we can order which SINK should we process first!!!!
+
+Sinkname, Write order
+sink1, 2
+sink2, 1
+source:employee.csv
+empid,empname,gender,country
+1001,maheer1,male1,india1
+1002,ati,female,usa
+1033,wafa,male,india
+
+Target: empTable
+Surrkey,empid,empname,gender,country,isActive
+1,1,fdasd,ijska,inkjdf,0
+2,1,maheer,male,india,0
+3,1,maheer3,male3,india,0
+4,1,maheer4,male4,india,1
+
+Step1:
+source(csvfile)->DerivedColumn1(transformation)->sink1
+
+In DerivedColumn1(transformation),
+isActive = 1
+
+Sink Output1:
+empid,empname,gender,country,isActive
+1,maheer5,male,india,1
+2,ati5,female,usa,1
+
+Step2:
+source(empTable of sink1 output)->select1(transformation)->
+
+In source(empTable of sink1 output)
+SurrKey,empid,empname,gender,country,isActive
+1,1001,maheer1,male1,india1,1
+
+In select(transformation):
+Rename columns of empTable as
+surrKey to SQL_surrKey
+empid to SQL_empid
+empname to SQL_empname
+gender to SQL_gender
+country to SQL_country
+isActive to SQL_isActive
+
+Step3:
+Create a new branch to import data from empSource.csv file
+
+source(empSource.csv)-> Lookup1 (lookup data from select1(transformation)) -> filter1(transformation) -> select2(transformation) -> DerivedColumn1(transformation) -> AlterRow1(transformaation) -> Sink2 
+
+In Lookup1 (lookup data from select1(transformation)),
+Primary stream : Empsource.csv file
+Lookup stream: select1(transformation)
+Check the option "Match multiple rows"
+Match multiple rows : yes 
+Lookup conditions: Left empid == Right SQL_empid
+
+Lookup1 Output3:
+empid,empname,gender,country,SQL_surrkey,SQL_empid,SQL_empname,SQL_gender,SQL_country,SQL_isActive
+1001,maheer1,male1,india1,1,1001,maheer,male,india,1
+1002,ati,female,usa,null,null
+1003,wafa,male,india,null,null
+
+Here the unmatched columns are with 'null' values
+
+In filter1(transformation),
+FilterCondition = !isNull(SQL_empid)
+
+filter1 Output4:
+empid,empname,gender,country,SQL_surrkey,SQL_empid,SQL_empname,SQL_gender,SQL_country,SQL_isActive
+1001,maheer1,male1,india1,1,1001,maheer,male,india,1
+
+In select2(transformation),
+select only 'SQL_' prefix columns
+
+In DerivedColumn1(transformation), 
+SQL_isActive = 0
+
+In AlterRow1(transformaation),
+Alter row conditions: UpdateIf "1==1"
+
+In Sink2,
+Update method: Allow update
+Key columns: List of columns -> SurrgateKey
+
+
+
+
+
+
+
+
+
+Filter by last Modified = @adddays(piepeline().TriggerTime,-30)
+path = @formatDataTime(peipeline().parameters.TriggerTime,'yyyy/MM/dd')
+UtcNow()-2
+
+COPY DATA TOOL :
+--------------
+This contains the Built-in copy task and Metadata-driven copy task
+
+Here we are copying data from SQLdatabse to DataLake using this copyDataTool where the target file can be of any format (JSON,AVRO,PARQUET,TXT)
+
+select database -> choose full load/deltaLoad -> If delta Load then waterMarkColumn&waterMarkStartingColumn(startDate) value is needed -> select the fileformat -> autogenerated createTableStatement & store procedure for updating the watermark for timestamp which is increamental data load
+
+Top Level pipeline:
+-------------------
+
+1) copy paste the table statements and execute them in a database 
+2) Create three pipelines, copy task 
+
+Max number of objects returned from lookup activity = 5000
+Max number of concurrent tasks = 20
+MAin Control Table Name = dbo.maincontroltable_q0s
+
+3) Lookup Activity -> ForLoopActivity in it we have "MidLevelPipeline"
+
+MidLevelPipeline:
+-----------------
+Within ForLoopActivity we cannot have another ForLoopActivity we created this MidlevelPipeline to create the LookupActivity
+
+
+ForLoopActivity -> ( Lookup Activity(select query) -> Execute Pipeline) -> SwitchCase with deltaLoad manyoptions -> a.GetMaxValue(Lookup),b.SetMaxValue(SetVariable),c.DeltaLoadOneObject(CopyDAta),d.UpadteWaterMarkMinValue(StorePRocedure)
+
+
+
+
+
+
+
+------------------------ SCD 2 ----------------------------
+ID, First_Name, Last_Name,City,Start_date
+1,Nithin,Pawar,Pune,2022-01-01
+2,Nikhil,Sarvaiye,Mumbai,2020-05-04
+3,Chinmay,Joshi,Delhi,2019-01-01
+4,Sunil,Vijayvargiya,Ahmedabad,2018-06-08
+
+here on runtime the end_date and flag should be added.
+For new records Flag be 1 and old records be 0.
+
+FLOW 1:
+CSVSourceFile -> 5 Columns -> SourceHash -> ExistingData(->TargetHash) -> DerivedColumn1->alterRow2->Sink1
+
+FLOW 2:
+EMPtable->ActiveRecords->TargetHash->Exists1(-> SourceHash)->derivedColumn2->AlterRow1-> Sink2
+
+FROM FLOW 1:
+IN SourcHash, we do MD5(ID,FirstName,City)
+In ExistingData, we compare Flow1 sourcedata Hash to Flow2 targetData Hash. Data that "DOESN'T EXIST is pulled out.
+In DerivedColumn1, we add 3 extra columns like End_date, Flag and SourceHash
+End_date = toDate("2099-12-31")
+Active_flag = 1
+In alterRow2, once we do anything above we need to do this alterRow to perform SINK
+ALTER ROW CONDITIONS: Upsert If or update Id== true()
+
+IN sink1, 
+UPDATE METHOD: Check the box "Allow upsert"
+KEY COLUMNS: ID, First_Name, City (by this we are doing upserts)
+
+FROM FLOW2:
+In ActiveRecords, use filter condition Active_flag==1
+In TargetHash, we do MD5(ID,FirstName,City)
+In Exists1, we are comparing targethash with the source hash. Data that "DOES EXIST" is pulled out.
+In derivedColumn2, we add 3 extra columns like End_date, Flag and TargetHash
+End_date = toDate(currentUTC())
+Active_flag= 0
+
+
+
+DATABRICKS IN ADF:
+
+%sql
+CREATE OR REPLACE TABLE scd2Demo (
+pk1 INT,
+pk2 STRING,
+dim1 INT,
+dim2 INT,
+dim3 INT,
+dim4 INT,
+active_status STRING,
+start_date TIMESTAMP,
+end_date TIMESTAMP )
+USING DELTA
+LOCATION '/FileStore/tables/scd2Demo'
+
+
+%sql
+insert into scd2Demo values(111, 'Unit1',200,500,800,400,'Y',current_timestamp(),'9999-12-31');
+insert into scd2Demo values(222,'Unit2',900,Null,700,100,'Y',current_timestamp(),'9999-12-31');
+insert into scd2Demo values(333,'Unit3',300,900,250,650,'Y',current_timestamp(),'9999-12-31');
+
+#create delta table instance
+
+from delta import *
+targetTable = DeltaTable.forPath(spark,"/FileStore/tables/scd2Demo")
+targetDF = targetTable.toDF()
+display(targetDF)
+
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+schema = StructType([StructField("pk1", StringType(), True),\
+			   StructField("pk2", StringType(), True),\
+			   StructField("dim1", IntegerType(),True),\
+			   StructField("dim2", IntegerType(),True),\
+			   StructField("dim3", IntegerType(),True),\
+			   StructField("dim4", IntegerType(),True),\
+			   StructField("active_status", StringType(), True),\
+			   StructField("start_date", StringType(),True),\
+			   StructField("end_date", StringType(),True)])
+
+data = [(111, 'Unit1',200,500,800,400),
+(222,'Unit2',800,1300,800,500),
+(444,'Unit4',100,None,700,300)]
+
+sourceDF = spark.createDataFrame(data=data, schema=schema)
+display(sourceDF)
+
+joinDF = sourceDF.join(targetDF,(sourceDF.pk1==targetDF.pk1) &\
+				(sourceDF.pk2 == targetDF.pk2) &\
+				(targetDF.active_status=="Y"),"leftouter")\
+			.select(sourceDF["*"],\
+				target .pk1.alias("target_pk1"), \
+				target .pk2.alias("target_pk2"), \
+				target .dim1.alias("target_dim1"), \
+				target .dim2.alias("target_dim2"), \
+				target .dim3.alias("target_dim3"), \
+				target .dim4.alias("target_dim4"))
+display(joinDF)
+
+
+filterDF = joinDF.filter(xxhash64(joinDF.dim1,joinDF.dim2,joinDF.dim3,joinDF.dim4)
+!=xxhash64(joinDF.target_dim1,joinDF.target_dim2,joinDF.target_dim3,joinDF.target_dim4))
+
+mergeDF=filter.withColumn("MERGEKEY",concat(filterDF.pk1,filterDF.pk2))
+
+display(filterDF)
+
+
+dummyDF = filterDF.filter("target_pk1 is not null").withColumn("MERGEKEY",lit(None))
+display(dummyDF)
+
+scdDF = mergeDF.union(dummyDF)
+display(scdDF)
+
+CF
+targetTable.alias("target").merge(
+		     source = scdDF.alias("source"),
+		     condition = "concat(target.pk1,target.pk2) = source.MERGEKEY and target.active_status='Y'").whenMatchedUpdate(set =
+	{
+		"active_status": "'N'",
+		"end_date": "current_date"
+	}
+).whenNotMatchedInsert(values =
+	{
+	"pk1": "source.pk1",
+	"pk2": "source.pk2",
+	"dim1": "source.dim1",
+	"dim2": "source.dim2",
+	"dim3": "source.dim3",
+	"dim4": "source.dim4",
+	"active_status": "'Y'",
+	"start_date": "current_date",
+	"end_date": """to_date('9999-12-31','yyyy-MM-dd)"""
+	}
+	).execute()
+
+%sql
+select * from scd2Demo
+
+
+
+
+
+
+
+
+

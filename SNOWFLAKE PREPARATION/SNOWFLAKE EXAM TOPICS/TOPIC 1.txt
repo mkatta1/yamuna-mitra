@@ -1,0 +1,30 @@
+How Does Snowflake Computing Outmaneuver Other Cloud Data Warehouses?
+https://dataart.medium.com/how-does-snowflake-computing-outmaneuver-other-cloud-data-warehouses-7aef9dc21f41
+
+Bulk unloading of data from Snowflake supports the use of a SELECT statement:
+
+COPY INTO @my_stage/my_unloaded_data.csv
+FROM (
+SELECT col1, col2, col3
+FROM my_table
+WHERE condition
+)
+FILE_FORMAT = (FORMAT_NAME = 'CSV' COMPRESSION = 'AUTO');
+
+Question) A customer using SnowSQL / native connectors will be unable to also use the Snowflake Web Interface (UI) unless access to the UI is explicitly granted by support.
+
+Solution:
+https://docs.snowflake.com/en/user-guide/connecting.html
+
+Q) Account-level storage usage can be monitored via:
+Sol: The Snowflake Web Interface (UI) in the Account -> Billing & Usage section
+https://docs.snowflake.com/en/user-guide/admin-usage-billing.html
+
+Q) How are Credits Charged for Warehouses?
+Credit charges are calculated based on:
+
+The warehouse size.The number of clusters (if using multi-cluster warehouses).
+
+The length of time the compute resources in each cluster runs.
+
+Sol: https://docs.snowflake.com/en/user-guide/warehouses-considerations

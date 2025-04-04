@@ -1,0 +1,84 @@
+We have a view that is queried frequently and that a long time to be processed.
+
+We can create a materialized view to solve that problem.
+
+Use any select-- statement to create this MView
+
+Results will be stored in a separate table and this will be updated automatically based on the base table.
+
+Note: Materialized views are maintained by snowflake having a separate warehouse called "MATERIALIZED_VIEW_MAINTENANCE" for which we need to pay amount in credits used. --> Materialized view maintenance costs!!! 
+
+Account admin -> Top pane Account -> Materialized_view_maintenance warehousename
+
+If there is a frequent changes in the underlying table every week then it is better not to have a materialized view for it!!!
+
+select * from table(information_schema.materialized_view_refresh_history()) ---> to check if the underlying data of a materialized view is changing.
+
+
+			** When to use MV **
+
+- Don't use materialized view if data changes are very frequent.
+- Keep maintenance cost in mind
+- Consider leveraging tasks (& streams) instea
+
+If the data is updated on a very regular basis...
+- Using tasks & streams could be a better alternative
+
+			******* LIMITATIONS of using a Materialized View ***********
+
+- Joins (including self-joins) are not supported
+- UDFs
+- HAVING clauses
+- ORDER BY clause
+- LIMIT clause
+- Limited amount of aggregation functions. Those are below:
+APPROX_COUNT_DISTINCT(HLL)
+AVG(except when used in PIVOT)
+BITAND_AGG
+BITOR_AGG
+BITXOR_AGG
+COUNT
+MIN
+MAX
+STDDEV
+STDDEV_POP
+STDDEV_SAMP
+SUM
+VARIANCE(VARIANCE_SAMP, VAR_SAMP)
+VARIANCE_POP (VAR_POP)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

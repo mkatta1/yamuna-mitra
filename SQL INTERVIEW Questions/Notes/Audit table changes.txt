@@ -1,0 +1,188 @@
+https://www.youtube.com/watch?v=oaialerWufw&list=PL08903FB7ACA1C2FB&index=97
+
+databasename, tablename, eventtype, loginname, sqlcommand, auditdatetime
+sampledb, mytable, create_table, venkat-pc\tan, create table STMT, 2015-09-11
+sampledb, mytable, drop_table, venkat-pc\tan, drop table STMT, 2015-09-11
+sampledb, mytable, create_table, venkat-pc\tan, create table STMT, 2015-09-11
+sampledb, mytable, alter_table, venkat-pc\tan, create table STMT, 2015-09-11
+
+eventdata() function returns eventdata in xml format
+<event_instance>
+<eventype>create_table</eventype>
+<servername></servername>
+<loginname>venkat-pc</loginname>
+<databasename>venka-pc\tan</databasename>
+<objectname>sampleDB</objectname>
+<tsqlcommand>
+ <commandtext>
+	create table mytable(id int, name varchar(), gender nvarchar(50))
+ </commandtext>
+</tsqlcommand>
+</event_instance>
+
+create table tablechanges
+(
+ databasename nvarchar(250),
+ tablename nvarchar(250),
+ eventype nvarchar(250),
+ loginname nvarchar(250),
+ sqlcommand nvarchar(2500),
+ auditdatetime datetime
+)
+
+create table mytable (id int, name nvarchar(50))
+
+Insert the above event data in xml format into this mytable!!!
+
+alter table mytable
+alter column name nvarchar(100)
+
+drop table mytable
+
+alter trigger tr_audittablechanges
+on all server
+for create_Table, alter_table, drop_table
+as
+begin
+ declare @eventdata xml
+ select @eventdata = eventdata()
+ 
+ insert into sampledb.dbo.tablechanges
+ (databasename, tablename, eventtype, loginname, sqlcommand, auditdatetime)
+ values
+(@eventdata.value)
+
+
+************************ Rollup in sql server ************************
+Employees table
+id, name, gender, salary, country
+1, mark, male, 5000, usa
+2, john, male, 4500, india
+3, pam, female, 5500, usa
+4, sara, female, 4000, india
+5, todd, male, 3500, india
+6, mary, female, 5000, uk
+7, ben, male, 6500, uk
+8, elizabeth, female, 7000, usa
+9, tom, male, 5500, uk
+10, ron, male, 5000, usa
+
+
+retrieve salary by country along with grand total
+------------------------------------------------
+
+query1:
+------
+-- using ROLLUP clause with GROUP BY
+select country, sum(salary) as totalsalary
+from employees
+group by rollup(country)
+
+select country, sum(salary) as totalsalary
+from employees
+group by country with rollup
+
+output1:
+-------
+country, totalsalary
+india, 12000
+uk, 17000
+usa, 22500
+null, 51500
+
+query2:
+------
+-- using UNION ALL operator along with GROUP BY
+select country, sum(salary) as totalsalary
+from employees
+group by country
+
+output2:
+-------
+country, totalsalary
+india, 12000
+uk, 17000
+usa, 22500
+
+query3:
+------
+-- Using GROUPING SETS
+To get a similar output of the rollup in the query1 to query1
+
+select country, sum(salary) as totalsalary
+from employees
+group by country
+
+union all
+
+select null, sum(salary) as totalsalary
+from employees
+
+QUERY4:
+------
+
+SELECT country, SUM(salary) AS totalsalary
+FROM 
+GROUP BY GROUPING SETS
+(
+ (COUNTRY), ()
+)
+
+QUERY5:
+------
+
+SELECT country, SUM(salary) AS totalsalary
+FROM 
+GROUP BY GROUPING SETS
+(
+ (COUNTRY, gender),
+ (COUNTRY),
+ ()
+)
+
+
+
+Grouping sets is a new feature introduced in SQL Server 2008 :
+-----------------------------------------------------------
+
+GroupSalary by country and gender. Also compute the subtotal at country level and grand total.
+
+SELECT country, gender, sum(salary) as totalsalary
+FROM employees
+GROUP BY ROLLUP(country, gender)
+
+
+************************* Cube in sql server **********************
+
+cube() in sql server produces the result set by generating all combinations of columns specified in GROUP BY CUBE()
+
+write a query to retrieve Sum of Salary grouped by all combinations of the 2 columns (country & gender) as well as grand total.
+
+Employees table
+id, name, gender, salary, country
+
+
+
+
+
+
+
+
+************************ cube in sql server ************************
+
+
+************************ diff bw cube & rollup ************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+

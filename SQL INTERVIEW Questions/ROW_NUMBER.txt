@@ -1,0 +1,53 @@
+QUESTION: what are the realtime use of row number except delete duplicate?
+
+In the below data to process using aggregate and then groupby is costly operation because it is an account transaction table which is heavy table with millions of rows. So, we perform rownumber
+
+MemberNbr,AcctNbr,EntryDate,Amount
+1,1,2018-07-29,150
+1,1,2018-07-30,140
+2,1,2018-07-29,260
+2,1,2018-07-31,480
+2,2,2018-07-28,150
+3,3,2018-07-25,560
+
+MemberNbr,AcctNbr,EntryDate,Amount
+1,1,2018-07-30,140
+2,1,2018-07-31,480
+2,2,2018-07-28,150
+3,3,2018-07-25,560
+
+create table AccountHistory
+(
+MemberNbr Int,
+AcctNbr Int,
+EntryDate Date,
+Amount Numeric(14,2)
+)
+
+Insert Into AccountHistory
+select 1,1,'2018-07-29',150
+union
+select 1,1,'2018-07-30',140
+union
+select 2,1,'2018-07-29',260
+union
+select 2,1,'2018-07-31',480
+union
+select 2,2,'2018-07-28',150
+union
+select 3,3,'2018-07-25',560
+
+with cte as(
+select *,row_number() over(partition by membernbr,acctnbr order by entrydate desc) as rw
+from AccountHistory
+) select * from cte
+where rw=1
+
+if not familiar with cte we can go with derived table
+
+select * from
+(
+select *,row_number() over(partition by membernbr,acctnbr order by entrydate desc) as rw
+from AccountHistory
+)as a
+where rw =1

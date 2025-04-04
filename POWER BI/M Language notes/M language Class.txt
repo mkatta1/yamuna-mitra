@@ -1,0 +1,131 @@
+M language is for performing tranformations using shortcuts. Instead of adding multiple steps to the PowerQuery, we can edit the columns.
+
+Suppose we want to change the columnName/expression/fileFormat so on... inside an language we can do that.
+
+If we don't want to start from scratch, we can duplicate&rename the source 
+that we want to and 
+
+Single User can use Power Bi Desktop to create reports which can be published to PowerBiService. This PowerBiService can be Free account which only you can use it but "PowerBiPro" can be shared & Collaborate with others. If a large company even want to scale things further then go to "Power Bi Premium" 
+
+
+SingleUser
+   |
+   \/
+Power Bi Desktop
+ |	|
+ \/	\/ Publish
+Finish	Power Bi Service	Share & Collaborate
+			 \	-------------------
+	Power Bi Free	   \-->	Power Bi Pro ($9.99/mo)
+			    \--> Power Bi Premium($20/mo) & ($4,995/mo)
+
+
+
+For free go to powerbi.microsoft.com/en-us/getting-started-with-power-bi/
+
+click on Try- powerbi for free
+
+Create Office 365 E3 or E5 trial
+
+After creation we have Favorites, Recent, + Create, Datasets,Goals, Apps, Shared with me, Workspaces to manage & create, and myWorkspace.
+
+In myWorkspace is our own personal workspace we can also publish reports of our own but not shared. It contains Dashboard(part of reports), Reports, Workbooks (Excel workbooks), and Datasets.
+
+Now click on "publish" in our Bi Desktop --> Sigin with the account email address --> Choose MyWorkspace or any other workspace create!!
+
+We can also create any other workspace we want which would not be personal one!
+Lineage can be seen for reports if we click on VIEW --> LINEAGE instead of LIST. This will show the sources, reports and their hierarchies.
+
+DATAGateway usage: If there are any changes in the datasets then Reports can be refreshed but if there are any changes to be reflected on the datasets then we need a DATAGateway.
+
+						  publish
+Personal Gateway: PowerBI Desktop on Your computer ------> to PowerBi Pro(service) this data needs to refreshed using Personal Gateway.
+Download Personal mode
+
+
+					    publish
+Standard Gateway: PowerBI Desktop on server ------> to PowerBi Pro(service) this data needs to refreshed using standard Gateway.
+Download standard mode
+
+
+Scheduled refresh: Go to Settings --> top pane Datasets ---> publisth ---> Scheduled refresh turn it on
+Keep your data up to date
+Refresh frequency: daily, weekly, monthly
+Time zone: UTC etc//
+Send refresh failure notifications to: Dataset owner, These contacts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

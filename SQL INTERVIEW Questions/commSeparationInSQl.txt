@@ -1,0 +1,74 @@
+HOW TO GET COMMA SEPARATED VALUES IN SQL ?
+
+Id,Training,ClassRoom,StartTime,Duration,WK
+1,SQLSERVER,SilverRoom,10:00:00.0000000,2.00,M
+2,SQLSERVER,SilverRoom,10:00:00.0000000,2.00,T
+3,SQLSERVER,SilverRoom,10:00:00.0000000,2.00,W
+4,SQLSERVER,SilverRoom,10:00:00.0000000,2.00,F
+5,MSBI,GOLDROOM,11:00:00.0000000,1.45,M
+6,MSBI,GOLDROOM,11:00:00.0000000,1.45,TH
+7,MSBI,GOLDROOM,11:00:00.0000000,1.45,F
+
+Training,ClassRoom,StartTime,Duration,WK
+SQLSERVER,SilverRoom,10:00:00.0000000,2.00,M;T;W;F
+MSBI,GOLDROOM,11:00:00.0000000,1.45,M;TH;F
+
+create table comma_separated_Tbl
+(
+trainingId Int,
+Training varchar(100),
+classroom varchar(100),
+startTime Time,
+duration numeric(14,2),
+wk varchar(10)
+)
+
+Insert comma_separated_Tbl
+select 1,'SQLSERVER','SilverRoom','10:00',2.00,'M'
+union
+select 2,'SQLSERVER','SilverRoom','10:00',2.00,'W'
+union
+select 3,'SQLSERVER','SilverRoom','10:00',2.00,'T'
+union
+select 4,'SQLSERVER','SilverRoom','10:00',2.00,'F'
+union
+select 5,'MSBI','GOLDROOM','11:00',1.45,'F'
+union
+select 6,'MSBI','GOLDROOM','11:00',1.45,'M'
+union
+select 7,'MSBI','GOLDROOM','11:00',1.45,'TH'
+
+SELECT * FROM commoa_separated_tbl
+
+Below is used for masking using the stuff where we give the arguments as (input,startpos,endpos,maskingchar) 
+select stuff('abc@abc',1,2,'**')
+
+------------- for xml path
+
+select ','+wk
+from comma_separated_tbl for xml_path('')
+
+query2:
+select stuff(
+(
+select ','+wk
+from comma_separeated_tbl for xml path('')
+),1,1,'') as a
+
+query3:
+select traing,classroom,starttime,duration,
+(select stuff(
+(
+select ','+wk
+from comma_separated_tbl for xml path('')
+),1,1,''))
+FROM comma_separated_tbl
+
+query4:
+select distinct traing,classroom,starttime,duration,
+(select stuff(
+(
+select ','+wk
+from comma_separated_tbl as a where a.training = b.training for xml path('')
+),1,1,''))
+FROM comma_separated_tbl as b

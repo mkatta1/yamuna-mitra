@@ -1,0 +1,189 @@
+/******************************
+    --classic web interface
+********************************/
+1. Introduction
+declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+ end;
+
+create or replace procedure sp_area_of_circle()
+  returns varchar
+  language sql
+  as
+  '
+    -- Snowflake Scripting code
+    declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+    end;
+  '  ;
+
+2. Using String Constant Delimiters Around a Block in a Stored Procedure
+
+--use double dollar signs.
+create or replace procedure sp_area_of_circle()
+  returns varchar
+  language sql
+  as
+  $$
+    -- Snowflake Scripting code
+    declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+    end;
+  $$
+  ;
+  
+  call sp_area_of_circle();
+  
+ --Use single quotes 
+  create or replace procedure sp_area_of_circle()
+  returns varchar
+  language sql
+  as
+  '
+    -- Snowflake Scripting code
+    declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+    end;
+  '
+  ;
+ 
+
+ call sp_area_of_circle();
+
+
+--3.  Passing a Block as a String Literal to EXECUTE IMMEDIATE
+
+--double dollar signs.
+
+execute immediate $$
+-- Snowflake Scripting code
+declare
+  radius_of_circle float;
+  area_of_circle float;
+begin
+  radius_of_circle := 3;
+  area_of_circle := pi() * radius_of_circle * radius_of_circle;
+  return area_of_circle;
+end;
+$$
+;
+
+
+select $stmt;
+set stmt =
+$$
+declare
+    radius_of_circle float;
+    area_of_circle float;
+begin
+    radius_of_circle := 3;
+    area_of_circle := pi() * radius_of_circle * radius_of_circle;
+    return area_of_circle;
+end;
+$$
+;
+
+
+execute immediate $stmt;
+
+set r =10;
+select $r;
+unset r;
+select $r;
+--use single quotes 
+
+
+execute immediate '
+-- Snowflake Scripting code
+declare
+  radius_of_circle float;
+  area_of_circle float;
+begin
+  radius_of_circle := 3;
+  area_of_circle := pi() * radius_of_circle * radius_of_circle;
+  return area_of_circle;
+end;
+'
+;
+
+
+set stmt =
+'
+
+declare
+    radius_of_circle float;
+    area_of_circle float;
+begin
+    radius_of_circle := 3;
+    area_of_circle := pi() * radius_of_circle * radius_of_circle;
+    return area_of_circle;
+end;
+'
+
+;
+
+execute immediate $stmt;
+
+
+
+--- SNOWSQL
+
+create or replace procedure sp_area_of_circle()
+  returns varchar
+  language sql
+  as
+ 
+
+    -- Snowflake Scripting code
+    declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+    end;
+  ;
+
+
+!load C:\venkat\snowflake_scripting\sp_area_of_circle_invalid.sql
+
+create or replace procedure sp_area_of_circle()
+  returns varchar
+  language sql
+  as
+  '
+    -- Snowflake Scripting code
+    declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+    end;
+  '
+  ;
+
+
+!load C:\venkat\snowflake_scripting\sp_area_of_circle.sql

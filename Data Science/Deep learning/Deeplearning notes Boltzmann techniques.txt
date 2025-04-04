@@ -1,0 +1,13 @@
+To practice on datasets given in the websites below:
+1. website: www.grouplens.org/datasets/movielens/
+for new research
+new education and research
+
+import, train and test the 
+binary rating
+
+what is spyder(python 3.6) application contains is it a file explorer?
+file explorer and variable explorer
+file explorer -> something.. -> vol2 -> deeplearning -> part5 Boltzmann machine -> set console work directory -> ml-1million, ml-100K, AltRBM-proof.pdf
+
+Boltzmann machine contains (2.0 graphical models/2.1 undirected graphs and Markov random fields/2.2 unsupervised learning with mathematical KL-divergence something... and optimization by gradient ascent), (3.0 Markov chains and morkov chain monte carlo techniques/ 3.2 gibbs sampling), (4.0 Restricted Boltzmann machines/ 4.1 Gradient of the log-likelihood/ )

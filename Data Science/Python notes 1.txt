@@ -1,0 +1,3394 @@
+**************************ASYNC PROGRAMMING **************************
+>> python hello.py & python hello.py
+output:
+[1]7512
+Hello World
+Hello World
+>> python hello.py & python hello.py &
+[1]7512
+[2]7530
+Hello World
+Hello World
+[2] +7530 done  python hello.py
+[1] +7529 done  python hello.py
+
+MULTI PROCESSES
+---------------
+from multiprocessing import Process
+def showSquare(num = 2):
+    print(num ** 2)
+    for i in range(1000000000000): pass
+
+procs = []
+for i in range(5):
+    procs.append(Process(target = showSquare))
+
+for proc in procs:
+    proc.start()
+print("Hello")
+
+output:
+4
+4
+4
+4
+Hello
+4
+
+for proc in procs:
+    proc.join()
+
+2)
+
+from multiprocessing import Process
+def showSquare(num = 2):
+    print(num ** 2)
+    for i in range(1000000000000): pass
+
+procs = []
+for i in range(5):
+    procs.append(Process(target = showSquare, args = (i+1, )))
+
+for proc in procs:
+    proc.start()
+print("Hello")
+
+output:
+4
+4
+4
+4
+Hello
+4
+
+for proc in procs:
+    proc.join()
+
+
+MULTI THREADING
+---------------
+from threading import Thread
+def square(n):
+    print("square is", n**2)
+def cube(n):
+    print("cube is", n**3)
+
+t1 = Thread(target = square, args=(4,))
+t2 = Thread(target = cube, args = (3,))
+
+t1.start()
+t2.start()
+print("hello")
+
+output
+square is 16
+cube ishello 27
+
+t1.join()
+t2.join()
+
+def producer(q):
+    for i in range(5):
+        q.put(i)
+        print("published", i)
+
+def consumer(q):
+    while True:
+         data = q.get()
+         print("consumed", data)
+
+q = Queue()
+producer_thread = Thread(target = producer, args =(q,))
+consumer_thread = Thread(target = consumer, args = (q,))
+
+consumer_thread.start()
+producer_thread.start()
+
+output:
+publishedconsumed 0
+published 1
+published 2 0
+consumed 1
+consumed 2
+
+published 3
+published 4
+consumed 3
+consumed 4
+
+producer_thread.join()
+consumer_thread.join()
+
+Coroutines AsyncIO
+-------------------
+
+def print_fancy_name(prefix):
+    try:
+	while True:
+	     name = (yield)
+	     print(prefix + ":" + name)
+    except GeneratorExit:
+	   print("Done !")
+co = print_fancy_name("Cool") -----> Initialization
+
+next* -----------> output: generator
+type(co) -----------> output: generator
+
+next(co) --------> sending data and control
+co.send("jatin")  -------> output: Cool:jatin
+co.send("prateek") ------> output:  Cool:prateek
+co.close() ---------> output:  Done!
+
+
+AsyncIO
+-------
+1)
+import asyncio
+import time
+
+async def main():
+  print("Hello")
+  await asyncio.sleep()
+  print("World")
+
+if __name__ == '__main__':
+    print(type(main())		---> output: <class 'coroutine'>
+
+2)
+
+import asyncio
+import time
+
+async def waiter(n):
+  await asyncio.sleep(n)
+  print(f"waited for {n} seconds")
+
+async def main():
+  # Event loop
+  task1 = asyncio.create_task(waiter(2))
+  task2 = asyncio.create_task(waiter(3))
+  
+  print(time.strftime('%X'))
+  await task1
+  await task2
+  print(time.strftime('%X'))
+
+if __name__ == '__main__':
+   asyncio.run(main())
+
+3)
+import asyncio
+import aiohttp
+
+async def fetchFromGoogle():
+  url = 'https://www.google.com'
+  session = aiohttp.ClientSession()
+  resp = await session.get(url)
+  print(await resp.content.read())
+  await session.close()
+
+async def main():
+  print(time.strftime('%X'))
+  await fetchFromGoogle()
+  print(time strftime('%X'))
+
+if __name__ == '__main__':
+  asyncio.run(main())
+
+
+4)
+async def fetchFromGoogle():
+  url = 'https://www.google.com'
+  session = aiohttp.ClientSession()
+  resp = await session.get(url)
+  await resp.content.read()
+  await session.close()
+
+async def main()
+  print(time.strftime('%X'))
+  await asyncio.gather(
+   *[
+     fetchFromGoogle() for _ in range(20)
+    ]
+)
+print(time.strftime('%X'))
+
+if __name__ == '__main__':
+  asyncio.run(main())
+
+*********************** NUMPY ************************************
+import numpy as np
+a = np.array([1,2,3,4,5])
+print(a)
+print(type(a)) --> output: [1 2 3 4 5]
+print(a.shape) --> output: <class 'numpy.ndarray'> (5,)
+
+b = np.array([[1],[2],[3],[4],[5])
+print(b)
+print(b.shape)
+
+output:
+[[1]
+ [2]
+ [3]
+ [4]
+ [5]]
+(5,1)
+
+c = np.array([[1,2,3],[4,5,6]])
+print(c) -->output: [[1 2 3]
+		     [4 5 6]]
+print(c.shape) -->output: (2,3)
+print(c[1][1]) -->output: 5
+
+#create zeros, ones, custom array
+a = np.zeros((3,3))
+print(a)
+b= np.ones((2,3))
+print(b)
+#Array of some constants
+c = np.full((3,2),5)
+print(c)
+
+#Identify Matrix - Size/Square Matrix
+d = np.eye()
+
+output:
+[[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]]
+[[1. 1. 1.]
+ [1. 1. 1.]]
+[[5 5]
+ [5 5]
+ [5 5]]
+[[1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [0. 0. 1. 0.]
+ [0. 0. 0. 1.]]
+[[0.37754576 0.4313543 0.62769984]
+ [0.98280604 0.73310827 0.77739381]]
+
+randomMatrix[1,1:3] = 1
+print(randomMatrix)
+output:
+[[0.37754576 0.4313543 0.62769984]
+ [0.98280604 1.	       1.]]
+
+##set some rows and columns with any values
+z = np.zeros((3,3), dtype = np.int64)
+print(z)
+z[1,:] = 5
+z[ :, -1] = 7
+print(z)
+
+output:
+[[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]]
+[[0. 0. 7.]
+ [5. 5. 7.]
+ [0. 0. 7.]]
+
+#DataTypes
+print(z.dtype) ---> output: int64
+
+#Mathematical operations
+x= np.array([[1,2],[3,4]])
+y= np.array([[5,6],[7,8]])
+
+#Element Wise Addition
+print(x+y)
+print(np.add(x,y))
+
+print(x*y)
+print(np.multiply(x,y))
+print(x/y)
+print(np.divide(x,y))
+print(np.sqrt(x))
+
+#Matrix Multiplication / Dot Products
+print(x)
+print(y)
+print(x.dot(y))
+print(np.dot(x,y))
+
+
+#multiplication(Dot Product) of vectors => scalar
+a = np.array([1,2,3,4])
+b = np.array([1,2,3,4])
+print(a.dot(b))
+
+print(sum(a))  ----> 10
+print(x)   ----> 
+[[1 2] 
+[3 4]]
+print(np.sum(x))  -----> 10
+print(np.sum(x,) -> [3 7]
+
+print(x)
+[[1 2]
+ [3 4]]
+print(np.sum(x))
+print(np.sum(x,axis=1))
+
+10
+[3 7]
+
+# Stacking of arrays
+print(a)
+b = b**2
+print(b)
+[1 2 3 4]
+[ 4 16 36 64]
+
+np.stack((a,b), axis=1)
+array([[1,4],
+	[2,16],
+	[3, 36],
+	[4, 64]])
+
+#Reshape a NumPy Array
+#print(a)
+a = a.reshape((4,2))
+print(a)
+[[1 2]
+ [3 4]
+ [4 16]
+ [36 64]]
+
+a = np.stack((a,b), axis=0)
+#print(a)
+a = a.reshape((4,2))
+print(a)
+[[1 2]
+ [3 4]
+ [1 4]
+ [9 16]]
+
+Numpy Random Module
+Random values in a given shape.
+Return a sample from the "standard normal" distribution
+Return random integers from low(inclusive) to high (exclusive)
+Return random floats in the half-open interval(0.0, 1.0)
+Generates a random sample from a given 1-D array
+Shuffle: Shuffles the contents of a sequence
+
+a = np.arrange(10) + 5
+print(a)  -----> [5 6 7 8 9 10 11 12 13 14]
+
+np.random.shuffle(a)
+print(a)   ----> [10 8 6 5 9 12 11 14 13 7]
+
+np.random.seed(1)
+
+
+#Returns values from a standard normal distributions
+a = np.random.rand(2,3)
+print(a)
+[[0.15425552 -0.13847914 0.08830793]
+ [-1.37581904 0.12538437 -0.78782392]]
+[7 7 8]
+4
+a = np.random.radint(5,10,3)
+print(a)
+
+#Randoly pick one element from a array
+element = np.random.choice([1,4,3,2,11,27])
+print(element)
+
+Statistical Compution using NUMPY
+----------------------------------
+numy functions for statistics
+- min, max
+- mean
+- median
+- average
+- variance
+- standard deviation
+
+a = np.array([[1,2,3,4],[7,6,2,0]])
+print(a)
+print(np.min(a))
+#Specify axis for the direction in case of multi dimension array
+print(np.min(a, axis=0))
+print(np.min(a, axis=1))
+
+output:
+[[1 2 3 4]
+ [7 6 2 0]]
+0
+[1 2 2 0]
+[1 0]
+
+b = np.array([1,2,3,4,5])
+m = sum(b)/5
+print(m)  -----> 3.0
+print(np.mean(b))  -----> 3.0
+print(np.mean(a, axis=0))  -----> [4. 4. 2.5 2. ]
+print(np.mean(a, axis=1))  -----> [2.5  3.75]
+
+c=np.array([1,5,4,2,0])
+print(np.median(c))
+
+# mean vs average is weighted
+print(np.mean(c))
+
+# weights
+w = np.array([1,1,1,1,1])
+print(np.average(c, weights=w))
+
+# standard deviation
+u = np.mean(c)
+myStd = np.sqrt(np.mean(abs(c-u**2)))
+
+#Inbuilt function
+dev = np.std(c)
+print(dev)
+
+#variance
+print(mystd**2)
+print(np.var(c))
+
+Q) ML Interview question
+given a running stream of numbers, compute mean and variance at any given point.
+
+
+******************************************************************
+LINEAR ALGEBRA -------> SKIPPED
+
+1. scalars and vectors
+- scalar is a single number, denoted as x
+- vector is an array of scalars, denoted by x. thus, a vector has n scalars x1,x2,...xn. note that indexing here begins with 1, unlike python (where it begins with 0)
+
+let us now look how we can create an array using numpy.
+
+import numpy as np
+x = np.array([[4],[5],[6]])
+print(x)
+print(x.shape)
+
+2. matrices and tensors
+- matrix is a 2d array of scalars, denoted by x
+- this matrix has m rows and n columns
+- each individual element such as x1,1 is a scalar
+- if m = n, the matrix is known as square matrix
+
+Tensor is an array with more than 2 axes, denoted as X
+- think of tensor as a generalization of an array with more than 2 axes
+
+X = np.array([[4,5,7,10],
+	       [10,11,13,11],
+		[56,80,90,12]])
+print(X.shape)
+X = X.reshape((2,6)) OR X = X.reshape((2,-1)) OR X = X.reshape((-1, 1)) .....
+print(X)
+print(X.shape)
+
+output:
+(3, 4)
+[[4 5 7 10 10 11]
+ [13 11 56 80 90 12]]
+(2, 6)
+
+
+1)
+T = np.ones((10,5,3))
+print(T)
+
+BLACK COLOUR
+T = np.ones((5,5,3), dtype = 'uint8/int32/int8/uint8' )
+print(T)
+import matplotlib.pyplot as plt
+plt.imshow(T)
+plt.show()
+
+2) 
+T = np.zeros((5,5,3),dtype='uint8')
+T[:,:,0] = 255 --->RED
+T[:,:,1] = 255--> GREEN
+T[:,:,2] = 255--> BLUE
+
+import matplotlib.pyplot as plt
+plt.imshow(T)
+plt.show()
+
+3. Transpose
+for a 2d matrix transpose can be obtain as follows
+for a vector, transpose makes the column vector into a row. thus a column vector can also be represented as x = [x1,x2,x3]^T
+
+# Transpose of Tensor
+T.shape
+#print(T[0][0])
+print(T.shape)
+T1 = np.transpose(T)
+print(T1.shape)
+
+output:
+(50,25,3)
+(3,25,50)
+
+# Transpose of Tensor
+T.shape
+#print(T[0][0])
+print(T.shape)
+T1 = np.transpose(T, axes=(2,0,1))
+print(T1.shape)
+
+T[0][0]
+T1[0][0]
+T[0][0].shape
+T1[0][0].shape
+output:
+(50,25,3)
+(3,50,25)
+
+4.BROADCASTING
+-------------- 
+- you can add a scalar to a vector, and numpy will add it to each element in the vector
+x + a = xi + a
+- similarly you can add a vector to a matrix, and numpy will add the vector to each column of the matrix
+
+x= np.array([1,2,3,4])
+print(x)
+print(x+4)
+output:
+[1 2 3 4]
+[5 6 7 8]
+
+x = np.array([[10,20,30,40],
+		[40,50,60,70]])
+print(X)
+print(X + x)
+
+output:
+[[10,20,30,40]
+ [40,50,60,70]]
+[[11,22,33,44]
+ [41,52,63,74]]
+
+5. Matrix Multiplication
+------------------------
+6. element wise multiplication: Hadamard product
+------------------------------------------------
+- element wise multiplication A . B
+- Notice how numpy uses the * for this. Important to be careful, and not to confuse this with matrix multiplication.
+
+A = np.array([[1,2],
+		[3,4]])
+B = np.array([[0,2],
+	       [3,2])
+A*B
+
+output:
+array([[0,4],
+        [9,8]])
+
+7.Norms
+- Norm can be thought of as a proxy for size of a vector.
+- we define L^p norm ||x||p=(sigma|xi|^p)1/p
+- norm is a function that maps vectors to non-negative values. A norm satisfies the following properties:
+  - f(x) = 0 => x =0
+  - f(x + y) =< f(x) + f(y) (Triangle inequality)
+  - forall  blah blah 
+
+L^2 norm is EUCLIDEAN NORM, often
+ - we work mostly with squared L^2 norm which can be computed as x^T x
+ - Squared L^2 norm is easier to work with as its derivative is 2 * x
+ - In some ML applications it is important to distinguish between elements that are zero and small but zero. Squared L^2 norm may not be the right choice as it grows very slowly near the origin.
+
+L^1 norm is the absolute sum of all members of a vector
+- Userful when difference between 0 and non-zero elements is essential
+
+Max-Norm: L^infinite: This simplifies to absolute value of the element with highest magnitude.
+
+x = np.array([-3,4])
+lp2 = np.linalg.norm(x)
+print(lp2)
+
+lp1 = np.linalg.norm(x,ord=1)
+print(lp1)
+
+lpinf = np.linalg.norm(x,ord=np.inf)
+print(lpinf)
+
+output:
+5.0
+7.0
+4.0
+
+8. Determinants:
+----------------
+More operations of matrices 
+- https://numpy.org/doc/stable/reference/routines.linalg.html
+
+A = np.array([[1,2],
+		[3,4]])
+
+np.linalg.det(A)
+
+output:
+-------
+-2.0000000000000004
+
+9.Inverse:
+---------
+Ainv = np.linalg.inv(A)
+print(Ainv)
+print(np.dot(A,Ainv))
+A = np.array([[6,8],
+		[3,4]])
+
+pinv = np.linalg.pinv(A)
+print(pinv)
+print(np.dot(A,pinv)
+
+10. Solve a System of Equations
+--------------------------------
+a = np.array([[2,3], [3,1]])
+b = np.array([8,5])
+
+np.linalg.solve(a,b)
+output: array([1., 2.])
+
+
+******************************************************************
+DATA VISUALISATION
+==================
+Install Matplotlib
+pip install matplotlib
+
+data science pipeline
+---------------------
+- understand the problem statement
+- acquire data and cleaning
+- data visualisation / exploratory analysis
+- machine learning modelling
+- share results/ interesting visualisations about findings
+
+
+LINE PLOTS
+----------
+import matplotlib.pyplot as plt
+import numpy as np
+
+themes = plt.style.available
+print(themes)
+
+plt.style.use("seaborn")
+
+x = np.arrange(10)
+y1 = x**2
+y2 = 2*x + 3
+print(x)
+print(y1)
+print(y2)
+
+output:
+------
+[0 1 2 3 4 5 6 7 8 9]
+[0 1 4 9 16 25 36 49 64 81]
+[3 5 7 9 11 13 15 17 19 21]
+
+plt.plot(x,y1,color='red')
+plt.show()
+
+plt.plot(x,y2,color='green')
+plt.show()
+
+plt.plot(x,y1,color='red', label="Apple")
+plt.show()
+
+plt.plot(x,y2,color='green', label="Kiwi")
+plt.show()
+
+plt.plot(x,y2,color='green', label="Kiwi", linestyle="dashed")
+plt.show()
+
+plt.plot(x,y1,color='red', label="Apple", marker='o')
+plt.show()
+
+plt.plot(x,y2,color='green', label="Kiwi", linestyle="dashed", marker='*')
+plt.show()
+
+plt.xtitle("Time")
+plt.ylabel("Prince")
+plt.title("Prices of Fruits over Time")
+plt.legend()
+
+plt.show()
+
+2) SCATTER PLOTS
+-----------------
+prices = np.array([1,2,3,4])**2
+print(prices)  ---> output: [1 4 9 16]
+
+plt.plot(prices)
+plt.show()
+
+plt.scatter(x,y1)
+plt.scatter(x,y2)
+plt.show()
+
+#Adjust the size of Any Plot
+plt.figure(figsize=(4,4))
+plt.scatter(x,y1,color='red',label="Apple",marker='^')
+plt.scatter(x,y2,color='green',label="Kiwi",linestyle="dashed")
+plt.xlabel("Time")
+plt.ylabel("Price")
+
+plt.title("Prices of Fruits over Time")
+plt.legend()
+plt.show()
+
+3) BAR GRAPHS:
+--------------
+plt.style.use("dark_background")
+x_coordinates = np.array([0,1,2])*2
+
+plt.bar(x_coordinates-0.25,[10,20,15],width=0.5,label="Current Year",tick_labels=["Gold","Platinum","Silver"],color="blue") #Current Year
+
+plt.bar(x_coordinate+0.25,[20,10,12],width=0.5,label="Next Year",color="orange")#Next Year
+
+plt.title("Metal Price Comparision")
+plt.xlabel("Metal")
+plt.ylabel("Price")
+plt.legend()
+plt.show()
+
+4) Pie chart
+------------
+plt.style.use("seaborn")
+subjects = "Maths","Chem", "Physics","English"
+weightage = [20,10,15,5]
+
+plt.pie(weightage, labels=subjects, explode=(0,0,1,0),autopct='%1.1f%%',shadow=True)
+plt.title("Subjects")
+plt.show()
+
+plt.pie?   --> to know the description
+ 
+
+5) HISTOGRAM
+------------
+FOR NORMAL DISTRIBUTION we use HISTOGRAM
+xsn = np.random.randn?
+xsn = np.random.randn(100)
+print(xsn)
+
+sigma = 8
+u = 70
+X = np.round(Xsn*sigma + u)
+X2 = np.round(Xsn*15 + 40)
+print(X)
+
+plt.hist(X)
+
+plt.style.use("seaborn")
+plt.hist(X)
+
+
+plt.style.use("seaborn")
+plt.hist(X)
+plt.ylabel("Prob/FreqCount of Students")
+plt.xlabel("Marks Range")
+plt.show()
+
+plt.style.use("seaborn")
+plt.hist(X2,alpha=0.8,label="Physics")
+plt.hist(X,alpha==0.9,label="Maths")
+plt.ylabel("Prob/FreqCount of Students")
+plt.xlabel("Marks Range")
+plt.title("Histogram")
+plt.show()
+
+Histogram: A Histogram is an accurate representation of the distribution of numerical data. It is an estimate of the probability distribution of a continuous variable (quantitative variable) and it differs from a bar graph because normal bar graph relates two variables, but a histogram relates only one. 1st step is to "bin" or "bucket" the entire range of values into a series of intervals and then count how many values fall into each interval. The bin are adjacent, equal size, consecutive, non-overlapping intervals of a variable.
+
+
+
+
+
+
+
+Data Visualisation Challenge
+----------------------------
+Given a Movies Dataset, your task is to make a visualisation that-
+ - plots the length of movie title names on X-Axis
+ - Frequency Counts on Y-axis i.e. Number of Movies having 'x' characters in their title
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+#Read a CSV File
+df = pd.read_csv("../2.Working with Libraries/movie_metadata.csv")
+df.head(n=10)
+df.columns
+
+titles = df.get('movie_title')
+print(type(titles))  ---> <class 'list'>
+
+print(titles[:5])
+
+freq_titles = {}
+for title in titles:
+   length = len(title)
+
+if freq_titles.get(length) is None:
+   freq_titles[length] = 1
+else:
+   freq_titles[length] +=1
+
+freq_titles
+
+print(freq_titles)
+
+X = np.array(list(freq_titles.keys()))
+Y = np.array(list(freq_titles.values()))
+#print(X,Y)
+
+plt.scatter(X,Y)
+plt.xlabel("Length of Movie Title")
+plt.ylabel("Freq Count")
+plt.title("Movie Data Visualisation Problem")
+plt.show()
+
+******************************************************************
+SEABORN
+
+pip install seaborn
+import seaborn as sns
+import numpy as np
+
+tips = sns.load_dataset('tips')
+tips
+tips.head()
+
+sns.barplot(x='sex',y='total_bill',data=tips, estimator=np.std)
+
+sns.countplot(x='time', data=tips)
+
+sns.boxplot(x="day", y="total_bill", data=tips, hue='smoker')
+
+sns.boxplot(x="day", y="total_bill", data=tips, hue='sex')
+
+sns.violinplot(x='day', y='total_bill', data=tips)
+
+sns.boxplot(x="day", y="total_bill", data=tips, hue='sex', split=True)
+
+sns.distplot(tips('total_bill'), kde=False, bins=40)
+
+sns.distplot(tips('total_bill'), kde=False, bins=100)
+
+sns.kdeplot(tips['total_bill'])
+
+sns.jointplot(x='total_bill', y='tip', data=tips)
+
+sns.jointplot(x='total_bill', y='tip', data=tips, kind='hex')
+
+sns.jointplot(x='total_bill', y='tip', data=tips, kind='reg')
+
+sns.jointplot(x='total_bill', y='tip', data=tips, kind='scatter')
+
+sns.pairplot(tips)
+
+tips.head()
+tips.corr()
+
+tips_corr = tips.corr()
+
+tips_corr
+
+sns.heatmap(tips_corr)
+
+sns.heatmap(tips_corr, annot=True)
+
+flights = sns.load_dataset('flights')
+flights
+
+flights_pivot = flights.pivot_table(index="month", columns="year", values="passengers")
+flights_pivot
+
+sns.heatmap(flights_pivot)
+
+sns.heatmap(flights_pivot, cmap="coolwarm")
+
+titanic = sns.load_dataset('titanic')
+
+titanic
+
+******************************************************************
+PANDAS
+======
+
+##PANDAS
+- Dataframe - Special Object to data in tabular form(rows&columns)
+
+Installation: !pip install pandas
+
+import numpy as np
+import pandas as pd
+
+#Try to create a data frame
+user_data = {
+  "MarksA":np.random.rand(1,100,5),
+  "MarksB":np.random.rand(50,100,5),
+  "MarksC":np.random.rand(1,100,5),
+
+}
+
+user_data
+
+df = pd.DataFrame(user_data, dtype= 'float32')
+print(df)
+df.head(n=3)
+df.columns
+print(df.columns)
+
+df.to_csv('marks.csv')
+
+my_data = pd.read_csv('marks.csv',index_col=False)
+my_data
+
+my_data = pd.read_csv('marks.csv')
+my_data = my_data.drop(columns=['Unnamed:0'])
+my_data
+
+BASICS - 2
+----------
+my_data.describe()
+my_data.tail(n=3)
+
+# Row
+df.iloc[3]
+#Row & Col
+df.iloc[3][1]
+
+df.iloc[3][1]
+
+idx = [df.columns.get_loc('MarksB'),df.columns.get_loc('MarksC')]
+print(idx) -----> [1, 2]
+df.iloc[3,idx]
+df.iloc[:3,idx]
+
+df.iloc[:3,[1,2]]
+
+## sort your dataframe
+my_data
+
+my_data.sort_values(by=["MarksC", "MarksA"], ascending=False)
+data_array = my_data.values
+print(type(my_data))
+print(my_data.shape)
+
+print(data_array)
+print(type(data_array))
+
+data_array.shape ----> (5,3)
+
+data_array[2][2]
+
+# numpy arrays back into dataframe
+new_df = pd.DataFrame(data_array,dtype='int32',columns=["Physics","Chem","Maths"])
+
+new_df
+
+new_df.to_csv("PCM.csv",index=False)
+new_df.to_csv?
+
+pcm = pd.read_csv('PCM.csv')
+print(pcm)
+
+MINST DATASET
+-------------
+
+
+
+
+MOVIE DATASET
+-------------
+
+
+
+
+
+16.Project - Movie Recommendation System
+----------------------------------------
+
+
+
+
+******************************************************************
+PROBABILITY DISTRIBUTION & STATISTICS
+======================================
+
+#Generate a Normal distribution (1-D)
+u = 5
+sigma = 2
+# Such a distribution is also called standard normal distribution
+
+vals = u + sigma*np.random.randn(1000)
+print(vals.shape)
+
+plt.hist(vals,50)
+plt.show()
+
+vals = np.round(vals)
+z = np.unique(vals, return_counts= True)
+
+output:
+-------
+(array([2., 3., 4., 5., 6., 7., 8.]), array([3, 58, 244, 403, 230, 54, 8]))
+
+Multivariate Normal Gaussian distribution ????
+-----------------------------------------
+vals = np.round(vals)
+z = np.unique(vals, return_counts=True)
+print(z)  ----> (array([3., 4., 5., 6., 7.]), array([1,5,8,5,1]))
+
+x = vals
+y = np.zeros(x.shape)
+plt.scatter(x,y)
+plt.show()
+
+Multivariate Normal distribution ????
+-----------------------------------------
+#BiVariate
+----------
+mean = np.array([0.0,0.0])
+cov = np.array([[1,0],[0,1]])
+#cov = np.array([[1,0.5],[0.5,1]])
+#cov = np.array([[1,0.8],[0.8,1]])
+
+mean2 = np.array([0.0,0.0])
+cov2 = np.array([[1,0.8],[0.8,1]])
+
+#mean2 = np.array([5.0,6.0])
+#cov2 = np.array([[1.3,0.2],[0.2,1.1]])
+
+
+dist = np.random.multivariate_normal(mean, cov, 500)
+dist2 = np.random.multivariate_normal(mean2, cov, 500)
+print(dist.shape)
+
+plt.scatter(dist[:,0],dist[:,1])
+plt.scatter(dist[:,0],dist2[:,1])
+plt.show()
+
+ML Interview Question - Std Deviation in a Running Stream
+---------------------------------------------------------
+Q) Given a running stream of numbers, compute mean and variance at any given point.
+
+
+
+******************************************************************
+K-NEAREST NEIGHBOURS (K-NN)
+---------------------------
+- simple machine learning
+- classification and regression
+- supervised learning
+- majority vote
+- no training
+- all the work query time O(N), O(NQ)
+- non-parametric
+- baseline
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+plt.style.use('seaborn-paste1')
+dfx = pd.read_csv('../Datasets/xdata.csv')
+dfy = pd.read_csv('../Datasets/ydata.csv')
+
+X = dfx.values
+Y = dfy.values
+
+X = X[:,1:]
+Y = Y[:,1:].reshape((-1,))
+
+print(X)
+print(X.shape)
+print(Y.shape)
+
+print(Y)
+
+plt.scatter(X[:,0],X[:,1], c=Y)
+plt.show()
+
+query_x = np.array([2,3])
+plt.scatter(query_x[0], query_x[1], color='red')
+plt.show()
+
+def dist(x1,x2):
+   return np.sqrt(sum((x1-x2)**2))
+
+def knn(X,Y,queryPoit,k=5):
+   vals = []
+   m = X.shape[0]
+
+  for i in range(m):
+      d = dist(queryPoint,X[i])
+      vals.append((d,Y[i]))
+
+vals = sorted(vals)
+# Nearest/First K points
+vals = vals[:k]
+vals = np.array(vals)
+print(vals)
+
+new_vals = np.unique(vals[:,1],return_counts=True)
+print(new_vals)
+
+index = new_vals[1].argmax()
+pred = new_vals[0][index]
+
+return pred
+
+vals = knn(X,Y,quer_x)
+np.unique(vals, return_counts=true)
+
+knn(X,Y,quer_x)
+
+
+Recognising Handwritten Digits on MNIST Dataset using KNN
+----------------------------------------------------------
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+Step 1. Data Preparation
+-------------------------
+df = pd.read_csv('train.csv')
+print(df.shape) -----> output: (42000, 785)
+
+print(df.columns)  ----> Index(blah blah)
+
+df.head(n=5)
+
+data = df.values
+print(data.shape)
+print(type(data))
+
+split = int(0.8*X.shape[0])
+print(split)
+
+X = data[:,1:]
+Y = data[:,0]
+print(X.shape, Y.shape) ----> (42000, 784) (42000,)
+
+split = int(0.8*X.shape[0])
+print(split)  ------> 
+
+X_train = X[:split,:]
+Y_train = Y[:split]
+
+X_test = X[split,:]
+Y_train = Y[split:]
+
+print(X_train.shape, Y_train.shape)  ---> 33600
+print(X_test.shape,Y_test.shape)
+
+(33600, 784) (33600,)
+(8400, 784) (8400,)
+
+#Visualise some samples
+def drawImg(sample):
+    img = sample.reshape((28,28))
+    plt.imshow(img, cmap='gray')
+    plt.show()
+
+drawImg(X_train[3])
+#drawImg(X_train[0])
+#print(Y_train[0])
+
+Step 2. K-NN
+-------------
+# can we apply KNN to this data?
+def dist(x1,x2):
+   return np.sqrt(sum((x1-x2)**2))
+
+def knn(X,Y,queryPoint, k=5):
+    vals = []
+    m = X.shape[0]
+
+    for i in range(m):
+       d = dist(queryPoint,X[i])
+       vals.append((d,Y[i]))
+
+    vals = sorted(vals)
+    # Nearest/First K points
+    vals = vals[:k]
+ 
+    vals = np.array(vals)
+    #print(vals)
+
+    new_vals = np.unique(vals[:,1],return_counts=True)
+    #print(new_vals)
+
+    index = new_vals[1].argmax()
+    pred = new_vals[0][index]
+
+    return pred
+
+Step 3: Make Predictions
+------------------------
+pred = knn(X_train,Y_train, X_test[0])
+print(int(pred))  ----> 0
+
+pred = knn(X_train,Y_train, X_test[1])
+print(int(pred))  ----> 7
+
+draImg(X_test[1])
+print(Y_test[1])
+
+
+19.🏆Diabetes Detection Challenge
+
+20.Project - Real Time Face Recognition using KNN
+
+******************************************************************
+LINEAR REGRESSION
+-----------------
+
+Time spent, performance score
+------------------------------
+2, 4
+3, 7
+10, 19
+12, 25
+8, 15
+
+Test, Data
+----------
+
+training data ---> algorithm ---> hypothesis
+
+2. Gradient Descent (in general)
+--------------------------------
+import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.arange(10)
+Y = (X-5)**2
+
+print(X,Y) ---> [0 1 2 3 4 5 6 7 8 9] [25 16 9 4 1 0 1 4 9 16]
+
+Goal Given a function f(x), we want to find the value of x that minimizes f.
+
+visualisation
+-------------
+plt.style.use("seaborn")
+plt.plot(X,Y)
+plt.ylabel("F(X)")
+plt.xlabel("X")
+plt.show()
+
+x = 0
+lr = 0.1
+error = []
+# 50 steps in the downhill direction
+plt.plot(X,Y)
+
+for i in range(50):
+   grad = 2*(x-5)
+   x = x - lr*grad
+   e = (x-5)**2  # here y is e, e is y
+   error.append(e)
+   plt.plot(x,y)
+   plt.scatter(x,y)
+   print(x)
+
+# plot the values of error
+plt.plot(error)
+plt.show()
+
+gradient descent to find a local minima in any given function
+gradient descent update rule for regression
+Linear Regression - data preparation
+------------------------------------
+Linear_X_Train.csv
+Linear_Y_Train.csv
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+Section 1. Load and visualise the data
+- download
+- load
+- visualise
+- normalisation
+
+X = pd.read_csv('./Training Data/Linear_X_Train.csv')
+y = pd.read_csv('./Training Data/Linear_Y_Train.csv')
+
+#Normalisation
+u = X.mean()
+std = X.std()
+X = (X-u)/std
+
+
+#visualise
+plt.style.use('seaborn')
+plt.scatter(X,y,color='orange')
+#plt.scatter(X,y)
+plt.title("Hardwork vs Performance Graph")
+plt.xlabel("Hardwork")
+plt.ylabel("Performance")
+plt.show()
+
+type(X)
+
+Section 2:Linear Regression - Implementing Gradient Descent
+-------------------------------------------------------------
+def hypothesis(x,theta):
+  y_ = theta[0] + theta[1]*x
+  return y_
+
+def gradient(X,Y,theta):
+  m = X.shape[0]
+  grad = np.zeros((2,))
+  for i in range(m):
+      x = X[i]
+      y_ = hypothesis(x,theta)
+      y = Y[i]
+      grad[0] += (y_ - y) 	
+      grad[1] += (y_ - y)*x
+  return grad/m
+
+def error(X,Y,theta):
+  m = X.shape[0]
+  total_error = 0.0
+  for i in range(m):
+      y_ = hypothesis(X[i],theta)
+      total_ error = (y_ - Y[i])**2
+
+  return error/m
+
+
+def gradientDescent(X,Y, max_steps=100, learning_rate = 0.1):
+
+    theta = np.zeros((2,))
+    error_list = []
+
+    for i in range(max_steps):
+    
+    # Compute grad
+     grad = gradient(X,Y,theta)
+     e = error(X,Y,theta)
+     error_list.append(e)
+
+    # update theta
+    theta[0] = theta[0] - learning_rate*grad[0]
+    theta[1] = theta[1] - learning_rate*grad[1]
+
+  return theta, error_list
+
+theta, error_list = gradientDescent(X,y)
+
+theta
+
+error_list
+
+plt.plot(error_list)
+plt.title("Reduction error over time")
+plt.show()
+
+Section 3 - Predictions and Best Line
+-------------------------------------
+Linear Regression - Making Predictions and Submitting Online Challenge
+-------------------------------------------------------------
+
+y_ = hypothesis(X,theta)
+print(y_)
+
+# Training + Predictions
+plt.scatter(X,y)
+plt.plot(X,y_,color='orange',label="Prediction")
+plt.legent()
+plt.show()
+
+# Load the test data
+X_test = pd.read_csv('./Test Cases/Linear_X_Test.csv').values
+y_test = hypothesis(X_test, theta)
+
+y_test.shape
+
+y
+
+df = pd.DataFrame(data=y_test,column=["y"])
+
+df.to_csv('y_predicition.csv', index=False)
+
+
+Section -4: Linear Regression code - Computing Scoring
+-------------------------------------------------------
+Score: R2 (R2-Squared) or Coefficient of Determination
+
+def r2_score(Y,Y_):
+  # Instead of Loop, np.sum is recommended as it is fast
+  num = np.SUM((Y-Y_)**2)
+  denom = np.SUM(Y-Y.mean())**2)
+
+  score = (1-num/denom)
+  return score*100
+
+r2_score(y,y_)
+
+SECTION 5: Surface Plots - Surface Plots and Contours
+------------------------------------------------------
+Surface Plots are used to
+ - visualise loss functions in machine learning and deep learning
+ - visualise state or state value functions in reinforcement learning
+
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
+
+#a= np.array([1,2,3])
+#b= np.array([4,5,6,7])
+
+a = np.array(-1,1,0.02)
+b = a
+a,b = np.meshgrid(a,b)
+print(a)
+print(b)
+
+fig = plt.figure()
+axes = fig.gca(projection='3d')
+axes.plot_surface(a,b,a+b,cmap='coolwarm')
+#axes.plot_surface(a,b,a+b,cmap='rainbow')
+#axes.plot_surface(a,b,a**2+b**2,cmap='coolwarm')
+plt.show()
+
+Section - 5 Visualising Loss Function, Gradient Descent, Theta Updates
+------------------------------------------------------------
+
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
+
+theta
+# loss actually
+T0 = np.arrange(-50,50,1)
+T1 = np.arrange(40,120,1)
+print(T0,T1)
+print(T1)
+
+T0,T1 = np.meshgrid(T0,T1)
+print(T1)
+J = np.zeros(T0.shape)
+
+#for i in range()
+print(T0.shape)
+
+for i in range(J.shape[1]):
+   for j in range(.shape[1]):
+      y_ = T1[i,j]*X + T0[i,j]
+      J[i,j] = np.sum((y-y_)**2) 
+      J[i,j] = np.sum((y-y_)**2)/y.shape[0]
+
+#print(J.shape)
+# Visualise the J (Loss)
+
+fig = plt.figure()
+axes = fig.gca(projection='3d')
+axes.plot_surface(T0,T1,J,cmap='rainbow')
+#axes.scatter(theta_list[:,0],theta_list[:,1],error_list)
+plt.show()
+
+Plot the changes in values of theta
+------------------------------------
+theta_list = np.array(theta_list)
+theta_list
+plt.plot(theta_list[:,0],label="Theta0")
+plt.plot(theta_list[:,1],label="Theta1")
+plt.legend()
+plt.show()
+
+plt.contour(T0,T1,J,cmap='rainbow')
+plt.scatter(theta_list[:,0],theta_list[:,1])
+plt.show()
+
+Interactive Plots using Matplotlib
+----------------------------------
+
+import pandas as pd
+
+X = pd.read.csv("./Training Data/Linear_X_Train.csv").values
+Y = pd.read.csv("./Training Data/Linear_Y_Train.csv").values
+# 100, 2
+theta = np.load("ThetaList.npy")
+#100, 2
+T0 = theta[:,0]
+T1 = theta[:,1]
+
+plt.ion()
+
+for i in range(0,50,30):
+    y_ = T1[i]*X + T0
+   #points
+   plt.scatter(X,Y)
+   #line
+   plt.plot(x,Y_,'red')
+   plt.plot(x,y_,'red')
+   plt.draw()
+   plt.pause(1)
+   plt.elf()
+
+
+$$$$$$ 24.Linear Regression - II Multiple Features $$$$$$$$$$
+
+2. Boston Housing Dataset
+--------------------------
+- Exploratory Analysis
+
+from sklearn.datasets import load_boston
+boston = load_boston()
+X = boston.data
+y = boston.target
+
+print(X.shape)
+print(y.shape)
+
+print(boston.feature_names)
+print(boston.DESCR)
+
+import pandas as pd
+df = pd.DataFrame(X)
+df.columns = boston.feature_names
+df.head()
+df.describe()
+
+# normalise this dataset
+# each feature must have 0 mean, unit variance
+
+import numpy as np
+u = np.mean(X,axis=0)
+std = np.std(X,axis=0)
+
+# normalise the data
+X = (X-u)/std
+print(X[:5,:])
+pd.Dataframe(X[:5,:]).head()
+
+# Plot Y vs any features
+plt.style.use('seaborn')
+import matplotlib.pyplot as plt
+plt.scatter(X[:,5],y)
+plt.show()
+
+Section - 2 Linear Regression on Multiple Features
+--------------------------------------------------
+- Boston Housing Dataset
+
+
+X.shape, y.shape
+
+ones = np.ones((X.shape[0],1))
+X = np.hstack((ones,X))
+print(X.shape)
+
+X[:4,:4]
+
+#X - Matrix (m x n)
+# x - Vector (Single Example with n features) 
+
+def hypothesis(x, theta):
+  y_ = 0.0
+  n = x.shape[0]
+  for i in range(n):
+      y_ += (theta[i]*x[i])
+  return y_
+
+def error(X,Y,theta):
+    e = 0.0
+    m = X.shape[0]
+
+   for i in range(m):
+       y_ = hypothesis(X[i],theta)
+       #e += (y-y_)**2
+       e += (y[i] - y_)**2
+
+    return e/m
+
+def gradient(X,y,theta):
+    m,n = X.shape
+
+    grad = np.zeros((n,))
+
+    # for all values of j
+    for j in range(n):
+       #sum over all examples
+       for i in range(m):
+           y_ = hypothesis(X[i],theta)
+           grad[j] += (y_-y[i])*X[i][j]
+      # Out of the loops
+     return grad/m
+
+def gradient_descent(X,y,leaning_rate=0.1, max_epochs=300):
+   m,n = X.shape
+   theta = np.zeros((n,))
+   error_list = []
+
+  for i in range(max_epochs):
+      e = error(X,y,theta)
+      error_list.append(e)
+
+      # Gradient Descent
+      grad = gradient(X,y, theta)
+      for j in range(n):
+          theta[j] = theta[j] - learning_rate*grad[j]
+
+
+    return theta, error_list
+
+import time
+start = time.time()
+theta, error_list = gradient_descent(X,y)
+end = time.time()
+print("Time taken is ", end-start)
+print(theta)
+plt.plot(error_list)
+
+Predictions
+-----------
+y_ = []
+
+for i in range(m):
+  pred = hypothesis(X[i],theta)
+  y_.append(pred)
+
+y_ = np.array(y_)
+
+y_
+
+def r2_score(y,y_):
+  num = np.sum((y-y_)**2)
+  denom = np.sum((y - y.mean())**2)
+  score = (1-num/denom
+  return score*100
+
+
+r2_score(y,y_)
+
+Section - 3 optimising code using vectorization
+------------------------------------------------
+
+an efficient implementation for linear regression using vectorization
+- avoid loops in the implementation, except gradient descent main loop
+- use numpy functions like np.sum(), np.dot() which are quite fast and already optimised
+
+def hypothesis(X,theta):
+   return np.dot(X,theta)
+
+def error(X,y,theta):
+    e =  0.0
+    m = X.shape[0]
+    y_ = hypothesis(X, theta)
+    e = np.sum((y-y_)**2)
+
+    return e/m
+
+def gradient(X,y,theta):
+  y_ = hypothesis(X,theta)
+  grad = np.dot(x.T, (y_ - y))
+  m = X.shape[0]
+
+  return grad/m
+
+def gradient_descent(X,y,learning_rate=0.1, max_iters=300):
+  n = X.shape[0]
+  theta = np.zeros((n,))
+  error_list = []
+
+  for i in range(max_iters):
+      e = error(X,y,theta)
+      error_list.append(e)
+
+     #Gradient descent
+     grad = gradient(X,y,theta)
+     theta = theta - learning_rate*grad
+
+  return theta, error_list
+
+start = time.time()
+theta, error_list = gradient_descent(X,y)
+end = time.time()
+print("Time taken by Vectorized Code", end-start)
+
+theta
+
+## Predictions
+y = hypothesis(X,theta)
+r2_score(y,y_)
+
+******************************************************************
+SCI-KIT LEARN INTRODUCTION
+---------------------------
+from sklearn import linear_model
+reg = linear_model.LinearRegression()
+reg.fit([[0,0], [1,1],[2,2],[0,1,2]]) ---> LinearRegression()
+reg.coef_   ------> array([0.5,0.5])
+
+1)
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import make_regression
+%matplotlib notebook
+
+X,y = make_regression(n_samples=1000, n_features=2, n_informative=1,noise=10,random_state=1)
+
+print(X.shape, y.shape) ---> (1000,2) (1000,)
+
+plt.subplot(1,2,1)
+plt.scatter(X[:,0],y)
+
+plt.subplot(1,2,2)
+plt.scatter(x[:,1],y)
+
+
+from mpl_toolkits imports mplot3d
+fig = plt.figure(figsize = (10,7))
+ax = plt.axes(projection ="3d")
+
+# creating plot
+ax.scatter3D(X[:,0], X[:,1],y, color="green");
+plt.title("3D scatter plot")
+plt.show()
+
+Implementing Linear Regression Using Sk-Learn
+----------------------------------------------
+from sklearn.liner_model import LinearRegression
+model = LinearRegression() 
+output:
+LinearRegression(copy_X=True, fit_intercept=True, n_jobs=None, normalize=False)
+
+model.fit(X,y)
+model.coef_  --> array([16.62437639, 87.990428471])
+model.intercept_ ---> -0.2176641376001833
+
+model.predit([X[0],X[1]])
+--> array([-186.58153868, -90.66624357])
+
+y[0],y[1]  --> (-198.36714169030483, -71.87770558832477)
+
+model.score(X,y) --> 0.988401838483157
+
+26. Air Quality Prediction Challenge
+
+27.Optimisation Algorithms
+
+******************************************************************
+LOCALLY WEIGHTED REGRESSION (LOWESS)
+
+******************************************************************
+MAXIMUM LIKELIHOOD ESTIMATE (MLE)
+
+******************************************************************
+LOGISTIC REGRESSION
+--------------------
+- data preparation
+- visualisation
+- create train and test set
+- create a logistic regression model
+- predictions
+- decision boundary
+- how to use sk-learn
+
+# data - generate using
+import numpy as np
+import matplotlib.pyplot as plt
+mean_01 = np.array([1, 0.5])
+cov_01 = np.array([[1,0.1], [0.1,1.2]])
+
+mean_02 = np.array([4, 5])
+cov_02 = np.array([1.2,0.1], [0.1,1.3])
+
+dist_01 = np.random.multivariate_normal(mean_01,cov_01, 500)
+dist_02 = np.random.multivariate_normal(mean_02,cov_02, 500)
+
+print(dist_01.shape)  ----> (500, 2)
+print(dist_02.shape)  ----> (500, 2)
+
+
+plt.style.use("seaborn")
+plt.scatter(dist_01[:,0],dist_01[:,1],color='red', label="Class 0")
+plt.scatter(dist_02[:,0],dist_02[:,1],color='blue',label="Class 1")
+
+np.random.multivariate_normal?
+
+#plt.scatter(dist_01[:,0],dist_01[:,1],color='red')
+#plt.scatter(dist_02[:,0],dist_02[:,1],color='blue')
+plt.xlabel("Feature x1")
+plt.ylabel("Feature x2")
+plt.show()
+
+data[:500,:2] = dist_01
+data[:500,:2] = dist_01
+
+data[500:-1] = 1.0
+
+#Randomly shuffle data
+np.random.shuffle(data)
+print(data[:10])
+
+# Divide the data into train and test part
+split = int(0.8*data.shape[0])
+X_train = data[:split,:-1]
+X_test = data[split:,:-1]
+
+Y_train = data[:split,-1]
+Y_test = data[split,-1]
+
+print(X_train.shape, X_test.shape, Y_train.shape, Y_test.shape)
+
+output:
+(800, 2) (200,2) (800,) (200,)
+
+print(Y_test)
+
+Data Normalisation
+------------------
+# Plot the training data and normalise it
+
+plt.scatter(X_Train[:,0], X_train[:,1],c=Y_train,cmap=plt.cm.Accent)
+plt.show()
+
+#plt.scatter(X_Train[:,0], X_train[:,1],c=[0,1,1,1,1,1,0,......) 
+
+# data normalisation
+--------------------
+x_mean = X_train.mean(axis=0)
+x_std = X_train.std(axis=0)
+
+# Apply the transformation
+X_train = (X_train-x_mean)/x_std
+
+# Apply the transformation
+X_tet = (X_test -x_mean)/x_std
+
+# Apply the same transformation []
+plt.scatter(X_train[:,0],X_train[:,1],c=Y_train,cmap=plt.cm.Accent)
+plt.show()
+
+X_train.std(axis=0)  ---> array([1.,1.])
+
+Logistic Regression Implementation - one
+------------------------------------------
+
+def sigmoid(x):
+   return 1.0/(1.0 + np.exp(-x))
+
+def hypothesis(X, theta):
+    """
+    X - entire array (m,n+1)
+    theta - np.array(n+1,1) 
+    """
+    return sigmoid(np.dot(X,theta))
+
+def error (X,y,theta):
+    """
+    params:
+    X - (m,n+1)
+    y - (m,1)
+    theta - (n+1,1)
+
+    return:
+       scale_value = loss
+
+   """
+    hi = hypothesis
+    #error = (y*np.log(hi) + ((1-y)*np.log(1-hi)))
+    e = -1*np.mean((y*np.log(hi) + ((1-y)*np.log(1-hi))))
+
+    return e
+
+a = np.linspace(-100,100,20)
+plt.plot(a,sigmoid(a))
+
+plt.scatter(a,sigmoid(a))
+
+Logistic Regression Implementation - two
+------------------------------------------
+def gradient(X,y,theta):
+   """
+   params:
+   X - (m,n+1)
+   y - (m,1)
+   theta - (n+1, 1)
+
+   return:
+     gradient_vector - (n+1,1)
+
+  """
+  hi = hypothesis(X,theta)
+  grad = -np.dot(X.T,(y-hi))
+  m = X.shape[0]
+  return grad/m
+
+def gradient_descent(X,y,lr=0, max_itr=500):
+
+  n = X.shape[1]
+  theta = np.zeros((n,1))
+  
+  error_list = []
+
+# Assignment - Change the Stopping Criteria
+# When Delta E is very small, stop the loop 
+
+  for i in range(max_itr):
+    err = error(X,y,theta)
+    error_list.append(err)
+
+    grad = gradient(X,y,theta)
+  #update
+    theta = theta + lr*grad
+
+return (theta,error_list)
+
+ones = np.ones((X_train.shape[0],-1))
+X_New_train = np.hstack((ones,X_train))
+print(X_New_train.shape)
+print(X_New_train)
+
+
+X_train.shape ---> (800, 2)
+
+theta, error_list = gradient_descent(X_New_train, Y_train)
+plt.plot(error_list)
+
+
+#theta, error_list = gradient()
+
+#  theta = np.zeros((X.))
+
+
+Visualise - Decision Surface Visualisation
+-------------------------------------------
+plt.scatter(X_train[:,0],X_train[:,1],c=Y_train.reshape((-1,)),cmap=plt.cm.Accent)
+plt.show()
+
+x1 = np.arrange(-3,4)
+x2 = -(theta[0] + theta[1]*x1)/theta[2]
+plt.scatter(X_train[:,0], X_train[:,1],c=Y_train.reshape((-1,)),cmap=plt.cm.Accent)
+
+
+plt.plot(x1,x2)
+plt.show()
+
+Predictions and Accuracy
+------------------------
+
+X_New_Test = np.hstack((np.ones((X_test.shape[0],1)),X_test))
+print(X_New_Test.shape)  ----> (200,3)
+print(X_NewTest[:3,:1]) 
+
+def predict(X, theta):
+   h = hypothesis(X,theta)
+   output = np.zeros(h.shape)
+   output[h>=0.5] = 1
+   output = output.astype('int')
+
+   return output
+XT_preds = predict(X_New_train,theta)
+Xt_preds = predict(X_New_Test,theta)
+
+XT_preds.shape
+
+def accuracy(actual,preds):
+    actual = actual.astype('int')
+    actual = actual.reshape((-1,1))
+    acc = np.sum(actual==preds)/actual.shape[0]
+    return acc*100
+
+train_acc = accuracy(Y_train, XT_preds)
+test_acc = accuracy(Y_test,Xt_preds)
+print(train_acc)  ------> 99.375
+print(test_acc)  -----> 100.0
+
+
+Xt_preds.shape
+Y_test.shape
+
+output:(200,0)
+Logistic regression using Sk-Learn
+-----------------------------------
+
+from sklearn.linear_model import LogisticRegression
+model = LogisticRegression()
+model.fit(X_train,Y_train)
+
+theta_0 = model.intercept_
+theta_s = model.coef_
+print(theta_o,theta_s)
+output: 
+[0.21756424] [[2.51608753 4.67562981]]
+
+model.score(X_train, Y_train) --> 0.99625
+model.score(X_test,Y_test) --> 1.0
+
+y_pred = model.predict(X_test)
+y_pred
+
+
+31.🏆 Separating Chemicals Challenge
+
+******************************************************************
+Feature Selection
+-----------------
+
+
+
+******************************************************************
+Feature Selection
+PCA
+
+******************************************************************
+TEXT PREPROCESSING (NLP BASICS)
+NLTK
+
+Install NLTK
+-------------
+pip install nltk
+import nltk
+nltk.download
+
+# Corpus - A large collection of text
+from nltk.corpus import brown
+print(brown.categories())
+print(len(brown.categories()))
+data = brown.sents(categories='adventure')
+data = brown.sents(categories='fiction')
+data
+len(data)
+data[1]
+
+#1 sentence in fiction category
+' '.join(data[1])  ---> 'Scotty did not go back to school .'
+
+
+NLTK - Bag of Words Pipeline
+----------------------------
+- get the data/corpus
+- tokenisation, stopward removal
+- stemming
+- building a vocab
+- vectorization
+- classification
+
+3.NLTK - Tokenization and Stopword Removal
+------------------------------------------
+document = """It was a very pleasant day. The weather was cool there were light showers. I went to the market to buy some fruits."""
+
+sentence = "Send all the 50 documents related to chapters 1,2,3 at prateek@cb.com"
+
+from nltk.tokenize import sent_tokenize, word_tokenize
+sents = sent_tokenize(document)
+print(sents)
+output:
+['It was a very pleasant day'., 'The weather was cool there were light showers'., 'I went to the market to buy some fruits.']
+
+print(len(sents)) ---> 3
+
+sent[0] ---> 'It was a very pleasant day.'
+sentence.split()
+
+words = word_tokenize(sentence)
+
+STOPWORDS
+---------
+from nltk.corpus import stopwords
+sw = set(stopwords.words('english'))
+print(sw)
+
+def remove_stopwords(text, stopwords):
+  useful_words = [w for w in text if w not in stopwords]
+  return useful_words
+
+text = "i am not bothered about her very much".split()
+useful_text = remove_stopwords(text,sw)
+print(useful_text) ---> ['bothered', 'much']
+
+'not' in sw ---> True
+
+Regex Based Tokenization
+------------------------
+Tokenization using Regular Expression
+--------------------------------------
+RegExPal.com
+
+sentence = "Send all the 50 documents related to chapter 1,2,3 at prateek@cb.com"
+from nltk.tokenize import RegexpTokenizer
+tokenizer = RegexpTokenizer('[a-zA-Z]+')
+useful_text = tokenizer.tokenize(sentence)
+usefu_text
+
+Stemming and Lemmatization
+--------------------------
+Stemming
+--------
+- process that transforms particular words
+- preserve the semantics of the sentence without increasing the number of unique tokens
+- example - jumps, jumping, jumped, jump ==> jump
+
+text = """Foxes love to make jumps. The quick brown fox was seen jumping over the lovely dog from a 6ft feet high wall"""
+
+from nltk.stem.snowball import SnowballStemmer, PorterStemmer
+from nltk.stem.lancaster import LancasterStemmer
+
+#Snowball Stemmer, Porter, Lancaster Stemmer
+ps = PorterStemmer()
+ps.stem('jumps') ---> 'jump'
+ps.stem('lovely') --> 'love'
+ps.stem('loving') --> 'love'
+
+# Snowball Stemmer
+ss = SnowballStemmer('english')
+ss.stem('lovely')   -----> 'love'
+ss.stem('jumping')  -----> 'jump'
+
+## Lemmatization
+from nltk.stem import WordNetLemmatizer
+wn = WordNetLemmatizer()
+wn.lemmatize('jumping')
+
+6.Bag of Words - Constructing Vocab
+-----------------------------------
+BULIDING A VOCAB AND VECTORIZATION
+----------------------------------
+# Sample Corpus - Contains 4 Documents, each document can have 1 or more
+
+corpus = [
+   'Indian cricket team will wins World Cup, says Capt. Virat Kohli. World cup will be held at Sri Lanka',
+   'We will win next Lok Sabha Elections, says confident Indian PM',
+   'The nobel laurate won the hearts of the people.', 
+   'The movie Raazi is an exciting Indian Spy thriller based upon a real story.'
+]
+
+
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer()
+vectorized_corpus = cv.fit_transform(corpus)
+vectorized_corpus = vectorized_corpus.toarray()
+vectorized_corpus[0]
+len(vectorized_corpus[0])
+print(vectorized_corpus[0])
+cv.vocabulary_
+
+print(cv.vocabulary)
+
+len(cv.vocabulary_.keys())   ------> 42
+
+# Reverse Mapping!
+numbers = vectorized_corpus[2]
+numbers
+
+s = cv.inverse_transform(numbers)
+print(s)
+
+7. Bag of Words - Vectorization with Stopward Removal
+-----------------------------------------------------
+Vectorization with Stopword Removal 
+------------------------------------
+cv = CountVectorizer?
+cv = CountVectorizer()
+
+
+def myTokenizer(document):
+   words = tokenizer.tokenize(sentence.lower())
+# Remove Stopwords
+wods = remove_stopwords(words,sw)
+return words
+
+myTokenizer("this is some function")
+['send','documents','related','chapters','prateek@cb.com']
+
+#myTokenizer(sentence)
+#print(sentence)
+cv = CountVectorizer(tokenizer=myTokenizer)
+vectorized_corpus = cv.fit_transform(corpus).toarray()
+print(vectorized_corpus)
+
+print(len(vectorized_corpus[0]))  ----> 33
+cv.inverse_transform(vectorized_corpus)
+
+# for test data
+test_corpus = [
+        'Indian cricket rock!'
+]
+cv.transform(test_corpus).toarray()
+
+cv.vocabulary_
+
+8.Big of Words Model - Bigrams, Trigrams, Ngrams
+------------------------------------------------
+### More ways to Create Features
+- Unigram - every word as a feature
+- bigrams
+- trigrams
+- n-grams
+- TF-IDF Normalisation
+
+sent_1 = ["this is good movie"]
+sent_2 = ["this is good movie but actor is not present"]
+sent_3 = ["this is not good movie"]
+
+
+#cv = CountVectorizer()
+cv = CountVectorizer(ngram_range=(3,3))
+docs = [sent_1[0], sent_2[0]]
+cv.fit_transform(docs).toarray()
+output:
+array([[1,1,1,0,1],
+       [1,1,1,1,1]])
+
+cv.vocabulary_
+
+9.Bag of words -TF-IDF Normalisation
+------------------------------------
+TF-IDF Normalisation
+--------------------
+- avoid features that occur very often, because they contain less information
+- information decreases as the number of occurrences increases across different type
+- so we define another term - term-document-frequency which associates a weight with every
+
+sent_1 = "this is good movie"
+sent_2 = "this was good movie"
+sent_3 = "this is not good movie"
+
+corpus = [sent_1,sent_2,sent_3]
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf = TfidVectorizer()
+vc = tfid.fit_transform(corpus).toarray()
+print(vc)
+tfidf.vocabulary_
+
+******************************************************************
+NAIVE BAYES CLASSIFIER
+
+Example: Does the patient have disease or not?
+A patient takes a lab test and result comes back positive. The test returns a correct +ve in only 98% of the cases in which disease is actually present, and a correct -ve result in only 97% of the cases in which disease is not present. Furthermore, 0.008 of the entire population have this disease.
+
+NAIVE BAYES - Mushroom Dataset
+-------------------------------
+Goal is to predict the class of mushrooms, given some features of the mushrooms. We will use Naive Bayes Model for this classification.
+
+Load the Dataset
+-----------------
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('../Datasets/Mushrooms/mushrooms.csv')
+df.head(n=10)
+print()
+
+Encode the categorical data into numerical data
+-----------------------------------------------
+le = LabelEncoder()
+#Applies transformation on each columns
+ds = df.apply(le.fit_transform)
+
+ds.head()
+print(type(ds))
+<class 'pandas.core.frame.DataFrame'>
+
+data = ds.values
+print(data.shape) --> (8124, 23)
+print(type(data)) --> <class 'numpy.ndarray'>
+print(data[:5,:])
+
+data_x = data[:,0]
+data_y = data[:,1:]
+
+8. Break the Data into train and test
+--------------------------------------
+x_train, x_test, y_train, y_test = train_test_split(data_x, data_y, test_size=0.2)
+
+print(x_train.shape,y_train.shape) --> (6499,22) (6499,)
+print(x_test.shape,y_test.shape)  ---> (1625,22) (1625,)
+
+np.unique(y_train) --> array([0, 1], dtype=int64)
+
+??
+Building Our Classifier
+-----------------------
+a = np.array([0,5,5,1,1,1,0,1])  ---> 6
+
+def prior_prob(y_train,label):
+   total_examples = y_train.shape[0]
+   class_examples = np.sum(y_train==label)
+   return (class_examples)/float(total_examples)
+
+#y = np.array([0,5,5,1,1,1,1,0,0,0])
+#prior_prob(y,5)
+
+def cond_prob(x_train,y_train,feature_col,feature_val, label):
+   x_filtered = x_train[y_train==label]
+   numerator = np.sum(x_filtered[:,feature_col])==feature_val)
+   denominator = np.sum(Y_train==label)
+
+   return numerator/flaot(denominator)
+
+9. Mushroom Classification - Prediction using Posterior Prob
+-------------------------------------------------------------
+Next Step: Compute Posterior Prob for each test example and make predictions
+-----------------------------------------------------------
+np.unique(y_train) ---> array([0,1], dtype=int64)
+
+def predict(x_train,y_train,xtest):
+    """Xtest is a single testing point, n features"""
+    classes = np.unique(y_train)  
+    n_features = x_train.shape[1]
+    post_probs = []
+# List of prob for all classes and given a single testing point
+    #Compute Posterior for each class
+    for label in classes:
+
+        #Post_c = likelihood*prior
+        likelihood = 1.0
+        for f in range(n_features):
+            cond = cond_prob(x_train,y_train,f,xtest[f],label)
+            likelihood*= cond
+       prior = prior_prob(y_train,label)
+       post = likelihood*prior
+       post_probs.append(post)
+
+  pred = np.argmax(post_probs)
+  return pred
+
+output = predic(x_train, y_train, x_test[1])
+print(output)    --------> 1
+print(y_test[1]) --------> 1
+
+def score(x_train, y_train,x_test,y_test):
+    pred = []
+    for i in range(x_test.shape[0]):
+        pred_label = predict(x_train,y_trai,x_test[i])
+        pred.append(pred)
+    pred = np.array(pred)
+
+    accuracy = np.sum(pred==y_test)/y_test.shape[0]
+
+   return accuracy
+
+print(score(x_train,y_train,x_test,y_test))
+
+
+10.Naive Bayes for Text Classification
+---------------------------------------
+11.Laplace Smoothing (Multinomial NB)
+---------------------------------------
+12.Multivariate Bernoulli Naive Bayes
+---------------------------------------
+13.Multinomial Event Model Naive Bayes
+---------------------------------------
+14.Steps to use in Multinomial Event Model Naive Bayes Classification.pdf
+-------------------------------------------------------
+15.Multivariate Bernoulli vs Multinomial Navie Bayes
+-------------------------------------------------------
+16.Gaussian Naive Bayes - Handling Continuous Valued Features
+-------------------------------------------------------------
+
+types of naive bayes
+- Multivariate Bernoulli 
+- Multinomial Navie Bayes
+- Gaussian Naive Bayes
+
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+from sklearn.datasets import make_classification
+import matplotlib.pyplot as plt
+X,Y = make_classification(n_samples=200,n_features=2,n_informative=2,n_redudant=0,random_state=4)
+plt.scatter(X[:,0],X[:,1],c=Y)
+plt.show()
+
+print(X[0]) ---> [-1.36748138 -2.18619146]
+print(X.shape) #Continous Val  ---> (200, 2)
+
+# Train our classifier
+gnb.fit(X,Y)  ---> GaussianNB(prior=None)
+
+gnb.score(X,Y) --> 0.9
+
+ypred = gnb.predict(X)
+print(ypred)
+
+print(Y)
+
+import numpy as np
+acc = (np.sum(ypred==Y))/X.shape[0]
+print(acc)
+
+17. Multinomial Navie Bayes vs Gaussian Naive Bayes
+----------------------------------------------------
+Naive Bayes on MNIST Data
+-------------------------
+from sklearn.datasets import load_digits
+from sklearn.model_selection import cross_val_score
+import numpy as np
+import matplotlib.pyplot as plt
+
+1. Dataset Preparation
+----------------------
+#Load the Sklearn MNIST Dataset
+digits = load_digits()
+
+X = digits.data
+Y = digits.target
+
+print(X.shape) ---> (1797, 64)
+print(Y.shape) ---> (1797,)
+
+plt.imshow(X[1].reshape((8,8)))
+print(Y[1])
+plt.show()
+
+print(X[0])
+
+TRAIN MODELS:
+-------------
+from sklearn.naive_bayes import GaussianNB, MultinomialNB
+
+mnb = MultinomialNB()
+gnb = GaussianNB()
+
+# Train
+mnb.fit(X,Y)
+gnb.fit(X,Y) --> GaussianNB(prior=None)
+
+# Score
+print(mnb.score(X,Y))  ---> 0.9053978853644964
+print(gnb.score(X,Y))  ---> 0.8580968280467446
+
+cross_val_score(gnb,X,Y,scoring="accuracy",cv=10).mean()
+--> 0.8103537583567821
+
+cross_val_score(mnb,X,Y,scoring="accuracy",cv=10).mean()
+---> 0.8819396216300838
+
+# This is because each feature isetbdiscrete valued! Hence MNB gives better results!
+
+
+
+
+******************************************************************
+NAIVE BAYES & NLP CHALLENGE
+PROJECT - MOVIE RATING PREDICTION CHALLENGE
+------------------------------------------
+
+
+******************************************************************
+K-MEANS CLUSTERING (UNSUPERVISED)
+-----------------------------------
+
+39.Project - Image Segmentation using K-Means
+-----------------------------------------------
+******************************************************************
+SVM - SUPPORT VECTOR MACHINES
+
+42.Project - Image Classification using SVM
+
+1.Challenge - PokeMon's on Goa Trip
+
+******************************************************************
+DECISION TREES & RANDOM FORESTSS
+---------------------------------
+competition description
+-----------------------
+The sinking of the RMS Titanic is one of the most infamous shipwrecks in history. On April 15, 1912, during her maiden voyage, the Titanic sank after colliding with an iceberg, killing 1502 out of 2224 passengers and crew. This sensational tragedy shocked the international community and led to better safety regulations for ships.
+
+One of the reasons that the shipwreck led to such loss of life was that there were not enough the passengers and crew. Although there was some element of luck involved in surviving the --- some groups of people were more likely to survive than others, such as women, children, and --- class.
+
+In this challenge, we ask you to complete the analysis of what sorts of people were likely to sur--- particular, we ask you to apply the tools of machine learning to predict which passengers .... tragedy.
+
+PROCESS KAGGLE TITANIC DATASET
+------------------------------
+
+
+DECISION TREES
+--------------
+Problem: titanic survivor prediction Kaggle challenge
+Learning goals:
+How to pre-process data?
+- Dropping not useful features
+- Filling the missing values (Data Imputation)
+
+Creating a Binary Decision Tree from Scratch
+
+import numpy as np
+import pandas as pd
+
+data = pd.read_csv("titanic.csv")
+data.head(n=10)
+data.info()
+
+columns_to_drop = ["PassengerId", "Name","Ticket","Cabin","Embarked"]
+data_clean = data.drop(columns_to_drop,axis=1)
+data_clean.head(n=5)
+
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+data_clean["Sex"] = le.fit_transform(data_clean["Sex"])
+data_clean.head()
+data.info()
+data_clean.info()
+
+data_clean = data_clean.fillna?
+data_clean = data_clean.fillna(data_clean["Age"].mean())
+
+# Imputer --> SkLearn!
+data_clean[2][1]
+
+
+NOT A COMPLETE VIDEO
+
+4- Implementing Information Gain
+---------------------------------
+data_clean.loc[1]
+
+input_cols = ['Pclass',"Sex","Age","SibSp","Parch","Fare"]
+output_cols = ["Survived"]
+X = data_clean[input_cols]
+Y = data_clean[output_cols]
+
+print(X.shape, Y.shape) --> (891, 6) (891, 1)
+print(type(X))
+
+def entropy(col):
+   counts = np.unique(col,return_counts=True)
+   N = floats(col.shape[0])
+
+   ent = 0.0
+
+   for ix in counts[1]:
+      P = ix/N
+      ent += (-1.0*p*np.log2(p))
+
+   return ent
+
+col = np.array([1,1,1,1,0,1,0])
+entropy(col)      ---------> 1.0
+output:
+(array [0,1]) , array([2, 5] , dtype=int64))
+
+def divide_data(x_data,fey,fval):
+    #Work with Pandas Data Frames
+    #x_right = pd.DataFrame?
+    x_right = pd.DataFrame([],columns=x_data.columns)
+    x_left = pd.DataFrame([],columns=x_data.columns)
+
+    for ix in range(x_data.shape[0]):
+        val = x_data[fkey].loc[ix]
+
+        if val > fval:
+           x_right = x_right.append(x_data.iloc[ix])
+        else:
+           x_left = x_left.append(x_data.iloc[ix])
+
+    return x_left,x_right
+
+x_left,x_right = divide_data(data_clean[:10],'sex',0.5)
+print(x_left)
+print(x_right)
+pd.DataFrame?
+
+
+
+def information_gain(x_data,fkey,fval):
+    left,right = divide_data(x_data,fkey,fval)
+
+    #% of total samples are on left and right
+    1 = float(left.shape[0])/x_data.shape[0]
+    r = float(right.shap[0])/x_data.shape[0]
+
+    #All examples come to one side!
+    if left.shape[0] == 0 or right.shape[0] ==0:
+       return -1000000 #Min Information Gain
+
+    i_gain = entropy(x_data.Survived) -(1*entropy(left.Survived)+r*entropy(right.Surived))
+
+    return i_gain
+
+# Test our function
+for fx in X.columns:
+    print(fx)
+    print(information_gain(data_clean,fx,data_clean[fx].mean())
+
+Implementing Decision Tree
+---------------------------
+class DecisionTree:
+   #Constructor
+   def __init__(self,depth=0,max_depth=5):
+      self.left = None
+      self.right = None
+      self.fkey = None
+      self.fval = None
+      self.max_depth = max_depth
+      self.depth = depth
+      self.target = None
+
+  def train(self,X_train):
+
+      features = ['Pclass','Sex','Age','SibSp','Parch','Fare']
+      info_gains = []
+
+      for ix in features:
+          i_gain = information_gain(X_train,ix,X_train[ix].mean())
+          info_gains.append(i_gain)
+
+      self.fkey = features[np.argmax(info_gains)]
+      self.fval = X_tain[self.fkey].mean()
+      print("Making Tree Features is", self.fkey)
+
+#Split Data
+data_left,data_right = divide_data(X_train,self.fkey,self.fval)
+data_left = data_left.reset_index(drop=True)
+data_right = data_right.reset_index(drop=True)
+
+#Truly a left node
+if data_left.shape[0] == 0 or data_right.shape[0] == 0:
+   if X_train.Survived.mean() >=0.5:
+     self.target = "Survive"
+   else:
+     self.target = "Dead"
+
+   return 
+
+#Stop early when depth >=max depth
+if(self.depth>=self.max_depth):
+  if X_train.Survived.mean() >=0.5:
+      self.target = "Survive"
+
+   else:
+      self.target = "Dead"
+
+   return
+
+#Recursive Case
+self.left = DecisionTree(depth=self.depth+1,max_depth=self.max_depth)
+self.left.train(data_left)
+
+
+self.right = DecisionTree(depth=self.depth+1,max_depth=self.max_depth)
+self.right.train(data.right)
+
+
+# You can set the target at every node
+if X_train.Survived.mean() >=0.5:
+    self.target = "Survive"
+else:
+    self.target = "Dead"
+return
+
+d = DecisionTree()
+#d.train(data_clean)
+
+#MAKING PREDICTIONS********
+
+def predict(self,test):
+   if test[self.fkey]>self.fval:
+      #go to right
+      if self.right is None:
+         return self.target
+      return self.right.predict(test)
+   else:
+      if self.left is None:
+         return self.target
+      return self.left.predict(test)
+
+Train-Validation-Test Set Split
+--------------------------------
+split = int(0.7*data_clean.shape[0])
+train_data = data_clean[:split]
+test_data = data_clean[split:]
+test_data = test_data.reset_index(drop=True)
+print(train_data.shape,test_data.shape) --> (623, 7) (268, 7)
+
+dt = DecisionTree()
+dt.train(train_data)
+
+print(dt.fkey) --> Sex
+print(dt.fval) --> 0.6292134831460674
+print(dt.left.fkey)  ----> Pclass
+print(dt.right.fkey)  ----> Fare
+
+y_pred = []
+for ix in range(test_data.shape[0]):
+   y_pred.append(dt.predict(test_data.loc[ix]))
+
+y_pred
+y_actual = test_data[output_cols]
+print(y_actual)
+
+le = LabelEncoder()
+y_pred = le.fit_transform(y_pred)
+print(y_pred)
+
+y_pred = np.array(y_pred).reshape((-1,1))
+print(y_pred.shape) ---> (268, 1)
+
+
+acc = np.sum(y_pred==y_actual)/y_pred.shape[0]
+acc = np.sum(np.array(y_pred)==np.array(y_actual))/y_pred.shape[0]
+
+print(acc)  ---> 0.817641791844776
+
+
+Output:
+-------
+Survived  219
+dtype: int64
+
+
+print(y_pred.shape)  ------> (268,)
+print(y_actual.shape) -----> (268,1)
+y_actual = y_actual.reshape((-1,)) ----> (268,)
+
+
+-------------
+acc = np.sum(y_pred==y_actual)/y_pred.shape[0]
+acc = np.sum(np.array(y_pred)==np.array(y_actual))/y_pred.shape[0]
+print(acc) ---> 0.817164791044776
+
+
+Decision Trees using Sci-kit learn
+-----------------------------------
+from sklearn.tree import DecisionTreeClassifier
+#sk_tree = DecisionTreeClassifier?
+sk_tree = DecisionTreeClassifier(criterion='entropy',max_depth=5)
+
+#DEFAULT criterion if no value is given then it is GINNI
+sk_tree = DecisionTreeClassifier(criterion='gini',max_depth=5)
+
+sk_tree.fit(train_data[input_cols],train_data[output_cols])
+
+sk_tree.predict(test_data[input_cols])
+
+sk_tree.score(test_data[input_cols],test_data[output_cols])
+---> 0.82835
+
+DecisionTreeClassifier?
+
+Decision Trees Visualization using Graphviz
+-----------------------------------------
+Visualise a Decision Tree
+-------------------------
+import  pydotplus
+from sklearn.externals.six import StringIO
+from IPython.display import Image
+from sklearn.tree import export_graphviz
+
+dot_data = StringIO()
+export_graphviz(sk_tree,out_file = dot_data, filled=True, rounded=True)
+
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+
+Image(.create_png())
+
+
+10.Challenge - Titanic Survivor Prediction
+
+******************************************************************
+PERCEPTRONS & NEURAL NETWORKS
+
+******************************************************************
+ARTIFICIAL NEURAL NETWORKS
+--------------------------
+Implementing a 3 layer architecture
+------------------------------------
+- Two layers 1 Hidden + 1 output
+- Multi-layer perceptron/feed forward net/deep forward net
+
+Part-1 Implementation
+---------------------
+
+def SoftMax(a):
+  e_pa = np.exp(a) #Vector
+  ans = e_pa/np.sum(ea,axis=1,keepdims=True)
+  return ans
+
+a = np.array([10,10],
+             [20,20])
+
+a_ SoftMax(a)
+print(a_)
+
+/*
+a = np.array([[5,1,2],[6,1,2]])
+np.sum(a,axis=1,keepdims=True)
+
+np.exp(a)
+*/
+
+#Model Parameters
+input_size = 2 # no_of_features
+layers = [4,3] # no of neurons in 1st and 2nd layer
+output_size = 2
+
+class NeuralNetwork:
+  def __init__(self,input_size,layers,output_size):
+     np.random.seed(0)
+
+    model = {} #Dictionary
+
+#Firt Layer
+    model['W1'] = np.random.randn(input_size,layers[0])
+    model['b1'] = np.zeros((1,layers[0]))
+
+#Second Layer
+    model['W2'] = np.random.randn(input_size[0],layers[1])
+    model['b2'] = np.zeros((1,layers[1]))
+
+#Third/Output Layer
+    model['W3'] = np.random.randn(input_size[1],output_size)
+    model['b3'] = np.zeros((1,output_size))
+
+    self.model = model
+    
+W1 = np.random.randn(input_size,layers[0])
+b1 = np.zeros((1,layers[0]))
+
+W1 = np.random.randn(input_size,layers[0])
+print(W1) #3x4 matrix
+
+3. Understanding Forward Propagation
+------------------------------------
+
+- how to pass one example?
+- how to pass multiples examples(Vectorization)?
+- Writing the code
+
+import numpy as np
+#Model Parameters
+input_size = 3 #no_of_features
+layers = [4,3] #no of neurons in 1st and 2nd layer
+output_size = 2
+
+class NeuralNetwork:
+   def __init__(self,input_size,layers,output_size):
+       np.random.seed(0)
+
+       model={} #Dictionary
+
+
+4. Vectorization, Implementation and SoftMax
+--------------------------------------------
+def forward(self,x):
+
+   W1,W2,W3 = self.model['W1'],self.model['W2'],self.model['W3']
+   b1,b2,b3 = self.model['b1'],self.model['b2'],self['b3']
+
+
+   z1 = np.dot(x,W1) + b1
+   a1 = np.tanh(z1)
+
+   z2 = np.dot(x,W2) + b2
+   a2 = np.tanh(z2)
+
+   z3 = np.dot(x,W3) + b3
+   a3 = softmax(z3)
+   
+5. Backpropagation for Output Neurons
+--------------------------------------
+
+6. Backpropagation for Hidden Neurons
+--------------------------------------
+
+7. Backpropogation for Cross Entropy
+-------------------------------------
+
+8. Vectorizing Backpropagation for m examples
+---------------------------------------------
+
+9. NN - Vanishing Gradients
+----------------------------
+
+10. NN - Implementation Backpropagation
+------------------------------------------
+
+def forward(self,x):
+
+   W1,W2,W3 = self.model['W1'],self.model['W2'],self.model['W3']
+   b1,b2,b3 = self.model['b1'],self.model['b2'],self.model['b3']
+
+
+   z1 = np.dot(x,W1) + b1
+   a1 = np.tanh(z1)
+
+   z2 = np.dot(x,W2) + b2
+   a2 = np.tanh(z2)
+
+   z3 = np.dot(x,W3) + b3
+   y_ = softmax(z3)
+
+   self.activation_outputs = (a1,a2,y_)
+   return y_
+
+ def backward(self,x,y,learing_rat=0.001):
+    W1,W2,W3 = 	self.model['W1'],self.model['W2'],self.model['W3']
+    b1,b2,b3 = 	self.model['b1'],self.model['b2'],self.model['b3']
+
+    m = x.shape[0]
+
+    a1,a2,y_ = self.activation_outputs
+
+    delta3 = y_ - y
+
+    dw3 = np.dot(a2.T,delta3)
+    dw3 = np.sum(delta3, axis=0)/float(m)
+
+   delta2 = (1-np.square(a2))*np.dot(delta3,W3.T)
+  dw2 = np.dot(a1.T,delta2)
+  dw2 = np.sum(delta,axis=0)/float(m)
+
+  delta1 = (1-np.square(a1))*np.dot(delta2,W.T)
+
+  dw1 = np.dot(X.T,delta1)
+  dw2 = np.sum(delta1,axis=0)/float(m)
+
+#Update the Model Parameters using Gradient Descent
+
+  self.model["W1"] -= learning_rate*dw1
+  self.model['b1'] -= learning_rate*db1
+
+  self.model["W2"] -= learning_rate*dw2
+  self.model['b2'] -= learning_rate*db2
+
+  self.model["W3"] -= learning_rate*dw3
+  self.model['b3'] -= learning_rate*db3
+
+#:)
+
+  def predict(self,x):
+     y_out = self.forward(x)
+     return np.argmax(y_out,axis=1)
+
+  def summary(self):
+     W1,W2,W3 = self.model['W1'],self.model['W2'],self.model['W3']
+
+     a1,a2,y_ = self.activation_outputs
+
+   print("W1 ",W1.shape)
+   print("A1 ",a1.shape)
+
+   print("W2 ",W2.shape)
+   print("A2 ",a2.shape)
+
+   print("W3 ",W3.shape)
+   print("Y_ ",y_.shape)
+
+
+def loss(y_oht,p):
+   1 = -np.mean(y_oht*np.log(p))
+   return 1
+
+
+ONE HOT VECTORS
+---------------
+def one_hot(y,depth):
+
+   m = y.shape[0]
+   y_oht = np.zeros((m,depth))
+   y_oht[np.arrane(m),y] = 1
+   return y_oht
+
+#print(Y) --> name 'Y' is not defined
+
+y_oht = one_hot(y,3)
+print(y_oht)
+
+## Generate Dataset
+from sklearn.datasets import make_circles
+import matplotlib.pyplot as plt
+
+X,Y = make_circles(n_samples=500, shuffle=True, noise=0.5, random_state=1, factor=0.8)
+
+plt.style.use("seaborn")
+plt.scatter(X[:,0],X[:,1]),c=Y,cmap=plt.cm.Accent)
+
+
+12.NN - Training Your Model
+----------------------------
+model = NeuralNetwork(input_size=2, layers=[10,5],output_size=2)
+model.summaary()
+
+def train(X,Y,models,epochs, learning_rate, logs=True):
+    training_loss = []
+
+    classes = 2
+    Y_OHT = one_hot(Y,classes)
+
+   for ix in range(epochs):
+
+   Y_ = model.forward(X)
+   l = loss(Y_OHT,Y_)
+   training_loss.append(l)
+   model.backward(X,Y_OHT,learning_rate)
+
+
+  if(logs):
+    print("Epoch %d Loss %.4f"%(ix,1))
+
+return training_loss
+
+losses = train(X,Y,model,500,0.001)
+
+plt.plot(losses)
+#plt.xtitle("Epoch")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.show()
+
+
+13.NN - Finding Accuracy and Visualising Decision Surface
+----------------------------------------------------------
+## Find Accuracy
+from visualize import plot_decision_boundary
+plot_decision_boundary(lambda x:model.predict(x),X,Y)
+outputs = model.predict(X)
+outputs==Y
+training_accuracy = np.sum(outputs==Y)/Y.shape[0]
+print("Training Accuracy %.4f"%training_accuracy*100)
+output:
+Training Accuracy 97.0000
+
+14. XOR Classification
+-----------------------
+
+Testing on other non-linear datasets
+------------------------------------
+model = NeuralNetwork(input_size=2, layers=[10,5], output_size=2)
+
+Xor dataset
+------------
+X = np.array([[0,0],
+              [0,1],
+              [1,0],
+              [1,1]
+              ]) 
+
+Y = np.array([0,1,1,0])
+#losses = train(X,Y,model,100,0.001)
+losses = train(X,Y,model,50,0.001)
+
+plt.plot(losses)
+plot_decision_boundary(lambda x:model.predict(x),X,Y)
+
+
+15.NN - Comparing performance on other datasets
+------------------------------------------------
+Other Datasets
+---------------
+from sklearn.datasets import make_moons, make_circles, make_classification
+
+def load_dataset(dataset):
+   if dataset =='moons':
+      X,Y = make_moons(n_samples=500,noise=0.2,random_state=1) #Perceptron
+   elif dataset== 'circles':
+      X,Y = make_circles(n_smaples=500, shuffle=True, noise=0.2, random_state=1, factor=0.2)
+   elif dataset=='classification':
+     X,Y = make_classification(n_samples=500,n_classes=2,n_features=2,n_informative=2,n_redundant=0,rar
+
+else:
+    #Create XOR Dataset
+    X = np.array([[0,0],
+                  [0,1],
+                  [1,0],
+                  [1,1]])
+   Y = np.array([0,1,1,0])
+
+   return X,Y
+
+datasets = ["xor","classification","moons","circles"]
+for d in datasets:
+    model = NeuralNetwork(input_size=2,layers=[4,3],output_size=2)
+    X,Y = load_dataset(d)
+    train(X,Y,model,1000,0.001,logs=False)
+    outputs = model.predict(X)
+
+    training_accuracy = np.sum(output==Y)/Y.shape[0]
+    print("Training Acc %.4f"%training_accuracy)
+
+    plt.title("Dataset "+d)
+    plot_decision_boundary(lambda x:model.predict(x),X,Y)
+    plt.show()
+
+
+48.Project - Image Classification using Neural Network
+------------------------------------------------------
+
+49.Project - Sentiment Analysis using Neural Networks
+------------------------------------------------------
+
+
+******************************************************************
+NEURAL NETWORKS CHALLENGES
+
+
+******************************************************************
+CONVOLUTIONAL NEURAL NETWORKS
+------------------------------
+
+General CNN Architecture:
+------------------------
+CONV ---> RELU ---> POOL ---> FC ---> SOFTMAX
+|--------- X2 -----------|
+
+How does it happen? It's like Template Matching!
+
+Locate an object described by template t(x,y) in image S(x,y) 
+
+51.Convolutional Neural Networks
+--------------------------------
+Why do we use CNN?
+
+Implementing Convolution, Understanding Filters
+------------------------------------------------
+Convolution layer?
+- convolution layers are made up of filters
+- but what are these filters?
+
+Convolution Example:
+--------------------
+-Let's go through one code example to understand 'Filters' and 'Convolution'
+- When the feature is present in part of an image, the convolution operation between the filter and that part of the image results in a real number with a high value. If the feature is not present, the resulting value is low.
+
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+
+def drawImg(img,title="Image"):
+    plt.imshow(img,cmap="gray")
+    plt.axis("off")
+    plt.style.use("seaborn")
+    plt.title(title+str(img.shape))
+    plt.show()
+
+#Hardcoded filters
+
+def convolution(img,img_filter):
+    W,H = img.shape[0], img.shape[1]
+
+    F = img_filter.shape[0]#3
+    new_img = np.zeros((W-F+1,H-F+1))
+
+   for row in range(W-F+1):
+       for col in range(H_F+1):
+           for i in range(F):
+               for j in range(F):
+                  new_img[row][col] +=img[row+i][col+j]*img_filter[i][j]
+               if new_img[row][col]>255:
+                  new_img[row][col] = 255
+
+               elif new_img[row][col] <0:
+                    new_img[row][col] = 0
+
+   return new_img #Activation Map
+
+blur_filter = np.ones((3,3))/9.0
+print(blur_filter)
+
+output1 = convolution(img_gray,blur_filter)
+
+drawImg(img_gray)
+drawImg(output1)
+
+
+
+img.shape
+    
+
+
+
+img_ = cv2.imread("./images/cody2.jpg") #BGR
+img_ = cv2.resize(img_,(100,100))
+img_ = cv2.cvtColor(img_,cv2.COLOR_BGR2RGB)
+img_gray = cv2.cvtColor(img_,cv2.COLOR_BGR2GRAY)
+drawImg(img_,"RGB")
+drawImg(img_gray, "Grayscale")
+
+
+plt.imshow(img_)
+plt.show()
+
+edge_filter = np.array([[1,0,-1],
+			[1,0,-1],
+			[1,0,-1]])
+
+output2 = convolution(img_gray,edge_filter)
+drawImg(img_gray)
+drawImg(output2)
+
+Extracting Features of image using Filters 
+CNN 03 - Convolution layer
+--------------------------
+- contains various filters
+- each filter extracts different kinds of features and gives 1 activation map
+- multiple activation maps are combined by stacking to form output volume
+- so CNN layer takes input a volume and produces an output volume of different shape
+
+
+CNN 04 - Strides and Padding
+-----------------------------
+Buzzwords in CNN's
+-------------------
+- Convolution layer
+- Valid vs Same Convolution
+- Padding
+- Stride
+- Filters/Kernels
+- Pooling (Average/Maxpooling)
+
+Stride
+-------
+- filters can have different size as well as movement
+- stride defines how a filter should move across the image
+- no of pixels we skip each time is called stride
+- in our example we used a stride of(1,1) along W and H 
+- you can also use a stride of (2,2) in that case the output volume will have less W and H
+
+Input and Output Sizes:(assuming 0 padding)
+Padding
+--------
+- convolution operation we have seen reduces "H" and "W" of original image
+- but sometimes we want the output image to have same size as input image
+- so we can achieve this by adding 0 value pixels(neurons) outside the original image
+- this is called Padding
+Input and Output Sizes after Convolution:(with padding)
+nc = number of filters used in the convolution
+
+Padding Example:
+----------------
+Padding using NumPy
+
+Pooling Layers
+--------------
+- Pooling is performed after Convolution Operation
+- Two types of pooling layer - Average Pooling and Max Pooling
+- Max-pooling layer: slides an (f,f)window over the input and stores the max value of the window in the output.
+- Average-pooling layer: slides an(f,f)window over the input and stores the average value of the window in the output.
+- it helps to reduce computation by discarding 75% of the neurons(assuming 2x2 filters with stride of 2)
+- makes feature detectors more robust
+- no parameters for learning, only hyperparameters such as filter size.
+
+np.pad?
+np.pad(array, pad_width, mode, **kwargs)
+ 
+print(img.shape)  ---> (100,100,3)
+drawImg(img)
+
+#Padding to this image
+pad_img = np.pad(img,((10,10),(20,20),(0,0)),'constant',constant_values=0) 
+drawImg(pad_img)
+
+
+CNN 06 Pooling Implementation
+Pooling Implementation - Max and Average
+----------------------------------------
+Implement Pooling Operation
+---------------------------
+X = np.array([[1,0,2,3],
+              [4,6,6,8],
+              [3,1,1,0],
+              [1,2,2,4]])
+
+def pooling(X, mode="max"):
+    stride = 2
+    f = 2
+    H,W = X.shape
+
+    HO = int((H-f)/stride) + 1
+    WO = int((W-f)/stride) + 1
+
+    for r in range(HO):
+        for c in range(WO):
+          r_start = r*stride
+          r_end = r_*start + f
+          c_start = c*stride
+          c_end = c*start + f
+          
+          X_slice = X[r_start:r_end,c_start:c_end]
+          if mode=="max":
+	     output[r][c] = np.max(X_slice)
+          else:
+             output[r][c] = np.mean(X_slice)
+
+    return output
+
+pooling_output = pooling(X)
+print(pooling_output) 
+
+output:
+-------
+[[6. 8.] [3. 4.]]
+
+CNN 07 - Dropouts
+------------------
+??????
+
+
+
+
+52. Digging Deeper into Convents
+--------------------------------
+
+53.Data Loaders, Augmentation, Colab
+-------------------------------------
+
+54.CNN Case Studies
+------------------
+
+55.Project - Covid Detection using CNN
+---------------------------------------
+
+56.Transfer Learning in Vision
+--------------------------------
+
+
+
+
+
+
+
+
+******************************************************************
+RECURRENT NEURAL NETWORKS (RNN)
+
+******************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*****************************************************************
+
+
+

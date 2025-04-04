@@ -1,0 +1,71 @@
+Timings:7pm to 9pm
+Duration: 3Months 
+Price : Rs 4999
+( Emi Available)
+Contact Numbers:
+9154083255
+
+What is Data Science in Telugu
+https://www.youtube.com/watch?v=ATgogrQWPFQ
+
+https://www.youtube.com/watch?v=xd39AJgAA80
+
+Pandas Power Full Library for data analysis:
+https://www.youtube.com/watch?v=zepfiunTHag
+
+Matplotlib and richest data EDA:
+https://www.youtube.com/watch?v=DOWdaecfRFw
+
+
+Full Stack Python Recorded Content
+
+What is Datascience?
+Datascience is the study of data to extract meaningful insights for business.
+
+
+Noisy Data --> Knowledge Insights --> Working Algorithms Applications
+
+ComputerScience: programming
+Maths : statistics, algebra, matrix
+business: growth, structuring, hierarchy
+
+DATA SCIENCE LIFE CYCLE
+1.Understanding the business problem --> 2.Preparing the data --> 3.Exploratory Data Analysis (EDA) --> 4.Modeling the data --> 5.Evaluating the model --> 6.Deploying the model--> BACK TO POINT 1.
+
+
+Data Science Road Map
+
+Basic Python --> Stats & probability --> Advanced python --> Data Visualizatio --> Machine Learning n --> Data Manipulation --> Deployment --> Deep learning --> projects --> Interview Preparation --> Placements
+
+
+Applications we use in data science:
+
+1.Customer analytics
+2. Fraud detection
+3. Risk Management
+4. Stcok prediction, stock recognition
+5. Image Recognition
+6. Speech Recognition
+7. healthcare, industries, education, manufacturing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

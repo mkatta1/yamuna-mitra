@@ -1,0 +1,126 @@
+what are the differences between Multi thread Execution and Parallelization with respect to Job performance in Talend?
+
+Multi threading is optimal when the number of threads (in general a Subjob count one thread) do not exceed the number of processors of the machine you use for parallel executions. Otherwise, some of the Subjobs have to wait until any processor is freed up.
+
+Also note that you cannot parallelize more than your number of CPU, otherwise it will wait for the processors and will be overhead for processors.
+
+Parallelization helps you to manage complex Job systems. It executes several subjobs simultaneously and synchronizes the execution of a subjob with other sub-jobs within the main Job.
+
+The exact difference between above two is Parallelize(or multi thread enabled) linked sub jobs run parallel regardless of which ones finish first, on the other hand Synchronize linked sub jobs starts to run only when all other parallelize sub jobs finishes.
+
+So, Parallelization is best when you have a request that need some of subjobs to run parallel, and a subjob starts to run only when all other parallelize subjobs finishes.
+
+It also makes your job design more flexible.
+
+
+Error handling with components:
+https://help.talend.com/r/en-US/8.0/studio-user-guide/error-handling-in-talend-studio
+Talend offers the following components to design error handling:
+
+tAssert and tAssertCatcher
+tChronometerStart and tChronometerStop
+tDie, tWarn and tLogCatcher
+tFlowMeter and tFlowMeterCatcher
+tLogRow
+
+tstatcatcher is in all components
+
+Data Cleansing : Duplicate removal, Removing non-matching values
+
+Adding a JobExecutionServer: https://help.talend.com/r/en-US/8.0/administration-center-user-guide/adding-execution-server
+
+
+****************************************** ErrorRecoveryManagement **************************************************************
+Talend Activity Monitoring Console is an add-on tool integrated in the studio for monitoring Talend Jobs and projects:
+https://help.talend.com/r/en-US/8.0/activity-monitoring-console-user-guide/introduction-to-talend-activity-monitoring-console
+
+Access the Error Recovery Management page from the Job conductor, Monitoring and Task execution monitoring pages.
+
+The concept of "recovery checkpoints" as an execution restore facility for Jobs executed with errors.
+- Select the task on the Task execution monitoring tabular list.
+- On the lower part of Real time statistics page, click the Execution info view.
+
+https://help.talend.com/r/en-US/8.0/administration-center-user-guide/how-to-access-recovery-checkpoints-view
+
+ In Talend Studio, you should initiate as "checkpoints" one or several OnSubjobOk trigger connections.
+
+https://help.talend.com/r/en-US/8.0/administration-center-user-guide/accessing-error-recovery-management-page
+
+Error Recovery Management page where you can recover all job executions ended in failure.
+
+JobConductor Page -> RecoverLastExecution -> ErrorRecoveryManagement -> 
+
+****************************************************************************************************************************
+
+JobConductor Page ->Select the task you want to monitor -> Action click on "Show execution history" -> TaskExecutionMonitor
+https://help.talend.com/r/en-US/8.0/administration-center-user-guide/accessing-execution-list-of-task
+
+How to add a file trigger:
+https://help.talend.com/r/en-US/8.0/administration-center-user-guide/how-to-add-file-trigger
+
+File trigger is an events queue based trigger:
+Trigger view -> Add trigger -> select "add file trigger" with folder_path and file_path
+
+Set the JVM parameters for jobs directly from TAC. Execute them without the need to regenerate it.
+JobConductor -> JVM parameters -> Xmx 1024m
+
+Change the context parameters in TAC:
+JobConductor -> Context Parameters -> to change value, If you want to change the dataType then give the text like "noDatetimeStringSync=true".. etc
+
+****************************************** Did not understand **************************************************************
+https://help.talend.com/r/en-US/8.0/administration-center-user-guide/improving-job-execution-time
+
+Improving Job execution time:
+remoteDataRetriever.threadPool.size parameter can be used to improve job execution time when many Jobs are running simultaneously.
+
+This parameter produces longer running jobs, which is meant to address a side effect of the current log retrieving mechanism: each execution implies a new thread, which in turn increases the number of tasks and induces job execution delays.
+
+Go to the configuration table of the database and edit remoteDataRetriever.threadPool.size value (number of threads in the pool). By default, the value is set to 30 threads.
+
+Note: If you need to go back to the old log retrieving mechanism, go to the configuration.properties file and set jobserver.log.retriever.deprecated to true. In this case, remoteDataRetriever.threadPool.size is ignored. With the old log retrieving mechanism, the number of tasks is reduced but the memory consumption is increased.
+
+**************************************************Orchestrating tasks(AKA jobs)****************************************************************************
+Accessing the Execution Plan page:
+https://help.talend.com/r/en-US/8.0/administration-center-user-guide/accessing-execution-plan-page
+Diff bw "On Ok", "After"
+
+In JobConductor-> while orchestrating the tasks(AKA jobs):
+
+If "On Ok", Only if 1st job is successfully then the current job runs.
+If we set "After", irrespective of the status of the 1st job the current job runs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

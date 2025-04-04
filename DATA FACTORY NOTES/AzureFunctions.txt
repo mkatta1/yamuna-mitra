@@ -1,0 +1,123 @@
+Go through Azure Functions playlist:
+https://www.youtube.com/playlist?list=PLMWaZteqtEaLRsSynAsaS_aLzDPBUU4CV
+
+Azure Logic Apps:
+https://www.youtube.com/playlist?list=PLMWaZteqtEaIWwpz64BwOBytNDPka700J
+
+
+Application Insights:(Need to learn more)
+It is like a DB to store all the information about the azure function logs. we can query on the insights to make decisions.
+to get quick idea of the service key and tags are used
+Azure function: We have created a function using the http request and also in code+test section we can see the code and also the 
+http link from Get function URL, to enter your name. So, the code is implemented without any deployment of servers.
+
+Create the function app project in visual studio
+Run the function locally
+publish the project to azure
+test your function in azure
+
+You can do with functions are data base interactions, business logics executions
+ctrl+f5 to run and interact with the local envi where it inter azure core tools and make available the "function app run time" locally to test.
+http://localhost:7071/api/Function1?name=Mitra
+Azure service app ?to host a functions from the desktop to azure cloud 
+Azure Function contains two things: 1. your code(c#,F#, python, javascript.. 2. Function.json file configuration details
+--if you publish your code from visual studio you cannor edit the code in azure and .json file contains the authentication, in-out directions
+
+Difference bw azure function app vs azure function:
+Azure Function:
+It is a serverless compute service that lets you run event-triggered code without having to explicitly provision or manage infrastructure.
+Azure Function App:(logical grouping of functions)
+A function app provides an execution context in Azure in which your functions run. As such, it is the UNIT of deployment and management
+for your functions. A function app is comprised of one or more individual functions that are managed, deployed, and scaled together
+Note: 1)All the functions in FunctionApp Share the same Pricing plan and deployment method % runtime version
+2)All the functions in the FunctionApp must be authored in same language
+Folder structure in Azure FunctionApp, Details of folders
+in root host.json, myFirstFuntion(function.json,csx etc),MySecondFunction(function.json, etc),SharedCode,bin(libraries,nuget packages, 3rd party libraries etc)
+fuction.json file contains configuration bindings details, host.json contains the FunctionApp runtime details
+https://github.com/projectkudu/kudu/wiki -- kudu for deployment using REST API
+
+Note: in App service editor REST API is used kudu to deploy jobs, console in FunctionApp 
+In configuration settings-> FUNCTION_WORKER_RUNTIME application setting with .NET version so the language is csharp. So, the languages
+within the functionapp are decided by this FUNCTION_WORKER_RUNTIME VALUE  (Runtime stack option during app creation decides the language)
+--For the best migration results, you should create a new function app in a new version and port your existing 
+version function code tothe new app.
+
+App settings in FunctionApp:
+App settings in a function app contain global configuration options that affect all functions for that function app.
+APPINSIGHTS_INSTRUMENTATIONKEY:
+The Application Insights instrumentation key if you're using Application Insights.
+AzureWebJobsStorage:
+The Azure Functions runtime uses this storage account connection string for all functions except for HTTP triggered functions.
+FUNCTIONS_EXTENSION_VERSION:
+The version of the Functions runtime to use in this functionapp
+FUNCTIONS_WORKER_RUNTIME:
+The language worker runtime to load in the functionapp. This will correspond to the language being used in your application(eg,"dotnet").
+WEBSITE_CONTENTAZUREFILECONNECTIONSTRING
+For Consumption & Premium plans only. Connection string for storage account where the function app code and configuration are stored.
+WEBSITE_CONTENTSHARE:
+For Consumption & Premium plans only. The file path to the fuction app code and configuration. Used with WEBSITE_CONTENTAZUREFILECONNECTIONSTRING.
+Default is a unique string that begins with the function app name.
+
+Environment Variables in Azure Functions:
+You may need to store custom settings for your Azure function. One available option is to usse environment variables. 
+You can managethese settings in the Application settings section of your functionapp in the Azure portal.
+IN CSX CODE we have :
+log.LogInformation("C# HTTP trigger function processed a request.");
+    log.LogInformation(System.Environment.GetEnvironmentVariable("Environment", GetEnvironmentVariableTarget.Process));
+
+App service Features which are useful for Azure Functions:
+a)App Service Editor
+b)Console
+c)Advanced tools(kudu)
+d)CORS(Cross-origin Resource Sharing)
+e)Authentication
+The FunctionApp's in Azure are maintained by App services by hosting web sites
+
+Platform Features in FunctionApp:
+-Function apps run in, and are maintained, by the Azure App Service platform. Hence, FunctionApps have access to most of features of 
+Azure Web hosting platform that is App services.
+-The Platform Features Tab is where you access these features in Azure FunctionApps.
+-In this session, we will focus on few important app service features which are useful for Azure Functions.
+
+
+a)App Service Editor:
+-The App Service editor is an advanced in-portal editor that you can use to modify JSON configuration files and code files.
+-This enables you to integrate with the Git repository, run and debug code, and modify functionapp settings.
+-But Microsoft recommends to develop functions on your local computer.
+b)Console:
+c)Advanced tools(kudu):
+The advanced tools for App Service(also known as Kudu) provide access to advance administrative features for your function app.
+From Kudu, you manage system information, app settings, environment variables, site extensions, HTTP headers, and server variables.
+You can also launch Kudu by browsing to the SCM endpoint of your FunctionApp
+d)Cross-origin Resource Sharing (CORS):(DOMAINS WHICH YOU WANT TO ALLOW) This concept comes in WEBAPI.
+To prevent malicious code execution on the cilent, modern browsers block requests from web applications to resources running in a 
+separate domain.
+Cross-origin resource sharing(CORS) lets an Access-Control-Allow-Origin header declare which origins are allowed to call endpoints
+on your functionapp.
+e)Authentication:
+Wehn function use an HTTP trigger, you can require calls to first be authenticated. App Service supports Azure Active Directory authenticated
+and sign-in with social providers, such as Facebook, Microsoft and Twitter
+
+Hosting plan decides functionapp scaling, resources available for each functionapp instance, support for advanced features like
+Azure Virtual Network connectivity.
+Premium plan is for pre-warmed instances, Consumption plan is for pay when you use functions.
+To host a web application you need a AppServicePlan in Azure. Run your functions just like web apps. If you use App Service for your
+other applications, your functions can run on the same plan at no additional cost.
+
+Triggers are used to run functions, and each function will have only one triggers. Diff functions have diff triggers.
+Binding to a function is a way of declaratively connecting another resource to the azure functions; bindings may be connected as input 
+bindings, output bindings, or both. Data from bindings is provided to the function as parameters.
+storage-> new queue msg-> run function -> generate another queue -> storage that in to Azure storage.
+Function.json file-> holds these triggers and bindings. trigger direction is always "in" and binding direction is always "out"
+All triggers and bindings have a direction property in function.json file
+->input and output bindings use in and out ->Some bindings support special direction inout.
+Binding is for azure storage, need to install package which supported for storage bindings. packages are extensions
+for .net type bindings access through nuget packages 
+
+Extension Bundles:
+Extension bundles is a deployment technology that lets you add a compatible set of binding extensions to your function app.
+A predefined set of extensions are added when you build your app.
+You enable extension bundles in the app's host.json file
+NuGet packages for C# library project Azure Functions.
+eg: Install-Package Microsoft.Azure.WebJobs.Extensions.ServiceBus/Storage...version<TARGET_VERSION>
+

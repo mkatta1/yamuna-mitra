@@ -1,0 +1,137 @@
+			IN COPY DATA TOOL OF ADF
+we have two options
+1) Built-in copy task to connect any of 90+ data source easily and schedule or Run once or Tumbling window trigger
+2) Metadata-driven copy task : You will get parameterized pipelines which can read metadata from an external store to load data at a large scale.
+MEANING no need to re-run from scratch only run from the previous point where the loading stopped.
+
+Orchestrate or Author
+
+Validate all --> to validate any components with errors 
+Create Pipeline --> Template gallery -> can select any of the templates like Bulk copy from Database etc..
+
+Lookup(GetPartitionList) -> ForEach(ForEachPartition)
+
+Monitor tab contains:
+Dashboards
+a)Runs (section)
+  Pipeline runs: Triggered, Debug
+  Trigger runs: scheduled trigger, tumbling window trigger, storage events, custom events
+  Change Data Capture (preview)
+b)Runtime & sessions:
+  Integration Runtime: selfhosted, azure, ssis, airflow
+  Data flow debug:
+
+c) Notifications
+  Alerts & metrics
+
+
+
+
+In Monitor tab--> Pipeline runs tab, we can customize the annotations like latest runs, pipeline names, in progress, success, failure, queued, triggered runs, etc.. columns by delete and adding in an order!!
+
+Also In pipeline runs, we can select the End time range of particular columns like Last 24 hours/ 7 days/ 30 days/ Custom up to a limit of 45 DAYS...
+
+
+Trigger types: Schedule/Tumbling Window/Storage Events/Custom Events
+
+
+In Manage Tab,
+
+Factory settings: 
+	show billing report by pipeline/by factory
+	Factory environment: DEv/Test/Prod/None
+Connections:
+	Linked services: Create Linked services here!
+
+	Integration runtimes: Create Integration runtimes here!
+
+	Microsoft Purview:
+
+c)Source control:
+	Git configuration: Configure here!
+
+	ARM template: 
+
+d) Author:
+
+	Triggers: Create triggers here!!
+	
+	Global parameters: Create Global parameters here!
+	
+	Data flow libraries:
+
+d) Security:
+	Credentials:
+
+	Customer managed key:
+
+LRS(racks means servers if one server data lost it is copied to other two racks)
+
+GRS(take backup from other datacenters)
+
+ZRS( high availability )
+Geo-Zone-Redudant storage
+
+		** In Storage account ***
+In Data Protection tab,
+Enable point-in-time restore for containers
+Enable soft delete for blobs(means files) from 7 to 365 days
+Enable soft delete for containers(folders) from 7 to 365 days
+
+Tracking, enable blob versions
+
+		**** Copy data activity ****
+Filepathtype: FilepathDataset/Prefix/Wildcard File Path/List of files
+Give the *.csv to find out the file with wildcard etc..
+Give the file that contains list of files
+
+Filter by last modified:  used to find the data from last 2 days or 3 days or etc....
+Start time (UTC) & End time (UTC)
+
+Example: @formatDateTime(addDays(utcNow(),-5))
+
+formatDateTime --> String in date format
+
+Using "Recursively" option you can read subfolders or sub files.
+
+"Enable partition discovery" to parse additional partitions as source columns.
+
+Note: For huge volumes of files to increase the performance of SFTP server we can increase the number in "max concurrent connections". Automatically specifies when we try to read multiple files from source. If you want to limit concurrent connection. If you are trying to fetch source from SFTP server but this SFTP server won't allow much connections.
+
+One side from azure you are trying to have max concurrent connections on the other side SFTP don't want to connections this would be a THROTTLING ISSUE.
+
+Add additional columns along with the exising files  and the $$Filename  will provide values in target dataset.
+
+In sink, 
+Merge files option to merge same schema files, flatten hierarchy option to sink data file without hierarchy.
+Allowed block size in MB
+Max rows per file =
+If we want split files in the target container then user "Max rows per file"== 10 then 10 rows per file is loaded.
+
+In Settings, Max DIU's = Edit DIUs from Till 2,4,8,16...till 256
+Default DIUs used by the system is 4 for single file changes for multiple files. 
+This Automation of Max DIU's is only applicable for cloud-to-cloud i.e., only for AutoResolveIntegrationRuntime but not for SelfHostedIntegrationRuntime. When using only AzureIR you can scale upto 256 DIU's for a copyActivity
+DIU's increases the powerfullness of our copy activity when we try to tried to multiple files from our source it increases the performance.
+
+For SelfHostedIR, Manually scale up the machine. Scale out to multiple machines(upto 4 nodes), and single copy activity will partition it file set across all nodes.
+
+
+Degree of copy parallelism: Parallelly establish connection to source.
+like 10 or 15 files to read then specify that number to read parallel.
+
+Data consistency check: It is additional check for row-count etc..
+The verification includes file size check and checksum verification for binary files, and row count verification for tabular data.
+
+FaultTolerance: "Skip incompatable rows" option for debugging the issue.
+
+Enable logging: The above skipped incompatable rows would be stored using this option of enable logging by giving storage account name.
+
+Enable staging: If onpremise systems network capability might be low while using synapse or oracle, sql. So better enable this option.
+
+
+AFTER execution, we can check the 
+
+
+
+
+

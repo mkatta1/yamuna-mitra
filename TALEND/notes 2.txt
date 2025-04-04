@@ -1,0 +1,38 @@
+tFileRowCount -> tJava ---Ifcondition--> tFileInputDelimited --> tMysql
+In the Code box, enter the function to print out the number of rows in the file:
+System.out.println(globalMap.get("tFileRowCount_1_COUNT"));
+
+Click the if trigger connection to open its Basic settings view:
+((Integer)globalMap.get("tFileRowCount_1_COUNT"))==2
+
+Redirecting standard output to file for entire job standard component:
+https://help.talend.com/r/en-US/8.0/java-custom-code/tjava-tfixedflowinput-tfileoutputdelimited-tlogrow-redirecting-standard-output-to-file-for-entire-job-standard-component
+
+Extracting NestedJson process:
+Extracting JSON data from a URL
+https://help.talend.com/r/en-US/7.3/json/tfileinputjson-textractjsonfields-tlogrow-tlogrow-extracting-json-data-from-url-standard-component-in-this
+
+Buffer concepts:
+https://help.talend.com/r/en-US/7.3/buffer/tbufferinput-tbufferoutput-tfileinputdelimited-tlogrow-retrieving-bufferized-data-standard-component-this
+
+Hash Concepts:
+By default, the tHashInput and tHashOutput components from the Technical family are hidden.
+https://help.talend.com/r/en-US/7.3/technical/storing-result-of-input-flow-in-temporary-location
+
+Hash is to cashe data privately within a job. Also even if we have multiple tHashOutput components we can choose which one we want to use in a particular tHashInput component. 
+This is particularly used in 
+
+
+
+ 
+Pencil icon at the top -> Project_Settings -> Designer -> Paletter_Settings
+
+In Joblet,
+The INPUT component is only to be used if there is a flow coming from the main Job that should be used in the Joblet, and the OUTPUT component is only to be used if there is a flow going out of the Joblet that needs be used in the main Job. You can remove either or both of them as needed.
+https://help.talend.com/r/en-US/8.0/studio-user-guide/creating-joblet-from-scratch
+
+Using triggers in a Joblet like TriggerInput, TriggerOutput.
+Launching the Joblet in a Job like in the below link read it!!!
+https://help.talend.com/r/en-US/8.0/studio-user-guide/launching-joblet-in-job
+
+Diff bw Joblet vs Routlet:

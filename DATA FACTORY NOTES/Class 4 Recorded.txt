@@ -1,0 +1,253 @@
+This brings us to the biggest disadvantage of data flows: it's not suited for processing small amounts of data. The overhead of the cluster (and the abstraction layers) is just too much compared with the processing time. It's just not efficient. Data flows (and also Azure Databricks) is designed to handle large amounts of data. When you need to process gigabytes or terabytes of data, that one minute of cluster startup time won't make that much of a difference. Keep in mind you can shorten the cluster startup time by using the "quick re-use" feature.
+
+Azure Data Factory: Bridging the Gap Between DevOps and Scrum
+https://www.mssqltips.com/sqlservertip/7855/azure-data-factory-adf-cloud-data-integration-orchestration/
+
+
+
+DataWrangling consists of steps:
+Discovery
+Structuring
+Cleaning
+Enriching
+Validating
+Publishing
+
+To Create and run Databricks Jobs:
+https://docs.databricks.com/en/workflows/jobs/create-run-jobs.html
+
+Use cluster-scoped init scripts:
+https://docs.databricks.com/en/init-scripts/cluster-scoped.html
+Store init scripts in workspace files:
+https://docs.databricks.com/en/files/workspace-init-scripts.html
+
+
+What are init scripts?
+An init script (initialization script) is a shell script that runs during startup of each cluster node before the Apache Spark driver or executor JVM starts. This article provides recommendations for init scripts and configuration information if you must use them.
+https://docs.databricks.com/en/init-scripts/index.html#compatibility
+
+Spark configuration search in the below webpage:
+https://docs.databricks.com/en/compute/configure.html
+
+
+
+Databricks Runtime 13.3 LTS and above with Unity Catalog
+Databricks Runtime 11.3 LTS and above without Unity Catalog
+Store init scripts as workspace files. (File size limit is 500 MB).
+
+
+
+
+
+Day 14 Recorded Session
+
+"Get Metadata" Activity to get information of folder or file metadata info.
+
+Field list options are: If you want all these information's below you can get it as well.
+Column count
+Content MD5 (to check both source & target is equal or not)
+Exists 
+Item name
+Item type (to check if its file or folder)
+Last modified
+Size
+Structure (to check structure of the file like column and data type)
+
+"Filter by last modified" option with "start time" and "end time" to get the data for that particular time period!!
+
+@activity('GetMetadata1').output -----> to get the output of the metadata activity anywhere dynamic contect is supported in the other activity.
+
+In Iteration&conditions, Get IfCondition Activity ---> Go to Activities tab of it and provide the expression
+@equals(activity('Get Metadata').output.columnCount,4) --> to check if the columns count matches 4 then it is True condition then COPY ACTIVITY inside this IfCondition Activity
+
+Amazon S3 virtual folder metadata cannot be provided by metadata and also Metadata structure and columncount are not supported when getting metadata from Binary, JSON or XML files
+
+
+
+Using copy activity to connect to onpremise using two ways
+1) Using Self hosted Integration Runtime
+2) Install our Azure VM to connect securely to onprem Vm authenticate our keys which we generated from ADF
+	
+
+		VALIDATAION ACTIVITY
+
+Go to settings,
+Timeout provide number like (12hours) 0.12:00:00 or 0.00:00:50 means 50 seconds
+sleep provide number like 10
+Minimum size like 1024
+
+
+
+We can create parameters in Linked service level, dataset level, pipeline level, activity level
+
+		PARAMETER AND EXPRESSION CONCEPTS
+
+name: @pipeline().parameters.password
+
+@{} --> this represents whatever the value returned would be turned into string
+
+@{pipeline().parameters.firstName} --> returns string
+@pipeline().parameters.myString --> Returns string
+@{pipeline().parameters.myString}---> Returns string
+@pipeline().parameters.myNumber --> Returns number
+@{pipeline().parameters.myNumber} ---> Returns String
+
+@concat('Answer is:', string(pipeline().parameters.myNumber))
+--> Returns string "Answer is: 42"
+
+"Answer is: @@{pipeline().parameters.myNumber}"
+---> Returns string "Answer is:@{pipeline().parameters.myNumber}"
+
+
+	Dynamic content editor
+
+Example:
+JSON
+{
+ "type":"@{if(equals(1,2),'Blob','Table')}",
+ "name": "@{toUpper('myData')}"
+}
+
+to get dynamically folder path:
+folderPath: "@dataset().path"
+
+OR
+path:"@pipeline().parameters.inputPath"
+path:"@pipeline().parameters.outputPath"
+
+
+
+Calling functions:
+  a)string functions:
+	concat, endsWith, guid, indexOf, lastIndexOf, replace, split, startWith, contains
+
+addDays('datetimstamp',10)
+addDays('datetimestamp',-5)
+addHours('datetimestamp',hours,format)
+addMinutes('datetimestamp',minutes)
+
+
+
+@linkedService().baseURL
+@linkedService().RelativeURL
+
+pipelineParameter = SourceRelativeURl
+CopyActivity parameter = @pipeline().parameters.SourceRelativeURl
+
+https://github.com/suresh12345/AzureDataEngineering_Batch/tree/main/ecdc_data 
+
+step1:
+In order to connect to http connector, go to linked service and add HTTP Linked Service of public/private network
+give base url: https://raw.githubusercontent.com/
+
+step2:
+Relative url need to be given in delimited text dataset:
+https://github.com/suresh12345/AzureDataEngineering_Batch/tree/main/ecdc_data
+
+step3:
+In pipeline, copy data activity--> delimitedtextdataset-->Request method:GET (IN SOURCEMODE), POST(IN SINK MODE)
+Additionalheaders:
+RequestBody:
+
+
+	HOW TO READ MULTIPLE FILES OF HTTPS using a JSON FILE
+
+Example: A json file containing the multiple source files info in it!!!
+
+[
+	{
+	 "sourceBaseURL:"",
+	 "sourceRelativeURL:"suresh/....csv",
+	 "sinkFileName:"cases_deaths.csv"
+	},
+	{
+	 "sourceBaseURL:"",
+	 "sourceRelativeURL:"suresh/....csv",
+	 "sinkFileName:"cases_deaths.csv"
+	},
+	{
+	 "sourceBaseURL:"",
+	 "sourceRelativeURL:"suresh/....csv",
+	 "sinkFileName:"cases_deaths.csv"
+	},
+	{
+	 "sourceBaseURL:"",
+	 "sourceRelativeURL:"suresh/....csv",
+	 "sinkFileName:"cases_deaths.csv"
+	}
+]
+
+			LOOKUP ACTIVITY
+
+Lookup Activity is used when we want to read any configFile/configTable or any singleRow/Table. Supported in both ADF & Synapse to dynamically return from configFiles or table or Result of executing query/storeProcedure.
+Output can be single/Array of values used in transformataions,controlflow activities like ForEAch Activity.
+
+In Pipeline,LookupActivity-->Go to settings, source dataset-->
+Uncheck only "FirstRow" option to get the rest of the files or rows
+
+capabilities:
+- Supports output of 4MB size, will fail if it exceeds
+- Returns up to 5000 rows, it there are more rows then only gives first 5000 rows
+- Timeout is 24 hours
+
+
+The configuration of Lookup & Copy Activity has similar about multiple files, wildcard 
+
+In Lookup-->ForEach, we get GetFiles, GetFiles values, GetFiles count, GetFiles value array
+
+
+In copy_Data activity, Source dataset is with 
+BaseURL= @item().sourceBaseURL
+relativeURL = @item().sourceRelativeURL
+
+
+Files formats we have are AVRO, PARQUET, ORC, JSON, Binary, DelimitedText
+
+
+			FOR EACH ACTIVITY
+
+In ForEach activity configuration, if Batch count is 3 then it means at a time we process 3 files or 3 copy instances for better performance.
+In ForEach activity, we can have multiple activities inside it!!
+		or
+In ForEach activity, if we select "sequential" instead of "BatchCount" then only one file is executed at once in this activity!!
+
+
+
+
+		SQL DATABASES
+
+Azure Sql DB: what are elastic pool (PaaS service)
+ManagedInstance: Used in data migrations scenarios (PaaS service)
+Sql Server on Azure VM: Its a IaaS service we need to take of everything vm, software, upgrading, patching
+
+
+Single DB storage limits
+			Basic	Standard	Premium
+Max storage size	2GB	1TB		4TB
+Max DTUs		5	3000		4000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,168 @@
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Advertisement $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Ticketek, either online, by calling 13 28 49
+! Companion tickets can be booked through Ticketek’s Accessible Seating Hotline; 1300 665 915. 
+https://www.retravision.com.au/ or
+https://www.retravision.com.au/russell-hobbs-desire-blender-matte-black-rhbl5blk?algoliaQueryID=45dc4cd65e72ee357d7445aabb44fbbf
+
+Russell Hobbs Desire Blender (Matte Black) - $78 (%5 discount for RAC)
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+mpp of synapse sql dw: 
+
+			Control Node (Single point entry to DW) T-sql commands
+Frontend to interact with all applications and connections
+			  ||
+			  \/
+		Massively Parallel Processing(MPP) Engine 
+Runs on the control node to optimizes quries & coordinate parallel queries
+			||
+			\/
+		ComputeNode,Computenode, computenode 
+Distribution's map to compute nodes for processing as you pay for more compute resources, SQL DW re-maps the distributions to the available compute nodes.
+CPU, memory and I/O are bundeled into DWU
+These are scaled using data warehouse unit (DWU) 
+Compute nodes ranges from 1-60 and is determined by the service level of the DW.
+		(DMSO/DMS)  (DMSO/DMS)   (DMSO/DMS)
+Data Movement Service
+DMS is a system level internal service that moves data across Nodes as necessary
+			||
+			\/
+		Azure Storage
+
+Sharding of Distribution :) :):) 
+Distribution is the basic unit of storage and processing for parallel queries that run on distributed data 
+The data is sharded into distributions to optimize system performance
+
+When sql analytics runs a query, the work is divided into 60 smaller queries that are run in parallel. 
+Each of the 60 smaller queries are run on one of the data distributions. 
+Each compute node manages one or more of the 60 distributions.
+Rows are stored across 60 distributions which are run in parallel
+
+TABLE TYPES in Azure SQL DW:
+Clustered Columnstore:
+ - Default table type
+ - High compression ratio based on oraganized columns which have similar values but    	packed close to each other on the storage.
+ - Ideally segments of 1 Million rows to ainsert or to process?
+ - No Secondary Indexes used here.
+
+Heap Table type:
+ - Provides no native index on the data and no ordering for it.
+ - Fast load because no secondary structure pointing to the table.
+ - No compressions and no advantages like you get for LARGE tables from CLUSTER COLUMN STORES
+ - Allows Secondary Indexes for very specific pin pointed queries.
+
+Clustered B-Tree Index:
+ - Pre sorts the Index based on the clustering key that allows really fast singleton lookups when you are arranged scanning for a row in a small table or when you're looking for a small amount of rows on a very specific fringe
+ -  No Compression
+ - Allows Secondary Indexes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+SHarding Patterns:
+- Hash Type distribution:
+    a)Delivers highest query performance on joins and aggregations for LARGE Tables.
+    b)Fact tables and Large dimension tables are great fit
+    c)Distribution key can't be updated
+
+with
+(
+ Clustered columnstore index
+ distribution = Hash([Column])
+)
+;
+
+- Round-robin (To load staging tables, Evenly distributed without optimization):
+   a)Loading data is  faster but Joins are slow becuase it requires to reshuffle    	data.
+   b)Used when no obvious joining key or good candidate column is not availbale
+   c)Performance is slow due to data movement.
+   c)Default distribution type for SQL DW
+with 
+(
+   Clustered columnstore index
+   distribution = round_robin
+)
+;
+	1st record to distribution number one
+	2nd record to distribution number two
+	3rd record to distribution number three etc
+	
+- Replicated (small tables are used)
+  a) Small dimension tables in a star schema with less than 2GB of storage after          	compression
+  b) Not applicable for:
+	i) Many write transaction are on the table (insert/update/delete) then it 		might have to be replicated data whenever there is a change!!
+	ii) You change DWU provisioning frequently then this replicated table need to 		be changed frequently as well.
+	iii) You use only 2-3 columns, but your table has many columns
+	iv) You index a replicated table
+
+Eg:
+with
+(
+clustered columnstore index
+, distribution = replicate
+)
+;
+
+Good Hash key is
+- Distributes evenly
+- Has more than 60 distinct values atleast to have 60 distribution
+- Hash is not updated, we can only delete that record and insert a new record
+- Used for grouping because similar values are stored in similar distributions
+- Used as join condition because similar values can be joined!!
+
+Three different table types for DW:
+a) Clustered columnstore:
+  - Used for large tables
+  - Updateable primary storage method
+  - Great for read-only
+b) Heap type:
+ - For temporarliy staging tables or smaller permanent tables
+ - Data is not in any particular order
+ - Use when data has no natural order
+
+c) Clustered B-Tree Index or Clustered Index:
+  - An index that is physically stored in the same order as the data being indexed
+  - A sorted column usually becomes the clustered key
+
+
+
+
+
+
+
+
+
+
+

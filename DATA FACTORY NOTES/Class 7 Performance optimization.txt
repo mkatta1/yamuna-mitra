@@ -1,0 +1,85 @@
+WHERE IS PERFORMANCE OPTIMIZATION USING TEMPLATES AFTER RECORDING 27?????
+
+Monitoring view provides information about data read/written volumne, number of files/rows of data copied from source to sink, throughput, the configurations applied for your copy scenario, steps the copy activity goes through with corresponding durations and details and more.
+
+Montior tab provides you with "performance tuning tips" at the top for every pipeline after its execution to identify bottleneck along with suggestions for that particular copy run.
+
+ADF and Synapse pipelines offer serverless architecture that allows parallelism at different levels.
+This architecture allows max data movement throughput using:
+- Network bandwidth bw source & target stores
+- Input output operations per second (IOPS) and bandwidth
+
+Size/	   50Mbps   100Mbps	500Mbps	  1Gbps	    10Gbps  50Gbps
+Bandwidth
+
+1GB	2.7min	   1.4 min   0.3 min	0.1 min	0.01min	 0.0 min
+
+10GB	27.3min	   13.7 min  2.7 min	1.3 min	0.3 min	 0.1 min
+
+100GB	4.6hrs	   2.3hrs    0.5 hrs	0.2 hrs	0.05	0.02 hrs
+
+In copyActivity, if we execute using AzureIR then start with default DIUs and parallel copy settings. if executed using self-hostedIR then separate machine/server hosting the data store and a DEDICATED MACHINE to host IR.
+- Till 4 nodes we can increase for IR's for 4 nodes. Inside settings, we have "Fault tolerance" option can be used to skip incompatable rows.
+- Staging option is used for onPremise-to-cloud when don't know their network then it is better to compress the data and load the data from staging layer.
+- We have RERUN from failed activity instead from scratch. Go to monitor tab--> Pipeline runs --> select the failed run --> click on top "update pipeline" and  rerun it!  IF you happen to change the DIU during this, it doesn't effect the new DIU setting!!
+- Its better to disable the constraints before the loading the data into Target becoz it saves lot of time!! Then enable constraint!!
+- Enumerate data source files/database data partitions is slow
+
+In copyDataTool, we have an option of FileLoadingBehaviour can be set to "IncrementalLoad:LastModifiedDate" or else "IncrementalLoad:time-partitioned folder/file names" and check the box as "BinaryCopy". Incrementally copy new files based on timepartitioned name by using copyDataTool.
+
+
+
+In ForLoop Activity, we can increase the BatchCount which is directly proportional to no.of files to be processed. If we have single file 5GB/10GB of data huge files at that point we should limit use BatchCount!!
+
+A single Self-hosted IR used for multiple on-premise data sources. You can also share it with another data facoty within the same azure active directory (Azure AD) tenant.
+
+Create a shared self-hosted IR in ADF means reuse an existing Self-hosted IR infrastructure that you already set up in a data factory. This reuse lets you create a linked self-hosted IR in a different ADF by referencing an existing self-hostedIR.
+
+Terminology
+SharedIR: An original self-hosted IR that runs on a physical infra
+LinkedIR: An IR that references another shared IR. The linked IR is a logical IR and uses the infra of another shared self-hosted IR.
+
+
+In Linked Self-hosted IR, settings specify the ResourceID of the Original self-hostedIR
+
+DIU is a combination of CPU, memory, and Network resource allocation. DIU only applies to AzureIR, but not for Self-hosted integration Runtime.
+You can only install only one instance of Self-hosted Integration Runtime on any single machine. Synapse workspace doesnot support "Integrate Runtime sharing". 
+- Recommended to install self-hostedIR on a machine that differs from the one that hosts the on-premise data source. When self-hosted IR and datasources are on different machines, the self-hostedIR doesn't compete with the datasource for resources.
+- Multiple Self-hostedIR's for different machines for the same on-premise datasource. Eg: Two Self-hostedIR's of two ADF's, the same on-premise data sources can be registered with both data factories.
+
+- Self-hostedIR can be used on cloud as well becoz we can have different VNetworks with different Self-hostedIR's
+
+- Self-hostedIRs work only on ADFs but not bw Synapse workspaces or ADF->Synapse workspace as well.
+
+
+for 20,50,100GB of files we need DIU of 16. $0.25/DIU per hour.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

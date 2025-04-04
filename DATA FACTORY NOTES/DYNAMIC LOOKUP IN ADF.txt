@@ -1,0 +1,110 @@
+PIPELINE 1:
+
+FLOW 1:
+
+PRIMARY SOURCE +  LOOKUP (+LookupProjection of flow2)
+
+
+FLOW 2:
+
+REFERENCEDATA + LookupProjection(Select Transformation):
+
+
+LOOKUP
+
+check box Match multiple rows and lookup condition
+
+movie,title,geners,year,rating,Rotton Tomato, DateOfETL
+
+PIPELINE 2:
+-------------
+PARAMETER: joinfield = NAME OF THE TABLE + of the column
+
+FLOW 1:
+MovieSource + Lookup1(setDynaCol) + sink1
+
+
+FLOW 2:
+
+dynaSource + setDynaCol
+
+
+setDynaCol:
+
+ColumnName: joinCol = toString(byName($joinfield))
+
+
+Lookup1(setDynaCol):
+
+join condition: movie == joinCol
+
+
+
+**** Load Excel File with Multiple Sheets Dynamically by using Lookup Activity *****
+
+
+STEP1:
+CREATE TABLE dbo.SheetNames
+(id int identity(1,1), SheetName varchar(100))
+
+insert into dbo.SheetNames values ('Customer'), ('Product'), ('Order')
+
+Select * from dbo.SheetNames
+
+STEP2:
+
+LookupActivity
+
+In LookupActivity,
+Query: select SheetName from dbo.SheetName
+
+In ForeachActivity,
+
+@activity('LookupActivity').output.value
+
+In (-->copydataActivity)), 
+
+Source: sheetname = @item().SheetName
+Sink: sheetname = @item().SheetName
+
+
+**** Dynamic Joins and Lookups in ADF DataFlows ********
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

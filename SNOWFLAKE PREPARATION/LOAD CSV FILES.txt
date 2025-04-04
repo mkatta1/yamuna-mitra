@@ -1,0 +1,98 @@
+use role accountadmin;
+use database demo_db;
+use schema public;
+ 
+create or replace table stg_dept(  
+  deptno     varchar,  
+  dname      varchar,  
+  loc        varchar   
+) ;
+
+
+create or replace table dept(  
+  deptno     number(2,0),  
+  dname      varchar2(14),  
+  loc        varchar2(13)  
+   
+) ;
+
+--File Format
+create or replace file format mycsvformat
+type = csv
+;
+-- Internal Stage
+create or replace stage mystage
+file_format = mycsvformat;
+ 
+
+list @MYSTAGE;
+
+-- Connect to Snowsql
+
+snowsql -a asa26717.us-east-1 -u krish94
+
+use role accountadmin;
+use database demo_db;
+use schema public; 
+
+put file://c:\data\dept_no_headers.csv @mystage;
+put file://c:\data\dept_with_headers.csv @mystage;
+put file://c:\data\dept_with_multiple_headers.csv @mystage;
+put file://c:\data\dept_with_headers_errors.csv @mystage;
+
+list @MYSTAGE;
+
+-- Case 1: No Headers
+truncate table stg_dept;
+copy into stg_dept from @mystage/dept_no_headers.csv;
+select * from stg_dept;
+truncate table dept;
+
+insert into dept 
+select * from stg_dept
+where 
+upper(deptno) != 'DEPTNO' OR upper(dname) !='DNAME' or upper(loc) != 'LOC';
+select * from dept;
+
+-- Case 2: With single Header
+
+truncate table stg_dept;
+copy into stg_dept from @mystage/dept_with_headers.csv;
+select * from stg_dept;
+truncate table dept;
+
+insert into dept 
+select * from stg_dept
+where 
+upper(deptno) != 'DEPTNO' OR upper(dname) !='DNAME' or upper(loc) != 'LOC';
+
+select * from dept;
+
+-- Case 3: With Multiple Headers
+
+truncate table stg_dept;
+copy into stg_dept from @mystage/dept_with_multiple_headers.csv;
+select * from stg_dept;
+truncate table dept;
+
+insert into dept 
+select * from stg_dept
+where 
+upper(deptno) != 'DEPTNO' OR upper(dname) !='DNAME' or upper(loc) != 'LOC';
+
+select * from dept;
+
+
+-- Case 4: With Invalid Headers 
+
+truncate table stg_dept;
+copy into stg_dept from @mystage/dept_with_headers_errors.csv;
+select * from stg_dept;
+
+truncate table dept;
+insert into dept 
+select * from stg_dept
+where 
+upper(deptno) != 'DEPTNO' OR upper(dname) !='DNAME' or upper(loc) != 'LOC';
+
+select * from dept;

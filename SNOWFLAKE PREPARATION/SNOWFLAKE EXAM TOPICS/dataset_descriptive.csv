@@ -1,0 +1,22 @@
+dataset_descriptive.csv file
+
+Columns,Descriptions
+TRANSACTION_REFERENCE,The transaction identifier for each transaction made by consumer
+USER_REFERENCE,The user identifier of the consumer
+AGE_BAND,The consumer age range
+SALARY_BAND,The consumer salary range.
+POSTCODE,The postcode of where the consumer lives.
+LSOA,"Geographical hierarchy: small areas that has similar population size (average of approximately 1,500 residents or 650 households)."
+MSOA,Geographical hierarchy: medium areas where the minimum population size is 5000 (average of 7200).
+DERIVED_GENDER,The consumer gender identity.
+TRANSACTION_DATE,The transaction date made by the consumer.
+ACCOUNT_REFERENCE,The consumer bank account identifier.
+PROVIDER_GROUP_NAME,The consumer's bank for executing his/her transactions.
+ACCOUNT_TYPE,"The account type: current, savings, etc."
+CREDIT_DEBIT,Type of transaction made by consumer: debit or credit.
+AMOUNT,The amount of transaction.
+AUTO_PURPOSE_TAG_NAME,The transaction purpose.
+MERCHANT_NAME,The merchant's name.
+MERCHANT_BUSINESS_LINE,The merchant's business category.
+ACCOUNT_CREATED_DATE,The date of when the account first created.
+ACCOUNT_LAST_REFRESHED,The date of when the account last updated.

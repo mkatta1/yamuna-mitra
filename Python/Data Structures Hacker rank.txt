@@ -1,0 +1,1286 @@
+
+Singly Linked List: Each node points to the next node in the sequence.
+Doubly Linked List: Each node points to both the next and previous nodes.
+Circular Linked List: Last node points back to the first node, forming a circle.
+Sorted Linked List: Elements are stored in a sorted order based on a specific criterion.
+
+You can create a linked list in Python by defining a Node class and a LinkedList class. Here’s a basic example of how to implement a linked list:
+
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None  # Reference to the next node
+# LinkedList class manages the nodes and operations of the linked list
+class LinkedList:
+    def __init__(self):
+        self.head = None  # Initialize an empty linked list
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+        last_node.next = new_node
+    def print_list(self):
+        current_node = self.head
+        while current_node:
+            print(current_node.data, end=" -> ")
+            current_node = current_node.next
+        print("None")
+# Example usage:
+llist = LinkedList()
+llist.append(1)
+llist.append(2)
+llist.append(3)
+llist.print_list()
+
+
+
+
+***************** SINGLE LINKED LIST ***************** 
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+def insertAtBegin(self, data):
+    new_node = Node(data)
+    if self.head is None:
+        self.head = new_node
+        return
+    else:
+        new_node.next = self.head
+        self.head = new_node
+
+
+# Method to add a node at any index
+# Indexing starts from 0.
+def insertAtIndex(self, data, index):
+    if (index == 0):
+        self.insertAtBegin(data)
+        return
+
+    position = 0
+    current_node = self.head
+    while (current_node != None and position+1 != index):
+        position = position+1
+        current_node = current_node.next
+
+    if current_node != None:
+        new_node = Node(data)
+        new_node.next = current_node.next
+        current_node.next = new_node
+    else:
+        print("Index not present")
+
+
+#Insertion in Linked List at End
+
+def inserAtEnd(self, data):
+    new_node = Node(data)
+    if self.head is None:
+        self.head = new_node
+        return
+
+    current_node = self.head
+    while(current_node.next):
+        current_node = current_node.next
+
+    current_node.next = new_node
+
+#Update the Node of a Linked List
+
+# Update node of a linked list
+# at given position
+def updateNode(self, val, index):
+    current_node = self.head
+    position = 0
+    if position == index:
+        current_node.data = val
+    else:
+        while(current_node != None and position != index):
+            position = position+1
+            current_node = current_node.next
+
+        if current_node != None:
+            current_node.data = val
+        else:
+            print("Index not present")
+
+#Delete Node in a Linked List
+
+ # Remove First Node from Linked List
+def remove_first_node(self):
+    if(self.head == None):
+        return
+    
+    self.head = self.head.next
+
+ # Remove Last Node from Linked List
+def remove_last_node(self):
+
+    if self.head is None:
+        return
+
+    curr_node = self.head
+    while (curr_node.next != None and curr_node.next.next != None):
+        curr_node = curr_node.next
+
+    curr_node.next = None
+
+
+Delete a Linked List Node at a given Position
+
+# Method to remove at given index
+def remove_at_index(self, index):
+    if self.head is None:
+        return
+
+    current_node = self.head
+    position = 0
+    
+    if index == 0:
+        self.remove_first_node()
+    else:
+        while current_node is not None and position < index - 1:
+            position += 1
+            current_node = current_node.next
+        
+        if current_node is None or current_node.next is None:
+            print("Index not present")
+        else:
+            current_node.next = current_node.next.next
+
+
+Delete a Linked List Node of a given Data
+
+def remove_node(self, data):
+    current_node = self.head
+
+    # Check if the head node contains the specified data
+    if current_node.data == data:
+        self.remove_first_node()
+        return
+
+    while current_node is not None and current_node.next.data != data:
+        current_node = current_node.next
+
+    if current_node is None:
+        return
+    else:
+        current_node.next = current_node.next.next
+
+Linked List Traversal in Python
+
+def printLL(self):
+    current_node = self.head
+    while(current_node):
+        print(current_node.data)
+        current_node = current_node.next
+
+Get Length of a Linked List in Python
+
+def sizeOfLL(self):
+    size = 0
+    if(self.head):
+        current_node = self.head
+        while(current_node):
+            size = size+1
+            current_node = current_node.next
+        return size
+    else:
+        return 0
+
+
+***************** ***************** ***************** 
+					Example of the Linked list in Python
+
+# Create a Node class to create a node
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+# Create a LinkedList class
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    # Method to add a node at the beginning of the LL
+    def insertAtBegin(self, data):
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+
+    # Method to add a node at any index
+    # Indexing starts from 0.
+    def insertAtIndex(self, data, index):
+        if index == 0:
+            self.insertAtBegin(data)
+            return
+
+        position = 0
+        current_node = self.head
+        while current_node is not None and position + 1 != index:
+            position += 1
+            current_node = current_node.next
+
+        if current_node is not None:
+            new_node = Node(data)
+            new_node.next = current_node.next
+            current_node.next = new_node
+        else:
+            print("Index not present")
+
+    # Method to add a node at the end of LL
+    def insertAtEnd(self, data):
+        new_node = Node(data)
+        if self.head is None:
+            self.head = new_node
+            return
+
+        current_node = self.head
+        while current_node.next:
+            current_node = current_node.next
+
+        current_node.next = new_node
+
+    # Update node at a given position
+    def updateNode(self, val, index):
+        current_node = self.head
+        position = 0
+        while current_node is not None and position != index:
+            position += 1
+            current_node = current_node.next
+
+        if current_node is not None:
+            current_node.data = val
+        else:
+            print("Index not present")
+
+    # Method to remove first node of linked list
+    def remove_first_node(self):
+        if self.head is None:
+            return
+
+        self.head = self.head.next
+
+    # Method to remove last node of linked list
+    def remove_last_node(self):
+        if self.head is None:
+            return
+
+        # If there's only one node
+        if self.head.next is None:
+            self.head = None
+            return
+
+        # Traverse to the second last node
+        current_node = self.head
+        while current_node.next and current_node.next.next:
+            current_node = current_node.next
+
+        current_node.next = None
+
+    # Method to remove a node at a given index
+    def remove_at_index(self, index):
+        if self.head is None:
+            return
+
+        if index == 0:
+            self.remove_first_node()
+            return
+
+        current_node = self.head
+        position = 0
+        while current_node is not None and current_node.next is not None and position + 1 != index:
+            position += 1
+            current_node = current_node.next
+
+        if current_node is not None and current_node.next is not None:
+            current_node.next = current_node.next.next
+        else:
+            print("Index not present")
+
+    # Method to remove a node from the linked list by its data
+    def remove_node(self, data):
+        current_node = self.head
+
+        # If the node to be removed is the head node
+        if current_node is not None and current_node.data == data:
+            self.remove_first_node()
+            return
+
+        # Traverse and find the node with the matching data
+        while current_node is not None and current_node.next is not None:
+            if current_node.next.data == data:
+                current_node.next = current_node.next.next
+                return
+            current_node = current_node.next
+
+        # If the data was not found
+        print("Node with the given data not found")
+
+    # Print the size of the linked list
+    def sizeOfLL(self):
+        size = 0
+        current_node = self.head
+        while current_node:
+            size += 1
+            current_node = current_node.next
+        return size
+
+    # Print the linked list
+    def printLL(self):
+        current_node = self.head
+        while current_node:
+            print(current_node.data)
+            current_node = current_node.next
+
+
+# create a new linked list
+llist = LinkedList()
+
+# add nodes to the linked list
+llist.insertAtEnd('a')
+llist.insertAtEnd('b')
+llist.insertAtBegin('c')
+llist.insertAtEnd('d')
+llist.insertAtIndex('g', 2)
+
+# print the linked list
+print("Node Data:")
+llist.printLL()
+
+# remove nodes from the linked list
+print("\nRemove First Node:")
+llist.remove_first_node()
+llist.printLL()
+
+print("\nRemove Last Node:")
+llist.remove_last_node()
+llist.printLL()
+
+print("\nRemove Node at Index 1:")
+llist.remove_at_index(1)
+llist.printLL()
+
+# print the linked list after all removals
+print("\nLinked list after removing a node:")
+llist.printLL()
+
+print("\nUpdate node Value at Index 0:")
+llist.updateNode('z', 0)
+llist.printLL()
+
+print("\nSize of linked list:", llist.sizeOfLL())
+
+
+***************** ***************** *****************      Double Linked List     ***************** ***************** ***************** 
+
+Doubly Linked List (DLL) is a special type of linked list in which each node contains a pointer to the previous node as well as the next node of the linked list. In a Doubly Linked List, we can traverse in forward and backward direction using the next and previous pointer respectively.
+
+# Node of a doubly linked list
+class Node:
+    def __init__(self, next=None, prev=None, data=None):
+        # reference to next node in DLL
+        self.next = next
+        # reference to previous node in DLL
+        self.prev = prev
+        self.data = data
+
+
+# Python Program for traversal of a doubly linked list
+class Node:
+    def __init__(self, data):
+        # Initialize a new node with data, previous, and next pointers
+        self.data = data
+        self.next = None
+        self.prev = None
+
+
+def traverse(head):
+    # Traverse the doubly linked list and print its elements
+    current = head
+    while current:
+      # Print current node's data
+        print(current.data, end=" <-> ")
+        # Move to the next node
+        current = current.next
+    print("None")
+
+
+def insert_at_beginning(head, data):
+    # Insert a new node at the beginning of the doubly linked list
+    new_node = Node(data)
+    new_node.next = head
+    if head:
+        head.prev = new_node
+    return new_node
+
+
+# Driver Code
+head = None
+head = insert_at_beginning(head, 4)
+head = insert_at_beginning(head, 3)
+head = insert_at_beginning(head, 2)
+head = insert_at_beginning(head, 1)
+
+# To traverse and print the nodes:
+traverse(head)
+
+Output
+------
+1 <-> 2 <-> 3 <-> 4 <-> None
+
+Insertion of Doubly Linked List in Python:
+-----------------------------------------
+At the front of the DLL.
+After a given node.
+Before a given node.
+At the end of the DLL.
+
+# Python Program for a doubly linked list at the beginning of a node
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+# Function to insert a node at the beginning of a doubly linked list
+def insert_at_beginning(head, data):
+    new_node = Node(data)
+    new_node.next = head
+    if head:
+        head.prev = new_node
+    return new_node
+
+# Function to display the elements of the doubly linked list
+def display(head):
+    current = head
+    while current:
+        print(current.data, end=" <-> ")
+        current = current.next
+    print("None")
+
+
+# Driver Code
+head = None
+head = insert_at_beginning(head, 3)
+head = insert_at_beginning(head, 2)
+head = insert_at_beginning(head, 1)
+
+print("Doubly Linked List after insertion at the beginning:")
+display(head)
+
+Output
+------
+Doubly Linked List after insertion at the beginning:
+1 <-> 2 <-> 3 <-> None
+
+
+
+
+
+
+# Python Program for Insertion after a given node 
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+# Function to insert a node after a given node in a doubly linked list
+def insert_after_node(node, data):
+    if node is None:
+        print("Error: The given node is None")
+        return
+
+    new_node = Node(data)
+    new_node.prev = node
+    new_node.next = node.next
+
+    if node.next:
+        node.next.prev = new_node
+
+    node.next = new_node
+
+# Function to display the elements of the doubly linked list
+def display(head):
+    current = head
+    while current:
+        print(current.data, end=" <-> ")
+        current = current.next
+    print("None")
+
+
+# Driver Code
+head = Node(1)
+node2 = Node(2)
+node3 = Node(3)
+
+head.next = node2
+node2.prev = head
+node2.next = node3
+node3.prev = node2
+
+print("Doubly Linked List before insertion:")
+display(head)
+
+insert_after_node(node2, 4)
+
+print("Doubly Linked List after insertion:")
+display(head)
+
+Output
+------
+Doubly Linked List before insertion:
+1 <-> 2 <-> 3 <-> None
+Doubly Linked List after insertion:
+1 <-> 2 <-> 4 <-> 3 <-> None
+
+
+
+# Python Program for Insertion before a given node
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None
+
+# Function to insert a node before a given node in a doubly linked list
+def insert_before_node(node, data):
+    if node is None:
+        print("Error: The given node is None")
+        return
+
+    new_node = Node(data)
+    new_node.prev = node.prev
+    new_node.next = node
+
+    if node.prev:
+        node.prev.next = new_node
+
+    node.prev = new_node
+
+# Function to display the elements of the doubly linked list
+def display(head):
+    current = head
+    while current:
+        print(current.data, end=" <-> ")
+        current = current.next
+    print("None")
+
+# Driver Code
+head = Node(1)
+node2 = Node(2)
+node3 = Node(3)
+
+head.next = node2
+node2.prev = head
+node2.next = node3
+node3.prev = node2
+
+print("Doubly Linked List before insertion:")
+display(head)
+
+insert_before_node(node2, 4)
+
+print("Doubly Linked List after insertion:")
+display(head)
+
+Output
+------
+Doubly Linked List before insertion:
+1 <-> 2 <-> 3 <-> None
+Doubly Linked List after insertion:
+1 <-> 4 <-> 2 <-> 3 <-> None
+
+
+
+# Python Program for Insertion at the end
+class Node:
+    def __init__(self, data):
+        # Initialize a new node with data, previous, and next pointers
+        self.data = data
+        self.next = None
+        self.prev = None
+
+
+def insert_at_end(head, data):
+    # Insert a new node at the end of the doubly linked list
+    new_node = Node(data)
+    if head is None:
+        return new_node
+
+    current = head
+    while current.next:
+        current = current.next
+
+    current.next = new_node
+    new_node.prev = current
+    return head
+
+
+def display(head):
+    # Display the doubly linked list elements
+    current = head
+    while current:
+      # Print current node's data
+        print(current.data, end=" <-> ")
+        # Move to the next node
+        current = current.next
+    print("None")
+
+
+# Driver Code
+head = None
+head = insert_at_end(head, 1)
+head = insert_at_end(head, 2)
+head = insert_at_end(head, 3)
+
+print("Doubly Linked List after insertion at the end:")
+display(head)
+
+Output
+------
+Doubly Linked List after insertion at the end:
+1 <-> 2 <-> 3 <-> None
+
+
+***************** ***************** ***************** 
+
+
+
+
+
+
+
+
+
+
+
+There are  types of query:
+
+"1v" - Add an element  to the heap.
+"2 v" - Delete the element  from the heap.
+"3" - Print the minimum of all the elements in the heap.
+NOTE: It is guaranteed that the element to be deleted will be there in the heap. Also, at any instant, only distinct elements will be in the heap.
+
+For each query of type 3, print the minimum value on a single line.
+
+Sample Input:
+------------
+STDIN       Function
+-----       --------
+5           Q = 5
+1 4         insert 4
+1 9         insert 9
+3           print minimum
+2 4         delete 4
+3           print minimum
+
+Sample Output:
+-------------
+4  
+9 
+
+Explanation:
+-----------
+After the first 2 queries, the heap contains {4,9}. Printing the minimum gives 4 as the output. Then, the 4th query deletes 4 from the heap, and the 5th query gives 9 as the output.
+
+CODE:
+----
+from bisect import insort
+class Heap:
+    def __init__(self):
+        self.heap = []
+        
+    def insert(self, val):
+        insort(self.heap, val)
+    
+    def delete(self, val):
+        self.heap.remove(val)
+    
+    def minimum(self):
+        if self.heap:
+            print(self.heap[0])
+
+
+q = int(input())
+heap = Heap()
+for _ in range(q):
+    query = [int(i) for i in input().split(" ")]
+    
+    if query[0] == 1:
+        heap.insert(query[1])
+    elif query[0] == 2:
+        heap.delete(query[1])
+    elif query[0] == 3:
+        heap.minimum()
+
+
+
+2. 
+
+Sample Input:
+------------
+STDIN               Function
+-----               --------
+6 7                 A[] size n = 6, k = 7
+1 2 3 9 10 12       A = [1, 2, 3, 9, 10, 12]  
+Sample Output
+
+2
+Explanation:
+-----------
+Combine the first two cookies to create a cookie with sweetness  = 1 x 1 + 2 x 2 = 5
+After this operation, the cookies are 3,5,9,10,12.
+Then, combine the cookies with sweetness 3 and sweetness 5, to create a cookie with resulting sweetness  = 1 x 3 + 2 x 5 = 13
+Now, the cookies are 9, 10, 12, 13.
+All the cookies have a sweetness >=7 .
+
+Thus, 2 operations are required to increase the sweetness.
+
+
+import heapq
+
+def cookies(k, A):
+    h=[i for i in A]
+    heapq.heapify(h)
+    ans=0
+    while h[0]<k and len(h)>1:
+        f=heapq.heappop(h)
+        s=heapq.heappop(h)
+        heapq.heappush(h,f+2*s)
+        ans+=1
+        
+    if h[0]>=k:
+        return ans
+    else:
+        return -1
+
+
+
+Python O(nlogn) with a queue. After sorting the list I create a queue. I add to a queue all new mixed cookies. Queue is sorted automatically. Later I check one by one (from the back of an A list) which number is bigger the first from the queue or the last number from A. If list A is empty or len(A) == 1 I add the queue to A.
+
+def cookies(k, A):
+    A.sort(reverse = True)
+    queue = []
+    mixes = 0
+    while True:
+        if len(A) <= 1 and queue:
+            A = queue[::-1] + A
+            queue = []
+        if not A and not queue:
+            return mixes
+        if queue:
+            if A[-1] <= queue[0]:
+                last_num = A.pop()
+            else:
+                last_num = queue.pop(0)
+        else:
+            last_num = A.pop()
+        if last_num >= k:
+            next
+        elif len(A) == 0 and last_num < k:
+            return -1
+        else:
+            if not queue:
+                sec_num = A.pop()
+            else:
+                if A[-1] <= queue[0]:
+                    sec_num = A.pop()
+                else:
+                    sec_num = queue.pop(0)
+            new_num = last_num + 2 * sec_num
+            queue.append(new_num)
+            mixes += 1
+
+
+
+
+3.
+
+def runningMedian(a):
+    # Declaring two min heap
+		# import at the top
+		# from heapq import heappush, heappop, heapify
+    
+    g = []
+    s = []
+    result = []
+    for i in range(len(a)):
+       
+        # Negation for treating it as max heap
+        heappush(s, -a[i])
+        heappush(g, -heappop(s))
+        if len(g) > len(s):
+            heappush(s, -heappop(g))
+ 
+        if len(g) != len(s):
+            result.append(float(-s[0]))
+        else:
+            result.append(float((g[0] - s[0])/2))
+        
+    return result
+
+
+		************  ARRAY  **********
+TLDR: If you're getting a timeout error, using a Prefix Sum Array will fix it. I wasn't familiar with them so here's a link: https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/
+
+For a more detailed explanation: While the prompt says for each query add the increment for each number in the range, this is too much work and causes a timeout error (at least for Kotlin and a couple other languages based on the comments here), So rather than incrementing everything between the start and end, create a prefix sum array by adding the increment at startIndex and subtract it at end index. Then after all the queries have been processed using this method, find the max in the prefix sum array by iterating through and adding up the values and checking for the max as you go.
+
+Runtime error
+Can someone help me optimaze this code?:
+def arrayManipulation(n, queries):
+    lista = [0 for x in range(n)]
+    
+    for i in queries:
+        alle = [q for q in range(i[0]-1, i[1])]
+        for j in alle:
+            lista[j] += i[2]
+            
+    return max(lista)
+I think its due to "the maximum size of a list comprehension", this is limited by the available memory, as it creates a new list in memory. However, it’s generally recommended to avoid creating very large lists to prevent performance issues and memory exhaustion.
+
+Array size n can be 10 million. No wonder Python fails on it.
+Trick is to maniupulate queries array (only 50k lines ;)
+
+
+
+
+1. Sparse Arrays:
+-----------------
+Sparse arrays are data structures used to efficiently store and manage large arrays where most of the elements are zero or otherwise default values. Unlike traditional arrays, which allocate memory sparse arrays only allocate memory for the non-default values and their corresponding indices. This approach minimizes memory usage and can improve performance, especially when dealing with large datasets where only a small fraction of the array is actively used. Sparse arrays are commonly used in various applications, including scientific computing, optimization problems, and machine learning, where they help handle large-scale data efficiently without wasting resources on storing unnecessary default values.
+
+
+There is a collection of input strings and a collection of query strings. For each query string, determine how many times it occurs in the list of input strings. Return an array of the results.
+
+Example:
+--------
+stringList = ['ab',' ab',abc']
+queries = ['ab',' abc',' bc']
+There are 2 instances of 'ab', 1 of 'abc' and 0 of 'bc'. For each query, add an element to the return array, results = [2,1,0].
+
+Function Description:
+--------------------
+Complete the function matchingStrings in the editor below. The function must return an array of integers representing the frequency of occurrence of each query string in stringList.
+
+matchingStrings has the following parameters:
+--------------------------------------------
+string stringList[n] - an array of strings to search
+string queries[q] - an array of query strings
+Returns
+
+int[q]: an array of results for each query
+
+SAMPLE INPUT 1:
+---------------
+
+4
+aba
+baba
+aba
+xzxb
+3
+aba
+xzxb
+ab
+
+Sample Output 1
+---------------
+2
+1
+0
+
+Sample Input 2:
+--------------
+3
+def
+de
+fgh
+3
+de
+lmn
+fgh
+
+Sample Output 2
+---------------
+1
+0
+1
+
+Sample Input 3:
+---------------
+13
+abcde
+sdaklfj
+asdjf
+na
+basdn
+sdaklfj
+asdjf
+na
+asdjf
+na
+basdn
+sdaklfj
+asdjf
+5
+abcde
+sdaklfj
+asdjf
+na
+basdn
+
+Sample Output 3:
+---------------
+1
+3
+4
+3
+2
+
+CODE:
+----
+
+def matchingStrings(stringList, queries):
+    # Write your code here
+    count = 0
+    ans = []
+    for i in queries:
+        if i in stringList:
+            count = stringList.count(i)
+            ans.append(count)
+        else:
+            ans.append(0)
+    return ans
+
+another type 2:
+--------------
+result=[]
+for i in range(len(queries)):
+    count=0
+    for j in range(len(stringList)):
+        if queries[i]==stringList[j]:
+            count+=1
+    result.append(count)
+return result
+
+another type 3:
+--------------
+L = [0]*len(queries)        
+
+for i in range(len(queries)):
+
+    for j in range(len(stringList)):
+
+        if queries[i]==stringList[j]:
+            L[i] = L[i]+1
+return L
+
+CODE 2:
+-------
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+# Complete the matchingStrings function below.
+def matchingStrings(strings, queries):
+    count=0
+    for strings in queries:
+        count+=1
+    return count
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    strings_count = int(input())
+
+    strings = []
+
+    for _ in range(strings_count):
+        strings_item = input()
+        strings.append(strings_item)
+
+    queries_count = int(input())
+
+    queries = []
+
+    for _ in range(queries_count):
+        queries_item = input()
+        queries.append(queries_item)
+
+    res = matchingStrings(strings, queries)
+
+    fptr.write('\n'.join(map(str, res)))
+    fptr.write('\n')
+
+    fptr.close()
+
+
+
+
+		************  DYNAMIC ARRAY  **********
+
+Declare a 2-dimensional array, arr, of n empty arrays. All arrays are zero indexed.
+Declare an integer,lastAnswer , and initialize it to 0.
+
+There are 2 types of queries, given as an array of strings for you to parse:
+
+1.Query: 1 x y
+Let idx = ((x + lastAnswer) % n)
+Append the integer y to arr[idx].
+
+2.Query: 2 x y
+Let idx = (( x + lastAnswer) % n)
+Assign the value arr[idx][y % size(arr[idx])] to lastAnswer
+Store the new value of lastAnswer to an answers array
+
+Note:  is the bitwise XOR operation, which corresponds to the ^ operator in most languages. Learn more about it on Wikipedia. % is the modulo operator.
+Finally, size(arr[idx]) is the number of elements in arr[idx]
+
+Function Description:
+--------------------
+Complete the dynamicArray function below.
+
+dynamicArray has the following parameters:
+- int n: the number of empty arrays to initialize in arr
+- string queries[q]: query strings that contain 3 space-separated integers
+
+Returns
+-------
+int[]: the results of each type 2 query in the order they are presented
+
+Sample Input
+-----------
+2 5
+1 0 5
+1 1 7
+1 0 3
+2 1 0
+2 1 1
+
+Sample Output
+------------
+7
+3
+
+CODE:
+----
+
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+#
+# Complete the 'dynamicArray' function below.
+#
+# The function is expected to return an INTEGER_ARRAY.
+# The function accepts following parameters:
+#  1. INTEGER n
+#  2. 2D_INTEGER_ARRAY queries
+#
+
+def dynamicArray(n, queries):
+    # Write your code here
+    # Write your code here
+    arr = [[]for i in range(n)]
+    lastAnswer = 0
+    ansArray = []
+    
+    for val in queries:
+        if val[0] == 1:
+            idx = (val[1] ^ lastAnswer) % n
+            arr[idx].append(val[2])
+        else:
+            idx = (val[1] ^ lastAnswer) % n
+            i = val[2] % len(arr[idx])
+            lastAnswer = arr[idx][i]
+            ansArray.append(lastAnswer)
+        
+    return ansArray
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    q = int(first_multiple_input[1])
+
+    queries = []
+
+    for _ in range(q):
+        queries.append(list(map(int, input().rstrip().split())))
+
+    result = dynamicArray(n, queries)
+
+    fptr.write('\n'.join(map(str, result)))
+    fptr.write('\n')
+
+    fptr.close()
+
+
+		************  QUEUE  **********
+
+
+A queue is an abstract data type that maintains the order in which elements were added to it, allowing the oldest elements to be removed from the front and new elements to be added to the rear. This is called a First-In-First-Out (FIFO) data structure because the first element added to the queue (i.e., the one that has been waiting the longest) is always the first one to be removed.
+
+A basic queue has the following operations:
+
+Enqueue: add a new element to the end of the queue.
+Dequeue: remove the element from the front of the queue and return it.
+In this challenge, you must first implement a queue using two stacks. Then process q queries, where each query is one of the following 3 types:
+
+1 x: Enqueue element x into the end of the queue.
+2: Dequeue the element at the front of the queue.
+3: Print the element at the front of the queue.
+
+For each query of type 3, print the value of the element at the front of the queue on a new line.
+
+Sample Input:
+-------------
+STDIN   Function
+-----   --------
+10      q = 10 (number of queries)
+1 42    1st query, enqueue 42
+2       dequeue front element
+1 14    enqueue 42
+3       print the front element
+1 28    enqueue 28
+3       print the front element
+1 60    enqueue 60
+1 78    enqueue 78
+2       dequeue front element
+2       dequeue front element
+
+Sample Output:
+-------------
+14
+14
+
+
+CODE:
+----
+
+class MyStack:
+    def __init__(self) -> None:
+        self.stk = []
+
+    def push(self, item):
+        self.stk.append(item)
+
+    def pop(self):
+        item = self.stk[-1]
+        self.stk = self.stk[:-1]
+        return item
+    
+    def peek(self):
+        return self.stk[-1]
+    
+    def is_empty(self):
+        return len(self.stk) == 0
+    
+    def __str__(self) -> str:
+        res = self.stk
+        return str(res)
+    
+		
+		
+class MyQueueUsingStacks:
+    def __init__(self) -> None:
+        self.stk_main = MyStack()
+        self.stk_temp = MyStack()
+
+    def enqueue(self, item):
+        # remove all items from main stack to temp
+        while self.stk_main.is_empty() == False:
+            item_to_remove = self.stk_main.pop()
+            self.stk_temp.push(item_to_remove)
+
+        # now push new item
+        self.stk_main.push(item)
+
+        # push all items again into main stack, first entered element will be on top
+        while self.stk_temp.is_empty() == False:
+            item_to_remove = self.stk_temp.pop()
+            self.stk_main.push(item_to_remove)
+         
+
+    def dequeue(self):
+        if self.stk_main.is_empty():
+            return "Empty Queue"
+        
+        return self.stk_main.pop()
+    
+    def peek(self):
+        if self.stk_main.is_empty():
+            return "Empty Queue"
+        
+        return self.stk_main.peek()
+        
+				
+        
+def main_driver():
+    n = int(input())
+    input_list = []
+
+    my_q = MyQueueUsingStacks()
+
+    i = 0
+    while i < n:
+        inp = input_list.append(input())
+        i += 1
+
+    for i in input_list:
+        if i[0] == "1":
+            item = int(i[2:])
+            # enqueue
+            my_q.enqueue(item)
+
+        if i[0] == "2":
+            # dequeue
+            my_q.dequeue()
+
+        if i[0] == "3":
+            # print front
+            print(my_q.peek())
+
+
+main_driver()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

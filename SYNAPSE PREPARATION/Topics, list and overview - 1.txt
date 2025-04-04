@@ -1,0 +1,546 @@
+Synapse
+History of Data Warehouse/ Datalakes
+Synapse workspace overview
+Data Hub Overview
+Develop Hub Overview
+Integrate Hub overview
+Mointor Hub Overview
+Manage hub overview
+
+SERVERLESS SQL POOL - Overview:
+Introduction to Serverless SQL Pool
+Serverless SQL Pool Cost Control
+
+SERVERLESS SQL POOL -QUERY CSV:
+OPENROWSET FUNCTION
+SPECIFY DATA TYPES, COLLATION
+Query subset of Columns
+Debugging & Identifying Errors
+Use External Data Source
+
+********************************** SERVERLESS SQL POOL -QUERY JSON *****************************************
+Query Payment Type(Single Line JSON)- JSON_VALUE FUNCTION:
+
+EXEC sp_describe_first_result_set N'
+SELECT 
+CAST(JSON_VALUE(jsonDoc, '$.payment_type') AS SMALLINT) payment_type,
+CAST(JSON_VALUE(jsonDoc, '$.payment_type_desc') AS VARCHAR(15)) payment_type_desc
+FROM OPENROWSET(
+BULK 'payment_type.json',
+DATA_SOURCE = 'nyc_taxi_data_raw',
+FORMAT = 'CSV',
+PARSER_VERSION = '1.0',
+FIELDTERMINATOR = '0x0b',
+FIELDQUOTE = '0x0b',
+ROWTERMINATOR = '0x0a'
+)
+WITH
+(
+	jsonDoc NVARCHAR(MAX)
+) AS payment_type;
+
+
+Query Payment Type(Single Line JSON)- OPENJSON FUNCTION:
+
+SELECT payment_type, description
+FROM OPENROWSET(
+	BULK 'payment_type.json',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	FIELDTERMINATOR = '0x0b',
+	FIELDQUOTE = '0x0b'
+)
+WITH
+(
+	jsonDoc NVARCHAR(MAX)
+) AS payment_type
+CROSS APPLY OPENJSON(jsonDoc)
+WITH(
+	payment SMALLINT,
+	description VARCHAR(20) '$.payment_type_desc'
+);
+
+QUERY Single and Multi Line JSON:
+
+SELECT CAST(JSON_VALUE(jsonDoc, '$.payment_type')AS SMALLINT) payment_type,
+	CAST(JSON_VALUE(jsonDoc,'$.payment_type_desc[0].value')AS VARCHAR(15)) payment_type_desc_0,
+	CAST(JSON_VALUE(jsonDoc,'$.payment_type_desc[1].value')AS VARCHAR(15)) payment_type_desc_01
+FROM OPENROWSET(
+	BULK 'payment_type_array.json',
+	DATASOURCE = 'nyc_taxi_data_row',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '1.0',
+	FIELDTERMINATOR = '0x0b',
+	FIELDQUOTE = '0x0b',
+	ROWTERMINATOR = '0x0a'
+)
+WITH
+(
+ JSONDOC NVARCHAR(MAX)
+) AS payment_type;
+
+-- Use OPENJSON to EXPLODE the ARRAY
+
+SELECT *
+FROM OPENROWSET(
+	BULK 'payment_type_array.json',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '1.0',
+	FIELDTERMINATOR = '0X0b,
+	FIELDQUOTE = '0x0b',
+	ROWTERMINATOR = '0X0a'
+) 
+WITH
+(
+	jsonDocNVARCHAR(MAX)
+) AS payment_type
+CROSS APPLY OPENJSON(jsonDoc)
+WITH
+(
+	payment_type SMALLINT,
+	payment_type_desc NVARCHAR(MAX) AS JSON
+)
+CROSS APPLY OPENJSON(payment_type_desc)
+WITH(
+	sub_type SMALLINT,
+	value VARCHAR(20)
+);
+
+########################################## SERVERLESS SQL POOL - QUERY FOLDERS & SUBFOLDERS ###################################################
+
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'https://synapsecoursedl.dfs.core.windows.net/nyc-taxi-data/raw/trip_data_green_csv/year=2020/month=01/green_tripdata_2020_01.csv'
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE
+) AS [result]
+
+-- select data from a folder
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'https://synapsecoursedl.dfs.core.windows.net/nyc-taxi-data/raw/trip_data_green_csv/year=2020/month=01/*.csv'
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE
+) AS [result]
+
+-- To select data from subfolders using the double astricks '**'
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'https://synapsecoursedl.dfs.core.windows.net/nyc-taxi-data/raw/trip_data_green_csv/year=2020/**'
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE
+) AS [result]
+
+-- Get data from more than one file
+
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'trip_data_green_csv/year=2020/month=01/*.csv','trip_data_green_csv/year=2020/month=03/*.csv'
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE
+) AS [result]
+
+-- Use more than 1 wildcard character
+
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'trip_data_green_csv/year=*/month=*/*.csv'
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '2.0',
+	HEADER_ROW = TRUE
+) AS [result]
+
+
+
+**************************************** SERVERLESS SQL POOL - QUERY COLUMNAR FORMATS ****************************************************************
+Query Single Parquet File, Delta files:
+
+EXEC sp_describe_first_result_set N
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'trip_data_greenParquet/y=2020/m=01/part-0000-tid-633243254.snappy.parquet',
+	FORMAT = 'PARQUET',
+	DATA_SOURCE = 'nyc_taxi_data_raw'
+) AS 
+WITH (
+COLUMNS DATATYPE, ....
+)
+[result]'
+
+-- 1)
+SELECT TOP 100 *
+FROM OPENROWSET (
+	BULK 'trip_data_green_parquet/year=2020/month=01/*.parquet',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'PARQUET'
+) AS 
+--- 2) GET FILENAME
+SELECT TOP 100
+	TRIP_DATA.FILENAME() AS FILE_NAME,
+	TRIP_DATA.*
+FROM OPENROWSET (
+	BULK 'trip_data_green_parquet/year=2020/month=01/*.parquet',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'PARQUET'
+) AS TRIP_DATA
+
+--- 3) QUERY FROM SUB FOLDERS
+
+SELECT TOP 100
+	TRIP_DATA.FILEPATH() AS FILE_PATH,
+	TRIP_DATA.*
+FROM OPENROWSET (
+	BULK 'trip_data_green_parquet/**',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'PARQUET'
+) AS TRIP_DATA
+
+
+-- 4) USE FILEPATH TO TARGET PARTITIONS
+SELECT trip_data.filepath(1) AS year,
+	trip_data.filepath(2) AS month,
+	COUNT(1) AS record_count
+FROM OPENROWSET (
+	BULK 'trip_data_green_parquet/year=*/month=*/*.parquet',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'PARQUET'
+) AS TRIP_DATA
+WHERE TRIP_DATA.filepath(1)
+AND trip_data.filepath(2) IN ('06','07','08')
+GROUP BY trip_data.filepath(1), trip_data.filepath(2)
+ORDER BY trip_data.filepath(2), trip_data.filepath(2);
+
+
+SELECT TOP 100 *
+FROM OPENROWSET(
+	BULK 'trip_data_green_delta/',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'DELTA'
+)
+WITH (
+	trip_amount FLOAT,
+.......
+) AS trip_data;
+
+********************************************** SERVERLESS SQL POOL - DATA DISCOVERY (CHECK THIS VIDEOS OUT!!)**********************************************
+
+-- Identify Duplicates:
+
+select count(distinct payment_type)
+from openrowset(
+	BULK 'trip_data_green_delta/',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'DELTA'
+) AS trip_data
+WHERE year = '2020' AND month = '01';
+
+-- Identify Duplicates
+-- Aggregation Function Syntax
+COUNT ({[[ ALL | DISTINCT ] expression ] | * })
+
+-- Analytic Function Syntax
+COUNT ([ ALL ] {expression | *}) OVER ([<partition_by_clause>])
+
+
+Eg:
+SELECT COUNT(*), AVG(Bonus)
+FROM Sales.SalesPerson
+WHERE S > 25000;
+
+SELECT borough,
+	COUNT(1) AS number_of_records
+FROM OPENROWSET(
+	BULK 'abfss://nyc-taxi-data@synapsecoursedl.dfs.core.windows.net/raw/taxi_zone.csv',
+	FORMAT = 'CSV',
+	PARSER_VERSION = '2.0',
+	FIRSTROW = 2,
+	FIELDTERMINATOR = ',',
+	ROWTERMINATOR = '\n'
+)
+WITH (
+	location_id SMALLINT 1,
+	borough	VARCHAR(15) 2,
+	.....
+) AS [result]
+GROUP BY borough
+HAVING COUNT(1) >1;
+
+-- Data Quality Checks: 
+
+SELECT MIN(total_amount) AS min_total_amount,
+	MAX(total_amount) AS max_total_amount,
+	AVG(total_amount) AS avg_total_amount,
+	COUNT(1) AS total_number_of_records,
+	COUNT(total_amount) AS not_null_total_number_of_records
+FROM OPENROWSET(
+	BULK 'trip../y=2020/m=01/',
+	FORMAT = 'PARQUET',
+	DATA_SOURCE = 'nyc_taxi_data_raw'
+) AS [result]
+
+-- Joining Files, Transform Data, Data Discovery Assignment
+
+DATA VIRTUALISATION:
+Data Virtualizatio is a logical data layer that allows us to combine data from multiple sources at query time without having to write complex ETL pipelines to load the data.
+
+a) Create External Table:
+
+- Create an external table on the data already present in the storage.
+- Metadata only change
+
+This creates an external table to access data stored in Azure blb or Azure Data Lake
+CREATE EXTERNAL TABLE {DBNAME.SCHEMANAME.TABLENAME | SCHEMANAME.TABLENAME | TABLENAME}
+(column_definition [,...n])
+WITH (
+	LOCATION = 'folder_or_filepath',
+	DATA_SOURCE = external_data_source_name,
+	FILE_FORMAT = external_file_format_name,
+	[, TABLE_OPTIONS = N'{"READ_OPTIONS":["ALLOW_INSCONSISTENT_READS"]}']
+[,<> [,...n] ]
+)
+[;]
+
+<column_definition> ::=
+column_name <data_type>
+	[ COLLATE collation_name ]
+<reject_options> ::=
+{
+  | REJECT_TYPE = value,
+  | REJECT_VALUE = reject_value,
+  | REJECT_SAMPLE_VALUE = reject_sample_value,
+  | REJECTED_ROW_LOCATION = '/REJECT_Directory'
+}
+
+b) Create External Table As Select (CETAS):
+
+- Selected data will be copied to the location specified in the table definition.
+- Metadata change + Data copied
+
+
+
+External Tables
+Create External Table-CSV:
+
+CREATE EXTERNAL FILE FORMAT <formatName>
+WITH (
+	FORMAT_TYPE = DELIMITEDTEXT,
+	FORMAT_OPTIONS (
+		FIELD_TERMINATOR = ','
+	,	STRING_DELIMITER - '"'
+	,	FIRST_ROW = 2
+	, 	USE_TYPE_DEFAULT = FALSE
+	,	ENCODING = 'UTF8'
+	,	PARSER_VERSION = '2.0' )
+	);
+
+IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat')
+CREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat]
+WITH ( FORMAT_TYPE = DELIMITEDTEXT,
+	FIELD_TERMINATOR = ',',
+	USE_TYPE_DEFAULT = FALSE
+	))
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'nyc-data-synapsecoursedl_dfs_core_window_net')
+CREATE EXTERNAL DATA SOURCE [nyc-taxi-data_synapsecoursedl_dfs_core_windows_net]
+WITH (
+	LOCATION ='abfss://nyc-taxi-data@synapsecoursedl.dfs.core.windows.net'
+)
+GO
+
+CREATE EXTERNAL TABLE taxi_zone (
+[LocationID] bigint,
+[Borough] nvarchar(4000),
+[Zone] nvarchar(4000),
+[service_zone] nvarchar(4000)
+)
+WITH (
+LOCATION = 'raw/taxi-zone.csv',
+DATA_SOURCE = [nyc-taxi-data-synapsecoursedl-dfs-core-windows-net],
+FILE_FORMAT = [SynapseDelimitedTextFormat]
+)
+GO
+
+Handling Rejections:
+
+Rejected rows feature is in Public Preview. Please note that rejected rows feature works for delimited text files and PARSER_VERSION 1.0 
+PARSER_VERSION 1.0 has additional functionalities but the 2.0 version does not have it.
+
+<reject_options> ::=
+{
+  | REJECT_TYPE = value,
+  | REJECT_VALUE = reject_value,
+  | REJECT_SAMPLE_VALUE = reject_sample_value,
+  | REJECTED_ROW_LOCATION = '/REJECT_Directory'
+}
+
+Example:
+CREATE EXTERNAL TABLE bronze.taxi_zone
+(
+loc_id	SMALLINT,
+borough	VARCHAR(15),
+zone	VARCHAR(50),
+service_zone	VARCHAR(15)
+)
+WITH (
+	LOCATION = 'raw/taxi_zone.csv',
+	DATA_SOURCE = 'nyc_taxi_src',
+	FILE_FORMAT = 'csv_file_format_pv1',
+	REJECT_VALUE = 10,
+	REJECTED_ROW_LOCATION = 'rejections/taxi_zone'
+);
+
+Example 2:
+IF OBJECT_ID('bronze.calendar') IS NOT NULL
+	DROP EXTERNAL TABLE bronze.calendar;
+
+CREATE EXTERNAL TABLE bronze.calendar
+(
+	date_key INT,
+	date	date,
+	...
+)
+WITH (
+	LOCATION = 'raw/calendar.csv',
+	DATA_SOURCE = nyc_taxi_src,
+	FILE_FORMAT = csv_file_format_pv1,
+	REJECT_VALUE = 10,
+	REJECTED_ROW_LOCATION = 'rejections/calendar'
+);
+
+-- Create file format tsv_file_format for parser version2.0
+IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'tsv_file_format')
+  CREATE EXTERNAL FILE FORMAT 
+  WITH (
+	FORMAT_TYPE = DELIMITEDTEXT,
+	FORMAT_OPTIONS (
+		FIELD_TERMINATOR = '\t'
+		, STRING_DELIMITER = '"'
+		, First_Row = 2
+		, USE_TYPE_DEFAULT = FALSE
+		, Encoding = 'UTF8'
+		, PARSER_VERSION = '2.0'
+		);
+
+Create external table: CSV, PARQUET, DELTA
+-- CSV:
+IF OBJECT_ID('bronze.trip_data_green_csv') IS NOT NULL
+	DROP EXTERNAL TABLE bronze.trip_data_green_csv;
+
+WITH (
+	LOCATION = 'raw/trip_data_green_csv/**',
+	DATA_SOURCE = nyc_taxi_src,
+	FILE_FORMAT = csv_file_format_pv1,
+	REJECT_VALUE = 10,
+	REJECTED_ROW_LOCATION = 'rejections/trip_data_green_csv'
+);
+
+-- PARQUET:
+
+-- Create external file format for parquet file format
+IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'parquet_file_format')
+  CREATE EXTERNAL FILE FORMAT parqeut_file_format
+  WITH (
+	FORMAT_TYPE = PARQUET,
+	DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'
+	);
+
+-- DELTA:
+
+-- Create external file format for Delta file format
+IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'parquet_file_format')
+  CREATE EXTERNAL FILE FORMAT parqeut_file_format
+  WITH (
+	FORMAT_TYPE = DELTA,
+	DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'
+	);
+
+Example:
+IF OBJECT_ID('bronze.trip_data_greenn_delta') IS NOT NULL
+  DROP EXTERNAL TABLE bronze.trip_data_green_delta;
+
+CREATE EXTERNAL TABLE bronze.trip_data_green_delta
+(
+
+)
+WITH (
+	LOCATION = 'raw/trip_data_green_delta',
+	DATA_SOURCE = nyc_taxi_src,
+	FILE_FORMAT = delta_file_format
+);
+
+-- Process multi line file
+SELECT rate_code_id, rate_code
+FROM OPENROWSET(
+	BULK 'rate_code_multi_line.json',
+	DATA_SOURCE = 'nyc_taxi_data_raw',
+	FORMAT = 'CSV',
+	FIELDTERMINATOR = '0x0b'
+	FIELDQUOTE = '0x0b'
+	ROWTERMINATOR = '0x0b'
+)
+WITH
+(
+	jsonDoc NVARCHAR(MAX),
+) AS rate_code
+CROSS APPLY OPENJSON()
+WITH(
+  rate_code_id TINYINT,
+  rate_code VARCHAR(20)
+);
+GO
+
+
+******************************************** Create View of JSON files, Partition Pruning ******************************************** 
+
+-- Create view for JSON files
+DROP VIEW IF EXISTS bronze.vw_rate_code
+GO
+
+CREATE VIEW bronze.vw_rate_code
+AS
+SELECT rate_code_id, rate_code
+FROM OPENROWSET(
+	BULK 'raw/rate_code.json',
+	DATA_SOURCE = 'nyc_taxi_src',
+	FORMAT = 'CSV'	
+	FIELDTERMINATOR = '0x0b',
+	FIELDQUOTE = '0x0b',
+	ROWTERMINATOR = '0x0b'
+)
+WITH
+(
+  jsonDoc NVARCHAR(MAX)
+) AS rate_code
+CROSS APPLY OPENJSON()
+WITH(
+  rate_code_id TINYINT,
+  rate_code VARCHAR(20)
+);
+GO
+
+SELECT * FROM bronze.vw_rate_code
+GO
+
+
+partition purning in Section - 11 and episode 65
+
+
+
+
+
+
+
+
+
+

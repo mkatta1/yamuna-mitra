@@ -1,0 +1,1218 @@
+Mean and Variance of Random Variables
+http://www.stat.yale.edu/Courses/1997-98/101/rvmnvar.htm
+
+==================================================================================
+
+			
+=====================   A*SEARCH     =============================================
+N Puzzle is a sliding blocks game that takes place on a k * k grid with ((k * k) - 1) tiles each numbered from 1 to N. Your task is to reposition the tiles to their proper order.
+
+Input Format
+------------
+The first line of the input contains an integer k, the size of the square grid. k * k lines follow each line containing an integer I on the tile starting from the top left to bottom right. The empty cell is represented by the number 0.
+
+N = (k * k) -1
+0 <= I <= N
+
+Constraints
+-----------
+3 <= k <= 5
+
+Output Format
+-------------
+The first line contains an integer, M, the number of moves your algorithm has taken to solve the N-Puzzle. M lines follow. Each line indicating the movement of the empty cell (0).
+
+A grid is considered solved if it is of the following configuration.
+
+0 1 2
+3 4 5
+6 7 8
+
+Sample Input
+-----------
+3
+0
+3
+8
+4
+1
+7
+2
+6
+5
+
+Sample Output
+------------
+70
+RIGHT
+DOWN
+...
+...
+...
+
+Explanation
+------------
+The board given as input is
+
+0 3 8
+4 1 7
+2 6 5
+After RIGHT, the board's configuration is
+
+3 0 8
+4 1 7
+2 6 5
+
+Task
+----
+Print all the moves made from the given configuration to the final solved board configuration.
+
+Scoring
+-------
+On successfully solving the puzzle, your score will be k * k.
+
+EXPLANATION:
+-----------
+After comparing different heuristics, I found that the best performance was given by this cost function
+
+steps_from_start + manhattan_dist + sqrt(nb_misplaced)
+steps_from_start: length of path taken until current state
+manhattan_dist: distance between each cell's position versus end position.
+nb_misplaced: number of tiles incorrectly placed
+Solved in 20 moves after finding 667 states and navigating through 396 of them.
+
+----
+When I run my code, my output shows up in the "Output" column beside the input in the "Input" column briefly, but then it all disappears and an empty "Error" box appears while the puzzle animation continues. Once the animation finishes showing the 24 moves output by my program (which solve the puzzle), it says "You have lost the game". As expected, when I submitted my code, I lost all 6 games. I'm not sure why the "Error" box appears and why it's empty and I assume that this is preventing my program from winning the game.
+
+Any ideas about what I should do? Thank you!
+
+(fyi I used A* graph search with the number of misplaced tiles as the heuristic)
+
+---------------
+Awesome :D I was able to solve the first test case in 20 moves :D
+
+Heuristics = Manhatan Distance of each cell + number of moves done so far
+
+I actually dont know why I need misplaced tiles as a hueristics. Manhattan distance seems sufficient enough
+----------------
+other explanation youtube videos:
+---------------------------------
+
+https://www.youtube.com/watch?v=W9zSr9jnoqY
+https://www.youtube.com/watch?v=ySN5Wnu88nE
+
+
+CODE1:
+-----
+https://youtu.be/XG5ZE11vFvc
+
+from matplotlib import animation
+def sliding_blocks_animation(solution):
+    image = np.zeros((k,k))
+    labels = range(k)
+    
+    fig, ax = plt.subplots()
+    plt.xticks(labels, labels)
+    plt.yticks(labels, labels)
+    
+    grid = ax.matshow(image, cmap = 'Pastel1_r')
+
+    def animate(i=0):
+        image = np.array(solution.states[i]).reshape((k,k))
+        ax.texts = []
+        for (i,j), z in np.ndenumerate(image):
+            if z != 0:
+                ax.text(j,i,z, ha ='center', va='center', fontsize=24)
+        return (ax.matshow(image, cmap='Pastel1_r'), )
+
+  anim = animation.FuncAnimation(fig, animate, init_func=animate,
+                                 frames=len(solution.states), interval=7,
+                                 blit=True, repeat=False)
+  return anim
+
+
+CODE2:
+------
+
+import random
+from IPython.display import HTML
+
+endgame = range(9)
+blocks = list(range(9))
+random.shuffle(blocks)
+
+print('Initial state of sliding blocks game:')
+draw_cells(blocks)
+print('Expected end game')
+draw_cells(endgame)
+
+solution = ida_star(Puzzle(blocks))
+anim = sliding_blocks_animation(solution)
+HTML(anim.to_html5_video())
+
+=================== Probability & Statistics - Foundations ===================
+ 
+1. Basic Probability Puzzles #1
+-------------------------------
+Objective
+In this challenge, we practice calculating probability.
+
+Task
+In a single toss of 2 fair (evenly-weighted) 6-sided dice, find the probability of that their sum will be at most 9.
+
+Output Format
+
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like: 3/4
+
+CODE:
+----
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from fractions import Fraction
+
+max_num = 9
+count = 0
+total_combinations = 6**2
+dice = range(1, 7)
+
+for die_1 in dice:
+    for die_2 in dice:
+        dice_sum = die_1 + die_2
+        if dice_sum <= max_num:
+            count += 1
+
+print(str(Fraction(count, total_combinations)))
+
+
+==================================================================================
+Basic Probability Puzzles #2
+----------------------------
+Task
+----
+For a single toss of 2 fair (evenly-weighted) dice, find the probability that the values rolled by each die will be different and their sum is 6.
+
+Output Format
+-------------
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+
+from fractions import Fraction
+
+count = 0
+
+def func(count):
+    for i in range(1, 7, 1):
+        for j in range(1, 7, 1):
+            if (i != j) and (i + j) == 6:
+                count += 1
+    
+    return Fraction(count, 6*6)
+
+
+print(func(count))
+
+===============================================================================
+Basic Probability Puzzles #3
+----------------------------
+
+In this challenge, we practice calculating probability.
+
+Task
+There are 3 urns: X, Y and Z.
+
+Urn  contains 4 red balls and 3 black balls.
+Urn  contains 5 red balls and 4 black balls.
+Urn  contains 4 red balls and 4 black balls.
+One ball is drawn from each urn. What is the probability that the 3 balls drawn consist of 2 red balls and 1 black ball?
+
+Output Format
+
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from fractions import Fraction
+
+p1 = ['r']*4 + ['b']*3
+p2 = ['r']*5 + ['b']*4
+p3 = ['r']*4 + ['b']*4
+
+combo = []
+visited = 0
+
+for i in p1:
+    for j in p2:
+        for k in p3:
+            temp = [i, j, k]
+            count_r = temp.count('r')
+            count_b = temp.count('b')
+            if (count_r==2) and (count_b==1):
+                combo.append(temp)
+                
+            visited += 1
+
+print(Fraction(len(combo), visited))
+
+==================================================================================
+
+Basic Probability Puzzles #4:
+=============================
+
+In this challenge, we practice calculating probability.
+
+Task
+Bag1 contains 4 red balls and 5 black balls.
+Bag2 contains 3 red balls and 7 black balls.
+
+One ball is drawn from the Bag1, and 2 balls are drawn from Bag2. Find the probability that 2 balls are black and 1 ball is red.
+
+Output Format:
+-------------
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+
+import math
+
+# setup situation
+bag1 = ['r']*4 + ['b']*5    # 1 pick
+bag2 = ['r']*3 + ['b']*7    # 2 picks
+                            # b b r
+
+# initialize counting variables
+numerator = 0
+denominator = 0
+
+# collect event occurrences
+for X in bag1:  # 1 pick from bag1
+    
+    for Y1 in bag2:  # 1 pick from bag2
+        bag2reduced = bag2.copy()  # create a COPY of bag2
+        bag2reduced.remove(Y1)  # remove already picked element from COPY of bag2
+        
+        for Y2 in bag2reduced:  # 1 pick from EDITED bag2
+            tup = (X, Y1, Y2)  # event
+            
+            if all([tup.count('r') == 1,
+                    tup.count('b') == 2]):  # conditions of interest
+                numerator += 1
+            
+            denominator += 1
+
+gcd = math.gcd(numerator, denominator)
+
+numerator //= gcd
+denominator //= gcd
+
+print(f'{numerator}/{denominator}')
+
+================================================================================
+
+Basic Probability Puzzles #5:
+=============================
+In this challenge, we practice calculating probability.
+
+Task
+There are 10 people about to sit down around a round table. Find the probability that 2 particular people will sit next to one another.
+
+Output Format
+--------------
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+
+
+
+
+
+================================================================================
+
+Basic Probability Puzzles #6:
+=============================
+In this challenge, we practice calculating probability.
+
+Task
+Bag X contains 5 white balls and 4 black balls. Bag Y contains 7 white balls and 6 black balls. You draw 1 ball from bag X and, without observing its color, put it into bag Y. Now, if a ball is drawn from bag Y, find the probability that it is black.
+
+Output Format:
+-------------
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+
+from fractions import Fraction
+
+X = ['w']*5 + ['b']*4
+Y = ['w']*7 + ['b']*6
+count=0
+visited=0
+
+for i in X:
+    tem=Y+[i]
+    #print(tem)
+    for j in tem:
+        if j=="b":
+            count+=1
+        visited+=1
+        
+print(Fraction(count,visited))
+
+================================================================================
+
+Basic Probability Puzzles #7:
+=============================
+In this challenge, we practice calculating probability.
+
+Task
+A firm produces steel pipes in three plants.
+
+Plant A produces 500 units per day and has a fraction defective output of 0.005.
+Plant B produces 1000 units per day and has a fraction defective output of 0.008.
+Plant C produces 2000 units per day and has a fraction defective output of 0.010.
+
+At random, a pipe is selected from the day’s total production and it is found to be defective. What is the probability that it came from plant A?
+
+Output Format
+-------------
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+================================================================================
+
+Basic Probability Puzzles #8:
+=============================
+Task
+In a certain city, the probability of a resident not reading the morning newspaper is 1/2, and the probability of a resident not reading the evening newspaper is 2/5. The probability they will read both newspapers is 1/5.
+
+Find the probability that a resident reads a morning or evening newspaper.
+
+Output Format
+
+In the editor below, submit your answer as Plain Text in the form of an irreducible fraction A/B, where A and B are both integers.
+
+Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+
+import fractions
+probM = fractions.Fraction(1,2) #prob of reading M
+probE = fractions.Fraction(3,5) #prob of reading E
+probB = fractions.Fraction(1,5) #prob of reading both
+
+print(probM + probE - probB)
+
+================================================================================
+
+Basic Probability Puzzles #9:
+=============================
+
+A candidate is selected for interview of management trainees for 3 companies. For the first company, there are 12 candidates, for the second there are 15 candidates and for the third, there are 10 candidates. Find the probability that he is selected in at least one of the companies. Assume that 1 candidate will be selected in each of the interviews, and all candidates appearing for the interview have an equal probability of getting selected.
+
+Fill in the answer in the text box, in the form of an irreducible fraction A/B where A and B are two integers.
+
+e.g. Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+Therea are two approaches, leading to the same solution
+
+P(A or B or C) = P (A) + P(B) + P(C) - P(A and B) - P(A and C) - P(B and C) + P( A and B and C)
+
+For proof, see:
+
+https://math.stackexchange.com/questions/1291012/how-to-proof-formula-for-general-addition-rule-of-three-events
+
+or obviously simpler, as most people here seem to have done : 1 - P(not A)*P(not B)*P(not C)
+
+================================================================================
+
+Basic Probability Puzzles #10:
+=============================
+
+Bill and Nina appear for an interview for two vacancies. The probability of Bill’s selection is 1/3 and that of Nina’s selection is 1/5. Find the probability that only one of them will be selected.
+
+Fill in the answer in the text box, in the form of an irreducible fraction A/B where A and B are two integers.
+
+e.g. Your answer should resemble something like:
+
+3/4  
+
+CODE:
+----
+(1/3 * 4/5) + (2/3 * 1/5) = 2/5
+
+P(Aw)=probability of A wining P(Bw)=probability of B wining P(1 - Aw)=probability of A not wining P(1 - Aw)=probability of B not wining
+
+P(Aw)*P(1-Bw) + P(Bw)*P(1-Aw)=2/3
+
+================================================================================
+
+Correlation and Regression Lines #1:
+===================================
+In this challenge, we practice calculating the correlation between two elements.
+
+Resources
+--------
+Here are some useful articles explaining the relationship between  and the slopes of the regression lines.
+
+Correlation and R-squared
+Khan Academy tutorial about the coefficient of determination
+Formula: r^2 = b-xy * b-yz where the symbols used are the standard ones, given the context.
+
+Task:
+----
+For a particular scatter plot, the line of regression of y  on x is:
+3x + 4y + 8 = 0
+
+And the line of regression of x on y is:
+4x + 3y + 7 = 0
+
+Find the Pearson Product moment coefficient, r, correct to a scale of 2 decimal places.
+
+Output Format
+-------------
+Your answer should be a single floating point/decimal number, correct to a scale of 2 decimal places. You can submit solutions in either of the  following ways:
+
+Solve the problem manually and submit your result as Plain Text. In the text box below, enter a single floating point/decimal number.
+Submit an R or Python program, which uses the above parameters (hard-coded), then computes and prints the score.
+Your answer should follow the format below, and must not contain any extra white space or newline characters:
+
+4.23
+
+CODE:
+----
+
+import math
+
+byx = -3/4 bxy = -3/4
+
+result = math.sqrt(byx*bxy)
+
+print(round(-1*result, 2))
+
+for every time that we have a positive correlation coefficient, the slope of the regression line is positive.
+in the formula a = r(sy/sx) since sy and sx will always be +ve a will have same sign as corr. coeff.
+
+
+I found Wikipedia's "geometric interpretation" to be helpful here, i.e. r² = 1/cos(delta) - tan(delta) where delta is the angle between the given regression lines. https://en.wikipedia.org/wiki/Pearson_product-moment_correlation_coefficient#Geometric_interpretation
+
+(Delta is easy to calculate from the y = f(x) = ax + b form of both regression lines, as a = tan(alpha) where alpha is the angle of the function w.r.t. the x axis)
+
+Personal pitfalls: forgetting to get the square root, forgetting to consider the sign (+ or -) of the result.
+
+
+The way to use simulation is adding information to the problem. I think the key point to this question is to understand the math behind linear regression and the Peason correlation. From the problem statement, we know that y= -3/4*x-2 +e (1); and x=-3/4*y -7/4 +e (2). The linear regression coefficient beta is Sxy/Sxx ( in y=beta*x+e format), where S regresents (summation of the difference.....please check the linear regression lecture notes). So, applying the regular beta formular to our problem, we get Sxy/Sxx= -3/4 from (1) ......(3); and Syx/Syy=-3/4 from (2) ........(4); Recall that the Peason corelation is: r=Sxy/(sqrt(Sxx)*sqrt(Syy)) Here Sxy=Syx. So, if we multiply (3) and (4) and sqrt the result, we get: sqrt(Sxy*Syx/(Sxx*Syy))=r=+ or - 3/4. Since y and x are negtive corellated based on the negative beta, we get the r = -0.75.
+
+Please excuse me if there are some types.
+
+
+================================================================================
+
+Correlation and Regression Lines #2:
+===================================
+
+Task:
+-----
+There are 2 series of data involving index numbers: P for price index and S for the commodity stock.
+The mean and standard deviation of P are 100 and 8, respectively.
+The mean and standard deviation of S are 103 and 4, respectively.
+The R^2 correlation coefficient between the two series is 0.4.
+
+With this data, obtain the slope of the regression line of P on S, correct to a scale of 2 decimal places.
+
+Output Format:
+-------------
+Your answer should be a single floating point/decimal number, correct to a scale of 2 decimal places. You can submit solutions in either of the  following ways:
+
+Solve the problem manually and submit your result as Plain Text. In the text box below, enter a single floating point/decimal number.
+Submit an R or Python program, which uses the above parameters (hard-coded), then computes and prints the score.
+Your answer should follow the format below, and must not contain any extra white space or newline characters:
+
+1.14
+
+
+We need slope = Sps/Sss. We know: R^2 = 0.4 = (Sps)/(Sss * Spp).
+
+We also have: Sss = (standard deviation of S)^2 = (4)^2 and Spp = (standard deviation of P)^2 = (8)^2.
+
+We need Sps = (deviation between S and P), which we must solve for.
+
+Solving for Sps from the R^2 equation above gives: Sps = (Sss * Spp) * R^2 = (4^2 * 8^2 * 0.4)
+
+Finally: Slope = Sps/Sss = (4^2 * 8^2 * 0.4)/(4^2) = 1.26. Which is the answer.
+
+
+I appreciate the explanation, but I'm still having trouble. I'm not sure where you got the formula for R^2 from. Normally, the formula given for R^2 = 1 - SSErrors/SSTotal However, you're saying that R^2 = (deviation between S&P)/(SD(P)*SD(P))
+
+I'm also not sure where the formula for the slope comes from. It's given as r*(SD(P)/SD(S))
+
+CODE:
+-----
+import math
+
+def b_from_correlation_formula(r_squared, std_x, std_y):
+    corr = math.sqrt(r_squared)
+    b_x = corr * std_y / std_x
+    return b_x
+
+def b_from_covariance_formula(r_squared, std_x, std_y):
+    corr = math.sqrt(r_squared)
+    cov_xy = corr * std_x * std_y
+    b_x = cov_xy / (std_x ** 2)
+    return b_x
+
+method = 0
+    
+if method == 0:
+    b_x = b_from_correlation_formula(0.4, 4, 8)
+else:
+    b_x = b_from_covariance_formula(0.4, 4, 8)
+       
+
+print(f'{b_x:.2f}')
+
+================================================================================
+
+Correlation and Regression Lines #3:
+===================================
+
+The two regression lines of a bivariate distribution are: 4x – 5y + 33 = 0 and 20x – 9y – 107 = 0. Calculate the arithmetic means of x and y respectively. (Both of these are integer values.)
+
+Output Format
+In the text box, enter the two integers corresponding to the means of x and y, each on a new line.
+
+Explanation:
+-----------
+
+we know that, if Y=a+bX :
+
+b=Y_mean - slope*X_mean
+
+So:
+
+Eq1=> X=5/4Y-30/3 => -30/4 = X_mean-5/4Y_mean
+
+Eq2=>Y=20/9X-107/9=> -107/9 =Y_mean-20/9X_Mean
+
+Solve system of Two equations: 33=5Y_mean-4X_mean 107=20X_mean-9Ymean
+
+X=13 , Y=17
+
+It seems very useful the following article: http://www.le.ac.uk/users/dsgp1/COURSES/LEISTATS/Lecture6.pdf (Section - REGRESSION AND CONDITIONAL EXPECTATIONS).
+
+Here we have two regression lines, y = alfa + beta * x after calculations (see the above link) alpha(beta) = Mean_y - beta * Mean_x. The issue is that we have two unknown variables (means) so we need two 'clues' => here come the two equations.
+
+The same sample set of observations (x,y) has these two regression lines. Don't consider them optimal, they are two correlations. For each of them apply the method of moments (alfa=Mean_y - beta * Mean_x): "The justification of this estimation procedure, which is know as the method of moments, is that, in many of the circumstances under which the sample is liable to be generated, we can expect the sample moments to converge to the true moments of the bivariate distribution, thereby causing the estimates of the parameters to converge likewise to their true values" (per cited article).
+
+CODE:
+----
+
+================================================================================
+
+The Central Limit Theorem #1:
+===================================
+
+In this challenge, we practice solving problems based on the Central Limit Theorem.
+
+Task
+----
+A large elevator can transport a maximum of 9800 pounds. Suppose a load of cargo containing 49 boxes must be transported via the elevator. The box weight of this type of cargo follows a distribution with a mean of µ = 205 pounds and a standard deviation of SIGMA = 15 pounds. Based on this information, what is the probability that all 49 boxes can be safely loaded onto the freight elevator and transported?
+
+Output Format
+-------------
+Your output must be a floating point/decimal number, correct to a scale of 4 decimal places. You can submit solutions in either of the 2 following ways:
+
+Solve the problem manually and submit your result as Plain Text. In the text box below, enter a single floating point/decimal number.
+
+Submit an R or Python program, which uses the above parameters (hard-coded), and computes the answer.
+
+Your answer should resemble something like:
+
+0.1234
+
+EXPLANATION:
+-----------
+
+p(xmean<=200)=P(Z<=(200-205)/(15/7))=P(Z<=-7/3) and find the corresponding probability in R pnorm(-7/3) is 0.0098
+
+The central limit theorem states that for a large number of independent random variables, the mean of their sum will approach the mean of the sum of the individual random variables as the number of random variables increases.
+
+In case of a collection of independent random variables X-i where E(X-i)= µ-I and Var(X-i)= SIGMA^2(-i) then the average of the sum is µ + SIGMA/sqrt(n) where n is the number. 
+
+weight of each box(X) = 9800 / 49 = 200
+u = 205
+sigma = 15
+n = 49
+sample_sigma = 15/7 = 2.1428
+prob(X < 200) = 200-205 / 2.1428 = -2.33
+z(X < 2.33) = 1 - 0.99010 = 0.0099
+
+ computing the solution via the CDF of  results in 0.0098 which is not accepted as the correct answer.
+
+0.0099 is right
+================================================================================
+
+The Central Limit Theorem #2:
+===================================
+Task
+The number of tickets purchased by each student for the University X vs. University Y football game follows a distribution that has a mean of 
+µ = 2.4 and a standard deviation of SIGMA = 2.0.
+
+Suppose that a few hours before the game starts, there are 100 eager students standing in line to purchase tickets. If there are only 250 tickets left, what is the probability that all 100 students will be able to purchase the tickets they want?
+
+Output Format
+------------
+Your output must be a floating point/decimal number, correct to a scale of 4 decimal places. You can submit solutions in either of the 2 following ways:
+
+Solve the problem manually and submit your result as Plain Text. In the text box below, enter a single floating point/decimal number.
+
+Submit an R or Python program, which uses the above parameters (hard-coded), and computes the answer.
+
+Your answer should resemble something like:
+
+0.1234
+
+EXPLANATION:
+-----------
+
+- Since tickets only come in whole numbers but the normal distribution applies to all real numbers, the continuity correction ought to be applied in this situation. The actual correct answer OUGHT to be the Normal CDF of (250.5 - 100*2.4)/(sqrt(100)*2)
+
+- One can further argue any student can only buy a min of zero and a max of 250 tickets; and the formula be adjusted for that. In any case, rounding to 4 decimal places would yield no difference in the submitted answer.
+
+- At four decimal places, the difference is a rather noticable 0.0087. Anyone who does this problem correctly (to more than one decimal place) will be awarded "Wrong Answer"!
+
+As a former teacher of statistics, this error, which I hope none of MY former students would make, is decidedly annoying.
+
+[[Teaching Mode ON]]
+
+There is some discrete probability distribution for the number of tickets which these 100 students will wish to buy. That is, there is a number representing the probability that 100 students will want 100 tickets, and another number for 101 tickets, yet another number (probably very close to zero) for zero tickets. But no number for 100.2 tickets. - Noone will ask to buy one fifth of a ticket! (Or rather the probability of that is so small that we will ignore it.)
+
+The central limit theorem tells us that the average number of tickets demanded will be 2.4×100 = 240, with a standard deviation of 2.0×√100 = 20. It also tells us that the actual distribution will be "approximately" normal. But the normal distribution is continuous, not discrete. A discrete distribution which closely approximates the normal distribution is obtained by taking the normal probability of a value between N-0.5 and N+0.5 as the discrete probability of a value exactly equal to N. (Many discrete distributions arise in exactly this way when observed values are rounded off for reporting.) The probability that exactly 250 tickets are demanded would then be approximately
+
+    Norm.CDF((250.5-240)/20) - Norm.CDF((249.5-250)/20)
+
+while the probability of exactly 249 tickets is approximately
+
+    Norm.CDF((249.5-240)/20) - Norm.CDF((248.5-250)/20)
+
+et cetera. So the correct approximation for the probability that 250 or fewer tickets are demanded telescopes to: Norm.CDF((250.5-240)/20) rather that the the mistake which is currently being accepted.
+
+[[Teaching Mode OFF]]
+
+
+----
+Again, python3 (using scipy.stats) yields the correct solution ( 0.6915) but rejected by the checker.
+
+- to multiply the sample's standard deviation by the population. Multiply the sample standard derviation by the square root of the population, i.e. sqrt(100), which has a product of 20.
+
+-
+
+================================================================================
+
+The Central Limit Theorem #3:
+===================================
+
+You have a sample of 100 values from a population with mean µ = 500 and with standard deviation σ = 80. What is the probability that the sample mean will be in the interval (490, 510)?
+
+Submission Modes and Output Format
+You may either solve the problem on pen-and-paper and submit the final answer in the text box, or you may submit an R or Python program to accomplish the above task. Your output should be a floating point/decimal number, correct to 4 places of decimal.
+
+In the text box below, enter a floating point/decimal number, correct to 4 places of decimal.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+0.1234
+
+EXPLANATION:
+-----------
+- solution with scipy.stats yields 0.7887, deemed incorrect by the checker.
+- n = 100
+s = 80
+u = 500
+sample_s = 80/10 = 8
+p(490
+p(x<510) = (510-500)/8 = 10/8 = 1.25
+p(-1.25
+
+- n = 100 s = 80 u = 500 sample_s = 80/10 = 8 e are given µ = 500, σ = 80, n = 100. a. P(490 < x <¯ 510) = P((490−500)/(√80/100)< z < (490−500)/(√80/100)) = P(−1.25 < z < 1.25) = 0.8944 − (1 − 0.8944) = 0.7888.
+
+- According to CTG, if you have X1...Xn independent variables with same distribution (here it's N(500,80)), their mean X has a normal distribution N( µ; σ/sqrt(n)) (sorry, can't write proper math symbols in browser) So in this case we have µ = 500, σ = 80, sqrt(n) = 10. So mean of X has the distribution of N(500;8)
+
+Now once you have a distribution, you need to calculate P(490 < mean X < 510) Once you normalize, it's P (-1.25 < Z < 1.25). That should be easy to calculate
+
+CODE:
+----
+import math
+
+def cdf(x, mu, sigma):
+    return 0.5 + math.erf((x-mu)/(sigma*2**0.5))*0.5
+
+n_samples=100
+lower_bound = 490
+upper_bound  =510
+population_mu = 500
+population_sigma = 80
+
+sample_mean_mu=population_mu
+sample_mean_sigma=population_sigma/n_samples**0.5
+
+Prob_l = cdf(lower_bound, sample_mean_mu, sample_mean_sigma)
+Prob_u = cdf(upper_bound, sample_mean_mu, sample_mean_sigma)
+
+print('{:0.4f}'.format(Prob_u-Prob_l))
+
+
+================================================================================
+
+Poisson Distribution #1:
+========================
+A random variable X follows Poisson distribution with mean 2.5, find the probability with which the random variable X is equal to 5; i.e. P(X = 5).
+
+Submission Modes and Output Format
+
+You may submit either an R or Python program to accomplish the above task, or solve the problem on pen-and-paper. Your output should be a floating point/decimal number, correct to 3 places of decimal.
+
+In the text box below, enter a floating point/decimal number, correct to 3 places of decimal.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+0.123
+
+EXPLANATION:
+-------
+- P(x=5) should be zero (or infinitely small). Also, we are not given upper or lower bounds for this distribution (i.e. what is the standard deviation?)
+
+- Shouldn't we need to subtract the upper-tail probability X>=6?
+	- The problem asks for the P[X=5]. It seems you are trying to answer P[X<=5] instead.
+
+- Shouldn't we need to subtract the upper-tail probability X>=6?
+	- The problem asks for the P[X=5]. It seems you are trying to answer P[X<=5] instead.
+
+
+CODE:
+----
+from scipy.stats import poisson
+poisson.pmf(k=5, mu=2.5)
+0.0668
+
+================================================================================
+
+Poisson Distribution #2:
+========================
+
+The manager of a industrial plant is planning to buy a machine of either type A or type B. For each day’s operation the number of repairs X, that the machine A needs is a poisson random variable with mean 0.88. The daily cost of operating A is
+
+CA = 160 + 40 ∗ X2
+For machine B, let Y be the poisson random variable indicating the number of daily repairs, which has mean 1.55, and the daily cost of operating B is
+
+CB = 128 + 40 ∗ Y2 
+Assume that the repairs take negligible time and each night the machine are cleaned so that they operate like new machine at the start of each day. What is the expected daily cost of each machine ?
+
+Submission Modes and Output Format
+
+You may submit either an R or Python program to accomplish the above task, or solve the problem on pen-and-paper. Your output should be two floating point/decimal numbers(as answers to 1st and 2nd questions respectively), correct to 3 places of decimal.
+
+In the text box below, enter two floating point/decimal numbers(as answers to 1st and 2nd questions respectively), correct to 3 places of decimal.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+9.123
+8.345
+
+EXPLANATION:
+-----------
+
+https://www.cimt.org.uk/projects/mepres/alevel/stats_ch6.pdf
+
+-----
+Using the equation of variance Var[X] = E[X^2] - E[X]^2 -> equation(1)
+
+For a Poisson distribution, Var[X] = E[X] -> equation(2)
+
+we can rewrite equation(1) as
+
+E[X^2] = Var[X] + E[X]^2
+
+or E[X^2] = E[X] + E[X]^2 -> From equation(2)
+
+On substituting these values in the cost equation we get 226.176 and 286.100
+
+-----
+- To get expected daily cost of each machine, take expectation of each cost equation. As we are considering poission distribution, expectation and variance are equal, use this property while solving that equation. For Ca = E(160+40*x^2) = 160 + 40(E(x^2)) = 160 + 40(V(x)+E(x)^2) solve it, use E(X)=0.88, for machine A, same for machine B.
+	- Thanks, worked. I would have not know to expand x^2 into V(x) + E(x)^2, is this a poissoin distribution property?
+	- NO..Not poission property..but Eqn of variance: V(x)=E(X^2)-(E(x))^2 I used this to get E(x^2)
+
+- That's my solution too, but if I substitute E(X)=0.88 I get E[Ca]=160+40(0.88+0.88^2)=226.176. And similar with E[Y]=1.55, for E[Cb]=128+40(1.55+1.55^2)=286.1. But my answer is not accepted. Any idea what could be wrong here?
+
+	- I think you should give your answer with 3 decimal places, so it would be 286.100
+
+================================================================================
+
+Poisson Distribution #3:
+========================
+The number of calls coming per minute into a hotels reservation center is Poisson random variable with mean 3.
+
+(a) Find the probability that no calls come in a given 1 minute period.
+
+(b) Assume that the number of calls arriving in two different minutes are independent. Find the probability that atleast two calls will arrive in a given two minute period.
+
+Submission Modes and Output Format
+----------------------------------
+You may submit either an R or Python program to accomplish the above task, or solve the problem on pen-and-paper. Your output should be two floating point/decimal numbers(as answers to 1st and 2nd questions respectively), correct to 3 places of decimal.
+
+In the text box below, enter two floating point/decimal numbers(as answers to 1st and 2nd questions respectively), correct to 3 places of decimal.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+9.123
+8.345
+
+EXPLANATION:
+--------------
+print("0.050") instead of print("0.05")
+
+- I am getting the below answer for 2nd question which differs from manually calclating instead of R.
+
+Using R 1-((ppois(q=0,lambda = 3)*ppois(q=0,lambda = 3))+(ppois(q=1,lambda = 3)*ppois(q=0,lambda = 3))+(ppois(q=1,lambda = 3)*ppois(q=0,lambda = 3))) [1] 0.9776912
+
+Manual Calculation: 1 − 7e^(−6) = 0.9826487
+
+Please let me know if there is difference of understanding from my side.
+	- The value of ppois(q=0,lambda = 3) is exp(-3) as expected. However the value of ppois(q=1,lambda = 3) seems equal to (4 * exp(-3)), instead (3 * exp(-3)).
+
+	If I changed ppois into dpois, I seem to get the correct result.
+The values have to be rounded to 3rd decimal digit, not truncated.
+this excercise fails to accept valid R command for the first number.
+I was able to do it with sprintf("%.3f", round(x,3)) but I find this annoying
+
+- The values have to be rounded to 3rd decimal digit, not truncated.
+I was able to do it with sprintf("%.3f", round(x,3)) but I find this annoying
+
+- The problem asks for 3 decimal places of precision. An answer x.yzw where x,y,z, and w are decimal digits might be a solution because it has 3 decimal places of precision. But x.yz is not a solution regardless if z=0 or not because x.yz has 2 decimal places of precision.
+
+In other words, x.yz0 is not the same as x.yz. If you write x.yz0 it means you are pretty confident about z. If you write x.yz it means you are pretty confident of y but not about z. That's the main point.
+
+================================================================================
+
+Poisson Distribution #5:
+========================
+
+The number of misprints on a page of The Economic Times has a Poisson distribution with mean 1.2. Find the probability that the number of errors -
+
+on page 10 is 2;
+on page 1 is less than 3;
+on first ten pages totals 5;
+on all forty pages adds up to at least 3.
+Submission Modes and Output Format
+
+You may submit either an R or Python program to accomplish the above task, or solve the problem on pen-and-paper. Your output should be four floating point/decimal numbers, correct to 3 places of decimal.
+
+In the text box below, enter four floating point/decimal numbers as answers to the four questions.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+9.123
+8.123
+7.123
+6.124
+
+CODE:
+----
+
+import math
+def fact(n):
+    return 1 if n == 0 else n*fact(n-1)
+def poi(k,lam):
+    return ((lam**k)*(math.exp(-lam)))/(fact(k))
+
+#1
+lam = 1.2
+print(round(poi(2,1.2),3))
+
+#2
+print(round(poi(0,1.2) + poi(1,1.2) + poi(2,1.2),3))
+#or
+k = 2; lam = 1.2
+round(sum([poi(x,lam) for x in range(0,k+1)]),3)
+
+#3
+lam = 12; k = 5 
+print(round(poi(k,lam),3))
+
+#4
+k = 40; lam = 1.2
+print(round(sum([poi(x,lam) for x in range(0,k+1)]),3))
+
+
+EXPLANATION:
+-----------
+Interesting, I solved with 0.217 0.879 0.013 1.000
+Wondering why 2 of our results differ by 0.001..
+
+- This is not a super hard problem if you know how independent poissons add together. For example if x and y are independent poisson variables with mean z. Then P(x+y)=n is the same as a poisson variable with mean 2*z.
+
+
+================================================================================
+Standard Deviation Puzzles #1
+=============================
+
+Find the largest possible value of N where the standard deviation of the values in the set {1,2,3,N} is equal to the standard deviation of the values in the set {1,2,3}.
+
+Output the value of N, correct to two decimal places.
+
+Output Format
+-------------
+Your output must be a floating point/decimal number, correct to a scale of 2 decimal places. You can submit solutions in either of the 2 following ways:
+
+Solve the problem manually and submit your result as Plain Text.
+
+Submit an R or Python program, which uses the above parameters (hard-coded), and computes the answer.
+
+Your answer format should resemble something like:
+
+4.23
+
+
+EXPLANATION:
+-----------
+
+You can also do this calculation algebraically using the deffinition of the Standard deviation. You'll end up with a quadratic expression in terms of N which solves nicely using the quadratic formula, or by a program utilizing newtons method for finding zero's on a function
+
+- This challenge uses the uncorrected definition of the variance which could be appropriate in certain situation, but most of the time this yield to a biaised answer. So, if you have any problem, try 1/N instad of 1/(N-1).
+- The mean of the set {1,2,3,N} is (1+2+3+N)/4
+
+CODE:
+----
+import numpy as np
+
+arr = [1.0, 2.0, 3.0]
+
+std = round(np.std(arr),2)
+
+print('Standard Deviation of ', arr, 'is', std)
+print()
+
+num = 0.0
+for i in range(1,100001):
+  num = round(num + 0.01, 2)
+  arr.append(num)
+  res_std = round(np.std(arr), 2)
+  if res_std == std:
+    res = num
+  arr.pop()
+print(res)
+
+----
+n = np.array([1, 2, 3])
+n.std() --> 0.82
+n2 = np.random.normal(loc = 2, scale = 0.82, size = 4)
+n2.max() --> 2.97
+n2 = np.array([1, 2, 3, 2.97])
+n2.std() --> 0.82
+
+```````````````````````````````````
+x1 = 1, x2 = 2, x3 = 3, x4 = ?
+
+Original stats
+
+E0 = sum(xi) / 3, i=1..3 => E0 = 2
+
+VAR0 = sum(xi - E0)^2 / 3, i=1..3 => VAR0 = 0.6(6)
+
+Unknown stats
+
+E1 = (3E0 + x4) / 4 = (x4 + 6) / 4
+
+VAR1 = sum(xi - E1)^2 / 4 = (3x4^2 + 12x4 + 20) / 16
+
+IF VAR0 == VAR1:
+
+x4 = 1.06 OR x4 = 2.94
+
+How can I approach this problem? Please explain it to me.?
+The deviation of the two lists is the same, you need to compute in {1,2,3} first and after that let it equals to {1,2,3,N} the deviation in the after list would be f(N)= some constant.
+
+==================================================================================
+Standard Deviation Puzzles #2:
+==============================
+
+The heights of a group of children are measured. The resulting data has a mean of  meters, and a standard deviation of  meters. One particular child is  centimeters tall. Compute , the number of standard deviations away from the mean that the particular child is.
+
+Enter the value of , correct to a scale of two decimal places.
+
+Output Format
+
+Your output must be a floating point/decimal number, correct to a scale of  decimal places. You can submit solutions in either of the  following ways:
+
+Solve the problem manually and submit your result as Plain Text.
+
+Submit an R or Python program, which uses the above parameters (hard-coded), and computes the answer.
+
+Your answer format should resemble something like:
+
+4.23
+
+EXPLANATION:
+-----------
+In this question it is asked to print upto two decimal places but in the answer only upto one decimal place answer is given
+
+- My solution with two decimal places is not accepted although it is correct. Please fix it.
+- Oh, look, another problem where I have to read the discussion section (where spoilers usually abound) to get the entire and/or correct problem statement. Classic HackerRank.
+
+- data_point = 90.25 / 100  # convert to meter  
+mean = 0.675
+stdev = 0.065
+z_score = (data_point - mean) /stdev
+round(z_score, 2)
+
+==================================================================================
+
+Standard Deviation Puzzles - 3
+==============================
+Let X and Y be two independent "normal" random deviates with mean and standard deviation 10 and 3, and 20 and 4, respectively. Let SIGMA be the value of the standard deviation of the distribution obtained by adding the two distributions (X + Y).
+
+In the answer box, enter the value of SIGMA, correct to one place of decimal.
+
+Submission Modes and Output Format
+You may either solve the problem on pen-and-paper and submit the final answer in the text box, or you may submit an R or Python program to accomplish the above task. Your output should be a floating point/decimal number, correct to 1 place of decimal.
+
+In the text box below, enter a floating point/decimal number, correct to 1 place of decimal.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+9.1
+
+EXPLANATION:
+------------
+The resulting variance is correct, you just have to submit it as 5.0.
+
+IMPORTANT math note: be careful about theory, variances do not add in general, what you can prove is that the following is always true for any X, Y distributions:
+
+Var(X+Y)=Var(X)+Var(Y)+2*Cov(X,Y).
+
+Also you can prove that if X and Y are indipendent then Cov(X,Y) = 0 (though the inverse is not true), so yes, to solve this problem you can use
+
+Var(X+Y)=Var(X)+Var(Y),
+
+but notice that it's not because X and Y are normal distributions, the hypothesis you are truly using is that they are indipendent.
+
+- Mean and Variance of Random Variables
+http://www.stat.yale.edu/Courses/1997-98/101/rvmnvar.htm
+
+- For independent random variables X and Y, the variance of their sum or difference is the sum of their variances:
+
+Variances are added for both the sum and difference of two independent random variables because the variation in each variable contributes to the variation in each case. If the variables are not independent, then variability in one variable is related to variability in the other. For this reason, the variance of their sum or difference may not be calculated using the above formula
+
+=================================================================================
+
+Standard Deviation Puzzles - 4:
+-------------------------------
+
+Let X and Y be two independent "normal" random deviates with mean and standard deviation 10 and 3, and 20 and 4, respectively. Let SIGMA be the value of the standard deviation of the distribution obtained by computing the difference of the two distributions (X - Y).
+
+In the answer box, enter the value of SIGMA, correct to one place of decimal.
+
+Submission Modes and Output Format
+You may either solve the problem on pen-and-paper and submit the final answer in the text box, or you may submit an R or Python program to accomplish the above task. Your output should be a floating point/decimal number, correct to 1 place of decimal.
+
+In the text box below, enter a floating point/decimal number, correct to 1 place of decimal.
+
+Alternatively, you may submit an R program, which uses the above parameters (hard-coded) and computes the answer.
+
+Your answer should resemble something like:
+
+9.1
+
+EXPLANATION:
+-----------
+By variance sum law: (SD of x-y)^2=(SD of x)^2 +(SD of y)^2
+
+CODE:
+----
+?????????????????????????
+
+==================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

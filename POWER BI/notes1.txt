@@ -1,0 +1,84 @@
+PTE LOGIN CREDENTIALS:
+mitra_2
+HappyYamuna1!
+
+Australia	1800-023-095
+
+2021 TO 2022
+Application ID: 3184134
+Application date: 07 December 2023
+You've submitted an application for a MES for the 2021-22 financial year.
+
+
+https://ihis.servicesaustralia.gov.au/mcaonline/#/mes/apply/who-can-get
+
+https://www.servicesaustralia.gov.au/enrolling-medicare?context=60092
+
+https://www.servicesaustralia.gov.au/medicare-entitlement-statement
+
+
+import is an irreversable option in storage mode, whereas dual and direct query is fine 
+
+
+MES@servicesaustralia.gov.au
+power bi exam: https://www.microsoft.com/en-us/learning/dashboard.aspx
+
+ID: MS0995875911
+EXAM: PL - 300 
+Appointment
+Thursday, December 14, 2023
+Check-in time: 9:30 AM Australia/Perth - AWST
+Start time: 10:00 AM Australia/Perth - AWS
+
+
+page 47 is pending
+
+
+https://radacad.com/kpi-visual-in-power-bi-explained
+https://www.sqlbi.com/articles/filtering-the-top-3-products-for-each-category-in-power-bi/
+https://learn.microsoft.com/en-us/power-bi/consumer/end-user-drill
+https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-scheduled-refresh
+https://learn.microsoft.com/en-us/power-bi/create-reports/desktop-report-view
+https://learn.microsoft.com/en-us/previous-versions/dynamicscrm-2016/administering-dynamics-365/dn708055(v=crm.8)
+https://www.fourmoo.com/2020/04/01/power-bi-which-groups-can-be-used-to-set-permissions-in-power-bi/
+https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-share-dashboards
+https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-distribute-apps
+https://learn.microsoft.com/en-us/dax/calculate-function-dax
+https://radacad.com/kpi-visual-in-power-bi-explained
+https://radacad.com/multi-select-slicer-in-power-bi
+
+
+Tough questions:
+5,9,13
+
+work related self education expenses:
+Azure DataEngineering DP-203 General expenses
+
+Other work-related expenses:
+Electricity Expenses = 263.47 (123.59 + 139.88)
+GAS BILL = 17.27 + 149.43 + 90.41 + 29.67 = 239.84/286.78
+MOBILE DATA EXPENSES = 345.54
+ATO receipt number: 71439 7641 5017
+
+Course names:
+Azure SQL Data Warehouse Synapse Analytics Service
+Azure Databricks & Spark For Data Engineers (PySpark / SQL) = $100 USD
+
+
+Spark and Python for Big Data with PySpark
+Apache Spark 3 - Spark Programming in Scala for Beginners
+
+
+
+bank statement of the house rent and certification expenses is pending!!
+Yamuna laptop refurbished is need to be added here !!
+
+Sep = $75
+Oct = $50
+Nov = $75.22
+Dec = $75.32
+Feb = $70
+
+
+rent is from september until december last
+rent is from april to june

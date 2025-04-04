@@ -1,0 +1,223 @@
+Data migration using PolyBase
+
+1. Export table to flat file (PolyBase only works with the flat file)
+2. Create blob storage account
+3. Upload flat file to blob storage
+4. Run PolyBase 6 steps process
+5. Monitor and confirm success migration
+6. Confirm 60 distributions in destination table
+
+Step1:
+Right click on Database-> Tasks->Export Data->Choose DataSource "SQL Server Native Client 11.0", Servername: LAPTOP-HJXXZDFS" -> Destination: Flatfile, FileName:"xyz"
+-> If you want to filter the data then choose the option "Write a query to specify the data to transfer OR OTHERWISE CHOOSE "copy data from one or more tables or views"
+
+For example, it can transfer 30 Million rows(1.6 GB) in a while!!!
+
+Instead of using Azure website to upload the files, use Azure Storage Explorer to upload files from on premise. First download Microsoft Azure Storage Explorer into local and then login into the "Storage Explorer" to 
+
+
+			POLYBASE SETUP
+
+FIRST CONNECT WITH YOUR AZURE SQL DATA WAREHOUSE using the credentials in 
+Microsoft SQL Server Management Studio -> Execute the below code
+
+Create masterKey -> Create a database scoped credential with the storage key
+-> Create an external data source -> Load from the external table -> Create an external table -> Create external fileformat
+
+-- 1.DROP MASTER KEY;
+CREATE MASTER KEY;
+GO
+
+-- 2. DROP DATABASE SCOPED CREDENTIAL BlobStorageCredential
+CREATE DATABASE SCOPED CREDENTIAL 
+WITH 
+	IDENTITY = 'blobuser',
+	SECRET = 'aasdfewurhewnbjahfuisdhfndjbiuhfjsdfbdf=='
+;
+GO
+
+-- 3. DROP EXTERNAL DATA SOURCE AzureBlobStorage
+CREATE EXTERNAL DATA SOURCE AzureBlobStorage
+WITH (
+    TYPE = HADOOP,
+    LOCATION = 'wasbs://demofiles@synapsestorage108.blob.core.windows.net',
+    CREDENTIAL  = BlobStorageCredential
+);
+GO
+
+-- 4. DROP EXTERNAL FILE FORMAT CSVFileFormat
+CREATE EXTERNAL FILE FORMAT CSVFileFormat
+WITH
+(   FORMAT_TYPE = DELIMITEDTEXT
+,   FORMAT_OPTIONS = ( FIELD_TERMINATION = ','
+		     , STRING_DELIMITER = ''
+		     , DATE_FORMAT = ''
+		     , USE_TYPE_DEFAULT = FALSE
+		     )
+);
+GO
+
+-- 5. DROP EXTERNAL TABLE [stage].FactTransactionHistory
+-- DROP SCHEMA stage
+
+CREATE SCHEMA [stage];
+GO
+
+CREATE EXTERNAL TABLE [stage].FactTransactionHistory
+(
+  [TransactionID] [int] NOT NULL,
+  [ProductKey] [int] NOT NULL,
+  [OrderDate] [datetime] NULL,
+  [Quantity] [int] NULL,
+
+)
+WITH
+(
+  LOCATION = '/FTH/'
+, DATA_SOURCE = AzureBlobStorage
+, FILE_FORMAT = CSVFileformat
+, REJECT_TYPE = VALUE
+, REJECT_VALUE = 0
+)
+GO
+
+-- 6. Need to load the data to production so. DROP SCHEMA [prod];
+CREATE SCHEMA [prod];
+GO
+-- DROP IF EXISTS[prod].[FactTransactionHistory]
+CREATE TABLE [prod].[FactTransactionHistory]
+WITH (DISTRIBUTION = HASH([ProductKey]) )
+AS
+SELECT * FROM [stage].[FactTransactionHistory]
+OPTION (LABEL = 'LOAD [prod].[FactTransactionHistory]');
+
+-- verify the data was loaded into the 60 distributions
+-- find data skew for a distributed table
+
+DBCC PDWW_SHOWSPACEUSED('prod.FactTransactionHistory');
+
+
+
+
+
+Check this query out:
+
+-- First let's look at what round-robin would look like
+
+select cp.[distribution],count(*) distributionRecords from (
+select row_number() over(order by (select null)) rowNum from FactTransactionHistory) subq
+cross apply(select rowNum%60 [distribution]) cp
+group by [distribution]
+order by [distribution]
+
+-- Now if we wanted to explore hash key distribution, what should we pick?
+
+select cs.name, tt.name from sys.columns cs inner join sys.types tt
+on cs.system_type_id=tt.system_type_id where object_id=OBJECT_ID('FactTransactionHistory');
+
+
+-- Analyze ProductKey
+select count(distrinct ProductKey)
+from FactTransactionHistory;
+
+select cp.[distribution], sum(recordCount) distributionRecords from
+(select DENSE_RANK() over(order by ProductKey) rowNum, count(*) recordCount from FactTransactionHistory
+gropu by ProductKey) subq
+cross qpply(select rowNum%60 [distribution]) cp
+group by [distribution]
+order by [distribution];
+
+-- However, distribution is not everything, you have to think about the query patterns as well
+
+select OBJECT_NAME(object_id) from sys.columns where name = 'ProductKey';
+
+
+$$$$$$ Analyze if ProductKey can be used as a distribution column $$$$$$$$$$$$4
+
+-- Analyze ProductKey
+
+select count(distinct ProductKey)
+from FactTransactionHistory;
+
+select cp.[distribution],sum(recordCount) distributionRecords from
+(select DENSE_RANK() OVER(ORDER BY ProductKey) rowNum, count(*) recordCount from FactTransactionHistory
+group by ProductKey) subq
+cross apply(select rowNum%60 [distribution]) cp
+group by [distribution]
+order by [distribution]
+
+-- However, distribution is not everything, you have to think about the query patterns as well
+
+select OBJECT_NAME(object_id) from sys.columns where name = 'ProductKey';
+
+
+-- Analyzing data types
+select OBJECT_NAME(object_id), cs.name from sys.columns cs
+inner join sys.types ts on cs.system_type_id = ts.system_type_id where ts.name in ('nvarchar', 'nchar')
+and (OBJECT_NAME(object_id) LIKE 'Dim%' OR OBJECT_NAME(object_id) LIKE 'Fact%');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+

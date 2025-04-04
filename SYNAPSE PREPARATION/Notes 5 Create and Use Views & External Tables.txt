@@ -1,0 +1,181 @@
+**************************************************************************
+Create and use views using serverless SQL pool in Azure Synapse Analytics:
+--------------------------------------------------------------------------
+
+Note:
+Change the first line in the query, i.e., [mydbname], so you're using the database you created.
+
+USE [mydbname];
+GO
+
+DROP VIEW IF EXISTS populationView;
+GO
+
+CREATE VIEW populationView AS
+SELECT * 
+FROM OPENROWSET(
+        BULK 'csv/population/population.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV', 
+        FIELDTERMINATOR =',', 
+        ROWTERMINATOR = '\n'
+    )
+WITH (
+    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2,
+    [country_name] VARCHAR (100) COLLATE Latin1_General_BIN2,
+    [year] smallint,
+    [population] bigint
+) AS [r];
+
+The view uses an EXTERNAL DATA SOURCE with a root URL of your storage, as a DATA_SOURCE and adds a relative file path to the files.
+
+
+Delta Lake views:
+
+If you are creating the views on top of Delta Lake folder, you need to specify the location to the root folder after the BULK option instead of specifying the file path.
+
+The OPENROWSET function that reads data from the Delta Lake folder will examine the folder structure and automatically identify the file locations.
+
+create or alter view CovidDeltaLake
+as
+select *
+from openrowset(
+           bulk 'covid',
+           data_source = 'DeltaLakeStorage',
+           format = 'delta'
+    ) with (
+           date_rep date,
+           cases int,
+           geo_id varchar(6)
+           ) as rows
+
+Partitioned views:
+If you have a set of files that is partitioned in the hierarchical folder structure, you can describe the partition pattern using the wildcards in the file path. Use the FILEPATH function to expose parts of the folder path as partitioning columns.
+
+
+CREATE VIEW TaxiView
+AS SELECT *, nyc.filepath(1) AS [year], nyc.filepath(2) AS [month]
+FROM
+    OPENROWSET(
+        BULK 'parquet/taxi/year=*/month=*/*.parquet',
+        DATA_SOURCE = 'sqlondemanddemo',
+        FORMAT='PARQUET'
+    ) AS nyc
+
+
+Partitioned views can improve the performance of your queries by performing partition elimination when you query them with filters on the partitioning columns. However, not all queries support partition elimination, so it's important to follow some best practices.
+
+To ensure partition elimination, avoid using subqueries in filters, since they can interfere with the ability to eliminate partitions. Instead, pass the result of the subquery as a variable to the filter.
+
+When using JOINs in SQL queries, declare the filter predicate as NVARCHAR to reduce the complexity of the query plan and increase the probability of correct partition elimination. Partition columns are typically inferred as NVARCHAR(1024), so using the same type for the predicate avoids the need for an implicit cast, which can increase query plan complexity.
+
+Delta Lake partitioned views:
+------------------------------
+If you are creating the partitioned views on top of Delta Lake storage, you can specify just a root Delta Lake folder and don't need to explicitly expose the partitioning columns using the FILEPATH function:
+
+
+CREATE OR ALTER VIEW YellowTaxiView
+AS SELECT *
+FROM  
+    OPENROWSET(
+        BULK 'yellow',
+        DATA_SOURCE = 'DeltaLakeStorage',
+        FORMAT='DELTA'
+    ) nyc
+
+The OPENROWSET function will examine the structure of the underlying Delta Lake folder and automatically identify and expose the partitioning columns. The partition elimination will be done automatically if you put the partitioning column in the WHERE clause of a query.
+
+The folder name in the OPENROWSET function (yellow in this example) that is concatenated with the LOCATION URI defined in DeltaLakeStorage data source must reference the root Delta Lake folder that contains a subfolder called _delta_log.
+
+
+JSON views:
+-----------
+The views are the good choice if you need to do some additional processing on top of the result set that is fetched from the files. One example might be parsing JSON files where we need to apply the JSON functions to extract the values from the JSON documents.
+
+CREATE OR ALTER VIEW CovidCases
+AS 
+select
+    *
+from openrowset(
+        bulk 'latest/ecdc_cases.jsonl',
+        data_source = 'covid',
+        format = 'csv',
+        fieldterminator ='0x0b',
+        fieldquote = '0x0b'
+    ) with (doc nvarchar(max)) as rows
+    cross apply openjson (doc)
+        with (  date_rep datetime2,
+                cases int,
+                fatal int '$.deaths',
+                country varchar(100) '$.countries_and_territories')
+
+
+
+The OPENJSON function parses each line from the JSONL file containing one JSON document per line in textual format.
+
+Azure Cosmos DB views on containers:
+-----------------------------------
+The views can be created on top of the Azure Cosmos DB containers if the Azure Cosmos DB analytical storage is enabled on the container. The Azure Cosmos DB account name, database name, and container name should be added as a part of the view, and the read-only access key should be placed in the database scoped credential that the view references.
+
+CREATE DATABASE SCOPED CREDENTIAL MyCosmosDbAccountCredential
+WITH IDENTITY = 'SHARED ACCESS SIGNATURE', SECRET = 's5zarR2pT0JWH9k8roipnWxUYBegOuFGjJpSjGlR36y86cW0GQ6RaaG8kGjsRAQoWMw1QKTkkX8HQtFpJjC8Hg==';
+GO
+CREATE OR ALTER VIEW Ecdc
+AS SELECT *
+FROM OPENROWSET(
+      PROVIDER = 'CosmosDB',
+      CONNECTION = 'Account=synapselink-cosmosdb-sqlsample;Database=covid',
+      OBJECT = 'Ecdc',
+      CREDENTIAL = 'MyCosmosDbAccountCredential'
+    ) with ( date_rep varchar(20), cases bigint, geo_id varchar(6) ) as rows
+
+
+Create and use native external tables using SQL pools in Azure Synapse Analytics:
+
+Native external tables have better performance when compared to external tables with TYPE=HADOOP in their external data source definition. This is because native external tables use native code to access external data.
+
+External tables are useful when you want to control access to external data in Synapse SQL pool. External tables are also useful if you want to use tools, such as Power BI, in conjunction with Synapse SQL pool. External tables can access two types of storage:
+
+Public storage where users access public storage files.
+Protected storage where users access storage files using SAS credential, Microsoft Entra identity, or Managed Identity of Synapse workspace.
+
+Note:
+-----
+In dedicated SQL pools you can only use native external tables with a Parquet file type, and this feature is in public preview. If you want to use generally available Parquet reader functionality in dedicated SQL pools, or you need to access CSV or ORC files, use Hadoop external tables. Native external tables are generally available in serverless SQL pools. Learn more about the differences between native and Hadoop external tables in Use external tables with Synapse SQL.
+
+
+
+Data format 	Serverless SQL pool	Dedicated SQL pool
+(Native external tables)
+Parquet		Yes (GA)	Yes (public preview)
+CSV		Yes	No (Alternatively, use Hadoop external tables)
+delta		Yes	No
+Spark		Yes	No
+Dataverse	Yes	No
+Azure Cosmos DB 	No (Alternatively, create views)	No
+data formats (JSON, BSON etc.)
+
+
+Use external tables with Synapse SQL:
+-------------------------------------
+
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql/develop-tables-external-tables?tabs=hadoop
+
+
+Use Azure Stream Analytics with dedicated SQL pool in Azure Synapse Analytics:
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-integrate-azure-stream-analytics?context=%2Fazure%2Fsynapse-analytics%2Fcontext%2Fcontext
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,32 @@
+Dim_employee.csv
+EmployeeId,Name,Designation,WorkLocation,ContactDetails,FromDate,ToDate,ActiveFlag,SCDkey
+Sales_fact.csv
+EmployeeId,ProductId,SalesDate,Quantity,SalesAmt,TaxAmt
+
+
+Flow1:
+
+Blob1 -> Lookup1 -> SELECT ->
+
+Source2:
+
+Dim
+
+
+From Flow1:
+
+In Blob1 contains the fact data
+In Lookup1 contains the Blob1(left) JOIN Dim(Rift) and conditions are:
+EmpID==EmpId
+SalesDate>=FromDate
+SalesDate<=ToDate
+
+Note:
+You need to mention which table you want to have in broadcast.
+By default, it is auto but while debugging the pipeline asks us to select the dataset.
+We can select both fact and Dim but it is better to select Dim.
+BROADCAST AS "FIXED" instead of AUTO
+So, we will select Dimension as the broadcast table
+
+In Select transformation, we use select only SCDKEY from Dimension table and the rest are neglected. 
+

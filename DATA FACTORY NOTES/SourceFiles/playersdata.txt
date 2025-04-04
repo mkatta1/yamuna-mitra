@@ -1,0 +1,6 @@
+dimid,name,age,homecountry,iplteam
+2,'kohli',28,'India','kkr'
+3,'watson',38,'Australia','mi'
+4,'cummins',30,'Australia','kkr'
+5,'Tewatia',20,'India','rr'
+6,'Test',22,'South Africa','dd'

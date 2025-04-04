@@ -1,0 +1,1514 @@
+1) create numpy array from input with float datatype
+
+def arrays(arr):
+ return numpy.array(arr, float)[::-1]
+
+arr = input().strip().split(' ')
+arrays = numpy.array(arr)
+
+2) shape & reshape with the given input
+
+import numpy
+
+my_1D_array = numpy.array([1,2,3,4,5])
+my_2D_array = numpy.array([1,2],[3,4],[6,5])
+print my_2D_array.shape
+
+ii) change array
+change_array = numpy.array([1,2,3,4,5])
+change_array.shape = (3,2)
+ print change_array
+
+iii) reshape array
+
+my_array = numpy.array([1,2,3,4,5,6])
+print numpy.reshape(my_array,(3,2))
+
+iv) 
+y = input().split()
+x = np.array(y,int)
+x = x.reshape(3,3)
+print(x)
+
+***********************************************************
+TRANSPOSE AND FLATTEN
+
+Eg:
+import numpy
+my_array = numpy.array([1,2,3],[4,5,6])
+print numpy.transpose(my_array)
+[[1 4]
+ [2 5]
+ [3 6]]
+print my_array.flatten()
+
+code:
+n, m = map(int, input().split())
+arr = np.array([input().split() for _ in range(n)], int)
+arrT = np.transpose(arr)
+arrF = arr.flatten()
+print(arrT)
+
+***********************************************************
+CONCATENATE
+
+import numpy
+array1 = numpy.array([1,2,3])
+array2 = numpy.array([4,5,6])
+array3 = numpy.array([7,8,9])
+print numpy.concatenate((array1, array2, array3))
+
+If an array has more than one dimension, it is possible to specify the axis along which multiple arrays are concatenated. By default, it is along the first dimension.
+
+array1 = numpy.array([[1,2,3],[0,0,0]])
+array2 = numpy.array([[0,0,0],[7,8,9]])
+print numpy.concatenate((array1,array2), axis =1)
+Print the concatenated array of size (N+M)*P
+4 3 2
+
+***********************************************************
+ZEROS AND ONES
+
+Eg:
+print numpy.zeros((1,2))
+print numpy.zeros((1,2), dtype = numpy.int)
+print numpy.ones((1,2))
+print numpy.ones((1,2), dtype = numpy.int)
+
+Input: 3 3 3
+output: 3 dimensional zero matrix and 1 matrix
+import numpy as np
+tup = tuple(map(int, input().split()))
+print(np.zeros(tup, dtype = int))
+print(np.ones(tup, dtype = int))
+
+***********************************************************
+ARRAY MATHEMATICS
+
+import numpy as np
+n, _ = map(int, input().split())
+a = np.array(list(input().split for _ in range(n)), int)
+b = np.array(list(input().split for _ in range(n)), int)
+
+print(a+b, a-b, a*b, a//b, a%b, a**b, sep ='\n')
+
+FLOOR, CEIL, RINT
+
+import numpy
+myarray = numpy.array([1.1,2.2,3.3,4.4,5.5,6.6,7.7,8.8,9.9])
+print numpy.floor(myarray)
+print numpy.ceil(myarray)
+print numpy.rint(myarray)
+
+Sample Output
+-------------
+[ 1.  2.  3.  4.  5.  6.  7.  8.  9.]
+[  2.   3.   4.   5.   6.   7.   8.   9.  10.]
+[  1.   2.   3.   4.   6.   7.   8.   9.  10.]
+
+import numpy
+np.set_printoptions(legacy='1.13')
+A = np.array(tuple(map(float, input().split())))
+print("%s\n%s\n%s"%(np.floor(A), np.ceil(A), np.ring(A)))
+
+***********************************************************
+SUM, PROD, TASK
+
+import numpy
+my_array = numpy.array([[1,2],[3,4]])
+print numpy.sum(my_array, axis=0) #output: [4 6]
+print numpy.sum(my_array, axis=1) #output: [3 7]
+print numpy.sum(my_array, axis=None) #output: 10
+print numpy.sum(my_array) #output: 10
+
+print numpy.prod(my_array, axis=0) #output: [3 8]
+print numpy.prod(my_array, axis=1) #output: [2 12]
+print numpy.prod(my_array, axis=None) #output: 24
+print numpy.prod(my_array) #output: 24
+
+N,M = map(int,input().split())
+print(np.prod(np.sum(np.array([list(map(int,input().split())) for _ in range(N)]),axis=0)))
+
+***********************************************************
+MIN AND MAX
+
+import numpy
+
+my_array = numpy.array([[2, 5], 
+                        [3, 7],
+                        [1, 3],
+                        [4, 0]])
+
+print numpy.min(my_array, axis = 0)         #Output : [1 0]
+print numpy.min(my_array, axis = 1)         #Output : [2 3 1 0]
+print numpy.min(my_array, axis = None)      #Output : 0
+print numpy.min(my_array)                   #Output : 0
+
+import numpy
+
+my_array = numpy.array([[2, 5], 
+                        [3, 7],
+                        [1, 3],
+                        [4, 0]])
+
+print numpy.max(my_array, axis = 0)         #Output : [4 7]
+print numpy.max(my_array, axis = 1)         #Output : [5 7 3 4]
+print numpy.max(my_array, axis = None)      #Output : 7
+print numpy.max(my_array)                   #Output : 7
+
+code:
+----
+import numpy as np
+if __name__=="__main__":
+    n, _ = map(int, input().split())
+    a = np.array([input().split() for _ in range(n)], int)
+    print(np.max(np.min(a,1)))
+
+***********************************************************
+MEAN, VAR AND STD:
+-----------------
+
+import numpy
+
+my_array = numpy.array([ [1, 2], [3, 4] ])
+
+print numpy.mean(my_array, axis = 0)        #Output : [ 2.  3.]
+print numpy.mean(my_array, axis = 1)        #Output : [ 1.5  3.5]
+print numpy.mean(my_array, axis = None)     #Output : 2.5
+print numpy.mean(my_array)                  #Output : 2.5
+
+import numpy
+
+my_array = numpy.array([ [1, 2], [3, 4] ])
+print numpy.var(my_array, axis = 0)         #Output : [ 1.  1.]
+print numpy.var(my_array, axis = 1)         #Output : [ 0.25  0.25]
+print numpy.var(my_array, axis = None)      #Output : 1.25
+print numpy.var(my_array)                   #Output : 1.25
+
+import numpy
+
+my_array = numpy.array([ [1, 2], [3, 4] ])
+
+print numpy.std(my_array, axis = 0)         #Output : [ 1.  1.]
+print numpy.std(my_array, axis = 1)         #Output : [ 0.5  0.5]
+print numpy.std(my_array, axis = None)      #Output : 1.11803398875
+print numpy.std(my_array)                   #Output : 1.11803398875
+
+CODE:
+----
+
+import numpy as np
+N,M = map(int,input().split())
+Na =np.array([list(map(int,input().split())) for _ in range(N)])
+print(f"{np.mean(Na,axis=1)}\n{np.var(Na,axis=0)}\n{round(np.std(Na),11)}")
+
+***********************************************************
+DOT AND CROSS:
+------------
+
+The dot tool returns the dot product of two arrays.
+
+import numpy
+A = numpy.array([ 1, 2 ])
+B = numpy.array([ 3, 4 ])
+print numpy.dot(A, B)       #Output : 11
+
+The cross tool returns the cross product of two arrays.
+
+import numpy
+A = numpy.array([ 1, 2 ])
+B = numpy.array([ 3, 4 ])
+print numpy.cross(A, B)     #Output : -2
+
+CODE:
+----
+import numpy as np
+N= int(input())
+A= np.array([list(map(int,input().split()))for i in range(N)])
+B= np.array([list(map(int,input().split()))for i in range(N)])
+print(np.dot(A,B))
+
+***********************************************************
+
+INNER AND OUTER:
+---------------
+https://en.wikipedia.org/wiki/Inner_product_space
+
+The inner tool returns the inner product of two arrays.
+
+import numpy
+A = numpy.array([0, 1])
+B = numpy.array([3, 4])
+print numpy.inner(A, B)     #Output : 4
+
+https://en.wikipedia.org/wiki/Outer_product
+
+The outer tool returns the outer product of two arrays.
+
+import numpy
+A = numpy.array([0, 1])
+B = numpy.array([3, 4])
+print numpy.outer(A, B)     #Output : [[0 0]
+                            #          [3 4]]
+
+
+import numpy as np
+arr = [np.array(list(map(int, input().split()))) for _ in range(2)]
+print(np.inner(*arr), np.outer(*arr), sep = "\n")
+
+	$$$$$$$$$$$ TOPIC: DEBUGGING  $$$$$$$$$$$
+
+1.Words Score:
+-------------
+
+If odd no.of vowels then return 1 and for even no.of vowels return 2
+
+def is_vowel(letter):
+  v_sum = sum([['a','e','i','o','u'].count(l) for l in letter])
+  return 2 if v_sum%2 == 0 else 1
+
+def score_words(words):
+  return sum([is_vowel(w) for w in [[*map(str, word)] for word in words]])
+
+
+2. Default Arguments:
+--------------------
+
+def increment_by(n, increment=1):
+  return n + increment
+
+def print_from_stream(n, stream=EvenStream()):
+   if isinstance(stream,EvenStream):
+	stream.current = O
+   for _ in range(n):
+	print(stream.get_next())
+
+
+	$$$$$$$$$$$ TOPIC: CLOSURES AND DECORATORS  $$$$$$$$$$$
+
+1.Standardize Mobile Number Using Decorators:
+  ------------------------------------------
+
+sample input:
+------------
+3
+07895462130
+919875641230
+9195969878
+
+sample output:
+--------------
++91 78954 62130
++91 91959 69878
++91 98756 41230
+
+def wrapper(f):
+    def fun(l):
+	<<<<<<<<<<< code >>>>>>>>>>>>>
+    return fun
+
+@wrapper
+def sort_phone(l):
+    print(*sorted(l), sep='\n')
+
+if __name__ == '__main__':
+    l = [input() for _ in range(int(input()))]
+    sort_phone(l)
+
+
+code:
+----
+
+from re import sub
+def wrapper(f):
+    def fun(l):
+        return f([sub(r"(.*){0,3}(\d{5})(\d{5})$",\
+        r"+91 \2 \3", num)for num in l])
+    return fun
+
+2. Decorators:
+   -----------
+
+import operator
+
+def person_lister(f):
+    def inner(people):
+	<<<<<<<< CODE >>>>>>>>>>>
+    return inner
+
+@person_lister
+def name_format(person):
+   return ("Mr. " if person[3] == "M" else "Ms. ") + person[0] + " " + person[1]
+
+if __name__ = '__main__':
+  people = [input().split() for i in range(int(input()))]
+  print(*name_format(people), sep='\n')
+
+CODE:
+----
+
+def person_lister(f):
+  def inner(people):
+    return [f(p) for p in sorted(people, key = lambda x: int(x[-2]))]
+  return inner
+
+
+Sample Input:
+------------
+3
+Mike Thomson 20 M
+Robert Bustle 32 M
+Andria Bustle 30 F
+
+Sample Output:
+-------------
+Mr. Mike Thomson
+Ms. Andria Bustle
+Mr. Robert Bustle
+
+		$$$$$$$$ TOPIC: XML  $$$$$$$$$
+
+1. FIND THE SCORE:
+   --------------
+
+import sys
+import xml.etree.ElementTree as etree
+
+def get_attr_number(node):
+	<<<<<<<<<<<<<< CODE >>>>>>>>>>>>
+
+if __name__ == '__main__':
+	sys.stdin.readline()
+	xml = sys.stdin.read()
+	tree = etree.ElementTree(etree.fromstring(xml))
+	root = tree.getroot(
+	print(get_attr_number(root))
+
+CODE:
+----
+
+import xml.etree.ElementTree as etree
+
+def get_attr_number(node: etree.Element) -> int:
+
+   return sum(len(element.attrib) for element in node.iter())
+
+
+2. FIND THE MAXIMUM DEPTH:
+   ----------------------
+import xml.etree.ElementTree as etree
+
+maxdepth = 0
+def depth(elem, level):
+    global maxdepth
+    # <<<<<<<<<<<<<<<< CODE >>>>>>>>>>>>>>
+
+if __name__ == '__main__':
+   n = int(input())
+   xml = ""
+   for i in range(n):
+	xml = xml + input() + "\n"
+   tree = etree.ElementTree(etree.fromstring(xml))
+   depth(tree.getroot(), -1)
+   print(maxdepth)
+
+CODE:
+----
+
+maxdepth = 0
+def depth(elem, level =0):
+    global maxdepth
+    maxdepth = max(maxdepth, level + 1) if [depth(e, level + 1) for e in elem]
+else max(maxdepth, level + 1)
+
+
+
+
+Sample Input:
+------------
+6
+<feed xml:lang='en'>
+    <title>HackerRank</title>
+    <subtitle lang='en'>Programming challenges</subtitle>
+    <link rel='alternate' type='text/html' href='http://hackerrank.com/'/>
+    <updated>2013-12-25T12:00:00</updated>
+</feed>
+
+Sample Output:
+-------------
+1
+
+
+	$$$$$$$$ REGEX AND PARSING $$$$$$$$
+
+Sample Input 0:
+--------------
+4
+4.0O0
+-1.00
++4.54
+SomeRandomStuff
+
+Sample Output 0:
+---------------
+False
+True
+True
+False
+
+Explanation 0:
+-------------
+4.0O0: O is not a digit.
+-1.00: is valid.
++4.54: is valid.
+SomeRandomStuff: is not a number.
+
+1. TOPIC IS FUNCTION Re.split():
+  ------------------------------
+regex_pattern = r"[,.]"	# Do not delete 'r'.
+
+import re
+print("\n".join(re.split(regex_pattern, input())))
+
+Sample Input 0:
+--------------
+100,000,000.000
+
+Sample Output 0:
+---------------
+100
+000
+000
+000
+
+2. Group(), Groups() & Groupdict():
+  --------------------------------
+group():
+-------
+A group() expression returns one or more subgroups of the match.
+
+>>> import re
+>>> m = re.match(r'(\w+)@(\w+)\.(\w+)','username@hackerrank.com')
+>>> m.group(0)       # The entire match 
+'username@hackerrank.com'
+>>> m.group(1)       # The first parenthesized subgroup.
+'username'
+>>> m.group(2)       # The second parenthesized subgroup.
+'hackerrank'
+>>> m.group(3)       # The third parenthesized subgroup.
+'com'
+>>> m.group(1,2,3)   # Multiple arguments give us a tuple.
+('username', 'hackerrank', 'com')
+
+groups():
+--------
+A groups() expression returns a tuple containing all the subgroups of the match.
+
+>>> import re
+>>> m = re.match(r'(\w+)@(\w+)\.(\w+)','username@hackerrank.com')
+>>> m.groups()
+('username', 'hackerrank', 'com')
+
+groupdict():
+-----------
+
+A groupdict() expression returns a dictionary containing all the named subgroups of the match, keyed by the subgroup name.
+
+>>> m = re.match(r'(?P<user>\w+)@(?P<website>\w+)\.(?P<extension>\w+)','myname@hackerrank.com')
+>>> m.groupdict()
+{'website': 'hackerrank', 'user': 'myname', 'extension': 'com'}
+
+CODE:
+----
+import re
+print( ms[0][0] if (ms := re.search(r'([a-zA-Z0-9])\1', input())) else -1 )
+
+Sample Input:
+------------
+..12345678910111213141516171820212223
+
+Sample Output:
+-------------
+1
+
+Explanation:
+------------
+
+.. is the first repeating character, but it is not alphanumeric.
+1 is the first (from left to right) alphanumeric repeating character of the string in the substring 111.
+
+3. Re.findall() & Re.finditer():
+  -----------------------------
+
+
+re.findall():
+-------------
+The expression re.findall() returns all the non-overlapping matches of patterns in a string as a list of strings.
+
+>>> import re
+>>> re.findall(r'\w','http://www.hackerrank.com/')
+['h', 't', 't', 'p', 'w', 'w', 'w', 'h', 'a', 'c', 'k', 'e', 'r', 'r', 'a', 'n', 'k', 'c', 'o', 'm']
+
+re.finditer():
+-------------
+The expression re.finditer() returns an iterator yielding MatchObject instances over all non-overlapping matches for the re pattern in the string.
+
+>>> import re
+>>> re.finditer(r'\w','http://www.hackerrank.com/')
+<callable-iterator object at 0x0266C790>
+>>> map(lambda x: x.group(),re.finditer(r'\w','http://www.hackerrank.com/'))
+['h', 't', 't', 'p', 'w', 'w', 'w', 'h', 'a', 'c', 'k', 'e', 'r', 'r', 'a', 'n', 'k', 'c', 'o', 'm']
+
+Sample Input:
+------------
+rabcdeefgyYhFjkIoomnpOeorteeeeet
+
+Sample Output:
+-------------
+ee
+Ioo
+Oeo
+eeeee
+
+Explanation:
+-----------
+ee is located between consonant d and f.
+Ioo is located between consonant k and m.
+Oeo is located between consonant p and r.
+eeeee is located between consonant t and t.
+
+CODE:
+----
+
+import re
+pattern = r"(?=[^AEIOUaeiou]([AEIOUaeiou]{2,})[^AEIOUaeiou])"
+match = re.findall(pattern, input())
+
+if match:
+    print(*match, sep="\n")
+else:
+    print(-1)
+
+
+4. Re.start() & Re.end():
+  ----------------------
+
+start() & end():
+---------------
+
+These expressions return the indices of the start and end of the substring matched by the group.
+
+>>> import re
+>>> m = re.search(r'\d+','1234')
+>>> m.end()
+4
+>>> m.start()
+0
+
+Print the tuple in this format: (start _index, end _index).
+If no match is found, print (-1, -1).
+
+Sample Input:
+------------
+aaadaa
+aa
+
+Sample Output:
+-------------
+(0, 1)  
+(1, 2)
+(4, 5)
+
+import re
+s = input()
+k = input()
+
+pattern = re.compile(f'(?=({k}))')
+result = list(pattern.finditer(s))
+
+for match in result:
+    print((match.start(1), match.end(1)-1))
+if k not in s:
+    print((-1,-1))
+
+5. Regex Substitution:
+-------------------
+
+The re.sub() tool (sub stands for substitution) evaluates a pattern and, for each valid match, it calls a method (or lambda).
+The method is called for all matches and can be used to modify strings in different ways.
+The re.sub() method returns the modified string as an output.
+
+Code:
+----
+import re
+#Squaring numbers
+def square(match):
+    number = int(match.group(0))
+    return str(number**2)
+
+print re.sub(r"\d+", square, "1 2 3 4 5 6 7 8 9")
+
+Output:
+------
+1 4 9 16 25 36 49 64 81
+
+Replacements in Strings:
+-----------------------
+Code:
+-----
+
+import re
+
+html = """
+<head>
+<title>HTML</title>
+</head>
+<object type="application/x-flash" 
+  data="your-file.swf" 
+  width="0" height="0">
+  <!-- <param name="movie"  value="your-file.swf" /> -->
+  <param name="quality" value="high"/>
+</object>
+"""
+
+print re.sub("(<!--.*?-->)", "", html) #remove comment
+
+Output:
+------
+<head>
+<title>HTML</title>
+</head>
+<object type="application/x-flash" 
+  data="your-file.swf" 
+  width="0" height="0">
+
+  <param name="quality" value="high"/>
+</object>
+
+Both && and || should have a space " " on both sides.
+
+Sample Input:
+------------
+
+11
+a = 1;
+b = input();
+
+if a + b > 0 && a - b < 0:
+    start()
+elif a*b > 10 || a/b < 1:
+    stop()
+print set(list(a)) | set(list(b)) 
+#Note do not change &&& or ||| or & or |
+#Only change those '&&' which have space on both sides.
+#Only change those '|| which have space on both sides.
+
+Sample Output:
+-------------
+a = 1;
+b = input();
+
+if a + b > 0 and a - b < 0:
+    start()
+elif a*b > 10 or a/b < 1:
+    stop()
+print set(list(a)) | set(list(b)) 
+#Note do not change &&& or ||| or & or |
+#Only change those '&&' which have space on both sides.
+#Only change those '|| which have space on both sides.
+
+CODE:
+----
+import re
+n = int(input())
+s = "\n".join([input() for _ in range(n)])
+patern = r'(?<=\s)&&(?=\s)|(?<=\s)\|\|(?=\s)'
+print(re.sub(patern, lambda m: 'and' if m.group(0) == '&&' else 'or', s))
+
+
+Validating Roman Numerals:
+-------------------------
+
+regex_pattern = r"^(?!.*(I{4}|V{2,}|X{4}|L{2,}|C{4}|D{2,}|M{4})).*$"
+import re
+print(str(bool(re.match(regex_pattern, input())))
+
+Input:
+-----
+CDXXI
+Output:
+------
+True
+
+For every string listed, print "YES" if it is a valid mobile number and "NO" if it is not on separate lines. Do not print the quotes
+
+
+Validating phone numbers:
+------------------------
+Sample Input:
+------------
+2
+9587456281
+1252478965
+
+Sample Output
+-------------:
+YES
+NO
+
+CODE:
+----
+import re
+pattern = r"^[789][0-9]{9}$"
+N = int(input())
+for _ in range(N):
+    if re.match(pattern, input()):
+       print("YES")
+    else:
+       print("NO")
+
+
+Validating and parsing email addresses:
+--------------------------------------
+Hint: Try using Email.utils() to complete this challenge. For example, this code:
+
+import email.utils
+print email.utils.parseaddr('DOSHI <DOSHI@hackerrank.com>')
+print email.utils.formataddr(('DOSHI', 'DOSHI@hackerrank.com'))
+
+produces this output:
+
+('DOSHI', 'DOSHI@hackerrank.com')
+DOSHI <DOSHI@hackerrank.com>
+
+Sample Input:
+------------
+2  
+DEXTER <dexter@hotmail.com>
+VIRUS <virus!@variable.:p>
+
+Sample Output:
+-------------
+DEXTER <dexter@hotmail.com>
+
+CODE:
+----
+import re
+p =  r"^[a-zA-Z]+\s<[a-zA-Z][\w\.\-]*@[a-zA-Z]+\.[a-zA-Z]{1,3}>$"
+[print(mail.group()) for mail in [re.match(p,input()) for _ in range(int(input()))] if mail]
+
+**********************************************************************************
+TOPICS IGNORED:  HTML PARSER - PART 1&2, detect html tags, attributes and its values
+
+For each test case, print 'Valid' if the UID is valid. Otherwise, print 'Invalid', on separate lines. Do not print the quotation marks.
+
+**********************************************************************************
+
+		$$$$$$$$$$$$ Validating UID $$$$$$$$$$$$
+
+import re
+patten = r'^(?=(.*[A-Z]){2})(?=(.*\d){3})(?!.*(.).*\3).{10}$'
+
+for _ in range(int(input()))
+   m = re.match(pattern, input())
+   if m:
+      print('Valid')
+   else:
+      print('Invalid')
+
+
+
+Sample Input:
+------------
+2
+B1CD102354
+B1CDEF2354
+
+Sample Output :
+-------------
+Invalid
+Valid
+
+Explanation:
+-----------
+B1CD102354: 1 is repeating → Invalid
+B1CDEF2354: Valid	
+
+**********************************************************************************
+
+Valid Credit Card Numbers:
+-------------------------
+
+4253625879615786
+4424424424442444
+5122-2368-7954-3214
+
+Invalid Credit Card Numbers:
+---------------------------
+
+42536258796157867       #17 digits in card number → Invalid 
+4424444424442444        #Consecutive digits are repeating 4 or more times → Invalid
+5122-2368-7954 - 3214   #Separators other than '-' are used → Invalid
+44244x4424442444        #Contains non digit characters → Invalid
+0525362587961578        #Doesn't start with 4, 5 or 6 → Invalid
+
+Explanation:
+------------
+
+4123456789123456 : Valid
+5123-4567-8912-3456 : Valid
+61234-567-8912-3456 : Invalid, because the card number is not divided into equal groups of 4.
+4123356789123456 : Valid
+5133-3367-8912-3456 : Invalid, consecutive digits 3333 is repeating 4 times.
+5123-4567-8912-3456 : Invalid, because space '  ' and - are used as separators.
+
+import re
+N = int(input())
+for _ in range(N):
+    Card = input()
+    if (bool(re.match(r'^[4-6]\d{3}-?(\d{4}-?{3}$)', Card)) and len(re.findall(r''))
+
+**********************************************************************************
+VALIDATING POSTAL CODES:
+-----------------------
+
+regex_integer_in_range should match only integers range from 100000 to 999999 inclusive
+
+regex_alternating_repetitive_digit_pair should find alternating repetitive digits pairs in a given string.
+
+(bool(re.match(regex_integer_in_range, P)) 
+and len(re.findall(regex_alternating_repetitive_digit_pair, P)) < 2)
+
+Sample Input 0
+---------------
+110000
+
+Sample Output 0
+---------------
+False
+
+Explanation 0:
+-------------
+
+1 1 0000 : (0, 0) and (0, 0) are two alternating digit pairs. Hence, it is an invalid postal code.
+
+Note:
+A score of  will be awarded for using 'if' conditions in your code.
+You have to pass all the testcases to get a positive score.
+
+CODE:
+----
+regex_integer_in_range = r"^[1-9]{1}\d{5}$"    # Do not delete 'r'.
+regex_alternating_repetitive_digit_pair = r"(\d{1})(?=\d{1}(\1))"
+
+import re
+P = input()
+
+print (bool(re.match(regex_integer_in_range, P)) 
+and len(re.findall(regex_alternating_repetitive_digit_pair, P)) < 2)
+
+		$$$$$$$$ Matrix script $$$$$$$$
+
+import math
+import os
+import random
+import re
+import sys
+
+
+
+
+first_multiple_input = input().rstrip().split()
+
+n = int(first_multiple_input[0])
+
+m = int(first_multiple_input[1])
+
+matrix = []
+
+for _ in range(n):
+    matrix_item = input()
+    matrix.append(matrix_item)
+flattened_matrix = "".join(map(lambda *x: "".join(x), *matrix))
+
+output = re.sub(r"([a-zA-Z0-9])([^a-zA-Z0-9]+)([a-zA-Z0-9])", r"\1 \3", flattened_matrix)
+
+print(output)
+############################# PYTHON FUNCTIONALS ################################
+
+1. MAP AND LAMBDA FUNCTION:
+  ------------------------
+The map() function applies a function to every member of an iterable and returns the result. It takes two parameters: first, the function that is to be applied and secondly, the iterables.
+Let's say you are given a list of names, and you have to print a list that contains the length of each name.
+
+>> print (list(map(len, ['Tina', 'Raj', 'Tom'])))  
+[4, 3, 3]  
+
+Lambda is a single expression anonymous function often used as an inline function. In simple words, it is a function that has only one line in its body. It proves very handy in functional and GUI programming.
+
+>> sum = lambda a, b, c: a + b + c
+>> sum(1, 2, 3)
+6
+Note:
+
+Lambda functions cannot use the return statement and can only have a single expression. Unlike def, which creates a function and assigns it a name, lambda creates a function and returns the function itself. Lambda can be used inside lists and dictionaries.
+
+Input Format:
+------------
+One line of input: an integer N
+
+Output Format:
+-------------
+A list on a single line containing the cubes of the first  fibonacci numbers.
+
+Sample Input:
+------------
+5
+Sample Output:
+-------------
+[0, 1, 1, 8, 27]
+
+Explanation:
+-----------
+The first  fibonacci numbers are [0,1,1,2,3], and their cubes are [0,1,1,8,2,27].
+
+cube = lambda x: x**3
+
+def Fibonacci(n):
+  list1=[]
+  for i in range(n):
+    list1.append(i) if i<2 else list1.append(list1[i-1]+list1[i-2])
+  return list1
+
+if __name__ == '__main__':
+    n = int(input())
+    print(list(map(cube, Fibonacci(n))))
+
+
+2. VALIDATING EMAIL ADDRESSES WITH A FILTER:
+   ----------------------------------------
+
+Sample Input:
+------------
+3
+lara@hackerrank.com
+brian-23@hackerrank.com
+britts_54@hackerrank.com
+
+Sample Output:
+-------------
+['brian-23@hackerrank.com', 'britts_54@hackerrank.com', 'lara@hackerrank.com']
+
+A filter takes a function returning True or False and applies it to a sequence, returning a list of only those members of the sequence where the function returned True. A Lambda function can be used with filters.
+
+>> l = list(range(10))
+>> l = list(map(lambda x:x*x, l))
+>> l = list(filter(lambda x: x > 10 and x < 80, l))
+
+CODE:
+-----
+import re
+def fun(s):
+    # return True if s is a valid email, else return False
+    pattern = r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9]+\.[a-zA-Z]{1,3}$'
+    if re.match(pattern, s):
+        return True
+    else:
+        return False
+
+def filter_mail(emails):
+    return list(filter(fun, emails))
+
+if __name__ == '__main__':
+    n = int(input())
+    emails = []
+    for _ in range(n):
+        emails.append(input())
+
+filtered_emails = filter_mail(emails)
+filtered_emails.sort()
+print(filtered_emails)
+
+
+3. REDUCE FUNCTION:
+  ----------------
+
+from fractions import Fraction
+
+from functools import reduce
+from typing import List
+
+def product(fracs: List[Fraction]):
+    t = Fraction(reduce(lambda x, y: x * y, fracs)) # complete this line with a reduce statement
+    return t.numerator, t.denominator
+if __name__ == '__main__':
+    fracs = []
+    for _ in range(int(input())):
+        fracs.append(Fraction(*map(int, input().split())))
+    result = product(fracs)
+    print(*result)
+
+Print only one line containing the numerator and denominator of the product of the numbers in the list in its simplest form, i.e. numerator and denominator have no common divisor other than 1.
+
+Sample Input 0
+
+3
+1 2
+3 4
+10 6
+Sample Output 0
+
+5 8
+Explanation 0
+
+Required product is 1/2 3/4 10/6 = 5/8
+
+
+		************** BUILT - INs ****************************
+
+
+>>> print zip([1,2,3,4,5,6],'Hacker')
+[(1, 'H'), (2, 'a'), (3, 'c'), (4, 'k'), (5, 'e'), (6, 'r')]
+>>> 
+>>> print zip([1,2,3,4,5,6],[0,9,8,7,6,5,4,3,2,1])
+[(1, 0), (2, 9), (3, 8), (4, 7), (5, 6), (6, 5)]
+>>> 
+>>> A = [1,2,3]
+>>> B = [6,5,4]
+>>> C = [7,8,9]
+>>> X = [A] + [B] + [C]
+>>> 
+>>> print zip(*X)
+[(1, 6, 7), (2, 5, 8), (3, 4, 9)]
+
+Sample Input:
+------------
+5 3
+89 90 78 93 80
+90 91 85 88 86  
+91 92 83 89 90.5
+
+Sample Output:
+-------------
+90.0 
+91.0 
+82.0 
+90.0 
+85.5        
+
+n, x = list(map(int, input().split()))
+matrix = []
+
+for _ in range(x):
+    marks = list(map(float, input().split()))
+    matrix.append(marks)
+
+for i in range(n):
+    total = 0
+    for j in range(x):
+        total += matrix[j][i]
+    print(round(total / x, 1))
+
+2.INPUT:
+  ------
+
+In Python 2, the expression input() is equivalent to eval(raw _input(prompt)).
+
+x, k = list(map(int, input().split()))
+p = eval(input())
+print(p == k)
+
+3. PYTHON EVALUATION:
+ --------------------
+ The eval() expression is a very powerful built-in function of Python. It helps in evaluating an expression. The expression can be a Python statement, or a code object.
+
+For example:
+-----------
+>>> eval("9 + 5")
+14
+>>> x = 2
+>>> eval("x + 3")
+5
+
+Here, eval() can also be used to work with Python keywords or defined functions and variables. These would normally be stored as strings.
+
+For example:
+------------
+>>> type(eval("len"))
+<type 'builtin_function_or_method'>
+
+Without eval()
+
+>>> type("len")
+<type 'str'>
+
+Task:
+You are given an expression in a line. Read that line as a string variable, such as var, and print the result using eval(var).
+
+NOTE: Python2 users, please import from __future__ import print_function.
+
+Constraint: Input string is less than 100 characters.
+
+Sample Input: print(2 + 3)
+Sample Output: 5
+CODE:
+----
+from __future__ import division
+stat=input() 
+print(eval(stat[5:]))
+
+4. ATHLETE SORT:
+   ------------
+
+Sample Input 0
+
+5 3
+10 2 5
+7 1 0
+9 9 9
+1 23 12
+6 5 9
+1
+Sample Output 0
+
+7 1 0
+10 2 5
+6 5 9
+9 9 9
+1 23 12
+Explanation 0
+
+The details are sorted based on the second attribute, since  is zero-indexed.
+
+CODE:
+----
+
+import math
+import os
+import random
+import re
+import sys
+
+
+
+if __name__ == '__main__':
+    nm = input().split()
+
+    n = int(nm[0])
+
+    m = int(nm[1])
+
+    arr = []
+
+    for _ in range(n):
+        arr.append(list(map(int, input().rstrip().split())))
+
+    k = int(input())
+    [print(*x) for x in sorted(arr, key=lambda x: x[k])]
+
+5. ANY OR ALL:
+  ------------
+any()
+This expression returns True if any element of the iterable is true.
+If the iterable is empty, it will return False.
+
+Code
+----
+>>> any([1>0,1==0,1<0])
+True
+>>> any([1<0,2<1,3<2])
+False
+all()
+This expression returns True if all of the elements of the iterable are true. If the iterable is empty, it will return True.
+
+Code
+----
+>>> all(['a'<'b','b'<'c'])
+True
+>>> all(['a'<'b','c'<'b'])
+False
+
+Output Format:
+-------------
+Print True if all the conditions of the problem statement are satisfied. Otherwise, print False.
+
+Sample Input:
+------------
+5
+12 9 61 5 14
+ 
+Sample Output:
+-------------
+True
+
+Explanation:
+-----------
+Condition 1: All the integers in the list are positive.
+Condition 2: 5 is a palindromic integer.
+
+Hence, the output is True.
+
+Can you solve this challenge in 3 lines of code or less?
+There is no penalty for solutions that are correct but have more than 3 lines.
+
+CODE:
+-----
+_ = input()
+arr = input().split()
+print(all([True if int(x) >= 0 else False for x in arr])and any([True if x == x[::-1] else False for x in arr]))
+
+
+**************** CLASSES: DEALING WITH COMPLEX NUMBERS **************** 
+Input Format
+
+One line of input: The real and imaginary part of a number separated by a space.
+For complex numbers with non-zero (A) real and complex part (B), the output should be in the following format: A + Bi
+
+Sample Input
+------------
+2 1
+5 6
+
+Sample Output
+-------------
+7.00+7.00i
+-3.00-5.00i
+4.00+17.00i
+0.26-0.11i
+2.24+0.00i
+7.81+0.00i
+
+CODE:
+----
+
+
+
+class Complex(object):
+    def __init__(self, real, imaginary):
+        self.real = real
+        self.imaginary = imaginary
+        self.c = complex(*(real, imaginary))
+    @staticmethod
+    def to_complex(no):
+        return complex(*(no.real, no.imaginary))
+            
+    def __add__(self, no):
+        c = self.c + Complex.to_complex(no)
+        return Complex(c.real, c.imag)
+ 
+    def __sub__(self, no):
+        c = self.c - Complex.to_complex(no)
+        return Complex(c.real, c.imag)
+
+    def __mul__(self, no):
+        c = self.c * Complex.to_complex(no)
+        return Complex(c.real, c.imag)
+
+    def __truediv__(self, no):
+        c = self.c / Complex.to_complex(no)
+        return Complex(c.real, c.imag)
+
+    def mod(self):
+        c = math.sqrt(self.c.real ** 2 + self.c.imag ** 2)
+        return Complex(c.real, c.imag)
+
+    def __str__(self):
+        if self.imaginary == 0:
+            result = "%.2f+0.00i" % (self.real)
+        elif self.real == 0:
+            if self.imaginary >= 0:
+                result = "0.00+%.2fi" % (self.imaginary)
+            else:
+                result = "0.00-%.2fi" % (abs(self.imaginary))
+        elif self.imaginary > 0:
+            result = "%.2f+%.2fi" % (self.real, self.imaginary)
+        else:
+            result = "%.2f-%.2fi" % (self.real, abs(self.imaginary))
+        return result
+
+
+***************************************************************************
+Class 2 - Find the Torsional Angle ----> NOT INTERESTED
+https://www.hackerrank.com/challenges/class-2-find-the-torsional-angle/problem?isFullScreen=true
+
+***************************************************************************
+
+Exceptions
+Errors detected during execution are called exceptions.
+
+Examples:
+
+ZeroDivisionError
+This error is raised when the second argument of a division or modulo operation is zero.
+
+>>> a = '1'
+>>> b = '0'
+>>> print int(a) / int(b)
+>>> ZeroDivisionError: integer division or modulo by zero
+
+ValueError
+----------
+This error is raised when a built-in operation or function receives an argument that has the right type but an inappropriate value.
+
+>>> a = '1'
+>>> b = '#'
+>>> print int(a) / int(b)
+>>> ValueError: invalid literal for int() with base 10: '#'
+
+Handling Exceptions
+-------------------
+The statements try and except can be used to handle selected exceptions. A try statement may have more than one except clause to specify handlers for different exceptions.
+
+#Code
+try:
+    print 1/0
+except ZeroDivisionError as e:
+    print "Error Code:",e
+
+Sample Input
+-----------
+3
+1 0
+2 $
+3 1
+Sample Output
+------------
+Error Code: integer division or modulo by zero
+Error Code: invalid literal for int() with base 10: '$'
+3
+
+CODE:
+----
+test_cases = int(input())
+for i in range(0, test_cases):
+    a, b = input().split()
+    
+    try:
+        print(round(int(a)//int(b)))
+        
+    except (ZeroDivisionError, ValueError) as e:
+        print("Error Code:", e)
+
+
+2.Incorrect Regex:
+  ---------------
+The first line contains integer , the number of test cases.
+The next  lines contains the string .
+
+Sample Input
+------------
+2
+.*\+
+.*+
+Sample Output
+-------------
+True
+False
+
+Explanation
+-----------
+.*\+ : Valid regex.
+.*+: Has the error multiple repeat. Hence, it is invalid.
+
+
+CODE:
+----
+import re
+
+T = int(input().strip())
+
+for i in range(T):
+    S= input().strip()
+    if any(op + '+' in S for op in ['*', '+', '?']):
+        print("False")
+    else:
+        try:
+            re.compile(S)
+            print('True')
+        except re.error:
+            print('False')
+
+
+		$$$$$$$$$$$$$$$$$$$$$$$$$$ Calendar Module $$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Sample Input:
+------------
+08 05 2015
+
+Sample Output:
+-------------
+WEDNESDAY
+
+Explanation:
+-----------
+The day on August th  was WEDNESDAY.
+
+CODE:
+----
+import calendar
+
+m, d, y = map(int, input().split())
+
+wday = calendar.weekday(y, m, d)
+
+print(calendar.day_name[wday].upper())
+
+2. TIME DELTA:
+   -----------
+
+Sample Input 0:
+--------------
+2
+Sun 10 May 2015 13:54:36 -0700
+Sun 10 May 2015 13:54:36 -0000
+Sat 02 May 2015 19:54:36 +0530
+Fri 01 May 2015 13:54:36 -0000
+
+Sample Output 0:
+---------------
+25200
+88200
+Explanation 0
+
+In the first query, when we compare the time in UTC for both the time stamps, we see a difference of 7 hours. which is 7* 3600 seconds or 25200 seconds.
+
+Similarly, in the second query, time difference is 5 hours and 30 minutes for time zone adjusting for that we have a difference of 1 day and 30 minutes. Or 24 * 3600 + 30 * 60 => 88200
+
+CODE:
+----
+
+import os
+from datetime import datetime as dt
+def time_delta(t1, t2):
+    fmt = "%a %d %b %Y %H:%M:%S %z"
+    deltaSeconds = abs((dt.strptime(t1, fmt)- dt.strptime(t2, fmt)).total_seconds())
+    return str(int(deltaSeconds))
+if __name__ == '__main__':
+    with open(os.environ['OUTPUT_PATH'], 'w') as fptr:
+        for t_itr in range(int(input())):
+            t1 = input()
+            t2 = input()
+            fptr.write(time_delta(t1, t2) + '\n')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,277 @@
+OPENROWSET function enables you to read the content of CSV file by providing the URL to your file.
+
+The easiest way to see to the content of your CSV file is to provide file URL to OPENROWSET function, specify csv FORMAT, and 2.0 PARSER_VERSION
+
+select top 10 *
+from openrowset(
+    bulk 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',
+    format = 'csv',
+    parser_version = '2.0',
+    firstrow = 2 ) as rows
+
+Previous example uses full path to the file. As an alternative, you can create an external data source with the location that points to the root folder of the storage:
+
+create external data source covid
+with ( location = 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases' );
+
+
+Once you create a data source, you can use that data source and the relative path to the file in OPENROWSET function:
+select top 10 *
+from openrowset(
+        bulk 'latest/ecdc_cases.csv',
+        data_source = 'covid',
+        format = 'csv',
+        parser_version ='2.0',
+        firstrow = 2
+    ) as rows
+
+Explicitly specify schema
+OPENROWSET enables you to explicitly specify what columns you want to read from the file using WITH clause:
+
+select top 10 *
+from openrowset(
+        bulk 'latest/ecdc_cases.csv',
+        data_source = 'covid',
+        format = 'csv',
+        parser_version ='2.0',
+        firstrow = 2
+    ) with (
+        date_rep date 1,
+        cases int 5,
+        geo_id varchar(6) 8
+    ) as rows
+
+The numbers after a data type in the WITH clause represent column index in the CSV file.
+
+Q) How to read a CSV file without a header row, with a Windows-style new line, and comma-delimited columns:
+SELECT *
+FROM OPENROWSET(
+        BULK 'csv/population/population.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIELDTERMINATOR =',',
+        ROWTERMINATOR = '\n'
+    )
+WITH (
+    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2,
+    [country_name] VARCHAR (100) COLLATE Latin1_General_BIN2,
+    [year] smallint,
+    [population] bigint
+) AS [r]
+WHERE
+    country_name = 'Luxembourg'
+    AND year = 2017;
+
+
+Q) how to read a file without a header row, with a Unix-style new line, and comma-delimited columns:
+SELECT *
+FROM OPENROWSET(
+        BULK 'csv/population-unix/population.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIELDTERMINATOR =',',
+        ROWTERMINATOR = '0x0a'
+    )
+WITH (
+    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2,
+    [country_name] VARCHAR (100) COLLATE Latin1_General_BIN2,
+    [year] smallint,
+    [population] bigint
+) AS [r]
+WHERE
+    country_name = 'Luxembourg'
+    AND year = 2017;
+
+
+Q) How to a read file with a header row, with a Unix-style new line, and comma-delimited columns
+
+SELECT *
+FROM OPENROWSET(
+    BULK 'csv/population-unix-hdr/population.csv',
+    DATA_SOURCE = 'SqlOnDemandDemo',
+    FORMAT = 'CSV', PARSER_VERSION = '2.0',
+    FIELDTERMINATOR =',',
+    HEADER_ROW = TRUE
+    ) AS [r]
+
+Option HEADER_ROW = TRUE will result in reading column names 
+
+
+Custom quote character, Escape characters, Escape quoting characters, Tab-delimited files, 
+
+Return a subset of columns:
+SELECT
+    COUNT(DISTINCT country_name) AS countries
+FROM OPENROWSET(
+        BULK 'csv/population/population.csv',
+        DATA_SOURCE = 'SqlOnDemandDemo',
+        FORMAT = 'CSV', PARSER_VERSION = '2.0',
+        FIELDTERMINATOR =',',
+        ROWTERMINATOR = '\n'
+    )
+WITH (
+    --[country_code] VARCHAR (5),
+    [country_name] VARCHAR (100) 2
+    --[year] smallint,
+    --[population] bigint
+) AS [r]
+
+
+Read CSV files without specifying schema:
+The following example reads CSV file that contains header row without specifying column names and data types:
+
+SELECT 
+    *
+FROM OPENROWSET(
+    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',
+    FORMAT = 'CSV',
+    PARSER_VERSION = '2.0',
+    HEADER_ROW = TRUE) as [r]
+
+The following example reads CSV file that doesn't contain header row without specifying column names and data types:
+
+SELECT 
+    *
+FROM OPENROWSET(
+    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',
+    FORMAT = 'CSV',
+    PARSER_VERSION = '2.0') as [r]
+
+
+Read Parquet files without specifying schema
+The following example returns all columns of the first row from the census data set, in Parquet format, and without specifying column names and data types:
+SELECT 
+    TOP 1 *
+FROM  
+    OPENROWSET(
+        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',
+        FORMAT='PARQUET'
+    ) AS [r]
+
+
+Read Delta Lake files without specifying schema:
+The following example returns all columns of the first row from the census data set, in Delta Lake format, and without specifying column names and data types:
+
+SELECT 
+    TOP 1 *
+FROM  
+    OPENROWSET(
+        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',
+        FORMAT='DELTA'
+    ) AS [r]
+
+Read specific columns from CSV file:
+The following example returns only two columns with ordinal numbers 1 and 4 from the population*.csv files. Since there's no header row in the files, it starts reading from the first line:
+
+SELECT 
+    * 
+FROM OPENROWSET(
+        BULK 'https://sqlondemandstorage.blob.core.windows.net/csv/population/population*.csv',
+        FORMAT = 'CSV',
+        FIRSTROW = 1
+    )
+WITH (
+    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2 1,
+    [population] bigint 4
+) AS [r]
+
+
+Specify multiple files/folders in BULK path:
+The following example shows how you can use multiple file/folder paths in BULK parameter:
+
+SELECT 
+    TOP 10 *
+FROM  
+    OPENROWSET(
+        BULK (
+            'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=2000/*.parquet',
+            'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=2010/*.parquet'
+        ),
+        FORMAT='PARQUET'
+    )
+AS [r]
+
+
+
+
+
+
+
+
+
+
+To access elements from a repeated column, such as an element of an Array or Map, use the JSON_VALUE function for every scalar element you need to project and provide:
+
+Nested or repeated column, as the first parameter
+A JSON path that specifies the element or property to access, as a second parameter
+
+JSON_VALUE ( expression , path ) documentation: (Need to read 2nd)
+https://learn.microsoft.com/en-us/sql/t-sql/functions/json-value-transact-sql?view=azure-sqldw-latest&preserve-view=true
+
+Consider the following JSON text:
+
+DECLARE @jsonInfo NVARCHAR(MAX)
+
+SET @jsonInfo=N'{  
+     "info":{    
+       "type":1,  
+       "address":{    
+         "town":"Bristol",  
+         "county":"Avon",  
+         "country":"England"  
+       },  
+       "tags":["Sport", "Water polo"]  
+    },  
+    "type":"Basic"  
+ }'
+
+Example 1
+The following example uses the values of the JSON properties town and state in query results. Since JSON_VALUE preserves the collation of the source, the sort order of the results depends on the collation of the jsonInfo column.
+
+(This example assumes that a table named Person.Person contains a jsonInfo column of JSON text, and that this column has the structure shown previously in the discussion of lax mode and strict mode. In the AdventureWorks sample database, the Person table does not in fact contain a jsonInfo column.)
+
+SELECT FirstName, LastName,
+ JSON_VALUE(jsonInfo,'$.info.address.town') AS Town
+FROM Person.Person
+WHERE JSON_VALUE(jsonInfo,'$.info.address.state') LIKE 'US%'
+ORDER BY JSON_VALUE(jsonInfo,'$.info.address.town')
+
+Example 2:
+The following example extracts the value of the JSON property town into a local variable:
+
+DECLARE @jsonInfo NVARCHAR(MAX)
+DECLARE @town NVARCHAR(32)
+
+SET @jsonInfo=N'{"info":{"address":[{"town":"Paris"},{"town":"London"}]}}';
+
+SET @town=JSON_VALUE(@jsonInfo,'$.info.address[0].town'); -- Paris
+SET @town=JSON_VALUE(@jsonInfo,'$.info.address[1].town'); -- London
+
+Example 3:
+The following example creates computed columns based on the values of JSON properties.
+
+CREATE TABLE dbo.Store
+ (
+  StoreID INT IDENTITY(1,1) NOT NULL,
+  Address VARCHAR(500),
+  jsonContent NVARCHAR(4000),
+  Longitude AS JSON_VALUE(jsonContent, '$.address[0].longitude'),
+  Latitude AS JSON_VALUE(jsonContent, '$.address[0].latitude')
+ )
+
+
+JSON Path Expressions (SQL Server) (Need to read 1st)
+
+https://learn.microsoft.com/en-us/sql/relational-databases/json/json-path-expressions-sql-server?view=sql-server-ver16&viewFallbackFrom=azure-sqldw-latest
+
+OPENJSON (Transact-SQL)
+https://learn.microsoft.com/en-us/sql/t-sql/functions/openjson-transact-sql?view=sql-server-ver16
+
+JSON_QUERY (Transact-SQL)
+https://learn.microsoft.com/en-us/sql/t-sql/functions/json-query-transact-sql?view=sql-server-ver16
+
+JSON_ARRAY (Transact-SQL)
+https://learn.microsoft.com/en-us/sql/t-sql/functions/json-array-transact-sql?view=sql-server-ver16&source=recommendations
+
+ISJSON (Transact-SQL)
+https://learn.microsoft.com/en-us/sql/t-sql/functions/isjson-transact-sql?view=sql-server-ver16&source=recommendations

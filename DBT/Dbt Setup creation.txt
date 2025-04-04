@@ -1,0 +1,112 @@
+preset managed superset of BI tool
+-- Error reporting, Incremental load of fact tables
+-- Track history of dimension tables
+-- Easy-to-access documentation
+-- Modeling changes are easy to follow and revert
+-- Explicit dependencies between models
+-- Explore dependencies between models
+-- Data quality tests
+
+
+complete-dbt-bootcamp-zero-to-hero:
+
+https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero
+
+https://github.com/nordquant/complete-dbt-bootcamp-zero-to-hero/blob/main/_course_resources/course-resources.md
+
+
+
+CREATE YOUR DBT FOLDER MANUALLY (DO THIS OTHERWISE DBT WILL FAIL TO CREATE A NEW PROJECT)
+
+Windows:
+
+Make sure to execute mkdir %userprofile%\.dbt in a cmd window to ensure you can create a dbt project (you are instructed to do this in the dbt setup lecture).
+
+WSL Windows users:
+
+If you prefer using WSL (Windows Subsystem for Linux) instead of a native installation, you can find WSL-based instructions in the last section of the course, Supplementary Materials.
+
+If you already have Python, pip, and virtualenv installed, feel free to create a folder for the course (I'm using Desktop/course), create a virtualenv called venv and skip the following two videos about Python setup and Virtualenv.   
+
+
+
+		*****	DBT PROJECT STRUCTURE   *****
+
+analyses
+data
+logs
+macros
+snapshots
+tests
+.gitgnore
+dbt_project.yml
+
+dbt_project.yml:
+
+model-paths:["models"]
+analysis-paths:["analyses"]
+test-paths:["tests"]
+seed-paths:["seeds"]
+macro-paths:["macros"]
+snapshot-paths:["snapshots"]
+
+target-path: "target"	#directory which will store completed SQL files
+clean-targets:		#directories to be removed by 'dbt clean'
+- "target"
+- "dbt_packages"
+
+models:
+  dbtlearn:
+
+
+
+Go through these links:
+
+To Install:
+https://marketplace.visualstudio.com/items?itemName=innoverio.vscode-dbt-power-user
+
+https://www.altimate.ai/   ---> To Install VS code Extension
+
+To chat for queries:
+https://app.myaltimate.com/contactus
+
+
+
+
+Installation process:
+
+In visual studio, search for dbt Power User --> Install--> Associate your .sql files the jinja-sql language by adding the following lines in settings.json:
+
+"files.associations": {
+	"*.sql": "jinja-sql"
+},
+
+
+Another way:
+
+Top pane click Code--> preferences --> Settings --> Files ----> Add Item
+
+To check if python & other setup is complete, write in terminal :
+
+dbt debug
+
+For further understanding check 31 to 35 class videos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

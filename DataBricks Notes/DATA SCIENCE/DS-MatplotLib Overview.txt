@@ -1,0 +1,4 @@
+Solutions in detail
+Website: https://www.machinelearningplus.com/plots/top-50-matplotlib-visualizations-the-master-plots-python/
+
+Website2: https://code.visualstudio.com/docs/datascience/data-science-tutorial

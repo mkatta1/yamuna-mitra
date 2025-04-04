@@ -1,0 +1,464 @@
+ANN means Artificial Neural Networks
+
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+tf.__version__
+
+Part 1 - Data Preprocessing
+===========================
+
+Importing the dataset
+---------------------
+dataset = pd.read_csv('Churn_Modelling.csv')
+x = dataset.iloc[:, 3:-1].values
+y = dataset.iloc[:, -1].values
+
+Encoding categorical data
+-------------------------
+
+- Encoding the Independent Variable:
+---------------------------------
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct = ColumnTransformer(transformers=[], remainder='passthrough')
+X = np.array(ct.fit_transform(X))
+print(X)
+
+- Encoding the Dependent Variable:
+--------------------------------
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+y = le.fit_transform(y)
+print(y)
+
+- Label Encoding the "Gender" column:
+-----------------------------------
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+X[:, 2] = le.fit_transform(X[:, 2])
+print(X)
+
+- One Hot Encoding the "Geography" column
+-----------------------------------------
+from sklearn.compose
+from sklearn.preprocess
+ct = ColumnTransform
+X = np.array(ct.fit_
+Splitting the dataset into the Training set and Testing set
+-----------------------------------------------------------
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state = 0)
+
+- Feature Scaling
+---------------
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train[:, 3:] = sc.fit_transform(X_train[:, 3:])
+X_test[:,3:] = sc.transform(X_test[:, 3:])
+
+print(X_train)
+
+
+Part 2 - Building the ANN
+=========================
+
+- Initializing the ANN:
+ ann = tf.keras.models.Sequential()
+
+- Adding the input layer and the first hidden layer
+ ann.add(tf.keras.layers.Dense(units=6, activation='relu'))
+
+- Adding the second hidden layer
+ ann.add(tf.keras.layers.Dense(units=6, activation='relu'))
+
+- Adding the output layer
+ ann.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
+
+Part 3 - Training the ANN
+=========================
+
+Compiling the ANN
+-----------------
+ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+Training the ANN on the Training set
+------------------------------------
+ann.fit(X_train, y_train, batch_size=32, epochs=100)
+
+Part 4 - Making the predictions and evaluating the model
+===========================================================
+Predicting the result of a single observation
+---------------------------------------------
+Problem: Homework
+-----------------
+Use our ANN model to predict if the customer with the following information's will leave the blank:
+Geography: France
+Credit Score: 600
+Gender: Male
+Age: 40 years old
+Tenure: 3 years
+Balance: $ 60000
+Number of Products: 2
+Does this customer have a credit card? Yes
+
+Solution:
+---------
+print(ann.predict(sc.transform([[1,0,0,600,1,40,3,60000,2,1,1,50000]]))>0.5)
+
+Predicting the Test set results:
+-------------------------------
+y_pred = ann.predict(X_test)
+y_pred = (y_pred > 0.5)
+print(np.concatenate((y_pred.reshape(len(y_pred),1), y_test.reshape(len(y_test),1)),1))
+
+
+Making the Confusion Matrix
+---------------------------
+from sklearn.metrics import confusion_matrix, accuracy_score
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+accuracy_score(y_test, y_pred)
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct = ColumnTransformer(transformers = [('encoder', OneHotEncoder(), [1])], remainder = 'passthrough')
+X = np.array(ct.fit_transform(X))
+print(X)
+
+
+
+==========================================================================
+
+CNN means Convolutional Neural Networks
+
+CNN 
+KERAS API -> API DOCS -> DEVELOPER GUIDES -> KERAS API reference -> Dataset preprocessing 
+
+import tensorflow as tf
+from keras.preprocessing.image import ImageDataGenerator
+tf.__version__
+
+
+#Preprocessing the Training set
+
+train_datagen = ImageDataGenerator(
+	rescale = 1./255,
+	shear_range=0.2,
+	zoom_range=0.2,
+	horizontal_flip=True)
+training_set = train_datagen.flow_from_directory(
+	'dataset/training_set',
+	target_size=(64, 64),
+	batch_size=32,
+	class_mode='binary')
+
+PART2- Building the CNN
+=======================
+Initialising the CNN
+-------------------
+
+cnn = tf.keras.models.Sequential()
+
+Step1 - convolution:
+--------------------
+cnn.add(tf.keras.layers.Cov2D(filters=32, kernel_size=3, activation='relu', input_shape=[64,64,3]))
+
+Step2 - Pooling:
+---------------
+cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2))
+
+Adding a second convolutional layer
+-----------------------------------
+cnn.add(tf.keras.layers.Conv2D(filters=32, kernel_size=3, activation='relu'))
+cnn.add(tf.keras.layers.MaxPool2D(pool_size=2, strides=2))
+
+Step3 - Flattening
+-------------------
+cnn.add(tf.keras.layers.Flatten())
+
+Step 4 - Full Connection
+------------------------
+cnn.add(tf.keras.layers.Dense(units=128, activation='relu'))
+
+Step5 - Output Layer
+-------------------
+cnn.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
+
+
+
+Part 3 - Training the CNN
+=========================
+
+Compiling the CNN:
+------------------
+cnn.compile(optimizer = 'adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+Training the CNN on the Training set and evaluating it on the Test set
+----------------------------------------------------------------------
+cnn.fit(x=training_set, validation_data = test_set, epochs = 25)
+
+Part 4 - Making a single prediction:
+===================================
+
+import numpy as np
+from keras.preprocessing import
+test_image = image.load_img('dataset/single_prediction/cat_or_dog_1.jpg',target_size=(64,64))
+test_image = image.img_to_array(test_image)
+test_image = np.expand_dims(test_image)
+result = cnn.predict(test_image)
+training_set.class_indices
+if result[][] == 1:
+	prediction = 'dog'
+else:
+	prediction = 'cat'
+
+print(prediction)
+
+
+==========================================================
+
+
+RNN means Recurrent Neural Networks
+
+Feature Scaling:
+---------------
+
+Standardisation
+---------------
+x-stand = (x - mean(x))/standard deviation of (x)
+
+Normalisation
+-------------
+x-norm = (x - min(x))/(max(x)- min(x))
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+#Importing the training set
+dataset_train = pd.read_csv('Google_Stock_Price_Train.csv')
+training_set = dataset_train.iloc[:, 1:2].values
+
+# Feature Scaling
+from sklearn.preprocessing import MinMaxScaler
+sc = MinMaxScaler(feature_range = (0,1))
+training_set_scaled = sc.fit_transform(training_set)
+
+# Creating a data structure with 60 timesteps and 1 output
+x_train = []
+y_train = []
+for i in range(60, 1258):
+	x_train.append(training_set_scaled[i-60:i, 0])
+	y_train.append(training_set_scaled[i, 0])
+x_train, y_train = np.array(x_train), np.array(y_train)
+
+# Reshaping
+x-train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+
+# Part 2 - Building the RNN
+ # Importing the Keras libraries and packages
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
+from keras.layers import Dropout
+
+ # Adding the first LSTM layer and some Dropout regularisation
+regressor.add(LSTM(units = 50, return_sequences = True, input_shape = (x_train.shape[1], 1))
+regressor.add(Dropout(0.2))
+
+ # Adding the second LSTM layer and some Dropout regularisation
+regressor.add(LSTM(units = 50, return_sequences = True))
+regressor.add(Dropout(0.2))
+
+ # Adding the third LSTM layer and some Dropout regularisation
+regressor.add(LSTM(units = 50, return_sequences = True))
+regressor.add(Dropout(0.2))
+
+ # Adding the fourth LSTM layer and some Dropout regularisation
+regressor.add(LSTM(units = 50))
+regressor.add(Dropout(0.2))
+
+ # Adding the output layer
+regressor.add(Dense(units = 1))
+
+# Compiling the RNN
+regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
+
+# Part 3 - Making the predictions and visualising the results
+
+#Getting the real stock price of 2017
+dataset_test = pd.read_csv('Google_Stock_Price_Test.csv')
+real_stock_price = dataset_test.iloc[:,1:2].values
+
+#Getting the predicted stock price of 2017
+dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis =0)
+inputs = dataset_Total[len(dataset_total) - len(dataset_test) - 60:].values
+inputs = inputs.reshape(-1,1)
+inputs = sc.transform(inputs)
+x_test = []
+for i in range(60,80):
+    x_test.append(inputs[i-60:i, 0])
+x_test = np.array(x_test)
+x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+predicted_stock_price = regressor.predict(x_test)
+predicted_stock_price = sc.inverse_transform(predicted_stock_price)
+
+# visualising the results
+plt.plot(real_stock_price, color='red', label='Real Google Stock Price')
+plt.plot(predicted_stock_price,color='blue', label='Predicted Google Stock Price')
+plt.title('Google Stock Price Prediction')
+plt.xlabel('Time')
+plt.ylabel('Google Stock Price')
+plt.legend()
+plt.show()
+
+
+# x_train, y_train = np.array(x_train), np.array(y_train)
+
+
+
+4.Self Organizing Maps
+-----------------------
+
+
+
+
+
+6. AutoEncoders
+----------------
+this website www.superdatascience.com/deep-learning/    contains 
+1. deep learning A-Z - Course folder template.zip
+2. artificial neural networks.zip
+
+CODE:
+-----
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+import torch.nn.parallel
+import torch.optim as optim
+import torch.utils.data
+from torch.autograd import Variable
+
+# Importing the dataset
+movies = pd.read_csv('m1-1m/movies.dat',sep='::',header=None, engine='python', encoding='latin-1')
+movies = pd.read_csv('m1-1m/users.dat',sep='::',header=None, engine='python', encoding='latin-1')
+movies = pd.read_csv('m1-1m/ratings.dat',sep='::',header=None, engine='python', encoding='latin-1')
+
+# Preparing the training set and the test set
+training_set = pd.read_csv('m1-100k/u1.base', delimiter='\t')
+training_set = np.array(training_set, dtype = 'int')
+test_set = pd.read_csv('m1-100k/u1.test', delimiter= '\t')
+test_set = np.array(test_set, dtype = 'int')
+
+# Getting the number of users and movies
+nb_users = int(max(max(training_set[:,0]), max(test_set[:,0])))
+nb_movies = int(max(max(training_set[:,1]),max(test_set[:,1])))
+
+# converting the data into an array with users in lines and movies in columns
+def convert(data):
+    new_data=[]
+    for id_users in range(1, nb_users + 1):
+	id_movies = data[:,1][data[:,0] == id_users]
+	id_ratings = data[:,2][data[:,0] == id_users]
+	ratings = np.zeros(nb_movies)
+	ratings[id_movies - 1] = id_ratings
+	new_data.append(list(ratings))
+    return
+training_set = convert(training_set)
+test_set = convert(test_set)
+
+# Converting the data into Torch tensors
+training_set = torch.FloatTensor(training_set)
+test_set = torch.FloatTensor(test_set)
+
+# Creating the architecture of the Neural Network
+class SAE(nn.Module):
+     def __init__(self, ):
+	super(SAE, self).__init__()
+	self.fc1 = nn.Linear(nb_movies,20)
+	self.fc2 = nn.Linear(20,10)
+	self.fc3 = nn.Linear(10,20)
+	self.fc4 = nn.Linear(20, nb_movies)
+	self.activation = nn.Sigmoid()
+     def forward(self, x):
+	x = self.activation(self.fc1(x))
+	x = self.activation(self.fc2(x))
+	x = self.activation(self.fc3(x))
+	x = self.fc4(x)
+	return x
+sae = SAE()
+criterion = nn.MSELoss()
+optimizer = optim.RMSprop(sae.parameters(), lr = 0.01, weight_decay = 0.5)
+
+# Training the SAE
+nb_epoch = 200
+for epoch in range(1, nb_epoch + 1):
+    train_loss = 0
+    s = 0
+    for id_user in range(nb_users):
+	input = Variable(training_set[id_user]).unsqueeze(0)
+	target = input.clone()
+	if torch.sum(target.data > 0) > 0:
+	   output = sae(input)
+	   target.require_grad = False
+	   output[target == 0] = 0
+	   loss = criterion(output, target)
+	   mean_corrector = nb_movies/float(torch.sum(target.data > 0) + 1e-10)
+	   loss.backward()
+	   train_loss += np.sqrt(loss.data[0]*mean_corrector)
+	   s += 1
+	   optimizer.step()
+   print('epoch:'+str(epoch)+'loss:'+str(train_loss/s))
+
+# Testing the SAE
+test_loss = 0
+s = 0
+for id_user in range(nb_users):
+    input = Variable(training_set[id_user]).unsqueeze(0)
+    target = Variable(test_set[id_user])
+    if torch.sum(target.data > 0) > 0:
+       output = sae(input)
+       target.require_grad = False
+       output[target == 0] = 0
+       loss = criterion(output, target)
+       mean_corrector = nb_movies/float(torch.sum(target.data > 0) + 1e-10)
+       test_loss += np.sqrt(loss.data[0]*mean_corrector)
+       s += 1
+   print('test_loss:'+ str(test_loss/s))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

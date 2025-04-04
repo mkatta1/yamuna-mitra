@@ -1,0 +1,226 @@
+datamart: individual custamized reporting by create subsets of datawarehouse called datamarts.
+datawarehouse: used across the organization
+
+They all draw data from different sources.
+We have multiple departments like finance, marketing.
+Finance is concerned with the statistics
+marketing is concerned with the promotions
+
+advantages of DW:
+- standardizes data across an organization
+- smarter decisions for companies - move towards fact based decisions
+
+Reduced costs:
+- Drop products not doing well
+- negotiate for improvement with suppliers
+
+Increase revenue:
+- Work on the high selling products
+- Customer satisfaction - know what is working and what is not
+
+
+Load data from staging by before or after staging removing special characters & extra spaces. Then we load it into Dimension and then to facts.
+
+dimension is a denormalized table means data comes from multiple sources. Below we are loading the dimension table.
+
+Input (country_name, sales_person, sales)
+Lookup (Sales & Rating from sales table)
+Target (Country_name, sales_person, sales, rating)
+
+CREATE TABLE INPUT (
+COUNTRY_NAME VARCHAR(20),
+SALES_PERSON VARCHAR(20),
+SALES INT
+)
+
+INSERT INTO INPUTVALUES ('India','ABC',100)
+INSERT INTO INPUTVALUES ('Australia','MDM',50)
+INSERT INTO INPUTVALUES ('USA','ETL',350)
+INSERT INTO INPUTVALUES ('India','GHI',200)
+INSERT INTO INPUTVALUES ('UK','EMI',245)
+INSERT INTO INPUTVALUES ('USA','ETL',125)
+
+
+CREATE TABLE LOOKUP
+(
+SALES INT,
+RATING VARCHAR(30)
+)
+INSERT INTO LOOKUP VALUES(100,'Poor')
+INSERT INTO LOOKUP VALUES(50,'Poor')
+INSERT INTO LOOKUP VALUES(350,'Very Good')
+INSERT INTO LOOKUP VALUES(200,'Good')
+INSERT INTO LOOKUP VALUES(245,'Very Good')
+INSERT INTO LOOKUP VALUES(125,'Good')
+
+
+****************************DATAMARTS & types ****************************
+
+-> Data mart is a smaller version of the datawarehouse
+-> data marts deal with a single subject
+-> data marts are focused on one area. hence they draw from a limited number of sources.
+-> Time taken to build the data mart is very low compared to time taken to build datawarehouse.
+hr, fianance, supplychain
+
+datawarehouse, datamarts
+------------------------------
+enterpirse wide data, department wide data
+multiple subject areas,  
+multiple data sources, 
+occupies large memory, 
+longer time to implement, 
+
+Dependent datamart:
+------------------
+- The data is first extracted from the OLTP systems and then populated in the central datawarehouse and then populated in the central datawarehouse.
+- From the datawarehouse the data then travel down to the data mart.
+So, 1st datawarehouse gets updated then the DATAMART.
+
+Eg: 1)for security reasons we want to have separate datamart
+    2) Don't have to access whole datawarehouse to access certain records. It's a quick timearound.
+Here the implementation time is doubled.
+
+Independent datamart:
+---------------------
+- The data is directly got from the source system
+- This is suitable for small organizations or smaller groups within an organization
+eg: 1) used for small companies , implementation of adhoc reports directly
+
+Hybrid datamart:
+----------------
+- The data is fed both from OLTP systems as well as the datawarehouse
+
+Eg: Customer relation management system. Survey customers/consumers online survey logs posted in oltp then to olap then to reporting. In another locations, where they colleced the data in the form of excel sheets.
+So, 1st is the DW way & 2nd is the OLTP way.
+
+What to build first?
+-> Bill Inmon had started = "whether to build DW 1st or the DATAMART"
+- Top down approach (Inmon approach) --> Not a frequent one,no business requirement in mind, its costs more & research, if innovative approach, invest more etc..
+	- info at central location, Time variant of both datamarts&dw is same. Data is updated at the same time for both the DW& datamart.
+	- Disadvantage becomes a very big project which must be handled by 		specialists else it can go wrong. Time consuming!
+
+- Bottom up approach: build datamart based on the requirement they need and then combine in DW.
+	- fast results, easier to manage becoz it's broken down in initial 		phase itself.
+	- Startups go for such approach where there are limited departments and it is very easy to build data marts and then go for the datawarehouse. As independent so not time variant.
+
+
+Operational data store (ODS):
+----------------------
+- contains operational data with a very short window
+- ods is refreshed frequently so that it contains very current data. It can be updated daily, hourly etc
+- The frequency of refresh depends on how current the data must be for reporting purpose.
+- This concept comes in between the concept of OLTP and the Datawarehouse. When realtime reporting is not possible in a datawarehouse, ods is used
+- It provides improved access to the critical and current operational data.
+- DataWarehouse is a current data but ODS is a periodic data.
+- It's needed for the day-to-day operations.
+Eg:
+Ticketing system, call centre to qureies of customers. They might not fulfill by looking at the transactional data but they need certain level of summarized data ,statistical view which is not available in the transactional data.
+
+2)
+When we place an order on an ecommerce site and we call up the call center to enquire about the status.
+- we  cannot get information from datawarehouse, as this data might not even have reached the warehouse
+- OLTP system is not ideal to fetch this data as already described.
+- Hence ODS is used, when status changes the oltp gets updated and the same is refreshed in ODS but only the current data is maintained.
+
+
+
+************************Build Datawarehouse ****************************
+- the objects of the subject are called dimensions
+- the tables that describe the dimensions involved are called dimension tables.
+- dividing a datawarehouse project into dimensions provides structured information for reporting purpose.
+
+what are facts?
+- a fact is a measure that can be summed, averaged or manipulated. If a fact is manipulated, it has to be a measure that makes a business sense.
+- a dimension is linked to a fact
+- a fact table contains 2 kinds of data - a dimension key and a measure
+
+types of dimension:
+-------------------
+- confirmed dimension
+- degenrative dimension
+- junk dimension
+- slowly changing dimension
+- role playing dimension
+
+slowly changing dimension:
+-------------------------
+- dimension attributes that change slowly over a period of time rather than changing regularly is grouped as SCD's
+- let's consider an example of a person changing his/her city from city 1 to city 2 and this change does not happen at regular intervals
+- ther are 3 ways in which these types of attributes are handled.
+
+Not having a data model may lead to performance issues and slow query processing.
+- ER diagrams depicts the relationship between the subjects
+
+				Modeling:
+				--------
+- a model is an abstraction or representation of a real world object
+- the data model acts as a blueprint to the developers in building the warehouse
+- the tables that make up the warehouse are mentioned, the relationship between the tables is mentioned, the primary keys and foreign keys are mentioned in the model
+- In fact proper documentation is one of the major problems in the IT industry.
+- If we start developing without a model and if we miss some entities we need start from the scratch.
+- Hence a model needs to be created and discussed with all stakeholders so that everyone is on the same page and everyone agrees to the design.
+- cardinality describes what is the type of relationship 
+Many to Many relationship: A project has many employees. an employee can also work in many projects.
+Many to one relationship: A company has many employees. an employee can work only in one company
+one to one relationship: a employee has one pan card. an pancard can be assigned only to one employee.
+
+		Types of Models
+		---------------
+
+Conceptual data model:
+---------------------
+- This model is designed based on collecting details from required documents, scheduling a call with the business analysts, talking to the end users
+- Designed primarily for business consumers who would like to get an idea about the warehouse.
+
+Physical data model:
+-------------------
+- describes data in much more detail. the entities and relationships are included
+- each entity will have attributes defined
+- Primary key for each entity will be defined
+- Foreign key linking the different entities will be defined
+- tables can also be normalized in this model
+
+
+
+Logical data model:
+-------------------
+
+
+
+
+******************** Types of Dimensions ************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

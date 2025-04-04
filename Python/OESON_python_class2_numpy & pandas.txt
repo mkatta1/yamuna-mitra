@@ -1,0 +1,111 @@
+#tuple example
+student_info_tuple = ("john doe",25,"male","computer science")
+print("student info tuple:", student_info_tuple)
+
+d = {"INDIA":"RS","USA":"USD","FRANCE":"EURO"}
+#access the value using key
+d["FRANCE"]
+d["FRANCE"]
+# replace the value
+d["INDIA"]= "INR"
+d
+#insert the value using key
+d["JAPAN"]="YEN"
+d
+#delete key value pair
+del d["USA"]
+d
+
+#insert value of key
+d["JAPAN"] = "Ken"
+d
+
+#value () method
+d = {'INDIA':'INR','FRANCE':'EURO','JAPAN':'Ken'}
+d.values()
+d.keys()
+
+
+datavisualiztion: seaborn,matplotlib, plotly, 
+dataprocessing: pands, numpy, keras, tensorflow, scikit-learn, scipy
+
+numpy - numeric python
+import numpy as np
+#list ---- concatinate
+list1 = [1,4,6]
+list2 = [3,6,7]
+list3 = list1 + list2
+list3
+
+numpy is alternative for list
+#numpy --- addition
+np1 = np.array([1,4,6])
+np2 = np.array([3,6,7])
+
+np3 = np1 + np2
+np3
+
+operends could not be operated with 3&4
+
+1.initialize fixed length array or
+2.convert list or tuple into numpyArrays
+
+read the screenshots and practice
+
+#PANDAS
+high performance for data manipulation
+import data, reshape, pivot data, indexing, subsetting, multiple datastructure, aggregations, and transformations.
+
+#importing pandas libraries
+import pandas as pd
+
+#series-one dimensional array
+#dataframe-two dimensional array
+import numpy as np
+import pandas as pd
+
+#dictionary
+car_per_cab = [809,654,234,743,920,237,698]
+country = ['united sales'.'','',',,'','','']
+Drive_right_rule = [False,True,False,False, True, True, True]
+
+#Dictionary
+cars_Dict = {"cars_per_cab": cars_per_cab,"country": country, "": drive_right_rule}
+car_dict
+
+cars = pd.DataFrame(cars_Dict)
+cars
+
+Aus-11-Functions - notebook name
+
+#Matplotlib
+
+graphics and visuals
+
+graphs, arrays, bars, histograms, 
+
+#IMPORTING MATPLOTLIB library
+
+import matplotlib.pyplot as plt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

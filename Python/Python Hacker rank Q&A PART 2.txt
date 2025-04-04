@@ -1,0 +1,1774 @@
+collections.Counter()
+A counter is a container that stores elements as dictionary keys, and their counts are stored as dictionary values.
+>>> from collections import Counter
+>>> 
+>>> myList = [1,1,2,3,4,5,3,2,3,4,2,1,2,3]
+>>> print Counter(myList)
+Counter({2: 4, 3: 4, 1: 3, 4: 2, 5: 1})
+>>>
+>>> print Counter(myList).items()
+[(1, 3), (2, 4), (3, 4), (4, 2), (5, 1)]
+>>> 
+>>> print Counter(myList).keys()
+[1, 2, 3, 4, 5]
+>>> 
+>>> print Counter(myList).values()
+[3, 4, 4, 2, 1]
+
+Output Format
+-------------
+Print the amount of money earned by Raghu.
+
+Sample Input:
+------------
+10
+2 3 4 5 6 8 7 6 5 18
+6
+6 55
+6 45
+6 55
+4 40
+18 60
+10 50
+
+Sample Output:
+-------------
+200
+
+Explanation:
+-----------
+Customer 1: Purchased size 6 shoe for $55.
+Customer 2: Purchased size 6 shoe for $45.
+Customer 3: Size 6 no longer available, so no purchase.
+Customer 4: Purchased size 4 shoe for $40.
+Customer 5: Purchased size 18 shoe for $60.
+Customer 6: Size 10 not available, so no purchase.
+
+Total money earned =  55 + 45 + 40 + 60 = $200
+
+CODE:
+----
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from collections import Counter
+
+number_of_shoes = int(input())
+shoe_size = Counter(list(map(int, input().split())))
+number_of_customers = int(input())
+size_price = []
+total = 0
+
+for i in range(number_of_customers):
+    s = tuple(map(int, input().split()))      
+    size_price.append(s)
+    if shoe_size[s[0]] > 0:
+        total += s[1]
+        shoe_size[s[0]] -= 1
+print(total)
+
+
+2. DefaultDict Tutorial:
+   --------------------
+
+The defaultdict tool is a container in the collections class of Python. It's similar to the usual dictionary (dict) container, but the only difference is that a defaultdict will have a default value if that key has not been set yet. If you didn't use a defaultdict you'd have to check to see if that key exists, and if it doesn't, set it to what you want.
+For example:
+
+from collections import defaultdict
+d = defaultdict(list)
+d['python'].append("awesome")
+d['something-else'].append("not relevant")
+d['python'].append("language")
+for i in d.items():
+    print i
+This prints:
+
+('python', ['awesome', 'language'])
+('something-else', ['not relevant'])
+
+Example:
+-------
+Group A contains 'a', 'b', 'a' Group B contains 'a', 'c'
+
+For the first word in group B, 'a', it appears at positions 1 and 3 in group A. The second word, 'c', does not appear in group A, so print -1.
+
+Expected output:
+---------------
+1 3
+-1
+
+from collections import defaultdict
+
+n, m = input().split()
+a = defaultdict(list)
+[a[input()].append(i+1) for i in range(int(n))]
+[print(*a[input()] or [-1]) for i in range(int(m))]
+
+
+3. collections.namedtuple():
+   ------------------------
+
+collections.namedtuple()
+Basically, namedtuples are easy to create, lightweight object types.
+They turn tuples into convenient containers for simple tasks.
+With namedtuples, you don’t have to use integer indices for accessing members of a tuple.
+
+Example:
+-------
+Code 01:
+-------
+>>> from collections import namedtuple
+>>> Point = namedtuple('Point','x,y')
+>>> pt1 = Point(1,2)
+>>> pt2 = Point(3,4)
+>>> dot_product = ( pt1.x * pt2.x ) +( pt1.y * pt2.y )
+>>> print dot_product
+11
+
+Code 02:
+-------
+>>> from collections import namedtuple
+>>> Car = namedtuple('Car','Price Mileage Colour Class')
+>>> xyz = Car(Price = 100000, Mileage = 30, Colour = 'Cyan', Class = 'Y')
+>>> print xyz
+Car(Price=100000, Mileage=30, Colour='Cyan', Class='Y')
+>>> print xyz.Class
+Y
+
+
+Sample Input
+------------
+TESTCASE 01
+-----------
+5
+ID         MARKS      NAME       CLASS     
+1          97         Raymond    7         
+2          50         Steven     4         
+3          91         Adrian     9         
+4          72         Stewart    5         
+5          80         Peter      6   
+
+TESTCASE 02
+-----------
+5
+MARKS      CLASS      NAME       ID        
+92         2          Calum      1         
+82         5          Scott      2         
+94         2          Jason      3         
+55         8          Glenn      4         
+82         2          Fergus     5
+
+Sample Output
+-------------
+TESTCASE 01
+-----------
+78.00
+
+TESTCASE 02
+-----------
+81.00
+
+Explanation
+-----------
+TESTCASE 01
+-----------
+
+Average = (97 + 50 + 91 + 72 + 80)/5
+
+Can you solve this challenge in 4 lines of code or less?
+NOTE: There is no penalty for solutions that are correct but have more than 4 lines.
+
+CODE:
+-----
+from collections import namedtuple
+
+total_stu = int(input())
+score = namedtuple('score', input().split())
+l = []
+
+for _ in range(total_stu):
+    marks = score(*input().split())
+    l.append(marks.MARKS)
+
+avg =sum(list(map(int, l))) / total_stu
+
+print(f"{avg:.2f}")
+
+
+4. collections.OrderedDict:
+   -----------------------
+
+An OrderedDict is a dictionary that remembers the order of the keys that were inserted first. If a new entry overwrites an existing entry, the original insertion position is left unchanged.
+
+Example
+
+Code
+----
+>>> from collections import OrderedDict
+>>> 
+>>> ordinary_dictionary = {}
+>>> ordinary_dictionary['a'] = 1
+>>> ordinary_dictionary['b'] = 2
+>>> ordinary_dictionary['c'] = 3
+>>> ordinary_dictionary['d'] = 4
+>>> ordinary_dictionary['e'] = 5
+>>> 
+>>> print ordinary_dictionary
+{'a': 1, 'c': 3, 'b': 2, 'e': 5, 'd': 4}
+>>> 
+>>> ordered_dictionary = OrderedDict()
+>>> ordered_dictionary['a'] = 1
+>>> ordered_dictionary['b'] = 2
+>>> ordered_dictionary['c'] = 3
+>>> ordered_dictionary['d'] = 4
+>>> ordered_dictionary['e'] = 5
+>>> 
+>>> print ordered_dictionary
+OrderedDict([('a', 1), ('b', 2), ('c', 3), ('d', 4), ('e', 5)])
+
+
+Your task is to print each item_name and net_price in order of its first occurrence.
+
+item_name = Name of the item.
+net_price = Quantity of the item sold multiplied by the price of each item.
+
+Sample Input
+
+9
+BANANA FRIES 12
+POTATO CHIPS 30
+APPLE JUICE 10
+CANDY 5
+APPLE JUICE 10
+CANDY 5
+CANDY 5
+CANDY 5
+POTATO CHIPS 30
+Sample Output
+
+BANANA FRIES 12
+POTATO CHIPS 60
+APPLE JUICE 20
+CANDY 20
+
+Explanation:
+-----------
+
+BANANA FRIES: Quantity bought: 1, Price: 12
+Net Price: 12
+POTATO CHIPS: Quantity bought: 2, Price: 30
+Net Price: 60
+APPLE JUICE: Quantity bought: 2, Price: 10
+Net Price: 20
+CANDY: Quantity bought: 4, Price: 5
+Net Price: 20
+
+CODE:
+----
+from collections import OrderedDict
+N = int(input())
+ordered_dictionary = OrderedDict()
+for x in range(N):
+    name, price = input().rsplit(' ', 1)
+    if name in ordered_dictionary:
+        ordered_dictionary[name] += int(price)
+    else:
+        ordered_dictionary[name] = int(price)
+for name, price in ordered_dictionary.items():
+    print(f"{name} {price}")
+
+ 
+
+
+5.Word Order:
+  ----------
+
+Sample Input:
+------------
+4
+bcdef
+abcdefg
+bcde
+bcdef
+
+Sample Output:
+-------------
+3
+2 1 1
+
+Explanation:
+-----------
+There are  distinct words. Here, "bcdef" appears twice in the input at the first and last positions. The other words appear once each. The order of the first appearances are "bcdef", "abcdefg" and "bcde" which corresponds to the output.
+
+CODE:
+----
+from collections import Counter
+words = [input() for _ in range(int(input()))]
+counter = Counter(words)
+print(len(counter))
+print(' '.join(map(str, counter.values())))
+
+
+
+6. collections.deque:
+   -----------------
+collections.deque()
+A deque is a double-ended queue. It can be used to add or remove elements from both ends.
+
+Deques support thread safe, memory efficient appends and pops from either side of the deque with approximately the same  performance in either direction.
+
+Click on the link to learn more about deque() methods.
+Click on the link to learn more about various approaches to working with deques: Deque Recipes.
+
+Example
+
+Code
+
+>>> from collections import deque
+>>> d = deque()
+>>> d.append(1)
+>>> print d
+deque([1])
+>>> d.appendleft(2)
+>>> print d
+deque([2, 1])
+>>> d.clear()
+>>> print d
+deque([])
+>>> d.extend('1')
+>>> print d
+deque(['1'])
+>>> d.extendleft('234')
+>>> print d
+deque(['4', '3', '2', '1'])
+>>> d.count('1')
+1
+>>> d.pop()
+'1'
+>>> print d
+deque(['4', '3', '2'])
+>>> d.popleft()
+'4'
+>>> print d
+deque(['3', '2'])
+>>> d.extend('7896')
+>>> print d
+deque(['3', '2', '7', '8', '9', '6'])
+>>> d.remove('2')
+>>> print d
+deque(['3', '7', '8', '9', '6'])
+>>> d.reverse()
+>>> print d
+deque(['6', '9', '8', '7', '3'])
+>>> d.rotate(3)
+>>> print d
+deque(['8', '7', '3', '6', '9'])
+
+Sample Input:
+------------
+
+6
+append 1
+append 2
+append 3
+appendleft 4
+pop
+popleft
+
+Sample Output:
+-------------
+1 2
+
+
+CODE:
+----
+
+from collections import deque
+
+n = int(input())
+d = deque()
+
+for x in range(n):
+    c = input().split()
+    
+    match c[0]:
+        case 'append':
+            d.append(c[1])
+        case 'pop':
+            d.pop()
+        case 'popleft':
+            d.popleft()
+        case 'appendleft':
+            d.appendleft(c[1])
+            
+print(" ".join(d))
+
+7. Piling Up!:
+   -----------
+
+Sample Input:
+------------
+
+STDIN        Function
+-----        --------
+2            T = 2
+6            blocks[] size n = 6
+4 3 2 1 3 4  blocks = [4, 3, 2, 1, 3, 4]
+3            blocks[] size n = 3
+1 3 2        blocks = [1, 3, 2]
+
+Sample Output:
+-------------
+Yes
+No
+Explanation
+
+In the first test case, pick in this order: left - 4, right - 4, left - 3, right - 3, left - 2, right - 1.
+In the second test case, no order gives an appropriate arrangement of vertical cubes. 3 will always come after either 1 or 2.
+
+
+CODE:
+----
+# Enter your code here. Read input from STDIN. Print output to STDOUT
+from collections import deque
+
+for _ in range(int(input())):
+    size, blocks = int(input()), deque(map(int, input().split()))
+    base = max(blocks[0], blocks[-1])
+    result = 'Yes'
+    while blocks:
+        if base >= blocks[0] and base >= blocks[-1]:
+            if blocks[0] >= blocks[-1]:
+                base = blocks[0]
+                blocks.popleft()
+            else:
+                base = blocks[-1]
+                blocks.pop()
+        else:
+            result = 'No'
+            break
+    print(result)
+
+
+		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+1. itertools.product():
+   -------------------
+
+itertools.product()
+
+This tool computes the cartesian product of input iterables.
+It is equivalent to nested for-loops.
+For example, product(A, B) returns the same as ((x,y) for x in A for y in B).
+
+Sample Code
+
+>>> from itertools import product
+>>>
+>>> print list(product([1,2,3],repeat = 2))
+[(1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3)]
+>>>
+>>> print list(product([1,2,3],[3,4]))
+[(1, 3), (1, 4), (2, 3), (2, 4), (3, 3), (3, 4)]
+>>>
+>>> A = [[1,2,3],[3,4,5]]
+>>> print list(product(*A))
+[(1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5), (3, 3), (3, 4), (3, 5)]
+>>>
+>>> B = [[1,2,3],[3,4,5],[7,8]]
+>>> print list(product(*B))
+[(1, 3, 7), (1, 3, 8), (1, 4, 7), (1, 4, 8), (1, 5, 7), (1, 5, 8), (2, 3, 7), (2, 3, 8), (2, 4, 7), (2, 4, 8), (2, 5, 7), (2, 5, 8), (3, 3, 7), (3, 3, 8), (3, 4, 7), (3, 4, 8), (3, 5, 7), (3, 5, 8)]
+
+Task
+----
+You are given a two lists  and . Your task is to compute their cartesian product A X B.
+
+Example
+
+A = [1, 2]
+B = [3, 4]
+
+AxB = [(1, 3), (1, 4), (2, 3), (2, 4)]
+Note: A and B are sorted lists, and the cartesian product's tuples should be output in sorted order.
+
+Input Format
+------------
+The first line contains the space separated elements of list A.
+The second line contains the space separated elements of list B.
+
+Both lists have no duplicate integer elements.
+
+Output Format
+-------------
+Output the space separated tuples of the cartesian product.
+
+Sample Input:
+--------------
+ 1 2
+ 3 4
+
+Sample Output
+-------------
+ (1, 3) (1, 4) (2, 3) (2, 4)
+
+CODE:
+----
+
+from itertools import product
+a = list(map(int,input().split()))
+b = list(map(int,input().split()))
+lst = [a,b]
+print(' '.join(map(str,product(*lst))))
+
+
+2. itertools.permutations(iterable[, r]):
+   -------------------------------------
+
+This tool returns successive  length permutations of elements in an iterable.
+
+If  is not specified or is None, then  defaults to the length of the iterable, and all possible full length permutations are generated.
+
+Permutations are printed in a lexicographic sorted order. So, if the input iterable is sorted, the permutation tuples will be produced in a sorted order.
+
+Sample Code
+
+>>> from itertools import permutations
+>>> print permutations(['1','2','3'])
+<itertools.permutations object at 0x02A45210>
+>>> 
+>>> print list(permutations(['1','2','3']))
+[('1', '2', '3'), ('1', '3', '2'), ('2', '1', '3'), ('2', '3', '1'), ('3', '1', '2'), ('3', '2', '1')]
+>>> 
+>>> print list(permutations(['1','2','3'],2))
+[('1', '2'), ('1', '3'), ('2', '1'), ('2', '3'), ('3', '1'), ('3', '2')]
+>>>
+>>> print list(permutations('abc',3))
+[('a', 'b', 'c'), ('a', 'c', 'b'), ('b', 'a', 'c'), ('b', 'c', 'a'), ('c', 'a', 'b'), ('c', 'b', 'a')]
+
+Print the permutations of the string  on separate lines.
+
+Sample Input:
+------------
+HACK 2
+
+Sample Output:
+-------------
+AC
+AH
+AK
+CA
+CH
+CK
+HA
+HC
+HK
+KA
+KC
+KH
+
+Explanation
+------------
+All possible size 2 permutations of the string "HACK" are printed in lexicographic sorted order.
+
+CODE:
+-----
+from itertools import permutations
+
+s,k = input().split()
+
+
+l = sorted(permutations(s,int(k)))
+
+for x in l:
+    print(''.join(x))
+
+
+
+3. itertools.combinations(iterable, r):
+   ------------------------------------
+
+This tool returns the  length subsequences of elements from the input iterable.
+
+Combinations are emitted in lexicographic sorted order. So, if the input iterable is sorted, the combination tuples will be produced in sorted order.
+
+Sample Code
+-----------
+>>> from itertools import combinations
+>>> 
+>>> print list(combinations('12345',2))
+[('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('2', '3'), ('2', '4'), ('2', '5'), ('3', '4'), ('3', '5'), ('4', '5')]
+>>> 
+>>> A = [1,1,3,3,3]
+>>> print list(combinations(A,4))
+[(1, 1, 3, 3), (1, 1, 3, 3), (1, 1, 3, 3), (1, 3, 3, 3), (1, 3, 3, 3)]
+
+Sample Input
+------------
+HACK 2
+
+Sample Output
+--------------
+A
+C
+H
+K
+AC
+AH
+AK
+CH
+CK
+HK
+
+CODE:
+----
+from itertools import combinations
+S, k = input().split()
+S = sorted(S)
+k = int(k)
+for x in range(1, k + 1):
+    for y in combinations(S, x):
+        print(''.join(y))
+
+4. itertools.combinations_with_replacement(iterable, r):
+  -----------------------------------------------------
+This tool returns  length subsequences of elements from the input iterable allowing individual elements to be repeated more than once.
+
+Combinations are emitted in lexicographic sorted order. So, if the input iterable is sorted, the combination tuples will be produced in sorted order.
+
+Sample Code
+
+>>> from itertools import combinations_with_replacement
+>>> 
+>>> print list(combinations_with_replacement('12345',2))
+[('1', '1'), ('1', '2'), ('1', '3'), ('1', '4'), ('1', '5'), ('2', '2'), ('2', '3'), ('2', '4'), ('2', '5'), ('3', '3'), ('3', '4'), ('3', '5'), ('4', '4'), ('4', '5'), ('5', '5')]
+>>> 
+>>> A = [1,1,3,3,3]
+>>> print list(combinations(A,2))
+[(1, 1), (1, 3), (1, 3), (1, 3), (1, 3), (1, 3), (1, 3), (3, 3), (3, 3), (3, 3)]
+
+Output Format
+-------------
+Print the combinations with their replacements of string  on separate lines.
+
+Sample Input:
+------------
+HACK 2
+
+Sample Output:
+-------------
+AA
+AC
+AH
+AK
+CC
+CH
+CK
+HH
+HK
+KK
+
+CODE:
+----
+from itertools import combinations_with_replacement
+
+word, n = input().split()
+
+comb = sorted([sorted(x) for x in combinations_with_replacement(word, int(n))])
+
+for x in comb:
+    print(''.join(x))
+
+5. Compress the String!:
+  ---------------------
+In this task, we would like for you to appreciate the usefulness of the groupby() function of itertools . To read more about this function, Check this out .
+
+You are given a string S. Suppose a character 'c' occurs consecutively X times in the string. Replace these consecutive occurrences of the character 'c' with (X, c) in the string.
+
+Sample Input:
+------------
+1222311
+
+Sample Output:
+-------------
+(1, 1) (3, 2) (1, 3) (2, 1)
+
+Explanation:
+-----------
+First, the character 1 occurs only once. It is replaced by (1,1). Then the character 2 occurs three times, and it is replaced by (3,2) and so on.
+
+Also, note the single space within each compression and between the compressions.
+
+CODE:
+----
+from itertools import groupby
+
+#Read input string
+s = input()
+
+#Use groupby to group consecutive identical characters
+result = [(len(list(group)), int(char)) for char, group in groupby(s)]
+
+#Print the result in the desired format
+print(' '.join(map(str, result)))
+
+6. Iterables and Iterators:
+  ------------------------
+
+Sample Input:
+------------
+4 
+a a c d
+2
+
+Sample Output:
+-------------
+0.8333
+
+Explanation:
+-----------
+All possible unordered tuples of length 2 comprising of indices from 1 to 4 are:
+(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)
+Out of these 6 combinations, 5 of them contain either index 1 or index 2 which are the indices that contain the letter 'a'.
+Hence, the answer is 5/6.
+
+CODE:
+----
+
+from itertools import combinations
+len_lst = int(input())
+lst = ''.join(input().split())
+indices = int(input())
+
+all_comb =  list(combinations(lst, indices))
+count = 0
+for i in all_comb:
+    if any(j=='a' for j in i):
+        count+=1
+print(round(count/len(all_comb),3))
+
+HAVE IGNORED TOPIC: MAXIMIZE IT!
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TOPIC: STRING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+You are given a string and your task is to swap cases. In other words, convert all lowercase letters to uppercase letters and vice versa.
+
+For Example:
+-----------
+Www.HackerRank.com → wWW.hACKERrANK.COM
+Pythonist 2 → pYTHONIST 2  
+Function Description
+
+Complete the swap_case function in the editor below.
+
+swap_case has the following parameters:
+
+string s: the string to modify
+Returns
+string: the modified string
+Sample Input 0
+--------------
+HackerRank.com presents "Pythonist 2".
+
+Sample Output 0
+---------------
+hACKERrANK.COM PRESENTS "pYTHONIST 2".
+
+CODE:
+----
+def swap_case(s):
+    return s.swapcase()
+
+if __name__ == '__main__':
+    s = input()
+    result = swap_case(s)
+    print(result)
+
+2. 
+In Python, a string can be split on a delimiter.
+
+Example:
+
+>>> a = "this is a string"
+>>> a = a.split(" ") # a is converted to a list of strings. 
+>>> print a
+['this', 'is', 'a', 'string']
+
+Joining a string is simple:
+
+>>> a = "-".join(a)
+>>> print a
+this-is-a-string 
+
+Sample Input
+------------
+this is a string   
+
+Sample Output
+-------------
+this-is-a-string
+
+CODE:
+-----
+def split_and_join(line):
+    line=line.split(" ")
+    line="-".join(line)
+    return line
+
+if __name__ == '__main__':
+    line = input()
+    result = split_and_join(line)
+    print(result)
+
+3. What's Your Name?:
+   -----------------
+
+Sample Input 0:
+--------------
+Ross
+Taylor
+
+Sample Output 0:
+---------------
+Hello Ross Taylor! You just delved into python.
+
+Explanation 0:
+-------------
+The input read by the program is stored as a string data type. A string is a collection of characters.
+
+CODE:
+----
+def print_full_name(first, last):
+    # Write your code here
+    print("Hello {0} {1}! You just delved into python.".format(first, last))
+
+if __name__ == '__main__':
+    first_name = input()
+    last_name = input()
+    print_full_name(first_name, last_name)
+
+4. Mutations:
+  -----------
+
+>>> string = "abracadabra"
+
+Example
+
+>>> string = "abracadabra"
+You can access an index by:
+
+>>> print string[5]
+a
+What if you would like to assign a value?
+
+>>> string[5] = 'k' 
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'str' object does not support item assignment
+How would you approach this?
+
+One solution is to convert the string to a list and then change the value.
+Example
+
+>>> string = "abracadabra"
+>>> l = list(string)
+>>> l[5] = 'k'
+>>> string = ''.join(l)
+>>> print string
+abrackdabra
+Another approach is to slice the string and join it back.
+
+Example:
+-------
+>>> string = string[:5] + "k" + string[6:]
+>>> print string
+abrackdabra
+
+CODE:
+-----
+def mutate_string(string, position, character):
+    return s[:position]+character+s[position+1:]
+
+if __name__ == '__main__':
+    s = input()
+    i, c = input().split()
+    s_new = mutate_string(s, int(i), c)
+    print(s_new)
+
+
+5. Find a String:
+   --------------
+def count_substring(string, sub_string):
+    count=0
+    for i in range(len(string)):
+        if string[i:].startswith(sub_string):
+            count+=1
+    return count
+
+Sample Input:
+------------
+ABCDCDC
+CDC
+
+Sample Output:
+-------------
+2
+
+Concept:
+-------
+Some string processing examples, such as these, might be useful.
+There are a couple of new concepts:
+In Python, the length of a string is found by the function len(s), where s is the string.
+To traverse through the length of a string, use a for loop:
+
+for i in range(0, len(s)):
+    print (s[i])
+A range function is used to loop over some length:
+
+range (0, 5)
+Here, the range loops over 0 to 4.5 is excluded.
+
+6. STRING VALIDATORS:
+   ------------------
+
+Python has built-in string validation methods for basic data. It can check if a string is composed of alphabetical characters, alphanumeric characters, digits, etc.
+
+str.isalnum()
+This method checks if all the characters of a string are alphanumeric (a-z, A-Z and 0-9).
+
+>>> print 'ab123'.isalnum()
+True
+>>> print 'ab123#'.isalnum()
+False
+str.isalpha()
+This method checks if all the characters of a string are alphabetical (a-z and A-Z).
+
+>>> print 'abcD'.isalpha()
+True
+>>> print 'abcd1'.isalpha()
+False
+str.isdigit()
+This method checks if all the characters of a string are digits (0-9).
+
+>>> print '1234'.isdigit()
+True
+>>> print '123edsd'.isdigit()
+False
+str.islower()
+This method checks if all the characters of a string are lowercase characters (a-z).
+
+>>> print 'abcd123#'.islower()
+True
+>>> print 'Abcd123#'.islower()
+False
+str.isupper()
+This method checks if all the characters of a string are uppercase characters (A-Z).
+
+>>> print 'ABCD123#'.isupper()
+True
+>>> print 'Abcd123#'.isupper()
+False
+
+Sample Input:
+------------
+qA2
+
+Sample Output:
+-------------
+True
+True
+True
+True
+True
+
+CODE:
+----
+
+if __name__ == '__main__':
+    s=input()
+print(any(c.isalnum() for c in s))
+print(any(c.isalpha() for c in s))
+print(any(c.isdigit() for c in s))
+print(any(c.islower() for c in s))
+print(any(c.isupper() for c in s))
+
+7. Text Alignment:
+   ---------------
+
+In Python, a string of text can be aligned left, right and center.
+
+.ljust(width)
+
+This method returns a left aligned string of length width.
+
+>>> width = 20
+>>> print 'HackerRank'.ljust(width,'-')
+HackerRank----------  
+.center(width)
+
+This method returns a centered string of length width.
+
+>>> width = 20
+>>> print 'HackerRank'.center(width,'-')
+-----HackerRank-----
+.rjust(width)
+
+This method returns a right aligned string of length width.
+
+>>> width = 20
+>>> print 'HackerRank'.rjust(width,'-')
+----------HackerRank
+
+CODE:
+----
+thickness = int(input()) #This must be an odd number
+c = 'H'
+
+#Top Cone
+for i in range(thickness):
+    print((c*i).rjust(thickness-1)+c+(c*i).ljust(thickness-1))
+
+#Top Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+
+#Middle Belt
+for i in range((thickness+1)//2):
+    print((c*thickness*5).center(thickness*6))    
+
+#Bottom Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))    
+
+#Bottom Cone
+for i in range(thickness):
+    print(((c*(thickness-i-1)).rjust(thickness)+c+(c*(thickness-i-1)).ljust(thickness)).rjust(thickness*6))
+
+
+8. Text Wrap:
+  ----------
+
+
+Sample Input 0:
+--------------
+ABCDEFGHIJKLIMNOQRSTUVWXYZ
+4
+
+Sample Output 0:
+---------------
+ABCD
+EFGH
+IJKL
+IMNO
+QRST
+UVWX
+YZ
+
+CODE:
+----
+import textwrap
+
+def wrap(string, max_width):
+    return "\n".join(textwrap.wrap(string,max_width))
+
+if __name__ == '__main__':
+    string, max_width = input(), int(input())
+    result = wrap(string, max_width)
+    print(result)
+
+9. Designer Door Mat:
+  ------------------
+
+
+
+Sample Designs
+
+    Size: 7 x 21 
+    ---------.|.---------
+    ------.|..|..|.------
+    ---.|..|..|..|..|.---
+    -------WELCOME-------
+    ---.|..|..|..|..|.---
+    ------.|..|..|.------
+    ---------.|.---------
+    
+    Size: 11 x 33
+    ---------------.|.---------------
+    ------------.|..|..|.------------
+    ---------.|..|..|..|..|.---------
+    ------.|..|..|..|..|..|..|.------
+    ---.|..|..|..|..|..|..|..|..|.---
+    -------------WELCOME-------------
+    ---.|..|..|..|..|..|..|..|..|.---
+    ------.|..|..|..|..|..|..|.------
+    ---------.|..|..|..|..|.---------
+    ------------.|..|..|.------------
+    ---------------.|.---------------
+
+Sample Input:
+------------
+9 27
+
+Sample Output:
+-------------
+
+------------.|.------------
+---------.|..|..|.---------
+------.|..|..|..|..|.------
+---.|..|..|..|..|..|..|.---
+----------WELCOME----------
+---.|..|..|..|..|..|..|.---
+------.|..|..|..|..|.------
+---------.|..|..|.---------
+------------.|.------------
+
+CODE:
+----
+
+N, M = map(int, input().split())
+
+MID_M = int((M + 1) / 2)
+MID_N = int(N // 2)
+
+top_lines = []
+for i in range(MID_N):
+    line = "|." + ".|." * i
+    line = line + "-" * (MID_M - len(line))
+    line = line[::-1]
+    line = line + line[::-1][1:]
+    top_lines.append(line)
+
+bottom_lines = top_lines[::-1]
+
+middle_line = "-" * (MID_M - 1 - (len("WELCOME") // 2)) + "WELCOME" + "-" * (MID_M - 1 - (len("WELCOME") // 2))
+
+for line in top_lines + [middle_line] + bottom_lines:
+    print(line)
+
+10.String Formatting:
+   -----------------
+Given an integer,n , print the following values for each integer i from 1 to n:
+
+Decimal
+Octal
+Hexadecimal (capitalized)
+Binary
+
+Function Description:
+--------------------
+Complete the print_formatted function in the editor below.
+print_formatted has the following parameters:
+
+- int number: the maximum value to print
+
+
+Sample Input:
+------------
+17
+
+Sample Output:
+-------------
+    1     1     1     1
+    2     2     2    10
+    3     3     3    11
+    4     4     4   100
+    5     5     5   101
+    6     6     6   110
+    7     7     7   111
+    8    10     8  1000
+    9    11     9  1001
+   10    12     A  1010
+   11    13     B  1011
+   12    14     C  1100
+   13    15     D  1101
+   14    16     E  1110
+   15    17     F  1111
+   16    20    10 10000
+   17    21    11 10001
+
+
+CODE:
+----
+def print_formatted(number):
+    for i in range(number):
+        justify_char_length = len(bin(number)[2:])
+        first = i + 1
+        first_str = str(first).rjust(justify_char_length, ' ')     # decimal
+        second = oct(first)[2:].rjust(justify_char_length, ' ')    # octal
+        third = hex(first)[2:].rjust(justify_char_length, ' ')
+        third_str = str(third).upper()         # hexidecimal
+        fourth = bin(first)[2:].rjust(justify_char_length, ' ')    # binary
+        print(f"{first_str} {second} {third_str} {fourth}")
+
+if __name__ == '__main__':
+    n = int(input())
+    print_formatted(n)
+
+11. Alphabet Rangoli:
+   -----------------
+(Rangoli is a form of Indian folk art based on creation of patterns.)
+
+Different sizes of alphabet rangoli are shown below:
+
+#size 3
+
+----c----
+--c-b-c--
+c-b-a-b-c
+--c-b-c--
+----c----
+
+#size 5
+
+--------e--------
+------e-d-e------
+----e-d-c-d-e----
+--e-d-c-b-c-d-e--
+e-d-c-b-a-b-c-d-e
+--e-d-c-b-c-d-e--
+----e-d-c-d-e----
+------e-d-e------
+--------e--------
+
+#size 10
+
+------------------j------------------
+----------------j-i-j----------------
+--------------j-i-h-i-j--------------
+------------j-i-h-g-h-i-j------------
+----------j-i-h-g-f-g-h-i-j----------
+--------j-i-h-g-f-e-f-g-h-i-j--------
+------j-i-h-g-f-e-d-e-f-g-h-i-j------
+----j-i-h-g-f-e-d-c-d-e-f-g-h-i-j----
+--j-i-h-g-f-e-d-c-b-c-d-e-f-g-h-i-j--
+j-i-h-g-f-e-d-c-b-a-b-c-d-e-f-g-h-i-j
+--j-i-h-g-f-e-d-c-b-c-d-e-f-g-h-i-j--
+----j-i-h-g-f-e-d-c-d-e-f-g-h-i-j----
+------j-i-h-g-f-e-d-e-f-g-h-i-j------
+--------j-i-h-g-f-e-f-g-h-i-j--------
+----------j-i-h-g-f-g-h-i-j----------
+------------j-i-h-g-h-i-j------------
+--------------j-i-h-i-j--------------
+----------------j-i-j----------------
+------------------j------------------
+
+CODE:
+----
+import string
+
+def print_rangoli(size):
+    lowercase = list(string.ascii_lowercase)
+    required_char = [lowercase[i] for i in range(size)]
+    half_ans = []
+    
+    for j in required_char:
+        ele = ""
+        
+        for x in range(size-1, lowercase.index(j), -1):
+            ele += lowercase[x]
+        
+        half_ans.append("-".join(ele + j + ele[::-1]))
+    
+    bottom_half = [h.center(len(half_ans[0]), "-") for h in half_ans]
+    top_half = [h.center(len(half_ans[0]), "-") for h in half_ans[-1:0:-1]]
+    result = top_half + bottom_half
+        
+    print(*result, sep='\n')
+
+
+if __name__ == '__main__':
+    n = int(input())
+    print_rangoli(n)
+
+
+12. CAPITALIZE:
+   -----------
+Sample Input:
+------------
+chris alan
+
+Sample Output:
+-------------
+Chris Alan
+
+CODE:
+----
+
+import math
+import os
+import random
+import re
+import sys
+
+def solve(s):
+   return ' '.join(list(map(str.capitalize,s.split(' '))))
+   #method2 return ''.join([a.capitalize() for a in s.split('')])
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    s = input()
+
+    result = solve(s)
+    fptr.write(result + '\n')
+    fptr.close()
+
+13. The Minion Game:
+    ---------------
+Sample Input:
+------------
+BANANA
+
+Sample Output:
+-------------
+Stuart 12
+
+def minion_game(string): 
+    
+    vowels = 'AEIOU' 
+    score_kevin = 0 
+    score_stuart = 0 
+    n = len(string)
+
+    for i in range(n):
+        if string[i] in vowels:
+            score_kevin += n - i  
+        else:
+            score_stuart += n - i 
+
+    if score_kevin > score_stuart:
+        print('Kevin', score_kevin)
+    elif score_stuart > score_kevin:
+        print('Stuart', score_stuart)
+    else:
+        print('Draw')
+
+
+if __name__ == '__main__':
+    s = input()
+    minion_game(s)
+
+
+		!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TOPIC: BASIC DATA TYPES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Sample Input 0:
+--------------
+1
+1
+1
+2
+
+Sample Output 0:
+---------------
+[[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1]]
+
+Sample Input 1:
+--------------
+2
+2
+2
+2
+
+Sample Output 1:
+----------------
+[[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 2], [0, 2, 1], [0, 2, 2], [1, 0, 0], [1, 0, 2], [1, 1, 1], [1, 1, 2], [1, 2, 0], [1, 2, 1], 
+
+CODE:
+----
+if __name__ == '__main__':
+    x = int(raw_input())
+    y = int(raw_input())
+    z = int(raw_input())
+    n = int(raw_input())
+    print([[a,b,c] for a in range(x+1) for b in range(y+1) for c in range(z+1) if a+b+c!=n])
+
+
+2. Find the Runner-Up Score!:
+   -------------------------
+Print the runner-up score.
+
+Sample Input 0:
+--------------
+5
+2 3 6 6 5
+
+Sample Output 0:
+---------------
+5
+
+Explanation 0:
+-------------
+Given list is [2,3,6,6,5]. The maximum score is 6, second maximum is 5. Hence, we print 5 as the runner-up score.
+
+#I thought removing max from the list and then finding max would be simpler
+
+CODE:
+----
+if __name__ == '__main__':
+    n = int(input())
+    arr = list(map(int, input().split()))
+    a = max(arr)
+    while a in arr:
+        arr.remove(a)
+    print(max(arr))
+
+
+3. Nested Lists:
+   ------------
+
+Sample Input 0:
+--------------
+5
+Harry
+37.21
+Berry
+37.21
+Tina
+37.2
+Akriti
+41
+Harsh
+39
+
+Sample Output 0:
+---------------
+Berry
+Harry
+
+Explanation 0:
+-------------
+There are  students in this class whose names and grades are assembled to build the following list:
+
+python students = [['Harry', 37.21], ['Berry', 37.21], ['Tina', 37.2], ['Akriti', 41], ['Harsh', 39]]
+
+The lowest grade of  belongs to Tina. The second lowest grade of  belongs to both Harry and Berry, so we order their names alphabetically and print each name on a new line.
+
+CODE:
+----
+
+if __name__ == '__main__':
+    marksheet = []
+    for _ in range(0,int(input())):
+        marksheet.append([input(), float(input())])
+
+    second_highest = sorted(list(set([marks for name, marks in marksheet])))[1]
+    print('\n'.join([a for a,b in sorted(marksheet) if b == second_highest]))
+
+
+4. Finding the percentage:
+   ----------------------
+
+Print one line: The average of the marks obtained by the particular student correct to 2 decimal places.
+
+Sample Input 0:
+--------------
+3
+Krishna 67 68 69
+Arjun 70 98 63
+Malika 52 56 60
+Malika
+
+Sample Output 0:
+---------------
+56.00
+
+Explanation 0:
+-------------
+Marks for Malika are {52, 56, 60}  whose average is (52+56+60)/3 => 56
+
+Sample Input 1:
+--------------
+2
+Harsh 25 26.5 28
+Anurag 26 28 30
+Harsh
+
+Sample Output 1:
+---------------
+26.50
+
+CODE:
+----
+
+if __name__ == '__main__':
+    n = int(input())
+    student_marks = {}
+    for _ in range(n):
+        name, *line = input().split()
+        scores = list(map(float, line))
+        student_marks[name] = scores
+    query_name = input()
+    query_scores=student_marks[query_name]
+    print("{0:.2f}".format(sum(query_scores)/len(query_scores)))
+
+
+
+5. LISTS:
+   ------
+
+Consider a list (list = []). You can perform the following commands:
+
+insert i e: Insert integer e at position i.
+print: Print the list.
+remove e: Delete the first occurrence of integer e.
+append e: Insert integer e at the end of the list.
+sort: Sort the list.
+pop: Pop the last element from the list.
+reverse: Reverse the list.
+Initialize your list and read in the value of n followed by n lines of commands where each command will be of the 7 types listed above. Iterate through each command in order and perform the corresponding operation on your list.
+
+Sample Input 0:
+--------------
+12
+insert 0 5
+insert 1 10
+insert 0 6
+print
+remove 6
+append 9
+append 1
+sort
+print
+pop
+reverse
+print
+
+Sample Output 0:
+---------------
+[6, 5, 10]
+[1, 5, 9, 10]
+[9, 5, 1]
+
+CODE:
+----
+
+if __name__ == '__main__':
+    T = int(input().strip())
+
+L = []
+for t in range(T):
+    args = input().strip().split(" ")
+    if args[0] == "append":
+        L.append(int(args[1]))
+    elif args[0] == "insert":
+        L.insert(int(args[1]), int(args[2]))
+    elif args[0] == "remove":
+        L.remove(int(args[1]))
+    elif args[0] == "pop":
+        L.pop()
+    elif args[0] == "sort":
+        L.sort()
+    elif args[0] == "reverse":
+        L.reverse()
+    elif args[0] == "print":
+        print(L)
+
+
+
+6. TUPLES:
+  -------
+Note: hash() is one of the functions in the __builtins__ module, so it need not be imported.
+
+Output Format:
+-------------
+Print the result of hash(t).
+
+Sample Input 0:
+--------------
+2
+1 2
+
+Sample Output 0:
+---------------
+3713081631934410656
+
+CODE:
+----
+if __name__ == '__main__':
+    n = int(input())
+    integer_list = map(int, input().split())
+    print (hash(tuple(integer_list)))
+
+
+	***************** BUILT INS	*****************
+
+1. Python If-Else:
+  ----------------
+Explanation 0:
+-------------
+
+if n=3 then it is odd and odd numbers are weird, so print Weird.
+
+Sample Input 1: n = 24
+Sample Output 1: Not Weird
+#!/bin/python
+
+import math
+import os
+import random
+import re
+import sys
+
+
+
+if __name__ == '__main__':
+    n = int(raw_input().strip())
+    if n%2==0 and (n in range(2,5) or n>20):
+        print("Not Weird")
+    else:
+        print("Weird")
+
+
+2.Arthemetic operations:
+  --------------------
+Output Format
+
+Print the three lines as explained above.
+
+Sample Input 0:
+--------------
+3
+2
+
+Sample Output 0:
+---------------
+5
+1
+6
+
+CODE:
+-----
+if __name__ == '__main__':
+    a = int(raw_input())
+    b = int(raw_input())
+    print(a+b)
+    print(a-b)
+    print(a*b)
+
+
+3. DIVISION:
+  ---------
+Print the two lines as described above.
+
+Sample Input 0:
+--------------
+4
+3
+
+Sample Output 0:
+---------------
+1
+1.33333333333
+
+CODE:
+----
+
+from __future__ import division
+
+if __name__ == '__main__':
+    a = int(raw_input())
+    b = int(raw_input())
+
+print(a//b)
+print(a/b)
+
+
+4. LOOPS:
+  -------
+
+if __name__ == '__main__':
+    n = int(raw_input())
+    for i in range(n):
+        print(i*i)
+
+
+5. WRITE A FUNCTION:
+   -----------------
+
+def is_leap(year):
+    leap = False
+       
+    return year%4==0 and (year%400==0 or year%100!=0)
+
+year = int(input())
+print(is_leap(year))
+
+
+7. Print Function:
+  ---------------
+
+from __future__ import print_function
+
+if __name__ == '__main__':
+    n = int(raw_input())
+    print(*range(1,n+1),sep='')
+
+
+* (unpacking operator):
+
+Expands the sequence generated by range into individual arguments for the print() function.
+sep='':
+
+Specifies that the separator between the arguments is an empty string (i.e., no spaces or other characters).
+
+OUTPUT: 12345
+
+8. Write a function:
+   -----------------
+
+Sample Input 0:
+--------------
+1990
+
+Sample Output 0:
+---------------
+False
+
+Explanation 0:
+-------------
+1990 is not a multiple of 4 hence it's not a leap year.
+
+CODE:
+----
+def is_leap(year):
+    leap = False
+       
+    return year%4==0 and (year%400==0 or year%100!=0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

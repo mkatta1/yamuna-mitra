@@ -1,0 +1,197 @@
+How to use OPENROWSET using serverless SQL pool in Azure Synapse Analytics
+
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql/develop-openrowset#type-mapping-for-parquet
+
+
+The OPENROWSET(BULK...) function allows you to access files in Azure Storage. OPENROWSET function reads content of a remote data source (for example file) and returns the content as a set of rows. Within the serverless SQL pool resource, the OPENROWSET bulk rowset provider is accessed by calling the OPENROWSET function and specifying the BULK option.
+
+The OPENROWSET function can be referenced in the FROM clause of a query as if it were a table name OPENROWSET. It supports bulk operations through a built-in BULK provider that enables data from a file to be read and returned as a rowset.
+
+ Note
+
+The OPENROWSET function is not supported in dedicated SQL pool.
+
+OPENROWSET without DATA_SOURCE can be used to directly read the contents of the files from the URL location specified as BULK option:
+
+SELECT *
+FROM OPENROWSET(BULK 'http://<storage account>.dfs.core.windows.net/container/folder/*.parquet',
+                FORMAT = 'PARQUET') AS [file]
+
+OPENROWSET with DATA_SOURCE can be used to access files on specified storage account
+
+SELECT *
+FROM OPENROWSET(BULK '/folder/*.parquet',
+                DATA_SOURCE='storage', --> Root URL is in LOCATION of DATA SOURCE
+                FORMAT = 'PARQUET') AS [file]
+
+
+OPENROWSET without DATA_SOURCE provides quick and easy way to access the storage files but offers limited authentication options. As an example, Microsoft Entra principals can access files only using their Microsoft Entra identity or publicly available files. If you need more powerful authentication options, use DATA_SOURCE option and define credential that you want to use to access storage.
+
+
+- SQL logins can also use OPENROWSET without DATA_SOURCE to access publicly available files, files protected using SAS token, or Managed Identity of Synapse workspace. You would need to create server-scoped credential to allow access to storage files.
+
+- In OPENROWSET with DATA_SOURCE authentication mechanism is defined in database scoped credential assigned to the referenced data source. This option enables you to access publicly available storage, or access storage using SAS token, Managed Identity of workspace, or Microsoft Entra identity of caller (if caller is Microsoft Entra principal). If DATA_SOURCE references Azure storage that isn't public, you would need to create database-scoped credential and reference it in DATA SOURCE to allow access to storage files.
+
+
+--OPENROWSET syntax for reading Parquet or Delta Lake files
+OPENROWSET  
+( { BULK 'unstructured_data_path' , [DATA_SOURCE = <data source name>, ]
+    FORMAT= ['PARQUET' | 'DELTA'] }  
+)  
+[WITH ( {'column_name' 'column_type' }) ]
+[AS] table_alias(column_alias,...n)
+
+--OPENROWSET syntax for reading delimited text files
+OPENROWSET  
+( { BULK 'unstructured_data_path' , [DATA_SOURCE = <data source name>, ] 
+    FORMAT = 'CSV'
+    [ <bulk_options> ]
+    [ , <reject_options> ] }  
+)  
+WITH ( {'column_name' 'column_type' [ 'column_ordinal' | 'json_path'] })  
+[AS] table_alias(column_alias,...n)
+ 
+<bulk_options> ::=  
+[ , FIELDTERMINATOR = 'char' ]    
+[ , ROWTERMINATOR = 'char' ] 
+[ , ESCAPECHAR = 'char' ] 
+[ , FIRSTROW = 'first_row' ]     
+[ , FIELDQUOTE = 'quote_characters' ]
+[ , DATA_COMPRESSION = 'data_compression_method' ]
+[ , PARSER_VERSION = 'parser_version' ]
+[ , HEADER_ROW = { TRUE | FALSE } ]
+[ , DATAFILETYPE = { 'char' | 'widechar' } ]
+[ , CODEPAGE = { 'ACP' | 'OEM' | 'RAW' | 'code_page' } ]
+[ , ROWSET_OPTIONS = '{"READ_OPTIONS":["ALLOW_INCONSISTENT_READS"]}' ]
+
+<reject_options> ::=  
+{  
+    | MAXERRORS = reject_value,  
+    | ERRORFILE_DATA_SOURCE = <data source name>,
+    | ERRORFILE_LOCATION = '/REJECT_Directory'
+}
+
+
+Read CSV files without specifying schema:
+----------------------------------------
+The following example reads CSV file that contains header row without specifying column names and data types:
+
+SELECT 
+    *
+FROM OPENROWSET(
+    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',
+    FORMAT = 'CSV',
+    PARSER_VERSION = '2.0',
+    HEADER_ROW = TRUE) as [r]
+
+
+The following example reads CSV file that doesn't contain header row without specifying column names and data types:
+SELECT 
+    *
+FROM OPENROWSET(
+    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',
+    FORMAT = 'CSV',
+    PARSER_VERSION = '2.0') as [r]
+
+
+
+Read Parquet files without specifying schema:
+--------------------------------------------
+The following example returns all columns of the first row from the census data set, in Parquet format, and without specifying column names and data types:
+
+SELECT 
+    TOP 1 *
+FROM  
+    OPENROWSET(
+        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',
+        FORMAT='PARQUET'
+    ) AS [r]
+
+Read Delta Lake files without specifying schema:
+-----------------------------------------------
+The following example returns all columns of the first row from the census data set, in Delta Lake format, and without specifying column names and data types:
+
+SELECT 
+    TOP 1 *
+FROM  
+    OPENROWSET(
+        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',
+        FORMAT='DELTA'
+    ) AS [r]
+
+
+Read specific columns from CSV file:
+------------------------------------
+The following example returns only two columns with ordinal numbers 1 and 4 from the population*.csv files. Since there's no header row in the files, it starts reading from the first line:
+
+SELECT 
+    * 
+FROM OPENROWSET(
+        BULK 'https://sqlondemandstorage.blob.core.windows.net/csv/population/population*.csv',
+        FORMAT = 'CSV',
+        FIRSTROW = 1
+    )
+WITH (
+    [country_code] VARCHAR (5) COLLATE Latin1_General_BIN2 1,
+    [population] bigint 4
+) AS [r]
+
+
+Read specific columns from Parquet file:
+-----------------------------------------
+The following example returns only two columns of the first row from the census data set, in Parquet format:
+
+SELECT 
+    TOP 1 *
+FROM  
+    OPENROWSET(
+        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',
+        FORMAT='PARQUET'
+    )
+WITH (
+    [stateName] VARCHAR (50),
+    [population] bigint
+) AS [r]
+
+
+Specify columns using JSON paths:
+--------------------------------
+The following example shows how you can use JSON path expressions in WITH clause and demonstrates difference between strict and lax path modes:
+
+SELECT 
+    TOP 1 *
+FROM  
+    OPENROWSET(
+        BULK 'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=20*/*.parquet',
+        FORMAT='PARQUET'
+    )
+WITH (
+    --lax path mode samples
+    [stateName] VARCHAR (50), -- this one works as column name casing is valid - it targets the same column as the next one
+    [stateName_explicit_path] VARCHAR (50) '$.stateName', -- this one works as column name casing is valid
+    [COUNTYNAME] VARCHAR (50), -- STATEname column will contain NULLs only because of wrong casing - it targets the same column as the next one
+    [countyName_explicit_path] VARCHAR (50) '$.COUNTYNAME', -- STATEname column will contain NULLS only because of wrong casing and default path mode being lax
+
+    --strict path mode samples
+    [population] bigint 'strict $.population' -- this one works as column name casing is valid
+    --,[population2] bigint 'strict $.POPULATION' -- this one fails because of wrong casing and strict path mode
+)
+AS [r]
+
+
+Specify multiple files/folders in BULK path:
+----------------------------------------------
+The following example shows how you can use multiple file/folder paths in BULK parameter:
+
+SELECT 
+    TOP 10 *
+FROM  
+    OPENROWSET(
+        BULK (
+            'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=2000/*.parquet',
+            'https://azureopendatastorage.blob.core.windows.net/censusdatacontainer/release/us_population_county/year=2010/*.parquet'
+        ),
+        FORMAT='PARQUET'
+    )
+AS [r]
+

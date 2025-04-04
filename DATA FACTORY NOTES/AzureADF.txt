@@ -1,0 +1,44 @@
+types of activities
+data movement, data transformation, and control flow
+65+ data sources supported in adf
+triggers and pipelines are in many-many relationship: Means mutiple triggers can kick off a single pipeline, or single trigger can kick off
+multiple pipelines.
+Types of triggers:
+Schedule trigger: to invoke pipeline on wall clock schedule
+tumbling trigger: operates on a periodic interval, while also retaining state.{
+1.Concurrency means number of parallel executions for historicalData 2.It can run on back field scenario's like run on past dates for historical data loads.
+even-based trigger: a trigger that responds to an event
+Event trigger:
+to trigger during file creation or deletion events in azure blob storage using the concept of "Azure Event Grid".
+Event based trigger properties: @triggerBody().folderPath and @triggerBody().fileName
+3 types of IR: 1.Azure for only azure cloud 2.self hosted for external like on-premise or private network 3. Azure-SSIS
+by default the Azure IR is created with Auto Resolve. In ADF, Auto Resolve automatically calculates the activities and dataset locations that are near zone locations to it
+and does not take much time. Already we have auto Azure IR in an ADF but extra one is created for separate operations or for hitting to a separate
+data zone location. 
+For on premise connection we need to download a msi and enable it on the on premise node and self-hosted IR can have 4 connections
+established in on-premise. Due to 4 node establishment it has high availability.
+
+For connecting another ADF to same selfhosted IR GRANT PRIVILEGE WITH RESOURCE ID copy this id into new IR(linked self-hosted option) ADF
+Parameterize the linked services like context variables for connection details and also for pipelines and dataflows.
+--We need to create parameters in linked service and then for dataset and finally in pipelines separately 
+-- In Avro the data definition(schema) is in JSON format making it easy to read and interpret by any program
+- the formats like Avro, parquet and ORC are from Hadoop eco system and also the azure blob, data lake gen, data lake gen2 etc are also build from Hadoop
+In copy data activity we have mapping option like tmap where is decide the column positions on output
+ExecutePipeline means to run child pipelines from a master pipeline, Delete Activity is to delte files, 
+-[Variables can be defined and only be used in pipeline whereas parameters values are assigned during a trigger run
+
+Set variable activity contains the variables of pipeline passed to it and make changes dynamically, variable types are string, boolean and Array]
+-(Filter activity is to filter the values of either variables or parameters dynamically also)
+--Append activity is to append the values of variable and parameter 
+-Foreach activity {
+		1.We can define the dataset with parameter FolderName
+		2.Need to define a Pipeline with Parameter of arrayType of folder names OutputFolder=[output1,output2,output3]
+		3.In For each activity ->Settings set Sequential option(batch parallel execution) 'Items' takes values from pipeline array variable defined
+		4.In Foreach activity section drag the dataset with foldername=@item to recursively produce output folders
+}
+--User Properties???????????
+
+ARM Template is the code representation of your data factory or azure resources. Using power shell scripts create azure resources...
+Entire code representation of your DATA FACTORY is in ARMTemplateForFactory.json, ARMTemplateParameterForFactory.json
+Use the flatten transformation to take array values inside hierarchical structures such as JSON and unroll them into individual rows.
+This process is known as denormalization.

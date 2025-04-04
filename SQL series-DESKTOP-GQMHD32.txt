@@ -1,0 +1,54 @@
+toughest sql practice questions
+
+Sql interview question links
+1)https://www.toptal.com/sql/interview-questions
+
+Important website practice more:
+2)https://www.complexsql.com/complex-sql-queries-examples-with-answers/
+REGEXP_LIKE: http://www.complexsql.com/regexp_like-examples/
+diff bw rowid and rownum : http://www.complexsql.com/rowid-rownum/
+performance tuning: http://www.complexsql.com/sql-performance-indexing-in-sql-types-of-indexes-in-sql/
+Normalization: http://www.complexsql.com/database-normalization/
+Union:
+diff bw rank and dense rank: http://www.complexsql.com/rank-function-in-sql/
+complex questions: https://www.complexsql.com/complex-sql-queries-examples-with-answers/complex-sql-for-interviews/
+SCD2: https://www.tutorialgateway.org/talend-scd-type-2-manual/
+Delete duplicate rows: https://www.sqlshack.com/different-ways-to-sql-delete-duplicate-rows-from-a-sql-table/
+scenario quesions: https://www.java-success.com/%e2%99%a6-sql-scenarios-based-interview-questions-answered/#:~:text=%2015%2B%20SQL%20scenarios%20based%20interview%20questions%20answered,order%20in%20August%E2%80%9D%3F%20A4%20Use%20an...%20More%20
+
+
+DUAL TABLE?
+
+Nth Hightest
+
+select if(grade<8,null,students.name),grade,marks
+from students join grades
+where students.marks between grades.min_mark and grades.max_mark
+order by grade desc,name,marks    
+
+http://www.complexsql.com/hierarchical-queries/
+
+select * from
+(select eno,ename,sal,dense_Rank() over(order by sal desc) nth_highest
+from emp)
+where nth_highest=2;
+
+select * from
+(select eno,ename,sal,row_number() over(order by sal desc) nth_highest
+from emp)
+where nth_highest=2;
+
+select empno,ename,sal
+from emp e1
+where &n=(select count(distinct(sal)) from emp e2 where e2.sal>=e1.sal)
+
+
+
+Top SQL Questions:
+https://thedatageneralist.com/top-sql-interview-questions/#q7
+
+https://www.javatpoint.com/apache-spark-take-function
+
+https://www.edureka.co/blog/git-tutorial/
+
+https://www.edureka.co/blog/hadoop-yarn-tutorial/

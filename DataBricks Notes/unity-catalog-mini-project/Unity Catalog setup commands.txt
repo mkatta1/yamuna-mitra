@@ -1,0 +1,79 @@
+
+Use Unity Catalog with your Delta Live Tables pipelines:
+https://learn.microsoft.com/en-us/azure/databricks/delta-live-tables/unity-catalog
+
+While creating cluster,
+compute -> create cluster-> advanced -> spark tab-> sparkconfig,environmentvaiables
+
+environmentvaiables:
+PYSPARK_PYTHON=/databricks/python3/bin/python3
+
+For logging:
+compute -> create cluster-> advanced -> logging tab 
+
+Destination, compute log path
+DBFS: dbfs:/cluster-logs
+
+For InitScripts:
+InitScipts in Workspace/ABFSS
+If ABFSS then filepath is abfss://
+
+Generally while cluster creation, 
+Worker type is standard_ds3_v2 of 14GB Memory, 4 Cores
+Min workers is 2, Max worker is 8
+
+Driver type is same as worker.
+
+Use spot instances to save cost. If spot instances are evicted due to unavailability, on-demand instances will be deployed to replace evicted instances.
+
+Terminate after bw 10 to 43200 minutes
+
+
+STEP1:
+Create External Locations
+
+CREATE EXTERNAL LOCATION IF NOT EXISTS databrickscourseucextdl_bronze
+URL "abfss://bronze@databrickscourseucextdl.dfs.core.windows.net/"
+WITH (STORAGE CREDENTIAL "");
+
+desc external location databrickscourseucextdl_bronze;
+
+magic %fs
+magic ls "abfss://bronze@databrickscourseucextdl.dfs.core.windows.net/"
+
+CREATE EXTERNAL LOCATION IF NOT EXISTS databrickscourseucextdl_silver
+url "abfss://silver@databrickscourseucextdl.dfs.core.windows.net/"
+with (storage credential 'databrickscourse-ext-storage-credential');
+
+create external location if not exists databrickscourseucextdl_gold
+url "abfss://gold@databrickscourseucextdl.dfs.core.windows.net/"
+with (storage credential 'databrickscourse-ext-storage-credential');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,207 @@
+Dynamic load of files or tables:
+https://help.talend.com/r/en-US/8.0/data-integration-job-examples/configuring-parent-job
+
+https://help.talend.com/r/en-US/7.3/orchestration/tflowtoiterate-trunjob-tfixedflowinput-tlogrow-setting-up-parent-job-standard-component-create
+
+
+package routines;
+public class revers {
+
+ public static String reverseString(String message) {
+	StringBuffer sb = new StringBuffer();
+	int len = message.length();
+	for (int i = len -1; i>=0; i--) {
+	sb.append(message.charAt(i));
+	}
+	return sb.toString();
+	}
+}
+
+ In mapping using routines,
+
+output_row.id = input_row.id;
+output_row.stock_market = input_row.stock_market;
+output_row.currency = input_row.currency;
+output_row.price = input_row.price;
+
+// routine code used in here
+if(input_row.stock_market.equals("NYSE"))
+output_row.reverse_value = reverse.reverseString(input_row.currency)
+else
+output_row.reverse_value = input_row.currency;
+
+Another Routine:
+public class TrippleDes {
+	private static final String UNICODE_FORMAT = "UTF8";
+	public static final String DESEDE_ENCRYPTION_SCHEME = "DESede";
+	private KeySpec ks;
+	private SecretKeyFactory skf;
+	private Cipher cipher;
+	byte[] arrayBytes;
+	private String myEncryptionKey;
+	private String myEncryptionScheme;
+	SecretKey key;
+	
+	public TrippleDes() throws Exception {
+		myEncryptionKey = "ThisIsSpartaThisIsSparta"
+		myEncryptionScheme = DESEDE_ENCRYPTION_SCHEME
+		arrayBytes = myEncryptionKey.getBytes(UNICODE_FORMAT);
+		ks = new DESedeKeySpec(arrayBytes);
+		skf = SecretKeyFactory.getInstance(myEncryptionScheme);
+		cipher = Cipher.getInstance(myEncryptionScheme);
+		key =skf.generateSecret(ks);
+	}
+
+	public String encrypt (String unencryptedString) {
+		String encryptedString = null;
+		try {
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			byte[] plainText = unencryptedString.getBytes(UNICODE_FORMAT);
+			byte[] encryptedText = cipher.doFinal(plainText);
+			encryptedString = new String(Base64.encodeBase64);
+	} catch (Exception e) {
+		e.printStackTrace();
+		}
+		return encryptedString;
+}
+
+	public String decrypt(String encryptedString) {
+		String decryptedText = null;
+		try {
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			byte[] encryptedText = Baase64.decodeBase64(encryptedString);
+			byte[] plainText = cipher.doFinal(encryptedText);
+		so oooooooonnnnnnnnnn ..........
+
+
+*******************************************************************
+Talend Tflowtoiterate Loading Target Dynamically (table & file)
+
+https://help.talend.com/r/en-US/8.0/data-integration-job-examples/configuring-parent-job
+
+
+tFileInputDelimited (products_by_city) -> tUniqueRow --Uniques--> tFlowToIterate --Iterate--> tFileInputDelimited2 (products_by_city) --> tFilterRow --> tMap --> (tDBInput) Mysql
+
+tUniqueRow:
+select the column "location" as unique key
+
+tFlowToIterate:
+key: "city", value: location
+
+tFileInputDelimited2 (products_by_city):
+
+tFilterRow codition:
+columnname = location 
+Operator = Equals
+Value = tFlowToIterate.city output is ((String)globalMap.get("city"))
+
+
+(tDBInput) Mysql:
+
+TableName: ((String)globalMap.get("city"))
+
+Final Output:
+created tables bangloare, chennai, delhi, hyderabad;
+
+select * from bangloare;
+select * from chennai;
+select * from delhi;
+select * from hyderabad;
+
+select udf_extractnumbers(idname) as id,
+	udf_ertractalphabets(idname) as name
+from testtable
+
+create function udf_extractnumbers
+(
+ @input varchar(255)
+)
+returns varchar(255)
+as
+begin
+ declare @alphabetIndex int Patindex('%[0-9]%',input)
+ begin
+	while @alphabetIndex >0
+	begin
+	 set @input = Stuff(@input, @alphabetIndex, 1, '')
+	 set @alphabetIndex = Patindex('%[^0-9]%', input)
+	End
+ end
+ return Isnull(@input, 0)
+end
+
+
+
+
+
+**************************************************************************
+Using Dynamic Schema to load data dynamically to database tables
+
+https://help.talend.com/r/en-US/8.0/data-integration-job-examples/using-dynamic-schema-to-load-data-dynamically-to-database-tables
+
+customer_detaials.csv, employee_details.csv, delivery_details.csv
+
+tFileList -Iterate-> tIterateToFlow (File_name_flow) -> tMap (File_table_lookup) -> tFixedFlowInput (Mappings) -> tJavaRow (Set_context_variables) -> tRunJob (Call_child)
+
+
+
+
+
+
+
+**************************************************************************
+
+*******************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

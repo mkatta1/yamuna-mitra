@@ -1,0 +1,196 @@
+Virtual warehouses
+table design
+monitoring
+retention period
+
+
+Best practice #1 - Eanble Auto-Suspend for virtual warehouse & #Best Practice #2 - Enable Auto-Resume
+
+CREATE WAREHOUSE BP_WH
+WITH WAREHOUSE_SIZE = 'XLARGE'
+WAREHOUSE_TYPE = 'STANDARD'
+AUTO_SUSPEND = 600
+AUTO_RESUME = TRUE
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 2
+SCALING_POLICY = 'STANDARD';
+
+DROP WAREHOUSE BH_WH;
+
+# Instead of sql we can also use UI to enable auto-suspend, like top pane click warehouses -> click create -> mention the above parameters given!!!!
+
+
+Best Practice #3- Set Appropriate timeouts
+		ETL/Data Loading	BI/SELECT QUERIES	DEVOPS/DATA SCIENCE
+Timeout		Immediately		10 min			5 min
+
+
+
+CREATE WAREHOUSE BP_WH
+WITH WAREHOUSE_SIZE = 'XLARGE'
+WAREHOUSE_TYPE = 'STANDARD'
+AUTO_SUSPEND = 0 --------------> This will immediately suspends the warehouse!!!
+AUTO_RESUME = TRUE
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 2
+SCALING_POLICY = 'STANDARD';
+
+
+
+			**** TABLE DESIGN *****
+
+Best Practice #1 - Appropriate table type
+Staging tables - Transient
+
+transient, permanent, and temporary types of tables
+
+				Different layers
+
+HR data   \_____\
+	   _____/ Rawdata  -------> Data Integraion ---------> Access layer
+sales data/	  STAGING AREA	  DATA TRANSFORMATION		PRODUCTION
+
+
+Best practice #1 - Appropriate table type
+	Staging tables - Transient
+	Productiv tables - Permanent
+	Development tables - Transient
+
+
+Development tables use transient because in these development tables we usually tend to have a lot of changes and therefore this can also decrease the amount of storage used for time travel and fail safe.
+
+
+Best Practice #2 - Appropriate data type
+
+Best Practice #3 - Set cluster keys only if necessary --> becoz already have storng by default and snowflake manages micro partitions automatically which is very strong in general.
+
+This is useful for Large tables, dimensions, and most tables that require query time for table scan!!!!
+
+Query History -> Profile Scan -> 
+
+dimesion cloumns like regions could be cluster keys
+
+			** Monitoring *****
+
+In the shoes of Account Admin:
+
+Top pane, click Account -> Usage -> see the data storage -> Usage of credit for the warehouses that we use..
+
+-- Table Storage
+
+SELECT * FROM "SNOWFLAKE"."ACCOUNT_USAGE"."TABLE_STORAGE_METRICS";
+
+-- How much is queried in databases
+SELECT * FROM "SNOWFLAKE"."ACCOUNT_USAGE"."QUERY_HISTORY";
+
+SELECT 
+DATABASE_NAME, ---> which databases are queried recently are shown
+COUNT(*) AS NUMBER_OF_QUERIES,
+SUM(CREDITS_USED_CLOUD_SERVICES)
+FROM "SNOWFLAKE"."ACCOUNT_USAGE"."QUERY_HISTORY"
+GROUP BY DATABASE_NAME;
+
+
+-- Usage of credits by warehouses
+SELECT * FROM "SNOWFLAKE"."ACCOUNT_USAGE"."WAREHOUSE_METERING_HISTORY";
+
+-- Usage of credits by warehouses // Grouped by day
+SELECT 
+DATE(START_TIME),
+SUM(CREDITS_USED)
+FROM "SNOWFLAKE"."ACCOUNT_USAGE"."WAREHOUSE_METERING_HISTORY"
+GROUP BY DATE(START_TIME);
+
+-- Usage of credits by warehouses // Grouped by warehouse
+SELECT
+WAREHOUSE_NAME,
+SUM(CREDITS_USED)
+FROM "SNOWFLAKE"."ACCOUNT_USAGE"."WAREHOUSE_METERING_HISTORY"
+GROUP BY WAREHOUSE_NAME;
+
+-- Usage of credits by warehouses // Grouped by warehouse & day
+SELECT
+DATE(START_TIME),
+WAREHOUSE_NAME,
+SUM(CREDITS_USED)
+FROM "SNOWFLAKE"."ACCOUNT_USAGE"."WAREHOUSE_METERING_HISTORY"
+GROUP BY WAREHOUSE_NAME,DATE(START_TIME);
+
+ 
+							*** Retention Period ****
+
+Best Practice #1: Staging database - 0 days (transient)
+
+Means zero days of retention period because we can easily get this orginal data from the source without any changes in the staging area. Get data at once and consolidate it and don't make any changes in staging area.
+
+Best Practice #2: Production - 4-7 days(1 day min)
+
+Best Practice #3- Large high-churn tables - 0 days (transient)
+
+	Active	Time Travel	Fail Safe
+Timeout	20GB	400GB		2.8TB
+
+A very large high churn table
+If table with 20GB size is updated 20 times per day, then the time travel if we have only one day of retention period, this time travel storage will include 400 gigabytes because all of the data is updated 20 times per day.
+For the last 7 days it is multiplied by seven to get 2.8TB
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

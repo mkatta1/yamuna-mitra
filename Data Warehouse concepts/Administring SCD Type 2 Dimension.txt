@@ -1,0 +1,21 @@
+Administrate Type 2 SCD
+
+Product_PK, Product_ID, Name, Category, Ef_Date, Ex_Date
+1, SG-TR7, Sunglases TR-7, Assecoirs, 2022-01-01, 2100-01-01
+2, CH-B70, Chocolate bar 70% cacao, Sweets, 2022-01-01, 2100-01-01
+3, OT-BSC, Oat meal biscuits, Sweets, 2022-01-01, 2022-05-31
+4, OT-BSC, Delicious Oat meal biscuits, Biscuits, 2022-06-01, 2100-01-01
+
+- Necessary also in ETL to use correct FK
+- Requires Surrogate key instead of Natural key
+- Add row in the Dimension first
+- Lookup in the Dimension table if the current row value is between effective date and expiration date.
+- Lookup in the Dimension with Natural key + Ef_/Ex_Date
+- Additional for Is_Current with Yes/No
+
+Mixing Type 1 + 2 :
+- No set in stone rules but needs to be defined with business users
+- Not a technical decision
+
+
+

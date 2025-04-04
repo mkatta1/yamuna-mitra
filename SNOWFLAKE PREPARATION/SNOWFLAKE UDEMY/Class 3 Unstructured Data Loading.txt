@@ -1,0 +1,291 @@
+############### UnStructured Data Loading #####################
+
+CreateStage -> Load raw data -> Analyse & Parse -> Flatten & load
+
+{
+  "city": "Grimshaw",
+  "first_name": "Rici",
+  "gender": "Female",
+  "id": 1
+}
+
+Multiple values
+{"firstName":"John2","lastName":"Doe"},
+{"firstName":"Ann2","lastName":"Smith"},
+{"firstName":"Peter","lastName":"Jones"}
+
+-- Complicated data
+{
+ "city":"Grimshaw",
+ "first_name":"Rici",
+ "gender":"Female",
+ "id":1,
+ "prev_company":["Witting LLC","Kessler, Bailey and Berge"]
+ "job": {
+	"salary": 15200,
+	"title": "Accounting Assistant II"
+	 },
+ "last_name": "Kinninglley",
+ "spoken_languages": [
+	{"language":"Kashmiri","level":"Advanced"},
+	{"language":"Punjabi","level":"Basic"}]}
+			]
+}
+
+CREATE OR REPLACE MANAGE_DB.EXTERNAL_STAGES.JSONSTAGE
+	url='s3://bucketsnowflake-jsondemo';
+CREATE OR REPLACE MANAGE_DB.FILE_FORMATS.JSONFORMAT
+	TYPE=JSON;
+
+CREATE OR REPLACE TABLE OUR_FIRST_DB.PUBLIC.JSON_RAW (
+ raw_file variant);
+
+COPY INTO OUR_FIRST_DB.PUBLIC.JSON_RAW
+	FROM @MANAGE_DB.EXTERNAL_STAGES.JSONSTAGE
+	file_format= MANAGE_DB.FILE_FORMATS.JSONFORMAT
+	files=('HR_data.json');
+	
+SELECT * FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+// Second step: Parse & Analyse Raw JSON
+  //Selecting attribute/column
+
+SELECT RAW_FILE:city FROM OUR_FIRST_DB.PUBLIC.JSON_RAW
+SELECT $1:first_name FROM OUR_FIRST_DB.PUBLIC.JSON_RAW
+
+ // Selecting attribute/column - formatted
+
+SELECT RAW_FILE:first_name::string FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+SELECT RAW_FILE:id::int FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+SELECT
+	RAW_FILE:id::int as id,
+	RAW_FILE:first_name::STRING first_name,
+	RAW_FILE:last_name::STRING as last_name,
+	RAW_FILE:gender::STRING as gender
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+	// Handling nested data
+select RAW_FILE:job::STRING as job FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+Here job may be called as an attribute or element where subset of attribute is called objects/child attribute. :) :) :)
+
+SELECT 
+	RAWS_FILE:job.salary::INT as salary
+FROM OUR_FIRST_DB.UBLIC.JSON_RAW;
+
+SELECT
+	RAW_FILE:first_name::STRING as first_name,
+	RAW_FILE:job.salary::INT as salary,
+	RAW_FILE:job.title::STRING as title,
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+// Handling arrays
+
+SELECT
+	RAW_FILE:prev_company as pre_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+SELECT
+	RAW_FILE:prev_company[0] as prev_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+-- With this array_size we are trying to find out number of elements in this array!!!
+
+SELECT
+	ARRAY_SIZE(RAW_FILE:prev_company) as prev_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW;
+
+
+SELECT
+	RAW_FILE:spoken_languages::STRING as spoken_languages
+
+To get all the elements in an array as columns we do as follows:
+
+SELECT
+	RAW_FILE:id::int as id,
+	RAW_FILE:first_name::STRING as first_name,
+	RAW_FILE:prev_company[0]::STRING as prev_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW
+UNION ALL
+SELECT
+	RAW_FILE:id::int as id,
+	RAW_FILE:first_name::STRING as first_name
+	RAW_FILE:prev_company[1]::STRING as prev_company
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW
+ORDER BY 
+
+output:
+1,mitra, igate&capgemini
+2,manohar, maltem&fortuneCloudTech
+
+To get data of prev_companies side by side 
+
+--- The above union all function is not a ideal function, we need to do table(flatten) function for this
+
+select
+	RAW_FILE:first_name::STRING as First_name,
+	f.value:language::STRING as First_language,
+	f.value:level::STRING as Level_spoken,
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW, TABLE(FLATTEN(RAW_FILE:spoken_languages)) f;
+
+-- Here for the child objects of 'f' we used the value keyword!!! :):):)
+
+&&&&&&&&&&&&&&&&&&& INSERT DATA &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+---------- option 1 --------------------------------
+CREATE OR REPLACE TABLE Languages AS
+select
+	RAW_FILE:first_name::STRING as First_name,
+	f.value:language::STRING as First_language,
+	f.value:level::STRING as Level_spoken,
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW, TABLE(FLATTEN(RAW_FILE:spoken_languages)) f;
+
+---------- option 2 --------------------------------
+INSERT INTO Languages
+select
+	RAW_FILE:first_name::STRING as First_name,
+	f.value:language::STRING as First_language,
+	f.value:level::STRING as Level_spoken,
+FROM OUR_FIRST_DB.PUBLIC.JSON_RAW, TABLE(FLATTEN(RAW_FILE:spoken_languages)) f;
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$ PARQUET QUERYING & LOADING $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+CREATE OR REPLACE FILE FORMAT MANAGE_DB.FILE_FORMATS.PARQUET_FORMAT
+	TYPE = 'parquet';
+
+CREATE OR REPLACE STAGE MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE
+	url = 's3://snowflakeparquetdemo'
+	FILE_FORMAT = MANAGE_DB.FILE_FORMATS.PARQUET_FORMAT
+
+	//preview the data
+
+LIST @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE;
+
+SELECT * FROM @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE;
+
+if we have not specified our file_format in stage then atleast we need to specify it in SELECT STATEMENT
+
+SELECT * FROM @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE;
+(file_format => 'MANAGE_DB.FILE_FORMATS.PARQUET_FORMAT')
+
+//Quotes can be omitted in case of the current namespace
+USE MANAGE_DB.FILE_FORMATS;
+
+-- Parquet data is something like this below as an example:
+
+{
+"__index_level_0__":7,
+"cat_id":"HOBBIES",
+"d":489,
+"date":133842240000000,
+"dept_id":"HOBBIES_1",
+"id":"HOBBIES_1_008_CA_1_evaluation",
+"item_id":"HOBBIES_1_008"
+"state_id":"CA",
+"store_id":"CA_1",
+"value":12
+}
+
+// Syntax for Querying unstructured data
+
+Here $1 represents the first column and its elements are given
+
+SELECT
+$1:__index_levl_0__,
+$1:cat_id,
+$1:date,
+$1:"__index_level_0__",
+$1:"cat_id",
+$1:"d",
+$1:"date",
+$1:"dept_id",
+$1:"id",
+$1:"item_id",
+$1:"state_id",
+$1:"store_id",
+$1:"value"
+FROM @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE;
+
+// Date conversion
+
+select 1;
+
+select DATE(365+60+60+24);
+
+// Querying with conversions and aliases
+
+SELECT
+$1:__index_level_0__::int as index_leve,
+$1:cat_id::varchar(50) as category,
+DATE($1:date::int) as Date,
+$1:"dept_id":varchar(50) as Dept_ID,
+$1:"id"::varchar(50) as id,
+$1:"item_id"::varchar(50) as item_id,
+$1:"state_id",
+$1:"store_id",
+$1:"value",
+METADATA$FILENAME AS FILENAME,
+METADATA$FILE_ROW_NUMBER AS ROWNUMBER,
+TO_TIMESTAMP_NTZ(current_timestamp) as LOAD_DATE
+FROM @MANAGE_DB.EXTERNAL_STAGES.PARQUETSTAGE;
+
+NTZ = no time zone available
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

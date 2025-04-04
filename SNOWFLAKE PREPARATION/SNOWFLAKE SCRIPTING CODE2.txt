@@ -1,0 +1,165 @@
+Snowsight:
+
+begin
+null;
+end;
+
+begin
+return 'Anonymous block';
+end;
+
+
+declare
+      radius_of_circle float;
+      area_of_circle float;
+    begin
+      radius_of_circle := 3;
+      area_of_circle := pi() * radius_of_circle * radius_of_circle;
+      return area_of_circle;
+    end;
+    
+  drop procedure if exists  area(); 
+ 
+ create or replace procedure area()
+  returns float
+  language sql
+  as
+    declare
+      radius float;
+      area_of_circle float;
+    begin
+      radius := 3;
+      area_of_circle := pi() * radius * radius;
+      return area_of_circle;
+    end;
+      
+    
+    call  area();
+
+Python:
+
+snowflake_conn.py
+
+snowflake account connection: https://ht56290.australia-east.azure.snowflakecomputing.com
+TAlend partner connect with snowflake:
+https://iam.us.cloud.talend.com/idp/credentials/trial-account?trialKey=b831d195-6205-47ec-89d4-44a7a0cd3264&product=default&period=14&partner=snowflake
+
+
+
+import snowflake.connector
+conn = snowflake.connector.connect(
+                user="venkat",
+                password="*****",
+                account="ad4015.southeast-asia.azure",
+                warehouse="Compute_wh",
+                database="snowflake_scripting",
+                schema="main"
+                )
+
+
+anonymous_block_from_python.py
+# Create a test table and insert one row
+
+# Logging
+import logging
+logging.basicConfig(
+    filename='c:\\venkat\snow_python\snowflake_python_connector.log',
+    level=logging.INFO)
+    
+import snowflake_conn
+conn= snowflake_conn.conn   
+sql_command =  "begin" 
+sql_command += " create or replace  table test(a varchar); "
+sql_command += " insert into test values ('first row'); " 
+sql_command += " end;"
+                                 
+print(sql_command)
+cur=conn.cursor().execute(sql_command) 
+print(" Anonymous block ran successfully")
+
+sp_py_area_of_circle.py
+# Logging
+import logging
+logging.basicConfig(
+    filename='c:\\venkat\snow_python\snowflake_python_connector.log',
+    level=logging.INFO)
+    
+import snowflake_conn
+conn= snowflake_conn.conn   
+sql_command =  " create or replace procedure sp_py_area_of_circle() " 
+sql_command += " returns varchar "
+sql_command += " language sql " 
+sql_command += " as " 
+sql_command += " --Snowflake Scripting code;  " + " \n " 
+sql_command += " declare " 
+sql_command += " radius_of_circle float; " 
+sql_command += " area_of_circle float; " 
+sql_command += " begin "
+sql_command += " radius_of_circle := 3; " 
+sql_command += " area_of_circle := pi() * radius_of_circle * radius_of_circle; " 
+sql_command += " return area_of_circle; "  
+sql_command += " end; "
+                              
+print(sql_command)
+cur=conn.cursor().execute(sql_command) 
+print(" sp_py_area_of_circle compiled successfully")
+
+sp_py_area_of_circle_single_quotes.py
+
+# Logging
+import logging
+logging.basicConfig(
+    filename='c:\\venkat\snow_python\snowflake_python_connector.log',
+    level=logging.INFO)
+    
+import snowflake_conn
+conn= snowflake_conn.conn   
+sql_command =  " create or replace procedure sp_py_area_of_circle_single_quotes() " 
+sql_command += " returns varchar "
+sql_command += " language sql " 
+sql_command += " as " 
+sql_command += " ' " 
+sql_command += " --Snowflake Scripting code;  " + " \n " 
+sql_command += " declare " 
+sql_command += " radius_of_circle float; " 
+sql_command += " area_of_circle float; " 
+sql_command += " begin "
+sql_command += " radius_of_circle := 3; " 
+sql_command += " area_of_circle := pi() * radius_of_circle * radius_of_circle; " 
+sql_command += " return area_of_circle; "  
+sql_command += " end; "
+sql_command += " '; " 
+                              
+print(sql_command)
+cur=conn.cursor().execute(sql_command) 
+print(" sp_py_area_of_circle compiled successfully")
+
+sp_py_area_of_circle_dollar_signs.py
+
+# Logging
+import logging
+logging.basicConfig(
+    filename='c:\\venkat\snow_python\snowflake_python_connector.log',
+    level=logging.INFO)
+    
+import snowflake_conn
+conn= snowflake_conn.conn   
+sql_command =  " create or replace procedure sp_py_area_of_circle_dollar_signs() " 
+sql_command += " returns varchar "
+sql_command += " language sql " 
+sql_command += " as " 
+sql_command += " $$ " 
+sql_command += " --Snowflake Scripting code;  " + " \n " 
+sql_command += " declare " 
+sql_command += " radius_of_circle float; " 
+sql_command += " area_of_circle float; " 
+sql_command += " begin "
+sql_command += " radius_of_circle := 3; " 
+sql_command += " area_of_circle := pi() * radius_of_circle * radius_of_circle; " 
+sql_command += " return area_of_circle; "  
+sql_command += " end; "
+sql_command += " $$; " 
+
+print(sql_command)
+cur=conn.cursor().execute(sql_command) 
+print(" sp_py_area_of_circle_dollar_signs compiled successfully")

@@ -1,0 +1,34 @@
+Three Reasons Why We Gave Up Using Azure Devops Project
+https://medium.com/@raxsuite/three-reasons-why-we-gave-up-using-azure-devops-projects-45f1c896e2b4
+
+
+Optimizing Delta Lake projects!!!
+https://medium.com/@martin.jurado.p/optimizing-delta-lake-projects-20424d79031f
+
+Projects by an Youtuber in Medium:
+https://naemazam.medium.com/data-engineering-projects-for-free-b76cc3b9db2c
+
+Project1 in Youtube:
+https://www.youtube.com/watch?v=yZKJFKu49Dk
+
+Project2 on Twitter using Airflow:
+https://www.youtube.com/watch?v=q8q3OFFfY6c
+
+Project3 on Stock Market Using Kafka:
+https://www.youtube.com/watch?v=KerNf0NANMo
+
+Project4 on Uber Data Analytics:
+https://www.youtube.com/watch?v=WpQECq5Hx9g
+
+Project5 on Olympic Data Analytics:
+https://www.youtube.com/watch?v=IaA9YNlg5hM
+
+
+
+
+Why: Power of Delta File Format
+https://medium.com/@diehardankush/why-power-of-delta-file-format-e8d029114879
+
+
+Interview Questions — Azure Data Engineer
+https://surajskfgi.medium.com/interview-questions-azure-data-engineer-627f566096d2

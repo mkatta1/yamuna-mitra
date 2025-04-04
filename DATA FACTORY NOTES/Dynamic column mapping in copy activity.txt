@@ -1,0 +1,199 @@
+******* Get Latest File from folder and Process it in Azure Data Factory
+
+Revisit for doubt Youtube: https://www.youtube.com/watch?v=QHeG36oqkPQ
+
+For pipeline, create two variables:
+LatestFileName
+PreviousModifiedDate = 1990-01-01T05:12:22Z
+
+
+GetMetadata->ForEach(-> GetMetadata->IfContidion-->SetVairable2-->copydata
+Activity	Activity  Activity_2 (->setVariable1)  
+
+In GetMetadatActivity, Go to settings add Fieldlist ="childitems"
+In ForEachActivity, Go to settings @activity('GetMetadataActivity').output.childItems
+
+In (--> GetMetadataActivity_2, Go to Dataset properties FileName = @item().name
+
+add two Fieldlists = Itemname, Last modified 
+
+In (--> GetMetadata2-->IfContidion), ifcondition go to Expression =
+@greater(formatDataTime(activity('GetMetadata2').output.lastModified,'yyyyMMddHHmmss'),formatDateTime(variables('previousModifiedDate'),'yyyyMMddHHmmss'))
+
+In (->IfContidion->setVariableActivity), IfCondition Trueactivities then LastFileName = 
+@activity('GetMetadata2').output.Itemname
+	||
+	\/
+setVariableActivity2
+LastFileName = @activity('GetMetadata2').output.LastModified
+
+
+
+
+
+
+
+************ Add additional columns during copy  ******
+
+In copyDataActivity, Go to Source then to Additional columns option which consists of opportunity to add additional columns to your file.
+
+Name, Value
+sourceFile, $$FILEPATH
+dup_name, $$COLUMN
+PipelineName, @pipeline().Pipeline
+staticCol, ABCD
+
+
+************ Dynamic column mapping in copy activity ******
+
+STEP1:
+In json file format of the copyActivity you will find "translator"where you can find all the mappings information. So we need to copy this to a file.
+
+Eg:
+
+"translator": {
+	"type": "TabularTranslator",
+	"mappings":
+		{
+		 "source": {
+			"name": "empid",
+			"type":"String",
+			"physicalType": "String"
+		},
+		"sink": {
+		  "name": "Emp_Id",
+		  "type": "Int32",
+		  "physicalType": "Int"
+		}
+		},
+		{
+
+		  "source": { so on...
+
+
+To runtime supply the mapping details dynamicall:
+In copyActivity, go to MAPPING Add dynamic content and we can pass this json into the json fuction "@json('')"
+
+
+STEP2:
+
+create table tbl_mappings
+(
+sourceFile nvarchar(50),
+sinkTableSchema nvarchar(50),
+sinkTableName nvarchar(50),
+jsonMapping nvarchar(max)
+)
+
+Here the jsonMapping column contains the mapping information of source and sink in the json.
+
+Insert the above json into this 'jsonMapping' column
+
+insert into tbl_mappings values ('employees.xlsx', 'dbo', 'tbl_employees','{
+	"type": "TabularTranslator",
+	"mappings" : [
+		     {....
+'
+
+
+STEP 3:
+
+Create & run GetMetadata Actvity(In settings choose childItems) and copy the childItems output array of json objects into a file.
+
+Eg:
+"childItems": [
+	{
+	  "name": "department.xlsx",
+	  "type": "File"
+	},
+	{
+	  "name": "employees.xlsx",
+	  "type": "File"
+	} ]
+
+GetMetadata ---> ForEach (----->LookupActivity-->CopydataActivity)
+Activity	 Activity
+
+In ForEach Activity, Go to Settings for Items = @activity('GetMetadata1').output.childItems
+
+Here in ForEach we are using LookupActivity because we want to run a query to retrieve the information about MappingJson and also the source,sink, and their columns info.
+
+In LookupActivity, Go to settings---> Query/Storeprocedure
+Query:
+select * from tbl_mappings where sourceFile = '@{item().name}'
+
+output of LookupActivity:
+"firstRow": {
+	"sourceFile": "department.xlsx",
+	"sinkTableSchema": "dbo",
+	"sinkTableName": "tbl_departments",
+	"jsonMapping": "{\r
+
+So dynamically we point to output of lookupActivity "firstRow--> SourceFile" provided dynamically to copyDataActivity 
+
+
+In CopyDataActivity, 
+
+Source tab dynamic parameters
+fileName = @activity('Lookup1').output.firstRow.sourceFile
+
+Sink tab dynamic parameters
+schemaName = @activity('Lookup1').output.firstRow.sinkTableSchema
+tableName = @activity('Lookup1').output.firstRow.sinkTableName
+
+Mapping tab dynamic content. The values we get is in json so we need to use the json function
+
+@json(activity('Lookup1').output.firstRow.jsonMapping)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

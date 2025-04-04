@@ -1,0 +1,135 @@
+CREATE OR REPLACE TABLE STG_CUSTOMER (
+C_NAME VARCHAR,
+C_ADDRESS VARCHAR,
+C_NATIONKEY VARCHAR,
+C_PHONE VARCHAR,
+C_ACCTBAL VARCHAR,
+C_MKTSEGMENT VARCHAR,
+C_COMMENT VARCHAR)
+
+CREATE OR REPLACE TABLE CUSTOMER (
+C_NAME VARCHAR(25),
+C_ADDRESS VARCHAR(40),
+C_NATIONKEY NUMBER(38,0),
+C_PHONE VARCHAR(15),
+C_ACCTBAL NUMBER(12,2),
+C_MKTSEGMENT VARCHAR(10),
+C_COMMENT VARCHAR(20));
+
+insert into customer(C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT)
+SELECT C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT
+FROM STG_CUSTOMER;
+
+select * from stg_customer
+where try_to_number(c_nation) is null or try_to_decimal() is null;
+
+truncate table customer_err;
+select * from customer_err;
+
+insert into customer_err(C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT)
+SELECT C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT
+FROM STG_CUSTOMER
+WHERE try_to_number(C_NATIONKEY) is null or try_to_decimal(C_ACCTBAL) is null;
+
+
+
+
+delete
+from stg_customer where
+try_to_number(C_NATIONKEY) is null or try_to_decimal(C_ACCTBAL) is null;
+
+insert into customer(C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT)
+SELECT C_NAME, C_ADDRESS, C_NATIONKEY, C_PHONE, C_ACCTBAL, C_MKTSEGMENT, C_COMMENT
+FROM STG_CUSTOMER;
+
+
+************************************** NUMERIC VALUE IS OUT OF RANGE ****************************************************
+
+check in the word document
+
+
+************************************** "cannot change column"  **************************************
+
+' How to resolve the "cannot change column" error in snowflake ?';
+--SQL compilation error: cannot change column MY_HOMELOAN_NUMBER__C from type NUMBER(38,0) to VARCHAR(50)
+create or replace  table person(id number
+                               , my_homeloan_number__c number
+                               , AnnualRevenue number(24)
+                               , BillingCity varchar(10)
+                               , BillingPostalCode float
+                               , active_flag boolean
+                               , created_datetime date
+                               , updated_time timestamp
+                               , val variant);
+
+-- Change data type 
+alter table person modify column my_homeloan_number__c varchar(50);
+alter table person modify column AnnualRevenue      number(38,2);
+alter table person modify column AnnualRevenue      float;
+alter table person modify column BillingPostalCode     number;
+alter table person modify column BillingCity           number;
+alter table person modify column active_flag           string;
+alter table person modify column created_datetime      timestamp;
+alter table person modify column updated_time          date;
+alter table person modify column val                   object;
+alter table person alter my_homeloan_number__c  set  data type   varchar(50);
+alter table person alter AnnualRevenue    set  data type   number(38,2);
+alter table person alter AnnualRevenue    set  data type   float;
+alter table person alter BillingPostalCode   set  data type   number;
+alter table person alter BillingCity            set  data type   number;
+alter table person alter active_flag            set  data type   string;
+alter table person alter created_datetime       set  data type   timestamp;
+alter table person alter updated_time           set  data type   date;
+alter table person alter valset                 data data type   object;  
+-- Increasing data type length --no issue
+alter table person modify column AnnualRevenue  number(28);  -- no issue
+alter table person modify column BillingCity    varchar(20); -- no issue
+-- Decreasing data type length - 
+alter table person modify column BillingCity    varchar(1);  -- no issue
+alter table person modify column AnnualRevenue  number(5);   -- having issue
+truncate table person;
+insert into person (id, my_homeloan_number__c, AnnualRevenue, BillingCity ) values (1,1234, 12345677912, 'Abcdedefghtijklmnop');
+alter table person modify column BillingCity    varchar(5);  
+alter table person modify column AnnualRevenue  number(5); 
+-- Case 1: When table is empty?
+-- what if you try to execute below one?
+alter table person modify column my_homeloan_number__c varchar(50);
+alter table person alter my_homeloan_number__c set data type varchar(50);
+-- Just re-create table (drop and create) 
+ create or replace  table person(id number , my_homeloan_number__c string, AnnualRevenue boolean
+, BillingCity varchar(10)
+, BillingPostalCode float
+, active_flag boolean
+, created_datetime timestamp
+, updated_time date
+, val object);
+--Case 2: When table has data?
+create or replace  table person(id number
+ , my_homeloan_number__c number
+ , AnnualRevenue number(24)
+ , BillingCity varchar(10)
+ , BillingPostalCode float
+ , active_flag boolean
+ , created_datetime date
+ , updated_time timestamp
+ , val variant);
+insert into person (id, my_homeloan_number__c, AnnualRevenue, BillingCity )
+values (1,1234, 12345677912, 'Abcdedefg');
+alter table person modify column my_homeloan_number__c varchar(50);
+alter table person alter my_homeloan_number__c set data type varchar(50);
+-- what is the soulution for this?
+-- step 1: Rename the existing column my_homeloan_number__c_rn
+-- Step 2: Add new column  with old coloumn name(my_homeloan_number__c) which you wanted to change data type
+-- Step 3: Update new column value with renamed column value
+-- Step 4: Drop renamed column my_homeloan_number__c_rn
+alter table person rename column my_homeloan_number__c to my_homeloan_number__c_rn;
+alter table person add column my_homeloan_number__c varchar(50);
+select * from person;
+update person set my_homeloan_number__c = my_homeloan_number__c_rn;
+select * from person;
+alter table person drop column my_homeloan_number__c_rn;
+desc table person;
+select * from person;
+-- insert new row after modfiy data type
+insert into person (id, my_homeloan_number__c, AnnualRevenue, BillingCity ) values (2,'HL-1234', 123456779127, 'Abcdede');
+select * from person;
