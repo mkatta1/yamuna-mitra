@@ -1,0 +1,106 @@
+**************************** SYDNEY **************************************
+
+
+
+
+******************************************************************
+
+**************************** PERTH **************************************
+Data Analyst
+Digital Resources Australia Pty Ltd
+https://www.seek.com.au/job/74562236?type=standard&ref=search-standalone#sol=764b45fefafd76d75d7bfbee77d2f1621d5576a3
+
+Junior Data Engineer
+BC 88 Pty Ltd
+https://www.seek.com.au/job/74450763?type=standard&ref=search-standalone#sol=a3c7a0f8b01c95f15f082890367aebf4f612a805
+
+BI Engineer
+Randstad Digital
+https://www.seek.com.au/job/74325920?type=standard&ref=search-standalone#sol=e3085e98eb782c843e47a897ca17ac6c0a70d408
+
+Data Engineer / Azure Tech Stack - 6 months+ contract - Perth
+Private Advertiser
+https://www.seek.com.au/job/74117912?type=standard&ref=search-standalone#sol=63cf3e36f3cf0ff558c6a7ef7d422989a71b1d8c
+
+Data Analyst
+Fleetcare
+https://www.seek.com.au/job/74426474?type=standout&ref=search-standalone#sol=78511f9b9837ea7fad6222d28b6436398e22ff84
+
+Data Engineering Consultant / Data Engineer
+Sia Partners Australia
+https://www.seek.com.au/job/73931196?type=standard&ref=search-standalone#sol=4e494db173818aa501532722b055144ee91cec59
+
+
+
+
+
+
+******************************************************************
+
+
+
+P&N Bank Data Engineer(Perth):
+https://www.seek.com.au/job/74225946?type=standout&ref=search-standalone#sol=4c9e596e8d5e7a7034337cdc6898e43d726119ad
+
+SMC Executive (Melbourne) Snowflake Engineer:
+https://www.seek.com.au/job/74043385?type=standout&ref=search-standalone#sol=6bee516812d17d2a756acef70e73c98f0064bbf9
+
+FourQuarters Recruitment Data Engineer (Melbourne):
+https://www.seek.com.au/job/73858295?type=standard&ref=search-standalone#sol=ecfe3b872861300b789435fbf9271180cd813dc8
+
+Accenture Data Engineer (Melbourne):
+https://www.seek.com.au/job/73760976?type=standout&ref=search-standalone#sol=5df61428a8b5a7c320879eaec8c80fbcac09172b
+
+Energy Australia (Melbourne):
+https://www.seek.com.au/job/74114486?type=standout&ref=search-standalone#sol=9a901b47081771bf0f830f7526674314f9f0324e
+
+Davidson data engineer (Melbourne):
+https://www.seek.com.au/job/74238969?type=standout&ref=search-standalone#sol=15ae958c52ca1bc693e85069cf42e700df9023bb
+
+WA Health Data Engineer:
+https://www.seek.com.au/job/74118588?type=standout&ref=search-standalone#sol=9c7e8731bffab79621e7124dc0e219c7ce39907f
+
+Fortescue Data Senior Engineer (Perth):
+https://www.seek.com.au/job/74312089?type=standout&ref=search-standalone#sol=93fff2b65e7d35992f45bced71c0ba44c87b07e7
+
+Professional Search Group (Perth): Data Engineer
+https://www.seek.com.au/job/73825850?type=standard&ref=search-standalone#sol=109d1a32e03258c16859088c436126b841ab05f5
+
+Private Advertiser (Perth):
+https://www.seek.com.au/job/74117912?type=standard&ref=search-standalone#sol=8dc33d37db4bf6fef758b62440c3815d1758c82d
+
+Data Engineer (East Perth, Perth WA):
+https://www.seek.com.au/job/73651067?type=standout&ref=search-standalone#sol=aa9d339d40f00e5ca9d3092e229766fad0e7a06d
+
+Sia Partners Australia (Perth):
+https://www.seek.com.au/job/73931196?type=standard&ref=search-standalone#sol=e7c2bde045633e1107f1fbfa8ca260b272ef1837
+
+NRI Data Engineer (Perth):
+https://www.seek.com.au/job/74083771?type=standout&ref=search-standalone#sol=ab79a3d51812489e4a909dd0f7b20fd208c21270
+
+Randstad Digital Data Engineer (Perth):
+https://www.seek.com.au/job/73697898?type=standard&ref=search-standalone#sol=e964cb56add0c9bc4b68c89d5771efe29b1f5c3f
+
+
+
+
+a temporary visa holder, and you weren't eligible for Medicare under
+132011
+
+Application ID: 3184134
+year: 2021-2022
+07 December 2023
+
+and automated testing.
+
+Will the debt be growing?
+
+
+
+Working a Melbourne based university. Student payment and their educational reports. Sourced the data in azure ADLS RestAPI & mysql DB for the transform using ADF --> Azure SQL  	
+
+
+Working bank sourced data from multiple datasources like oracle db, hive db using the template ADF --> Azure SQL  
+
+
+

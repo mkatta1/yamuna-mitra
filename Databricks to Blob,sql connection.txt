@@ -1,0 +1,61 @@
+Azure storage connection
+SAS = SharedAccessSignature
+val containerName="azsqlshackcontainer"
+val storageAccountName="azsqlshackstorage"
+val sas = "SAS Connection String"
+val config = "fs.azure.sas."+containerName+"."+storageAccountName+".blob.core.windows.net"
+Code snippet that uses Databricks utility to mount the Azure Storage
+
+dbutils.fs.mount(
+ source=".csv"
+mountPoint="/mnt/myfile",
+extraConfigs=Map(config->sas)
+
+aggdata.write
+.option("header","true")
+.format("com.databricks.spark.csv")
+.save("/mnt/result/SalesProfitData/csv")
+
+AWS connection
+
+dbutils.fs.mount(
+  source = "wasbs://<container-name>@<storage-account-name>.blob.core.windows.net",
+  mount_point = "/mnt/<mount-name>",
+  extra_configs = {"<conf-key>":dbutils.secrets.get(scope = "<scope-name>", key = "<key-name>")})
+  
+  
+Databricks:
+dbutils.fs.mount(
+  source = "wasbs://<container-name>@<storage-account-name>.blob.core.windows.net",
+  mount_point = "/mnt/<mount-name>",
+  extra_configs = {"<conf-key>":dbutils.secrets.get(scope = "<scope-name>", key = "<key-name>")})
+  df = spark.read.text("/mnt/<mount-name>/...")
+  
+  
+spark.conf.set(
+  "fs.azure.account.key.<storage-account-name>.blob.core.windows.net",
+  "<storage-account-access-key>")
+  
+ spark.conf.set(
+  "fs.azure.sas.<container-name>.<storage-account-name>.blob.core.windows.net",
+  "<complete-query-string-of-sas-for-the-container>")
+  
+  
+jdbcHostname = "azsqlshackserver.database.windows.net"
+jdbcPort = "1433"
+jdbcDatabase = "azsqlshackdb"
+properties = {
+ "user" : "gauri",
+ "password" : "******" }
+ 
+
+url = "jdbc:sqlserver://{0}:{1};database={2}".format(jdbcHostname,jdbcPort,jdbcDatabase)
+mydf = sqlContext.read.csv("/FileStore/tables/1000_Sales_Records-d540d.csv",header=True)
+
+from pyspark.sql import *
+import pandas as pd
+myfinaldf = DataFrameWriter(mydf)
+myfinaldf.jdbc(url=url, table= "TotalProfit", mode ="overwrite", properties = properties)
+
+Databricks Link:
+https://www.sqlshack.com/load-data-into-azure-sql-database-from-azure-databricks/

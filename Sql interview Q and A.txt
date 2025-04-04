@@ -1,0 +1,2808 @@
+362) Repeat Rows N Times According to Column Value in SQL Server?
+I have following table.
+
+Table A:
+--------
+
+ID         ProductFK         Quantity       Price
+------------------------------------------------
+10         1                  2           100
+11         2                  3           150
+12         1                  1           120
+
+I have following table.
+
+Table A:
+--------
+ID         ProductFK         Quantity       Price
+------------------------------------------------
+10         1                  2           100
+11         2                  3           150
+12         1                  1           120
+----------------------------------------------
+I need select that repeat Rows N Time According to Quantity Column Value.
+
+So I need following select result:
+
+ID        ProductFK         Quantity        Price
+------------------------------------------------
+10        1                   1          100
+10        1                   1          100
+11        2                   1          150
+11        2                   1          150
+11        2                   1          150
+12        1                   1          120
+
+
+=============================================================
+
+SELECT  t1.*, t2.number + 1 RepeatNumber
+FROM    TableA t1
+JOIN    master.dbo.spt_values t2 ON t2.type = 'P' AND t2.number < t1.Quantity
+
+The above query repeats each record by the specified number in Quantity column.
+
+Note for master.dbo.spt_values on type = 'P':
+This table is used for getting a series of number which is hard-coded in it by
+condition of type = 'P'.
+
+
+361). How to Generate Sequence without using Ranking functions in SQL Server?
+A)
+Yes, simply count the number of rows with (sort column) value less than the current rows sort column value...
+
+   Select *, 
+         (Select Count(*) From Table 
+          Where SortColumn <= t.SortColumn) as Rank
+   From table t
+NOTE: The sort column should be unique if you don't want to count duplicates. For example, if you want to rank test scores, then this technique will give everyone with the same score the same rank, instead of randomly assigning them all different ranks).
+
+in yr example,
+
+Select e.EmployeeID as ID,   
+   FirstName+' '+LastName as Name,  
+   (Select Count(*) From Employees
+    Where EmployeeID <= e.EmployeeId)  
+From employees e  
+   Join Orders o  
+      On e.EmployeeID = o.EmployeeID  
+Group by e.EmployeeID, FirstName+' '+LastName 
+
+
+LOW LEVEL QUERY:
+---------------
+
+select 
+Employees.EmployeeID as ID, 
+FirstName+' '+LastName as Name,
+DENSE_RANK() over (order by SUM(Orders.OrderID)) as [Rank]
+from 
+employees 
+inner join 
+orders 
+on
+Employees.EmployeeID = Orders.EmployeeID
+group by 
+Employees.EmployeeID, 
+FirstName+' '+LastName
+
+
+360). What would be the output of following script. (asked in TCS with more nested
+question) 
+
+SELECT 'Vikas' + NULL + 'Ahalwat' AS [FullName]
+
+When a NULL is involved in a concatenation using the + operator, the entire result becomes NULL. Use the ISNULL or COALESCE function to replace NULL with an empty string (''):
+
+SELECT 'Vikas' + ISNULL(NULL, '') + 'Ahalwat' AS [FullName]
+
+358). How you will replace "A" with "B" and "B" with "A" in following string "ABAB"?(HCL)
+
+SELECT REPLACE(REPLACE(REPLACE('ABAB', 'A', 'X'), 'B', 'A'), 'X', 'B') AS Result;
+Explanation:
+
+First Replacement ('A' -> 'X'):
+-------------------------------
+Replace all "A" with a temporary placeholder (e.g., "X") to avoid interference when replacing "B".
+Result: XBXB
+
+Second Replacement ('B' -> 'A'):
+--------------------------------
+Replace all "B" with "A".
+Result: XAXA
+
+Third Replacement ('X' -> 'B'):
+--------------------------------
+Replace the placeholder "X" back with "B".
+Result: BABA
+
+357). What do you understand by sp_MSForEachTable?
+
+sp_MSForEachTable is an undocumented system stored procedure provided by SQL Server. It is used to execute a specified command or query for each table in the current database. Since it is undocumented, Microsoft does not guarantee its behavior or availability in future versions of SQL Server, and its use is generally discouraged in favor of custom scripts or documented alternatives.
+
+EXEC sp_MSForEachTable @command1 = 'SQL command'
+
+Parameters:
+----------
+@command1: The SQL command to execute for each table. It can include placeholders for dynamic table names:
+?: Represents the table name.
+Example Usages:
+List all table names:
+
+sql
+Copy code
+EXEC sp_MSForEachTable 'PRINT ''?'''
+This prints the names of all tables in the current database.
+
+Truncate all tables:
+--------------------
+sql
+Copy code
+EXEC sp_MSForEachTable 'TRUNCATE TABLE ?'
+This truncates all tables in the database (if constraints allow).
+
+Get row count for each table:
+
+sql
+Copy code
+EXEC sp_MSForEachTable 'SELECT ''?'' AS TableName, COUNT(*) AS RowCount FROM ?'
+This provides the row count for each table in the database.
+
+Advantages:
+-----------
+Quick and easy way to perform operations on all tables.
+Supports dynamic table manipulation without writing looping constructs.
+Disadvantages:
+Undocumented: It is not officially supported or documented by Microsoft.
+Limited Customization: For more complex operations, writing explicit loops or using sys.tables may be more suitable.
+Potential Risk: Since it's undocumented, behavior may vary across different SQL Server versions, and it might not be available in future versions.
+Recommended Alternatives:
+Use a cursor or WHILE loop to iterate over tables in sys.tables or INFORMATION_SCHEMA.TABLES.
+Example of truncating all tables using sys.tables:
+sql
+Copy code
+DECLARE @sql NVARCHAR(MAX) = '';
+
+SELECT @sql += 'TRUNCATE TABLE ' + QUOTENAME(name) + '; ' 
+FROM sys.tables;
+
+EXEC sp_executesql @sql;
+
+356). Write query to show marks as below
+
+NEED TO ANSWER
+
+355). What will execute first tell the order of every keyword used in below
+query?(Wipro/Sapient)
+
+Order of Query Process Phases-SQL Server
+----------------------------------------
+SELECT
+TOP 10 E.FirstName,
+SUM(E.Salary)
+From EmployeeDetail E
+INNER JOIN ProjectDetail P ON E.EID = P.EID
+WHERE E.Salary IS NOT NULL
+GROUP BY FirstName
+HAVING SUM(E.Salary) > 500000 
+ORDER BY E.FirstName
+
+353). What do you understand by "sql_variant" datatype in SQL Server?
+
+352). What Execute in SQL Server First?
+A) WHERE
+B) SELECT
+C) ON
+D) FROM
+E) TOP
+
+351). How column Density is effect to Index?
+Column density is a critical factor that influences the performance and behavior of database indexes in SQL Server. Density refers to how unique the data in a column is and is mathematically represented as the reciprocal of the number of distinct values in that column.
+
+Formula for Density:
+Density = 
+1
+Number of Distinct Values
+Number of Distinct Values
+1
+​
+ 
+
+For example:
+
+If a column has 1000 rows and only 10 distinct values, the density is 
+1
+10
+=
+0.1
+10
+1
+​
+ =0.1.
+If all 1000 rows are unique, the density is 
+1
+1000
+=
+0.001
+1000
+1
+​
+ =0.001.
+How Density Affects Indexes:
+Impact on Selectivity:
+
+Selectivity is the ability of an index to filter rows effectively. A low-density column (high number of distinct values) has high selectivity, making it ideal for indexing because the index will efficiently narrow down search results.
+High-density columns (low number of distinct values) have low selectivity, and indexes on these columns may perform poorly since they return many rows for a given query.
+Example:
+
+Indexing a column like EmployeeID (low density, high selectivity) is beneficial.
+Indexing a column like Gender (high density, low selectivity) is less useful.
+Index Size:
+
+Columns with low density (high distinct values) require more storage space for the index because there are more unique entries to maintain in the index structure.
+Index Scans vs. Seeks:
+
+High-density columns are more likely to result in index scans rather than index seeks, leading to slower query performance.
+Compound Index Performance:
+
+When using a compound index, the leading column's density determines the effectiveness of the index. A low-density leading column may reduce the index's utility.
+Statistics and Query Optimizer:
+
+SQL Server uses density statistics to estimate the number of rows a query will return. This estimation affects query plan selection.
+A low-density column allows the optimizer to make more precise row estimations and choose better execution plans.
+Practical Recommendations:
+Index High-Selectivity Columns:
+
+Prefer columns with low density (high selectivity) for indexing to improve query performance.
+Avoid Indexing High-Density Columns Alone:
+
+For high-density columns, consider combining them with other columns in a composite index to improve selectivity.
+Update Statistics Regularly:
+
+Ensure that statistics are kept up to date so that the query optimizer has accurate density and distribution information.
+Analyze Index Usage:
+
+Use tools like the Database Engine Tuning Advisor or query execution plans to evaluate if the index benefits the workload.
+By understanding column density, you can make informed decisions about index creation and maintenance, optimizing database performance.
+
+350). What do you understand by Column Density in SQL Server?
+
+Column density information is stored in the statistics for a table or index. You can view this information using the DBCC SHOW_STATISTICS command:
+
+sql
+Copy code
+DBCC SHOW_STATISTICS('TableName', 'IndexOrStatisticsName')
+This command displays:
+
+Density: Calculated for each prefix of index columns or statistics.
+Distinct Rows: Used to compute the density.
+The All Density column in the output reflects the density for the given column(s).
+
+Practical Example:
+Table:
+ID	City
+1	New York
+2	London
+3	New York
+4	Tokyo
+5	London
+City has 3 distinct values: {New York, London, Tokyo}.
+Density of City = 
+1
+3
+=
+0.333
+3
+1
+​
+ =0.333.
+Query:
+sql
+Copy code
+SELECT * FROM Customers WHERE City = 'New York';
+Density helps SQL Server estimate the number of rows for this predicate (City = 'New York').
+With 5 rows in total and a density of 0.333, SQL Server might estimate approximately 
+5
+×
+0.333
+≈
+2
+5×0.333≈2 rows as the result.
+Key Takeaways:
+Low Density (high uniqueness) → High Selectivity → Better Index Performance.
+High Density (low uniqueness) → Low Selectivity → May not benefit from indexing.
+Use column density as a guide for indexing strategies and query optimization in SQL Server.
+
+349). Will Non-Clustered Index used every time by SQL Server Engine?  
+
+No, a Non-Clustered Index is not used every time by the SQL Server engine. The decision to use a non-clustered index depends on the Query Optimizer and whether the index is deemed efficient for executing a specific query. SQL Server evaluates multiple factors to decide whether a non-clustered index will improve query performance or whether an alternative approach, such as a table scan, clustered index scan, or another index, would be better.
+
+
+Factors Affecting the Usage of a Non-Clustered Index:
+Query Selectivity:
+
+Non-clustered indexes are typically used when the query is highly selective (i.e., it filters a small percentage of rows).
+If the query returns a large number of rows, SQL Server might opt for a table scan or clustered index scan, as these may be more efficient.
+Columns in the Index:
+
+The index key columns must align with the columns used in the query's WHERE, JOIN, GROUP BY, or ORDER BY clauses.
+If the index does not cover the query, the query engine may choose not to use it.
+Index Coverage:
+
+A covering index includes all the columns required by the query (either in key or included columns).
+If the index does not fully cover the query, a key lookup (also known as a bookmark lookup) may be needed, which can increase overhead. In such cases, SQL Server might avoid using the non-clustered index.
+Query Complexity:
+
+For complex queries with multiple joins, aggregates, or subqueries, the optimizer might choose a different execution plan that does not use the non-clustered index.
+Statistics and Outdated Information:
+
+SQL Server relies on statistics to estimate the cost of using an index.
+If statistics are outdated or inaccurate, the optimizer might make suboptimal decisions, such as not using a suitable non-clustered index.
+Index Maintenance Overhead:
+
+If the non-clustered index adds significant overhead (e.g., due to frequent updates, inserts, or deletes), SQL Server might favor other execution methods.
+Parameter Sniffing:
+
+Depending on parameter values, a query might sometimes use the non-clustered index and sometimes not, based on the estimated number of rows affected.
+Index Fragmentation:
+
+Heavily fragmented indexes can degrade performance, causing SQL Server to prefer alternative access methods.
+Cost-Based Query Optimization:
+
+SQL Server evaluates the "cost" of using an index versus other options. If the estimated cost of using the non-clustered index is higher than alternatives, it won't be used.
+When SQL Server Will Likely Use a Non-Clustered Index:
+The query is highly selective and filters on columns included in the index key.
+The index is a covering index for the query.
+Statistics are up-to-date and accurately reflect the data distribution.
+The query uses indexed columns for sorting or grouping operations.
+How to Check Index Usage:
+Execution Plan:
+
+Analyze the execution plan to see if the non-clustered index is used.
+Example:
+sql
+Copy code
+SET STATISTICS PROFILE ON;
+SELECT * FROM TableName WHERE ColumnName = 'Value';
+Dynamic Management Views (DMVs):
+
+Use DMVs to check index usage statistics:
+sql
+Copy code
+SELECT * 
+FROM sys.dm_db_index_usage_stats
+WHERE object_id = OBJECT_ID('TableName');
+Query Tuning Tools:
+
+Tools like the Database Engine Tuning Advisor or Query Store can help identify underused or unused indexes.
+Key Takeaway:
+The SQL Server engine does not guarantee the use of a non-clustered index for every query. Proper index design, up-to-date statistics, and understanding the query's requirements are essential to encourage the use of a non-clustered index where it is beneficial.
+
+
+348). Suppose you have above table"TestUpdate". then what would be the output of
+following query?
+UPDATE Testupdate SET ID = ID + (SELECT MAX(ID) FROM Testupdate)
+GO 2
+SELECT * FROM Testupdate
+
+-- The GO 2 means the UPDATE statement will be executed twice consecutively.
+SELECT * FROM Testupdate
+-- This will display the final state of the Testupdate table after the two UPDATE executions.
+
+
+Initial State of Table:
+Assume Testupdate initially contains:
+
+ID
+1
+2
+3
+Step 1: First Execution of UPDATE:
+Compute MAX(ID) from the current table:
+MAX(ID)
+=
+3
+MAX(ID)=3
+Update each ID value:
+New ID
+=
+Old ID
++
+MAX(ID)
+=
+Old ID
++
+3
+New ID=Old ID+MAX(ID)=Old ID+3
+Table after the first UPDATE: | ID | |------| | 4 | | 5 | | 6 |
+Step 2: Second Execution of UPDATE:
+Compute MAX(ID) from the updated table:
+MAX(ID)
+=
+6
+MAX(ID)=6
+Update each ID value again:
+New ID
+=
+Old ID
++
+MAX(ID)
+=
+Old ID
++
+6
+New ID=Old ID+MAX(ID)=Old ID+6
+Table after the second UPDATE: | ID | |------| | 10 | | 11 | | 12 |
+Final Output from SELECT *:
+After executing the query twice, the Testupdate table will look like:
+
+ID
+10
+11
+12
+Key Points:
+The GO 2 executes the UPDATE statement twice.
+Each UPDATE computes the MAX(ID) based on the table's state at the time of execution.
+The process results in cumulative updates to the ID column.
+
+347) Assume Testupdate initially contains
+
+ID
+1
+2
+3
+4
+
+What would be the output of following query?
+UPDATE Testupdate SET ID = ID + (SELECT MAX(ID) FROM Testupdate)
+SELECT * FROM Testupdate
+
+New ID=Old ID+MAX(ID)=Old ID+4
+
+The final output of the query is:
+--------------------------------
+ID
+5
+6
+7
+8
+
+346). What will be the output of the following query?
+SELECT CASE WHEN 1=1 THEN 'Vikas Ahlawat1'
+	    WHEN 2=2 THEN 'Vikas Ahlawat2'
+	    ELSE 'Vikas Ahlawat3' END AS Name
+
+-- The subsequent conditions (WHEN 2=2 and ELSE) are not evaluated because the first condition was satisfied.
+
+Output:
+Name
+Vikas Ahlawat1
+
+345). How you will change the font size/style in SQL Server?
+
+Click Options on the Tools menu. Click Environment, and then click Fonts and Colors. In the Show settings for list, select Text Editor. Change the font, size, display item, foreground and background colors. Click Use Defaults to return to the default settings.
+
+344). How you will select all records using TOP keyword in SQL Statement, even you don't know the count of table?
+A)
+
+You can use COUNT(*) OVER()
+
+SELECT TOP 20 *, 
+       COUNT(*) OVER() AS TotalMatchingRows
+FROM master..spt_values
+WHERE type='P'
+ORDER BY number
+Doing two queries may work out more efficient however especially if you have narrower indexes that can be used in determining the matching row count but don't cover the entire SELECT list.
+
+343). What is the difference between Data files and Log Files in Sql Server?
+A) https://learn.microsoft.com/en-us/sql/relational-databases/databases/database-files-and-filegroups?view=sql-server-ver16
+
+342). What is the main rule of first normal form? second form ? third form?
+
+341). What is the difference between Master, MSDB,TempDB and Model Databases?
+
+
+340). What would be the output of following SQL Script.
+IF(NULL = NULL)
+  PRINT 'True'
+ELSE
+  PRINT 'False'
+
+output:
+False because we cannot compare unknown value with unknown
+
+339). How to split a comma-separated value to columns?
+
+338). What is the backup strategy in your organization? (TCS)
+
+337). What would be the output of the following script?
+DECLARE @Name VARCHAR(20)
+SET @Name = 'विकास अहलाव त'
+SELECT @Name
+
+Data Type (VARCHAR):
+--------------------
+VARCHAR is a data type designed for storing non-Unicode strings. It uses a single-byte or multi-byte encoding depending on the collation but does not inherently support Unicode characters.
+
+Expected Output:
+----------------
+If the database collation does not support Devanagari characters (common in most default configurations), each unsupported character will be replaced with ?.
+Output:
+ruby
+Copy code
+????? ???? ?
+
+Alternative with NVARCHAR:
+-------------------------
+To correctly store and display Unicode characters, use the NVARCHAR data type:
+sql
+Copy code
+DECLARE @Name NVARCHAR(20)
+SET @Name = N'विकास अहलाव त'
+SELECT @Name
+
+Key Takeaway:
+Use NVARCHAR with the N prefix for Unicode strings in SQL Server to ensure proper storage and display of characters from scripts like Devanagari.
+
+
+
+
+330). What is the difference between SQL, PL-SQL and T-SQL?
+
+SQL, PL/SQL, and T-SQL are all used to interact with databases, but they differ in terms of functionality, purpose, and the platforms they are associated with. Here's a detailed comparison:
+
+1. SQL (Structured Query Language)
+==================================
+Overview:
+Purpose: A standard language used for querying and manipulating relational databases.
+Scope: Focuses on simple CRUD operations—Create, Read, Update, Delete.
+Standard: ANSI/ISO standard language for relational databases, implemented with slight variations by database vendors.
+Key Features:
+Declarative language for database operations.
+Basic syntax is common across all databases.
+Used to:
+Create and manage tables (CREATE, ALTER, DROP).
+Query data (SELECT, WHERE, GROUP BY).
+Perform data manipulation (INSERT, UPDATE, DELETE).
+Example:
+sql
+Copy code
+SELECT FirstName, LastName FROM Employees WHERE Department = 'HR';
+Used In:
+Works across various RDBMS like MySQL, Oracle, SQL Server, PostgreSQL, etc.
+
+2. PL/SQL (Procedural Language/SQL)
+===================================
+Overview:
+Purpose: Extends SQL with procedural capabilities for Oracle databases.
+Platform: Specific to Oracle Database.
+Scope: Focuses on creating procedural constructs like loops, conditions, and exception handling within SQL.
+Key Features:
+Procedural programming: Includes loops, conditions (IF, FOR, WHILE).
+Allows the creation of stored procedures, functions, triggers, and packages.
+Built for transactional control and error handling.
+Supports strong integration with SQL for complex operations.
+Example:
+sql
+Copy code
+DECLARE
+  emp_salary NUMBER(10, 2);
+BEGIN
+  SELECT salary INTO emp_salary FROM Employees WHERE EmployeeID = 101;
+
+  IF emp_salary > 5000 THEN
+    DBMS_OUTPUT.PUT_LINE('High salary');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('Moderate salary');
+  END IF;
+END;
+Used In:
+Exclusively with Oracle RDBMS.
+
+3. T-SQL (Transact-SQL)
+=======================
+Overview:
+Purpose: Extends SQL with procedural capabilities for Microsoft SQL Server and Azure SQL.
+Platform: Specific to Microsoft SQL Server and Azure SQL Database.
+Scope: Includes procedural programming features, additional functions, and SQL Server-specific enhancements.
+Key Features:
+Procedural programming: Includes WHILE, BEGIN...END, IF...ELSE.
+Extended SQL features, such as error handling (TRY...CATCH) and transaction control.
+Additional built-in functions, such as GETDATE() and NEWID().
+Focuses on Microsoft SQL Server's needs, like working with stored procedures, triggers, and user-defined functions.
+Example:
+sql
+Copy code
+DECLARE @Salary INT;
+SET @Salary = (SELECT Salary FROM Employees WHERE EmployeeID = 101);
+
+IF @Salary > 5000
+BEGIN
+  PRINT 'High salary';
+END
+ELSE
+BEGIN
+  PRINT 'Moderate salary';
+END;
+Used In:
+Exclusively with Microsoft SQL Server and Azure SQL Database.
+Key Differences
+Feature	SQL	PL/SQL	T-SQL
+Full Form	Structured Query Language	Procedural Language/SQL	Transact-SQL
+Platform	General-purpose (cross-platform)	Oracle Database	Microsoft SQL Server, Azure SQL
+Programming Features	No procedural capabilities	Procedural constructs (IF, LOOP)	Procedural constructs (WHILE, IF)
+Scope	Data querying and manipulation	Procedural programming for Oracle	Procedural programming for SQL Server
+Error Handling	Not supported	Supported (with EXCEPTION)	Supported (TRY...CATCH)
+Example Use Case	Basic CRUD operations	Complex business logic in Oracle	Advanced SQL Server tasks
+When to Use Each?
+SQL:
+
+Basic querying and data manipulation tasks.
+Vendor-independent operations across databases.
+PL/SQL:
+
+Complex business logic for Oracle-based applications.
+Ideal for batch processing, stored procedures, and triggers.
+T-SQL:
+
+Advanced programming needs for Microsoft SQL Server.
+Custom business logic, transactional control, and error handling.
+Conclusion
+While SQL is the foundational query language, PL/SQL and T-SQL extend SQL with procedural capabilities tailored to Oracle and Microsoft SQL Server, respectively. The choice between them depends on the database platform you're using and the complexity of the tasks you're handling.
+
+
+
+331). Name any three standard trace templates provided by SQL Server Profiler?
+SQL Server Profiler provides several standard trace templates to facilitate monitoring and troubleshooting various aspects of SQL Server. Here are three commonly used trace templates:
+
+
+1. TSQL_SPs
+===========
+Purpose: Captures Transact-SQL (T-SQL) statements executed within stored procedures.
+Use Case: Useful for analyzing the execution of stored procedures, identifying performance bottlenecks, and debugging stored procedure logic.
+
+2. TSQL_Duration
+================
+Purpose: Captures T-SQL statements with their execution durations.
+Use Case: Helps in identifying long-running queries and optimizing query performance.
+
+3. Standard
+===========
+Purpose: Provides a general-purpose trace template that captures common events such as batch starts/completions, RPC calls, and errors.
+Use Case: Used for broad troubleshooting and performance monitoring.
+Additional Standard Templates
+TSQL_Replay: Captures events required to replay T-SQL activity for debugging and testing.
+Tuning: Focuses on capturing events to identify queries that can benefit from index tuning.
+These templates provide a starting point for different monitoring scenarios and can be customized as needed.
+
+332). Can you edit Sql Profiler existing/default templates?
+
+Yes, you can edit existing/default templates in SQL Server Profiler, but the changes you make will be saved as a new custom template. The original default templates provided by SQL Server Profiler cannot be overwritten.
+
+Steps to Edit a Default Template in SQL Server Profiler:
+Launch SQL Server Profiler:
+
+Open SQL Server Management Studio (SSMS).
+Go to Tools → SQL Server Profiler.
+Open an Existing Template:
+
+In SQL Server Profiler, go to File → Templates → Edit Template.
+Select the SQL Server instance version and choose the template you want to edit (e.g., Standard, TSQL_SPs).
+Modify the Template:
+
+You can add or remove events (e.g., SQL:BatchCompleted, RPC:Completed).
+You can include or exclude specific columns (e.g., Duration, CPU, Reads).
+Apply filters to narrow down the data captured (e.g., filter by application name or duration > 1 second).
+Save as a New Template:
+
+After making changes, save the modified template with a new name using File → Save As → Trace Template.
+Use the Custom Template:
+
+When starting a new trace, you can select your custom template under Use the template in the Trace Properties dialog.
+Key Notes:
+The default templates are read-only and cannot be overwritten.
+Custom templates are stored locally and can be reused or shared with other team members by exporting/importing them.
+Why Edit Templates?
+To tailor trace sessions to specific needs (e.g., capturing only performance-critical queries).
+To reduce the overhead of excessive event data collection by filtering unnecessary events.
+By creating custom templates based on existing ones, you ensure efficient and focused tracing for specific use cases.
+
+333). How to strip all non-alphabetic characters from string in SQL Server?
+
+To strip all non-alphabetic characters from a string in SQL Server, you can use a combination of T-SQL functions like PATINDEX, STUFF, and loops. Since SQL Server does not have a built-in regex function, this approach removes non-alphabetic characters iteratively.
+
+Example Query: Remove Non-Alphabetic Characters
+DECLARE @InputString NVARCHAR(100) = 'Hello123@World!#'
+DECLARE @OutputString NVARCHAR(100) = ''
+DECLARE @CurrentChar NVARCHAR(1)
+DECLARE @Index INT = 1
+
+WHILE @Index <= LEN(@InputString)
+BEGIN
+    -- Extract the current character
+    SET @CurrentChar = SUBSTRING(@InputString, @Index, 1)
+
+    -- Check if the character is alphabetic (A-Z or a-z)
+    IF @CurrentChar LIKE '[A-Za-z]'
+    BEGIN
+        SET @OutputString = @OutputString + @CurrentChar
+    END
+
+    SET @Index = @Index + 1
+END
+
+SELECT @OutputString AS StrippedString
+
+Output:
+=======
+For the input 'Hello123@World!#', the output will be:
+
+StrippedString: HelloWorld
+
+Explanation:
+SUBSTRING:
+Extracts one character at a time from the input string.
+LIKE '[A-Za-z]':
+Checks if the character is alphabetic.
+SET @OutputString:
+Appends the alphabetic character to the result string.
+Loop:
+Iterates through each character of the input string until all are processed.
+
+Alternative Using String Aggregation (SQL Server 2017+)
+If you are using SQL Server 2017 or later, you can achieve this using the STRING_AGG function with JSON and CROSS APPLY:
+
+DECLARE @InputString NVARCHAR(100) = 'Hello123@World!#'
+
+SELECT STRING_AGG(Alphabet, '') AS StrippedString
+FROM (
+    SELECT SUBSTRING(@InputString, Number, 1) AS Alphabet
+    FROM master.dbo.spt_values
+    WHERE Type = 'P' AND Number BETWEEN 1 AND LEN(@InputString)
+    AND SUBSTRING(@InputString, Number, 1) LIKE '[A-Za-z]'
+) AS FilteredChars
+
+
+
+To strip all non-alphabetic characters from a string in SQL Server, you can use a combination of T-SQL functions like PATINDEX, STUFF, and loops. Since SQL Server does not have a built-in regex function, this approach removes non-alphabetic characters iteratively.
+
+Example Query: Remove Non-Alphabetic Characters
+sql
+Copy code
+DECLARE @InputString NVARCHAR(100) = 'Hello123@World!#'
+DECLARE @OutputString NVARCHAR(100) = ''
+DECLARE @CurrentChar NVARCHAR(1)
+DECLARE @Index INT = 1
+
+WHILE @Index <= LEN(@InputString)
+BEGIN
+    -- Extract the current character
+    SET @CurrentChar = SUBSTRING(@InputString, @Index, 1)
+
+    -- Check if the character is alphabetic (A-Z or a-z)
+    IF @CurrentChar LIKE '[A-Za-z]'
+    BEGIN
+        SET @OutputString = @OutputString + @CurrentChar
+    END
+
+    SET @Index = @Index + 1
+END
+
+SELECT @OutputString AS StrippedString
+Output:
+For the input 'Hello123@World!#', the output will be:
+StrippedString: HelloWorld
+
+Explanation:
+SUBSTRING:
+Extracts one character at a time from the input string.
+LIKE '[A-Za-z]':
+Checks if the character is alphabetic.
+SET @OutputString:
+Appends the alphabetic character to the result string.
+Loop:
+Iterates through each character of the input string until all are processed.
+Alternative Using String Aggregation (SQL Server 2017+)
+If you are using SQL Server 2017 or later, you can achieve this using the STRING_AGG function with JSON and CROSS APPLY:
+
+
+DECLARE @InputString NVARCHAR(100) = 'Hello123@World!#'
+
+SELECT STRING_AGG(Alphabet, '') AS StrippedString
+FROM (
+    SELECT SUBSTRING(@InputString, Number, 1) AS Alphabet
+    FROM master.dbo.spt_values
+    WHERE Type = 'P' AND Number BETWEEN 1 AND LEN(@InputString)
+    AND SUBSTRING(@InputString, Number, 1) LIKE '[A-Za-z]'
+) AS FilteredChars
+
+
+Output:
+-------
+For the same input, the output will again be:
+StrippedString: HelloWorld
+
+Notes:
+-------
+The LIKE '[A-Za-z]' ensures that only alphabetic characters are kept.
+The master.dbo.spt_values system table is used for generating a sequence of numbers for string traversal in the second method.
+For performance-critical cases, consider implementing this logic in an application layer (e.g., C# or Python) instead of SQL.
+
+327). How to pass an array(or a table variable) into a SQL Server stored procedure?
+
+In SQL Server, you can pass an array or a table-like structure into a stored procedure using table-valued parameters (introduced in SQL Server 2008). This is the most efficient and recommended way to pass a collection of data.
+
+Steps to Pass a Table (or Array) to a Stored Procedure
+1. Create a User-Defined Table Type
+A table type is a user-defined type that allows you to define the structure of the table to pass.
+
+CREATE TYPE MyArrayType AS TABLE (
+    ID INT,
+    Value NVARCHAR(100)
+);
+2. Create the Stored Procedure
+The stored procedure can accept the table type as a parameter.
+
+CREATE PROCEDURE InsertArrayData
+    @ArrayData MyArrayType READONLY -- Table-valued parameter must be READONLY
+AS
+BEGIN
+    -- Insert the data into a target table
+    INSERT INTO TargetTable (ID, Value)
+    SELECT ID, Value
+    FROM @ArrayData;
+
+    -- Optional: Return some confirmation
+    SELECT 'Data inserted successfully!' AS Message;
+END;
+3. Declare and Populate the Table Variable in T-SQL
+You need to declare and populate the table variable that matches the table type.
+
+DECLARE @MyArray MyArrayType;
+
+-- Insert data into the table variable
+INSERT INTO @MyArray (ID, Value)
+VALUES (1, 'Alpha'), (2, 'Beta'), (3, 'Gamma');
+
+-- Execute the stored procedure and pass the table variable
+EXEC InsertArrayData @ArrayData = @MyArray;
+Explanation
+CREATE TYPE:
+Defines the schema for the table-valued parameter (MyArrayType in this example).
+Table-Valued Parameter:
+Passed into the procedure as READONLY. It cannot be modified inside the stored procedure.
+Procedure Logic:
+You can perform operations (e.g., SELECT, INSERT, UPDATE, etc.) on the passed data within the stored procedure.
+Use Case Example
+Target Table Schema
+sql
+Copy code
+CREATE TABLE TargetTable (
+    ID INT PRIMARY KEY,
+    Value NVARCHAR(100)
+);
+Data After Execution
+After running the above code, the TargetTable will contain:
+
+ID	Value
+1	Alpha
+2	Beta
+3	Gamma
+Alternative Methods
+Comma-Separated String:
+Pass a delimited string (e.g., '1,2,3') to the stored procedure and parse it into a table using a string-splitting function. However, this is less efficient and harder to maintain.
+XML or JSON:
+Pass the array as XML or JSON and parse it inside the stored procedure. Useful for complex hierarchical data but requires additional parsing steps.
+For simplicity, table-valued parameters are the most efficient and straightforward method when working with tabular data.
+
+325). What is Slot Array in Sql Server? How it is related to Database Page?
+
+In SQL Server, a slot array is an integral part of the data page structure, helping SQL Server manage and locate rows within a database page efficiently. Here’s a detailed explanation:
+
+1. What is a Slot Array?
+A slot array is a structure within a data page that stores the offsets of rows in the page.
+It is essentially a list or array of pointers (offsets) that point to the actual rows stored in the page.
+Each entry in the slot array corresponds to a row in the page, and its position in the array is referred to as the slot number.
+2. Relationship Between Slot Array and Database Page
+In SQL Server, data is stored in 8 KB pages. Each page contains:
+
+Page Header: Metadata about the page, such as page type, object ID, and free space information.
+Row Data: The actual rows of data.
+Slot Array: Located at the end of the page, it acts as an index for the rows on that page.
+How it Works:
+When a row is inserted into a page, it is stored in the row data section, and its offset (location) is recorded in the slot array.
+SQL Server uses the slot array to quickly locate rows on a page by referencing their slot numbers.
+3. Example
+Suppose a page contains three rows, stored at the following byte offsets within the page: 24, 128, and 256.
+
+Slot Number	Offset
+0	24
+1	128
+2	256
+The slot array contains these offsets, and SQL Server can directly access a specific row by referencing its slot number.
+For instance, Slot 1 points to the row starting at offset 128.
+4. Benefits of Slot Array
+Efficient Row Access: Slot numbers allow SQL Server to quickly find rows without scanning the entire page.
+Support for Reordering: If rows on a page are moved due to updates or splits, only the slot array is updated; the logical structure remains intact.
+Compact Representation: Only offsets are stored, keeping the slot array small and efficient.
+5. Relationship with Heap and Clustered Index
+In a Heap table (no clustered index):
+Slot arrays are used extensively because the row location is determined by the physical position of the row in the page.
+In a Clustered Index:
+Rows are ordered by the clustered index key, but the slot array still helps SQL Server manage row offsets within each page.
+6. Visual Representation of a Data Page
+mathematica
+Copy code
++----------------------+
+| Page Header          |
+|----------------------|
+| Row 1 Data (Offset 24) |
+| Row 2 Data (Offset 128) |
+| Row 3 Data (Offset 256) |
+|----------------------|
+| Slot Array           |
+| Slot 0 -> Offset 24  |
+| Slot 1 -> Offset 128 |
+| Slot 2 -> Offset 256 |
++----------------------+
+7. Practical Importance
+Slot arrays are critical for the row locator mechanism in SQL Server.
+They are essential for RID Lookups in non-clustered indexes to locate rows in heap tables.
+Understanding slot arrays can help in troubleshooting fragmentation and row movement within a page.
+Conclusion
+The slot array is an efficient mechanism that maps rows to their physical locations within a database page. It ensures quick access and maintains logical consistency, even if rows are physically moved. This mechanism is fundamental to SQL Server's internal storage and query performance.
+
+
+316). Write down the query to get the list of tables changed with in the database in last 5
+days?
+To retrieve the list of tables modified in the database within the last 5 days, you can query the sys.objects and sys.dm_db_index_usage_stats system views in SQL Server. Here's how:
+
+SELECT 
+    o.name AS TableName,
+    o.modify_date AS LastModifiedDate
+FROM 
+    sys.objects o
+WHERE 
+    o.type = 'U' -- Only user tables
+    AND o.modify_date >= DATEADD(DAY, -5, GETDATE())
+ORDER BY 
+    o.modify_date DESC;
+
+- If you want to list tables that were queried, updated, or accessed in the last 5 days, use sys.dm_db_index_usage_stats:
+
+SELECT 
+    OBJECT_NAME(ius.object_id) AS TableName,
+    MAX(ius.last_user_update) AS LastAccessedDate
+FROM 
+    sys.dm_db_index_usage_stats ius
+WHERE 
+    database_id = DB_ID() -- Current database
+    AND ius.last_user_update >= DATEADD(DAY, -5, GETDATE())
+GROUP BY 
+    ius.object_id
+ORDER BY 
+    LastAccessedDate DESC;
+
+
+
+317). Write a query to insert your name 1000 times without Using While Loop in SQL
+Server?
+
+You can insert your name 1000 times into a table without using a WHILE loop by leveraging a recursive Common Table Expression (CTE) in SQL Server. Here's how you can achieve it:
+
+
+-- Create a target table to hold the data
+CREATE TABLE NameTable (
+    Name NVARCHAR(100)
+);
+
+-- Use a Recursive CTE to generate 1000 rows
+WITH CTE AS (
+    SELECT 1 AS Number
+    UNION ALL
+    SELECT Number + 1
+    FROM CTE
+    WHERE Number < 1000
+)
+-- Insert the name into the table
+INSERT INTO NameTable (Name)
+SELECT 'YourName' 
+FROM CTE
+OPTION (MAXRECURSION 1000); -- Allow recursion up to 1000 levels
+
+-- Verify the data
+SELECT * FROM NameTable;
+
+
+
+Alternative Without Recursion (SQL Server 2012+)
+You can also use the VALUES clause and the CROSS JOIN method to generate 1000 rows:
+INSERT INTO NameTable (Name)
+SELECT 'YourName'
+FROM (SELECT TOP 10 1 AS n FROM master.dbo.spt_values) A
+CROSS JOIN (SELECT TOP 10 1 AS n FROM master.dbo.spt_values) B
+CROSS JOIN (SELECT TOP 10 1 AS n FROM master.dbo.spt_values) C;
+
+This approach generates 1000 rows by combining 10 × 10 × 10 rows using CROSS JOIN.
+
+311). Sql server difference between exec and sp_executesql?
+312). Difference between blocking and deadlock sql server?
+313). Difference between detach and take offline in sql server?
+314). Difference between Index Scan / Index Seek in sql server?
+
+303). Sql server difference between isnull and coalesce?
+
+
+304). Differences between ISNULL and IS NULL?
+ISNULL is a function
+IS NULL is a logical operation, and checks if a value is NULL
+ISNULL(expression, replacement_value)
+
+SELECT ISNULL(NULL, 'Default Value') AS Result; 
+-- Output: 'Default Value'
+
+SELECT *
+FROM Employee
+WHERE Department IS NULL;
+-- Returns rows where the Department column is NULL.
+
+Replace NULL values in query results:
+SELECT EmployeeID, ISNULL(Department, 'Unknown') AS Department
+FROM Employee;
+-- Replaces NULL with 'Unknown' in the Department column.
+
+Filter rows with NULL values:
+SELECT EmployeeID, Department
+FROM Employee
+WHERE Department IS NULL;
+-- Retrieves rows where Department is NULL.
+
+294). Sql server difference between sysobjects and sys.objects?
+
+264). How to delete Duplicate records?
+265). How to find employees hired in last month?
+you can use SQL Server's DATEADD and DATEDIFF functions
+SELECT EmployeeID, Name, HireDate
+FROM Employees
+WHERE HireDate >= DATEADD(MONTH, -1, DATEADD(DAY, 1, EOMONTH(GETDATE(), -1)))
+  AND HireDate <= EOMONTH(GETDATE(), -1);
+
+SELECT EmployeeID, Name, HireDate
+FROM Employees
+WHERE DATEDIFF(MONTH, HireDate, GETDATE()) = 1;
+
+266). How to find all rows that contains only numeric data?
+TRY_CONVERT returns NULL if a value cannot be converted to a specified data type, making it ideal for this case.
+SELECT *
+FROM YourTable
+WHERE TRY_CONVERT(NUMERIC, YourColumn) IS NOT NULL;
+
+ISNUMERIC checks if a value can be evaluated as a numeric value, but it also returns true for some non-numeric cases like '1e5', '$123', and '123.45'.
+SELECT *
+FROM YourTable
+WHERE ISNUMERIC(YourColumn) = 1;
+
+If you want stricter numeric matching, you can use LIKE and regex-like conditions.
+SELECT *
+FROM YourTable
+WHERE YourColumn NOT LIKE '%[^0-9]%' AND YourColumn IS NOT NULL;
+
+SELECT *
+FROM YourTable
+WHERE YourColumn NOT LIKE '%[^0-9.-]%' 
+  AND YourColumn LIKE '%[0-9]%' -- Ensure at least one digit
+  AND CHARINDEX('.', YourColumn) <= 1 -- At most one decimal point
+  AND CHARINDEX('-', YourColumn) IN (0, 1); -- Optional leading negative sign
+
+
+267). How to find primary key name if not given by the user for a particular column?
+To find the primary key name in SQL Server for a particular column when the name is not explicitly provided by the user, you can query the system catalog views.
+
+SELECT 
+    kc.name AS PrimaryKeyName,
+    c.name AS ColumnName,
+    t.name AS TableName
+FROM 
+    sys.key_constraints kc
+INNER JOIN 
+    sys.index_columns ic ON kc.parent_object_id = ic.object_id AND kc.unique_index_id = ic.index_id
+INNER JOIN 
+    sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+INNER JOIN 
+    sys.tables t ON kc.parent_object_id = t.object_id
+WHERE 
+    kc.type = 'PK'  -- Filters for primary key
+    AND c.name = 'YourColumnName'  -- Replace with your column name
+    AND t.name = 'YourTableName';  -- Replace with your table name
+
+
+Explanation
+sys.key_constraints:
+
+Contains information about primary keys and unique constraints.
+The column type indicates the type of constraint, where 'PK' denotes a primary key.
+sys.index_columns:
+
+Maps indexes to the columns they include.
+sys.columns:
+
+Contains the column metadata, including column names and IDs.
+sys.tables:
+
+Contains table metadata.
+Filters:
+
+Replace 'YourColumnName' and 'YourTableName' with the specific column and table names.
+
+Alternative: Using INFORMATION_SCHEMA
+You can also use the INFORMATION_SCHEMA.KEY_COLUMN_USAGE view:
+SELECT 
+    CONSTRAINT_NAME AS PrimaryKeyName,
+    TABLE_NAME,
+    COLUMN_NAME
+FROM 
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE 
+    TABLE_NAME = 'YourTableName'  -- Replace with your table name
+    AND COLUMN_NAME = 'YourColumnName'; -- Replace with your column name
+
+
+
+268). Can we add two columns using ALTER command?
+Yes, you can add multiple columns to a table using a single ALTER TABLE command in SQL Server. The syntax allows you to specify multiple ADD clauses within the same command. Here's how you can do it:
+
+ALTER TABLE TableName
+ADD Column1 DataType Constraint,
+    Column2 DataType Constraint;
+
+Suppose you have a table named Employees and you want to add two new columns: Department (a VARCHAR column) and DateOfJoining (a DATE column).
+ALTER TABLE Employees
+ADD Department VARCHAR(50),
+    DateOfJoining DATE;
+
+After adding columns, you can verify the structure of the table using:
+EXEC sp_help 'Employees'; -- Displays table structure.
+
+Or by querying the INFORMATION_SCHEMA:
+
+SELECT COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'Employees';
+
+
+269). How to get row number without ROW_NUMBER function?
+
+270). What is Partitioned View?
+
+A Partitioned View in SQL Server allows you to combine data from multiple tables into a single logical view. The data in these tables is typically partitioned horizontally (i.e., split by rows) based on a range of values, such as dates or IDs. Partitioned views can be local or distributed and are used to improve performance and manageability when dealing with large datasets.
+
+Types of Partitioned Views
+Local Partitioned View:
+
+All underlying tables reside on the same SQL Server instance.
+Typically used to partition data across multiple tables within a single database.
+Distributed Partitioned View:
+
+Underlying tables are distributed across multiple servers.
+Used in distributed databases to scale out and improve query performance.
+Key Features
+Logical Union of Data:
+
+Combines multiple tables with the same structure into a single view using the UNION ALL operator.
+Partitioning:
+
+Data is divided horizontally, often based on a column like OrderDate, RegionID, or EmployeeID.
+Performance Benefits:
+
+Queries on the view can be directed to specific partitions, reducing the amount of data scanned.
+Check Constraints:
+
+Required on each table to define the boundaries of the partition.
+SQL Server uses these constraints to determine which table(s) to query.
+Example of Local Partitioned View
+Step 1: Create Partitioned Tables
+Let's partition employee data by regions (North, South, East, West):
+
+sql
+Copy code
+CREATE TABLE Employees_North (
+    EmployeeID INT PRIMARY KEY,
+    Name NVARCHAR(50),
+    RegionID INT CHECK (RegionID = 1)
+);
+
+CREATE TABLE Employees_South (
+    EmployeeID INT PRIMARY KEY,
+    Name NVARCHAR(50),
+    RegionID INT CHECK (RegionID = 2)
+);
+Step 2: Create the Partitioned View
+sql
+Copy code
+CREATE VIEW Employees AS
+SELECT EmployeeID, Name, RegionID FROM Employees_North
+UNION ALL
+SELECT EmployeeID, Name, RegionID FROM Employees_South;
+Step 3: Query the View
+sql
+Copy code
+SELECT * FROM Employees WHERE RegionID = 1;
+Distributed Partitioned View
+A distributed view spans multiple servers and is implemented in scenarios like data sharding.
+
+Steps:
+Tables with similar structures are created on different servers.
+Linked servers are used to access remote tables.
+A partitioned view is created using UNION ALL, referencing linked servers.
+Advantages of Partitioned Views
+Performance:
+Improves query performance by querying only relevant partitions.
+Scalability:
+Makes it easier to manage large datasets by distributing data across tables or servers.
+Manageability:
+Simplifies maintenance tasks like backups or archiving by working on individual partitions.
+Limitations
+Check Constraints Required:
+
+Essential to ensure queries target the correct partitions.
+No Automatic Partitioning:
+
+Partitioning must be manually designed and maintained.
+Indexing Complexity:
+
+Indexes must be managed separately on each table.
+Distributed Views:
+
+Require careful configuration of linked servers and may suffer from network latency.
+When to Use Partitioned Views?
+Local Partitioned Views:
+
+When working with a large table that can be logically divided into smaller partitions.
+Use within the same database for improved performance and manageability.
+Distributed Partitioned Views:
+
+When scaling out data across multiple servers in a distributed database system.
+Alternative: Partitioned Tables
+For newer systems, Partitioned Tables are often preferred over Partitioned Views, as they are more efficient and easier to maintain. Partitioned Tables automatically handle the partitioning and indexing internally.
+
+271). What is the difference between UNIQUE Key and Primary Key?
+
+272). How to find who deleted/ dropped from Transaction log?
+To determine who deleted or dropped an object (such as a table) in SQL Server, you can analyze the Transaction Log using specific tools and methods. The transaction log records changes to the database, including DDL operations like DROP.
+
+Here are the steps to retrieve this information:
+1. Using fn_dblog (Transaction Log Function)
+The fn_dblog function is a system function that allows you to query the transaction log. This is useful for viewing recent transactions, including deletions or drops.
+
+Query:
+SELECT 
+    [Transaction ID],
+    [Begin Time],
+    [Transaction Name],
+    [Transaction SID],
+    [Operation],
+    [Context],
+    [AllocUnitName],
+    [IndexID],
+    [Page ID],
+    [Slot ID],
+    [Description]
+FROM 
+    fn_dblog(NULL, NULL) 
+WHERE 
+    Operation = 'LOP_DELETE_ROWS' -- For DELETE operations
+    OR Operation = 'LOP_DROP_PAGE'; -- For DROP operations
+Explanation:
+fn_dblog(NULL, NULL): Reads the active portion of the transaction log.
+Operation: Filters for specific actions like LOP_DELETE_ROWS (delete data) or LOP_DROP_PAGE (drop table).
+2. Map Transaction SID to a User
+The Transaction SID from the log can be mapped to a user using the SUSER_SNAME function.
+
+Query:
+SELECT 
+    SUSER_SNAME([Transaction SID]) AS UserName,
+    [Transaction ID],
+    [Operation],
+    [AllocUnitName],
+    [Begin Time]
+FROM 
+    fn_dblog(NULL, NULL)
+WHERE 
+    Operation = 'LOP_DELETE_ROWS' 
+    OR Operation = 'LOP_DROP_PAGE';
+Result:
+You’ll see which user executed the delete or drop operation.
+
+3. Using Extended Events (Future Monitoring)
+If you want to track deletions or drops in real time, you can set up an Extended Event Session.
+
+Steps:
+Create Extended Event Session:
+
+
+CREATE EVENT SESSION [TrackDDLChanges] ON SERVER
+ADD EVENT sqlserver.sql_statement_completed
+(
+    WHERE sqlserver.like_i_sql_unicode_string([statement], N'%DROP%')
+    OR sqlserver.like_i_sql_unicode_string([statement], N'%DELETE%')
+)
+ADD TARGET package0.event_file
+(
+    SET filename = 'C:\TrackDDLChanges.xel'
+);
+Start the Session:
+
+sql
+Copy code
+ALTER EVENT SESSION [TrackDDLChanges] ON SERVER STATE = START;
+View Captured Events:
+
+SELECT * 
+FROM sys.fn_xe_file_target_read_file('C:\TrackDDLChanges*.xel', NULL, NULL, NULL);
+4. Using SQL Server Audit
+If auditing is enabled, you can retrieve this information from the audit logs.
+
+Steps:
+Configure an audit for SCHEMA_OBJECT_CHANGE_GROUP to capture DDL events.
+Query the audit log to identify the user and details of the action.
+Query:
+SELECT 
+    event_time,
+    action_id,
+    session_server_principal_name,
+    statement
+FROM 
+    sys.fn_get_audit_file('C:\SQLAudit\*.sqlaudit', DEFAULT, DEFAULT)
+WHERE 
+    action_id IN ('DR', 'DL'); -- DR for DROP, DL for DELETE
+
+5. Using Third-Party Tools
+There are several third-party tools (like Redgate SQL Log Rescue or ApexSQL Log) that provide user-friendly interfaces to analyze transaction logs and audit changes.
+
+Limitations
+fn_dblog: Only works with active logs and doesn’t support log backups.
+Extended Events and Audit: Require prior configuration to capture future changes.
+Transaction Log: If the log has been truncated, historical data may be unavailable.
+Best Practice
+Set up Extended Events or Auditing proactively to monitor critical operations like DROP or DELETE.
+Regularly back up your transaction log to retain historical data for forensic analysis.
+
+
+273). Can we ALTER two columns using ALTER command?
+Pro Tip
+If you frequently need to perform batch updates to a table schema, consider scripting the changes or using tools like "SQL Server Management Studio (SSMS)" for efficiency.
+
+SQL Server does not allow you to modify multiple columns in a single ALTER TABLE statement when changing their data type or nullability. You must modify them one at a time with separate statements.
+-- Modify the first column
+ALTER TABLE Employees
+ALTER COLUMN FirstName NVARCHAR(100) NOT NULL;
+
+-- Modify the second column
+ALTER TABLE Employees
+ALTER COLUMN LastName NVARCHAR(100) NOT NULL;
+
+You can add multiple columns in a single ALTER TABLE statement.
+ALTER TABLE Employees
+ADD MiddleName NVARCHAR(50),
+    DateOfBirth DATE;
+
+You cannot drop multiple columns in a single ALTER TABLE statement.
+-- Drop the first column
+ALTER TABLE Employees
+DROP COLUMN MiddleName;
+
+-- Drop the second column
+ALTER TABLE Employees
+DROP COLUMN DateOfBirth;
+
+use sp_rename for renaming columns
+EXEC sp_rename 'Employees.OldColumnName1', 'NewColumnName1', 'COLUMN';
+EXEC sp_rename 'Employees.OldColumnName2', 'NewColumnName2', 'COLUMN';
+
+274). How to clean Buffer in SQL Server?
+In SQL Server, the buffer pool is used to cache data pages, reducing the need to read data directly from disk. You might want to clean the buffer pool to test performance or force SQL Server to reload data from disk.
+
+To clean the buffer, you can use the DBCC DROPCLEANBUFFERS command.
+Command to Clean the Buffer Pool
+CHECKPOINT;
+DBCC DROPCLEANBUFFERS;
+
+Explanation
+CHECKPOINT:
+
+Writes all dirty pages (modified pages not yet written to disk) from the buffer pool to disk.
+Ensures that the subsequent DBCC DROPCLEANBUFFERS does not discard unsaved changes.
+DBCC DROPCLEANBUFFERS:
+
+Removes all clean pages (pages not modified since being read from disk) from the buffer pool.
+Forces SQL Server to reload the data from disk the next time it's accessed.
+Example Usage
+Step 1: Check Data Load Time
+sql
+Copy code
+SELECT * FROM LargeTable;
+This query will retrieve data, loading pages into the buffer pool.
+
+Step 2: Clean the Buffer Pool
+sql
+Copy code
+CHECKPOINT;
+DBCC DROPCLEANBUFFERS;
+Step 3: Re-run the Query
+sql
+Copy code
+SELECT * FROM LargeTable;
+The second query forces SQL Server to reload the data from disk, allowing you to measure disk I/O performance.
+
+Important Notes
+Permissions:
+
+Requires sysadmin or equivalent permissions to execute DBCC DROPCLEANBUFFERS.
+Impact:
+
+This command affects the entire instance of SQL Server and all databases on it.
+Use cautiously in a production environment, as it can degrade performance by forcing reloading of data into the buffer pool.
+For Testing Only:
+
+Typically used in testing or development environments to simulate cold data access.
+Validate Buffer Pool Cleaning
+You can verify the buffer pool content before and after using the command with:
+
+sql
+Copy code
+-- Check the number of data pages in the buffer pool
+SELECT COUNT(*) AS CachedPages
+FROM sys.dm_os_buffer_descriptors
+WHERE database_id = DB_ID('YourDatabaseName');
+This will show how many pages are cached for a specific database. After cleaning, the count should drop to near zero.
+
+
+
+275). How to clear Execution Plan cache?
+To clear the Execution Plan Cache in SQL Server, you can use the DBCC FREEPROCCACHE command. This command removes all cached execution plans from the SQL Server memory, forcing the server to recompile queries on their next execution.
+
+Command to Clear Execution Plan Cache
+sql
+Copy code
+DBCC FREEPROCCACHE;
+Explanation
+DBCC FREEPROCCACHE:
+Clears all execution plans stored in the plan cache.
+Affects all users and databases on the SQL Server instance.
+Forces SQL Server to recompile queries, which might impact performance temporarily.
+Use Cases
+Testing query performance without cached plans.
+Resolving plan cache-related performance issues (e.g., parameter sniffing).
+Reclaiming memory by removing unused or old execution plans.
+Targeted Clearing of Execution Plans
+Clear a Specific Plan Using Plan Handle:
+
+You can clear an individual execution plan using its plan handle.
+Steps:
+sql
+Copy code
+-- Retrieve the plan handle for a specific query
+SELECT plan_handle
+FROM sys.dm_exec_cached_plans
+CROSS APPLY sys.dm_exec_sql_text(plan_handle)
+WHERE text LIKE '%YourQueryHere%';
+
+-- Clear the specific plan
+DBCC FREEPROCCACHE(plan_handle);
+Clear Cache for a Specific Database:
+
+Use the ALTER DATABASE command to clear the cache for a specific database:
+sql
+Copy code
+ALTER DATABASE SCOPED CONFIGURATION CLEAR PROCEDURE_CACHE;
+Validate Cache Clearing
+To check the contents of the execution plan cache before and after clearing:
+
+sql
+Copy code
+-- View cached execution plans
+SELECT 
+    cp.plan_handle,
+    st.text AS QueryText,
+    cp.cacheobjtype,
+    cp.objtype
+FROM 
+    sys.dm_exec_cached_plans cp
+CROSS APPLY 
+    sys.dm_exec_sql_text(cp.plan_handle);
+
+-- After running DBCC FREEPROCCACHE, re-run this query to observe changes.
+Important Notes
+Permissions:
+
+Requires sysadmin or serveradmin role.
+Impact:
+
+Clearing the cache may temporarily degrade query performance as SQL Server recompiles execution plans for subsequent queries.
+For Testing or Troubleshooting Only:
+
+Use cautiously in production environments as it affects all sessions and queries on the server.
+Best Practice
+Instead of clearing the entire cache, consider targeted approaches (e.g., by plan handle or database) to minimize the impact on production systems.
+
+
+276). How can we check for existence of any object in database?
+
+Common Object Types:
+'U': User table
+'P': Stored procedure
+'V': View
+'FN': Scalar function
+'IF': Inline table-valued function
+'TF': Multi-statement table-valued function
+'TR': Trigger
+
+IF OBJECT_ID('dbo.MyTrigger', 'TR') IS NOT NULL
+    PRINT 'The trigger exists';
+ELSE
+    PRINT 'The trigger does not exist';
+
+IF OBJECT_ID('dbo.MyProcedure', 'P') IS NOT NULL
+    PRINT 'The procedure exists';
+ELSE
+    PRINT 'The procedure does not exist';
+
+IF OBJECT_ID('schema_name.object_name', 'object_type') IS NOT NULL
+    PRINT 'The object exists';
+ELSE
+    PRINT 'The object does not exist';
+
+
+IF OBJECT_ID('dbo.MyTable', 'U') IS NOT NULL
+    PRINT 'The table exists';
+ELSE
+    PRINT 'The table does not exist';
+
+INFORMATION_SCHEMA views
+========================
+IF EXISTS (SELECT 1 
+           FROM INFORMATION_SCHEMA.TABLES 
+           WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'MyTable')
+    PRINT 'The table exists';
+ELSE
+    PRINT 'The table does not exist';
+
+IF EXISTS (SELECT 1 
+           FROM INFORMATION_SCHEMA.VIEWS 
+           WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'MyView')
+    PRINT 'The view exists';
+ELSE
+    PRINT 'The view does not exist';
+
+The sys.objects catalog view contains metadata about all objects in the database.
+
+IF EXISTS (SELECT 1 
+           FROM sys.objects 
+           WHERE name = 'object_name' AND type = 'object_type')
+    PRINT 'The object exists';
+ELSE
+    PRINT 'The object does not exist';
+
+IF EXISTS (SELECT 1 
+           FROM sys.objects 
+           WHERE name = 'MyTable' AND type = 'U')
+    PRINT 'The table exists';
+ELSE
+    PRINT 'The table does not exist';
+
+277). What is meant by differed name resolution in SQL Server?
+Deferred Name Resolution in SQL Server refers to the behavior where SQL Server does not validate the existence or structure of database objects (such as tables or columns) referenced in a stored procedure during its creation. Instead, the validation occurs only when the procedure is executed.
+
+
+278). How to find Organization Employee Hierarchy using SQL?
+To find an organization employee hierarchy in SQL, you can use self-joins or the Common Table Expressions (CTE) with a recursive query. This approach is particularly useful for representing hierarchical data like manager-employee relationships.
+
+
+EmployeeID	EmployeeName	ManagerID
+1	John	NULL
+2	Sarah	1
+3	Mike	1
+4	Kate	2
+5	Tom	2
+
+Recursive Common Table Expressions (CTEs) are ideal for querying hierarchical data.
+
+WITH EmployeeHierarchy AS (
+    -- Anchor member: Select the top-level employee(s)
+    SELECT 
+        EmployeeID,
+        EmployeeName,
+        ManagerID,
+        CAST(EmployeeName AS VARCHAR(MAX)) AS HierarchyPath
+    FROM Employees
+    WHERE ManagerID IS NULL
+
+    UNION ALL
+
+    -- Recursive member: Select employees reporting to the current level
+    SELECT 
+        e.EmployeeID,
+        e.EmployeeName,
+        e.ManagerID,
+        CAST(eh.HierarchyPath + ' -> ' + e.EmployeeName AS VARCHAR(MAX)) AS HierarchyPath
+    FROM Employees e
+    INNER JOIN EmployeeHierarchy eh
+    ON e.ManagerID = eh.EmployeeID
+)
+
+-- Final query to display the hierarchy
+SELECT 
+    EmployeeID,
+    EmployeeName,
+    ManagerID,
+    HierarchyPath
+FROM EmployeeHierarchy;
+
+The query will output the hierarchy with paths:
+
+EmployeeID	EmployeeName	ManagerID	HierarchyPath
+1	John	NULL	John
+2	Sarah	1	John -> Sarah
+3	Mike	1	John -> Mike
+4	Kate	2	John -> Sarah -> Kate
+5	Tom	2	John -> Sarah -> Tom
+
+Use Cases
+---------
+Organizational Charts: Build tree-like structures for HR systems.
+Authorization Levels: Determine access rights based on reporting hierarchy.
+Performance Reporting: Roll up metrics for teams under specific managers.
+
+
+279). How does a recursive CTE works?
+280). What is Auditing inside SQL Server?
+Auditing in SQL Server refers to the process of tracking and recording database events and changes for security, compliance, and performance monitoring purposes. SQL Server provides built-in mechanisms to help administrators monitor and record database activity, ensuring accountability and transparency.
+
+Key Features of Auditing in SQL Server
+Tracks User Activity: Logs actions performed by users, such as login attempts, data modifications, or schema changes.
+Compliance: Helps organizations meet regulatory and compliance requirements like GDPR, HIPAA, or SOX.
+Security: Monitors unauthorized access and suspicious activities.
+Diagnostics: Identifies performance issues or problematic queries.
+
+Types of Auditing in SQL Server
+1. SQL Server Audit (Native Auditing)
+A built-in feature for fine-grained auditing.
+Allows tracking of server-level and database-level actions.
+Components:
+SQL Server Audit Object: Defines the audit configuration (e.g., where logs are stored).
+Server Audit Specification: Logs server-level events (e.g., login failures).
+Database Audit Specification: Logs database-level events (e.g., table modifications).
+Example: Setting Up an Audit
+sql
+Copy code
+-- Create an audit
+CREATE SERVER AUDIT MyServerAudit
+TO FILE (FILEPATH = 'C:\AuditLogs\');
+GO
+
+-- Enable the audit
+ALTER SERVER AUDIT MyServerAudit WITH (STATE = ON);
+GO
+
+-- Create a database audit specification
+CREATE DATABASE AUDIT SPECIFICATION MyDatabaseAuditSpec
+FOR SERVER AUDIT MyServerAudit
+ADD (SELECT ON dbo.MyTable BY PUBLIC);
+GO
+
+-- Enable the database audit specification
+ALTER DATABASE AUDIT SPECIFICATION MyDatabaseAuditSpec WITH (STATE = ON);
+GO
+2. Change Data Capture (CDC)
+Tracks changes made to tables (insert, update, delete).
+Useful for auditing data modifications.
+Example:
+sql
+Copy code
+-- Enable CDC at the database level
+EXEC sys.sp_cdc_enable_db;
+
+-- Enable CDC on a specific table
+EXEC sys.sp_cdc_enable_table 
+    @source_schema = 'dbo', 
+    @source_name = 'MyTable', 
+    @role_name = NULL;
+
+3. Change Tracking
+Lightweight tracking mechanism.
+Tracks which rows have changed but does not log the details of the changes.
+Example:
+sql
+Copy code
+-- Enable change tracking at the database level
+ALTER DATABASE MyDatabase
+SET CHANGE_TRACKING = ON 
+(CHANGE_RETENTION = 2 DAYS, AUTO_CLEANUP = ON);
+
+-- Enable change tracking on a table
+ALTER TABLE dbo.MyTable
+ENABLE CHANGE_TRACKING;
+
+4. SQL Server Extended Events
+Captures detailed information about server activity.
+Useful for advanced auditing scenarios and performance troubleshooting.
+
+5. Triggers for Auditing
+User-defined triggers to capture specific actions like INSERT, UPDATE, or DELETE.
+Logs the changes into an audit table.
+Example:
+sql
+Copy code
+CREATE TRIGGER trgAudit
+ON dbo.MyTable
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    INSERT INTO AuditLog (Action, TableName, TimeStamp)
+    SELECT 'Change', 'MyTable', GETDATE();
+END;
+
+Auditing Use Cases
+Track Login Activity:
+Monitor failed login attempts for security purposes.
+Data Change Auditing:
+Capture modifications to sensitive data.
+Schema Change Auditing:
+Record DDL changes like table or column additions.
+Compliance Reporting:
+Generate logs for regulatory compliance.
+Benefits of Auditing
+Accountability: Identifies who performed specific actions.
+Security: Detects unauthorized access or data breaches.
+Compliance: Ensures adherence to industry standards and regulations.
+Diagnostics: Provides insights into database performance and usage.
+Viewing Audit Logs
+Audit logs can be viewed in the SQL Server Management Studio (SSMS) or queried using T-SQL:
+
+sql
+Copy code
+SELECT *
+FROM sys.fn_get_audit_file('C:\AuditLogs\*.sqlaudit', DEFAULT, DEFAULT);
+Auditing in SQL Server is a powerful tool for maintaining database security, compliance, and operational integrity.
+
+
+
+281). What is the difference between GETDATE() and SYSDATETIME()?
+282). How do you check if Automatic Statistic Update is enabled for a database?
+283). What are the limitations of view?
+284). How to find department with highest number of employees?
+285). What are different operation available on ONDELETE and ONUPDATE?
+286). What are the uses of System tables
+
+50). What will be the result of this query. select * from TableName order by 1 .Will this query
+throw an error?
+
+The number 1 in ORDER BY 1 refers to the first column in the SELECT list, not the first column in the table.
+The rows will be sorted based on the values of this column.
+
+If the SELECT list is empty or does not include valid columns (e.g., when using an invalid table name or an invalid SELECT statement), the query will fail.
+Msg 207, Level 16, State 1, Line X
+Invalid column name '1'.
+
+50.1). How to get specific string/Date from a string in SQL Server using TSQL?
+To extract a specific string or date from a larger string in SQL Server using T-SQL, you can use string manipulation functions like SUBSTRING, CHARINDEX, PATINDEX, and sometimes LEFT/RIGHT or even Regular Expressions (via CLR or external tools). For dates, proper parsing functions like CONVERT or CAST might also be used.
+
+Example 1: Extracting a Substring Based on Position
+SELECT SUBSTRING('Hello, SQL World!', 8, 3) AS ExtractedString;
+
+Example 2: Extracting Using CHARINDEX
+DECLARE @Text NVARCHAR(50) = 'John|Doe|2024-12-01';
+SELECT SUBSTRING(@Text, CHARINDEX('|', @Text) + 1, CHARINDEX('|', @Text, CHARINDEX('|', @Text) + 1) - CHARINDEX('|', @Text) - 1) AS LastName;
+Output: Doe
+
+Example 3: Using PATINDEX for Pattern Matching
+DECLARE @Text NVARCHAR(50) = 'Order: 12345-XYZ';
+SELECT SUBSTRING(@Text, PATINDEX('%[0-9]%', @Text), CHARINDEX('-', @Text) - PATINDEX('%[0-9]%', @Text)) AS OrderNumber;
+Output: 12345
+
+
+Extracting a Date from a String
+
+Example 1: Date at a Known Position
+DECLARE @Text NVARCHAR(50) = 'Report generated on 2024-12-19';
+SELECT SUBSTRING(@Text, 22, 10) AS ExtractedDate;
+
+Example 2: Using CHARINDEX for Delimited Dates
+DECLARE @Text NVARCHAR(50) = 'Event|2024-12-19|Location';
+SELECT SUBSTRING(@Text, CHARINDEX('|', @Text) + 1, CHARINDEX('|', @Text, CHARINDEX('|', @Text) + 1) - CHARINDEX('|', @Text) - 1) AS ExtractedDate;
+
+Example 3: Parsing Strings to Dates
+DECLARE @Text NVARCHAR(50) = 'The event is on 2024-12-19.';
+SELECT CAST(SUBSTRING(@Text, CHARINDEX('2024-', @Text), 10) AS DATE) AS ParsedDate;
+
+Advanced Case: Extract Using JSON or XML
+DECLARE @Text NVARCHAR(MAX) = '<Root><Date>2024-12-19</Date></Root>';
+SELECT CAST(@Text AS XML).value('(/Root/Date)[1]', 'DATE') AS ExtractedDate;
+
+*For structured data or complex patterns, consider XML or CLR regex.
+
+Example Regex via CLR (Pseudo-SQL):
+SELECT dbo.RegexExtract('Event: 2024-12-19', '[0-9]{4}-[0-9]{2}-[0-9]{2}');
+
+51). What are the different index configurations a table can have?
+
+In SQL Server, a table can have various index configurations to optimize data retrieval and improve performance. These configurations depend on the type of workload and the structure of the table. Below are the different index configurations a table can have:
+
+1. Clustered Index
+A table can have only one clustered index because it determines the physical order of the data in the table.
+The data rows are stored in the same order as the clustered index.
+Typically used for columns that are frequently queried in a range or for sorting.
+Example:
+sql
+Copy code
+CREATE CLUSTERED INDEX IX_Table_Column ON TableName(ColumnName);
+2. Non-Clustered Index
+A table can have multiple non-clustered indexes (up to 999 per table in SQL Server).
+The data rows are not stored in the order of the non-clustered index; instead, the index contains pointers (row locators) to the actual data rows.
+Used to speed up queries on columns not part of the clustered index.
+Example:
+sql
+Copy code
+CREATE NONCLUSTERED INDEX IX_Table_Column ON TableName(ColumnName);
+3. Unique Index
+Ensures that all values in the indexed column(s) are unique.
+Can be created as either clustered or non-clustered.
+Automatically created when a UNIQUE constraint is defined on a column.
+Example:
+sql
+Copy code
+CREATE UNIQUE INDEX IX_Table_Column ON TableName(ColumnName);
+4. Composite Index
+An index that includes two or more columns.
+Useful for queries that filter or sort on multiple columns.
+Can be either clustered or non-clustered.
+Example:
+sql
+Copy code
+CREATE NONCLUSTERED INDEX IX_Table_Columns ON TableName(Column1, Column2);
+5. Filtered Index
+A non-clustered index with a filter predicate.
+Stores a subset of rows based on the filter condition, reducing index size and improving performance.
+Example:
+sql
+Copy code
+CREATE NONCLUSTERED INDEX IX_Table_Filtered ON TableName(ColumnName) 
+WHERE ColumnName IS NOT NULL;
+6. Full-Text Index
+Used for full-text searches on text-based columns.
+Allows searching for words or phrases in a large amount of text data.
+Requires a full-text catalog.
+Example:
+sql
+Copy code
+CREATE FULLTEXT INDEX ON TableName(ColumnName) 
+KEY INDEX PK_TableName ON FullTextCatalog;
+7. XML Index
+Used to optimize queries on XML data.
+Can be a primary XML index or secondary XML index.
+Example:
+sql
+Copy code
+CREATE PRIMARY XML INDEX IX_Table_XML ON TableName(XMLColumn);
+8. Spatial Index
+Designed for spatial data types like GEOMETRY or GEOGRAPHY.
+Optimizes queries involving spatial operations like distance or intersection.
+Example:
+sql
+Copy code
+CREATE SPATIAL INDEX IX_Table_Spatial ON TableName(SpatialColumn);
+9. Columnstore Index
+Stores data in a columnar format, making it efficient for large-scale analytical queries.
+Can be clustered or non-clustered.
+Example:
+sql
+Copy code
+CREATE CLUSTERED COLUMNSTORE INDEX IX_Table_Columnstore ON TableName;
+10. Hash Index (For Memory-Optimized Tables)
+Used in memory-optimized tables for fast lookup operations.
+Works with BUCKET_COUNT for distributing rows.
+Example:
+sql
+Copy code
+CREATE HASH INDEX IX_Table_Hash ON TableName(ColumnName) 
+WITH (BUCKET_COUNT = 1000000);
+11. Indexed Views
+Indexes can be created on views to materialize them and improve performance.
+Requires that the view is defined with SCHEMABINDING.
+Example:
+sql
+Copy code
+CREATE UNIQUE CLUSTERED INDEX IX_View ON ViewName(ColumnName);
+Summary of Configurations
+Index Type	Clustered/Non-Clustered	Purpose
+Clustered Index	Clustered	Sorts and stores data in table order.
+Non-Clustered Index	Non-Clustered	Points to data rows for fast lookups.
+Unique Index	Both	Ensures unique column values.
+Composite Index	Both	Indexes multiple columns.
+Filtered Index	Non-Clustered	Indexes a subset of rows.
+Full-Text Index	Specialized	Optimized for text search.
+XML Index	Specialized	Optimized for XML data.
+Spatial Index	Specialized	Optimized for spatial data types.
+Columnstore Index	Clustered/Non-Clustered	Optimized for analytical queries.
+Hash Index	Specialized	Optimized for in-memory tables.
+Indexed View	Clustered	Materializes a view for performance.
+Each index type and configuration serves specific use cases, and the choice depends on the table's usage patterns and query requirements.
+
+64). What is a linked server?
+ChatGPT said:
+ChatGPT
+A linked server in SQL Server is a configuration that allows SQL Server to execute queries and commands against remote data sources as if they were part of the local server. This functionality is part of SQL Server's Distributed Queries feature.
+
+Key Features of a Linked Server
+Connectivity: Enables communication between SQL Server and other data sources (e.g., another SQL Server, Oracle, MySQL, or even non-relational sources like Excel or flat files).
+Distributed Queries: Allows executing queries across different servers/databases seamlessly.
+Heterogeneous Data Sources: Supports both relational and non-relational data sources.
+Authentication: Provides options to authenticate to the remote data source using either the current user's credentials or specific credentials.
+Common Use Cases
+Querying data from multiple servers in a single query.
+Joining tables from different databases or servers.
+Migrating data between databases.
+Accessing non-SQL Server databases (e.g., Oracle or MySQL) from SQL Server.
+Integrating with legacy systems or external data sources like Excel.
+Syntax to Create a Linked Server
+The sp_addlinkedserver system stored procedure is used to create a linked server.
+
+Example: Adding a SQL Server as a Linked Server
+sql
+Copy code
+EXEC sp_addlinkedserver 
+   @server = 'RemoteServerName', 
+   @srvproduct = '', 
+   @provider = 'SQLNCLI', 
+   @datasrc = 'RemoteServerInstance';
+Example: Adding a Non-SQL Server Data Source (e.g., Oracle)
+sql
+Copy code
+EXEC sp_addlinkedserver 
+   @server = 'OracleServer', 
+   @srvproduct = 'Oracle', 
+   @provider = 'OraOLEDB.Oracle', 
+   @datasrc = 'OracleDataSource';
+Adding Login Mapping
+sql
+Copy code
+EXEC sp_addlinkedsrvlogin 
+   @rmtsrvname = 'RemoteServerName', 
+   @useself = 'false', 
+   @locallogin = NULL, 
+   @rmtuser = 'RemoteUser', 
+   @rmtpassword = 'RemotePassword';
+Querying a Linked Server
+Once the linked server is created, you can query it using the four-part name:
+
+Syntax:
+Copy code
+LinkedServerName.DatabaseName.SchemaName.ObjectName
+Example:
+sql
+Copy code
+SELECT * 
+FROM RemoteServerName.DatabaseName.dbo.TableName;
+Checking Linked Servers
+To view all linked servers:
+
+sql
+Copy code
+EXEC sp_linkedservers;
+Removing a Linked Server
+To remove a linked server:
+
+sql
+Copy code
+EXEC sp_dropserver 'LinkedServerName', 'droplogins';
+Advantages of Linked Servers
+Simplifies distributed database access.
+Eliminates the need for ETL (Extract, Transform, Load) processes for simple data access.
+Provides a unified interface for accessing different data sources.
+Limitations
+Performance overhead due to network latency.
+Potential security risks if credentials are not managed securely.
+Limited functionality for certain data sources.
+Can be complex to configure for non-SQL Server data sources.
+When to Use Linked Servers
+For infrequent or simple data integration tasks.
+When you need to access data from external sources temporarily or for reporting.
+For more complex or performance-critical scenarios, other tools like SSIS, data replication, or ETL pipelines may be more suitable.
+
+
+65). What database does SQL Server use for temporary tables?
+Both local temporary tables (e.g., #TempTable) and global temporary tables (e.g., ##GlobalTempTable) are stored in tempdb.
+While table variables (@TableVar) are primarily stored in memory, they may spill over to tempdb if memory pressure occurs.
+
+tempdb stores:
+Temporary result sets (e.g., intermediate results during query execution).
+Worktables (used internally by SQL Server for sorting or query execution plans).
+Temporary stored procedures.
+
+tempdb is recreated every time the SQL Server instance is restarted, ensuring a clean state.
+Temporary objects and data are automatically removed when the associated session ends.
+
+CREATE TABLE #TempTable (ID INT, Name NVARCHAR(50));
+INSERT INTO #TempTable VALUES (1, 'Alice'), (2, 'Bob');
+SELECT * FROM #TempTable;
+
+CREATE TABLE ##GlobalTempTable (ID INT, Name NVARCHAR(50));
+INSERT INTO ##GlobalTempTable VALUES (1, 'Alice'), (2, 'Bob');
+SELECT * FROM ##GlobalTempTable;
+
+Why Use tempdb for Temporary Tables?
+Isolation: Temporary tables in tempdb are isolated by session or scope.
+Performance: Optimized for temporary storage with special configurations.
+Flexibility: Allows SQL Server to handle ad-hoc and intermediate data efficiently.
+Automatic Cleanup: Temporary objects are automatically removed when no longer needed.
+Best Practices for tempdb
+Monitor Usage: Keep track of tempdb usage to avoid contention, especially in high-concurrency environments.
+Optimize Disk I/O: Place tempdb on fast storage like SSDs.
+Size Appropriately: Pre-size tempdb to avoid frequent autogrowth operations.
+Avoid Overuse: Use temporary tables judiciously to minimize resource contention.
+In summary, tempdb is a crucial part of SQL Server's architecture, enabling efficient handling of temporary data.
+
+
+66). What are different Types of Sub-Queries?
+ChatGPT said:
+ChatGPT
+Subqueries in SQL are queries nested within another query, allowing you to dynamically retrieve and use data. Subqueries are categorized based on their purpose and behavior. Here are the different types of subqueries:
+
+1. Based on the Number of Results
+a. Single-Row Subquery
+Returns only one row.
+Used with operators like =, <, >, <=, etc.
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees 
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+b. Multi-Row Subquery
+Returns multiple rows.
+Used with operators like IN, ANY, ALL.
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees 
+WHERE DepartmentID IN (SELECT DepartmentID FROM Departments WHERE Location = 'New York');
+c. Scalar Subquery
+Returns a single value (one row and one column).
+Commonly used in the SELECT list or conditions.
+Example:
+sql
+Copy code
+SELECT Name, 
+       (SELECT AVG(Salary) FROM Employees) AS AvgSalary
+FROM Employees;
+d. Correlated Subquery
+A subquery that references columns from the outer query.
+Executed repeatedly for each row of the outer query.
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees e
+WHERE Salary > (SELECT AVG(Salary) FROM Employees WHERE DepartmentID = e.DepartmentID);
+2. Based on Placement
+a. Subquery in SELECT Clause
+Appears in the SELECT list to retrieve computed values.
+Example:
+sql
+Copy code
+SELECT Name, (SELECT MAX(Salary) FROM Employees) AS MaxSalary
+FROM Employees;
+b. Subquery in FROM Clause
+Acts as a derived table (inline view).
+Example:
+sql
+Copy code
+SELECT d.DepartmentID, d.TotalSalary
+FROM (SELECT DepartmentID, SUM(Salary) AS TotalSalary FROM Employees GROUP BY DepartmentID) d;
+c. Subquery in WHERE Clause
+Filters rows based on a condition involving the subquery result.
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees 
+WHERE DepartmentID = (SELECT DepartmentID FROM Departments WHERE Name = 'HR');
+d. Subquery in HAVING Clause
+Used to filter aggregated data.
+Example:
+sql
+Copy code
+SELECT DepartmentID, SUM(Salary) 
+FROM Employees 
+GROUP BY DepartmentID
+HAVING SUM(Salary) > (SELECT AVG(Salary) FROM Employees);
+3. Based on Dependency
+a. Correlated Subquery
+Depends on the outer query.
+Evaluated once for each row of the outer query.
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees e1
+WHERE Salary > (SELECT AVG(Salary) FROM Employees e2 WHERE e1.DepartmentID = e2.DepartmentID);
+b. Non-Correlated Subquery
+Independent of the outer query.
+Evaluated only once.
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees 
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+4. Based on the Type of Data Returned
+a. Subquery Returning Scalar Value
+Returns a single value (scalar).
+Example:
+sql
+Copy code
+SELECT Name 
+FROM Employees 
+WHERE Salary = (SELECT MAX(Salary) FROM Employees);
+b. Subquery Returning a Table
+Returns a table that can be used in the FROM clause.
+Example:
+sql
+Copy code
+SELECT d.DepartmentID, d.TotalEmployees
+FROM (SELECT DepartmentID, COUNT(*) AS TotalEmployees FROM Employees GROUP BY DepartmentID) d;
+Summary Table
+Type	Description	Example Use
+Single-Row Subquery,	Returns one row.,		WHERE column = (SELECT ...)
+Multi-Row Subquery,	Returns multiple rows.,		WHERE column IN (SELECT ...)
+Scalar Subquery,	Returns a single value.,	SELECT (SELECT ...)
+Correlated Subquery,	Depends on the outer query.,	WHERE EXISTS (SELECT ...)
+Non-Correlated Subquery,	Independent of the outer query.,	SELECT ... WHERE column = (SELECT ...)
+Subquery in SELECT Clause,	Used to compute derived columns.,	SELECT column, (SELECT ...)
+Subquery in FROM Clause,	Acts as a derived table.,		SELECT ... FROM (SELECT ...)
+Subquery in WHERE Clause,	Filters rows.,				SELECT ... WHERE column IN (SELECT ...)
+Subquery in HAVING Clause,	Filters aggregated data.,		HAVING SUM(column) > (SELECT ...)
+
+Subqueries are versatile and help in solving complex queries efficiently by dividing the logic into manageable components.
+
+
+67). What are the authentication modes in SQL Server? How can it be changed?
+
+68). Which command using Query Analyzer will give you the version of SQL server and
+operating system?
+
+To determine the version of SQL Server and the operating system using Query Analyzer (or any query execution tool like SQL Server Management Studio), you can use the following commands:
+
+1. Using @@VERSION
+sql
+Copy code
+SELECT @@VERSION AS SQLServer_Version;
+Output:
+Provides a single string containing:
+SQL Server version.
+Edition (e.g., Standard, Enterprise).
+Operating system version.
+Example Output:
+yaml
+Copy code
+Microsoft SQL Server 2019 (RTM-CU16) (KB5007182) - 15.0.4223.1 (X64) 
+Nov 18 2021 15:20:49 
+Copyright (C) 2019 Microsoft Corporation
+Enterprise Edition: Core-based Licensing (64-bit) on Windows Server 2019 Datacenter 10.0 (Build 17763: ) (Hypervisor)
+2. Using SERVERPROPERTY()
+The SERVERPROPERTY function can retrieve individual properties of the SQL Server.
+
+Query:
+sql
+Copy code
+SELECT 
+    SERVERPROPERTY('ProductVersion') AS Version,
+    SERVERPROPERTY('ProductLevel') AS ProductLevel,
+    SERVERPROPERTY('Edition') AS Edition,
+    SERVERPROPERTY('EngineEdition') AS EngineEdition,
+    SERVERPROPERTY('IsClustered') AS IsClustered;
+Explanation:
+ProductVersion: The SQL Server version (e.g., 15.0.4223.1 for SQL Server 2019).
+ProductLevel: Service pack level (e.g., RTM, SP1).
+Edition: Edition of SQL Server (e.g., Standard Edition, Enterprise Edition).
+EngineEdition: Type of SQL Server engine:
+1 = Personal/Desktop Engine
+2 = Standard Edition
+3 = Enterprise Edition
+4 = Express Edition
+IsClustered: Indicates if the server is part of a cluster (1 = Yes, 0 = No).
+3. Using xp_msver (Extended Stored Procedure)
+The xp_msver extended stored procedure retrieves detailed information about SQL Server and the operating system.
+
+Query:
+sql
+Copy code
+EXEC xp_msver;
+Output:
+Returns a detailed result set including:
+Product name.
+Version.
+Operating system information.
+Platform, language, and build numbers.
+4. Using sys.dm_os_host_info (SQL Server 2017 and Later)
+For newer versions of SQL Server, you can use the sys.dm_os_host_info DMV to get operating system details.
+
+Query:
+sql
+Copy code
+SELECT host_platform, host_distribution, host_release, host_service_pack_level 
+FROM sys.dm_os_host_info;
+Output:
+Provides OS-specific information such as platform (Windows/Linux), distribution, and release.
+When to Use Each?
+Use @@VERSION for a quick overview.
+Use SERVERPROPERTY() for specific details.
+Use xp_msver for comprehensive information in older versions.
+Use sys.dm_os_host_info for detailed OS data in newer SQL Server versions.
+
+
+
+69). What is service Broker?
+70). What is the difference between HAVING and WHERE clause?
+71). What is a B-Tree?
+73). What is an active database?
+74). .........?
+
+75). Can a stored procedure call itself or recursive stored procedure? How much level SP
+nesting is possible?
+
+Yes, a stored procedure can call itself in SQL Server, which is referred to as a recursive stored procedure. Additionally, a stored procedure can call other stored procedures, resulting in nested procedure calls. Here are the details:
+
+1. Recursive Stored Procedure
+Definition: A stored procedure that calls itself either directly or indirectly.
+Usage: Recursive stored procedures are commonly used for tasks like calculating factorials, hierarchical data processing (e.g., employee-manager relationships), or tree traversals.
+Example of Recursive Stored Procedure:
+sql
+Copy code
+CREATE PROCEDURE CalculateFactorial
+    @Number INT,
+    @Result BIGINT OUTPUT
+AS
+BEGIN
+    IF @Number <= 1
+        SET @Result = 1;
+    ELSE
+    BEGIN
+        DECLARE @TempResult BIGINT;
+        EXEC CalculateFactorial @Number - 1, @TempResult OUTPUT;
+        SET @Result = @Number * @TempResult;
+    END
+END;
+Calling the Procedure:
+sql
+Copy code
+DECLARE @Result BIGINT;
+EXEC CalculateFactorial 5, @Result OUTPUT;
+PRINT @Result; -- Output: 120
+2. Levels of Stored Procedure Nesting
+SQL Server allows up to 32 levels of nesting for stored procedures.
+This includes both direct recursion and indirect calls between procedures.
+Example of Nested Stored Procedures:
+sql
+Copy code
+-- Procedure 1
+CREATE PROCEDURE Proc1
+AS
+BEGIN
+    PRINT 'Executing Proc1';
+    EXEC Proc2;
+END;
+
+-- Procedure 2
+CREATE PROCEDURE Proc2
+AS
+BEGIN
+    PRINT 'Executing Proc2';
+    EXEC Proc3;
+END;
+
+-- Procedure 3
+CREATE PROCEDURE Proc3
+AS
+BEGIN
+    PRINT 'Executing Proc3';
+END;
+
+-- Execute the first procedure
+EXEC Proc1;
+Output:
+Copy code
+Executing Proc1
+Executing Proc2
+Executing Proc3
+Considerations for Recursive Stored Procedures
+Termination Condition:
+
+Recursive procedures must have a clear termination condition to avoid infinite recursion.
+Without proper termination, recursion will cause a stack overflow and raise an error.
+Error Message for Excessive Recursion:
+
+If the recursion exceeds 32 levels, SQL Server will return the following error:
+sql
+Copy code
+Msg 217, Level 16, State 1, Procedure ProcName, Line X
+Maximum stored procedure, function, trigger, or view nesting level exceeded (limit 32).
+Performance:
+
+Recursive procedures can consume significant resources, especially with deep recursion.
+For better performance, consider iterative approaches if recursion depth is high.
+
+Conclusion
+A stored procedure can call itself recursively, and SQL Server supports up to 32 levels of nesting for stored procedures.
+Ensure proper termination conditions and monitor recursion depth to avoid errors or performance issues.
+
+
+76). What is Log Shipping?
+
+
+Log Shipping is a high-availability feature in SQL Server that provides a way to maintain a standby copy of a database on a separate server. This helps ensure data availability and disaster recovery by automatically transferring transaction log backups from a primary server to one or more secondary servers and applying those backups.
+
+Key Components of Log Shipping
+Primary Database
+
+The source database from which transaction log backups are created.
+Secondary Database(s)
+
+The target database(s) where transaction log backups are restored.
+Operates in either a "standby" mode (read-only access) or a "restoring" mode (no access).
+Monitor Server (Optional)
+
+Tracks the status of the log shipping process, including backup, copy, and restore operations.
+Jobs
+
+Backup Job: On the primary server, creates transaction log backups at regular intervals.
+Copy Job: On the secondary server(s), copies the backup files from the primary server to the secondary server(s).
+Restore Job: On the secondary server(s), restores the transaction log backups.
+How Log Shipping Works
+Transaction Log Backup:
+
+A transaction log backup of the primary database is created at scheduled intervals.
+File Transfer:
+
+The transaction log backup file is copied to the secondary server(s).
+Log Restore:
+
+The transaction log backup is applied to the secondary database(s) in sequence to keep them synchronized with the primary database.
+Advantages of Log Shipping
+High Availability:
+
+Provides a warm standby server for disaster recovery.
+Ease of Setup:
+
+Simple to configure compared to other high-availability solutions.
+Multiple Secondary Servers:
+
+Allows for multiple secondary databases, improving redundancy.
+Cost-Effective:
+
+Requires less expensive hardware and no shared storage compared to failover clustering.
+Limitations of Log Shipping
+Manual Failover:
+
+In the event of a primary server failure, the failover process to the secondary server is manual.
+Lag in Synchronization:
+
+There is a delay between the primary and secondary databases, depending on the log shipping schedule.
+Read-Only Access:
+
+Secondary databases can only be used in read-only mode or remain inaccessible while in restoring mode.
+No Automatic Detection:
+
+Unlike Availability Groups, log shipping does not automatically detect server failures.
+Use Case Scenario
+Disaster Recovery: Ensuring business continuity by maintaining a backup server in case the primary server goes down.
+Reporting: Setting up a secondary server for read-only reporting without impacting the performance of the primary server.
+Steps to Configure Log Shipping
+Enable SQL Server Agent: Ensure SQL Server Agent is running on all involved servers.
+Backup and Restore:
+Perform a full backup of the primary database.
+Restore it on the secondary server with NORECOVERY or STANDBY mode.
+Configure Log Shipping:
+Enable log shipping on the primary database.
+Define the backup schedule, copy schedule, and restore schedule.
+Configure alert settings for monitoring.
+Monitor Log Shipping:
+Use the optional monitor server to track the status of jobs and synchronization.
+Example Commands for Log Shipping
+Creating a Transaction Log Backup
+sql
+Copy code
+BACKUP LOG YourDatabase 
+TO DISK = 'C:\LogShipping\YourDatabase_TransactionLog.trn';
+Restoring the Transaction Log on Secondary Server
+sql
+Copy code
+RESTORE LOG YourDatabase 
+FROM DISK = 'C:\LogShipping\YourDatabase_TransactionLog.trn'
+WITH STANDBY = 'C:\LogShipping\YourDatabase_StandbyUndo.ldf';
+Difference Between Log Shipping and Other HA Features
+Feature	Manual/Automatic Failover	Sync Type	Read-Only on Secondary	Cost
+Log Shipping	Manual	Asynchronous	Yes (in standby mode)	Low
+Replication	Manual	Asynchronous	Yes	Moderate
+Mirroring	Automatic (in High Safety)	Synchronous	No	Moderate
+Always On AG	Automatic/Manual	Both	Yes	High
+Log Shipping is a simple and effective disaster recovery solution when high automation is not required.
+
+
+77). Name 3 ways to get an accurate count of the number of records in a table?
+
+Here are three ways to get an accurate count of the number of records in a table in SQL Server:
+
+1. Using COUNT(*)
+This is the most common and straightforward way to count all rows in a table, including rows with NULL values.
+
+Query:
+sql
+Copy code
+SELECT COUNT(*) AS TotalRecords
+FROM TableName;
+Explanation:
+Counts all rows in the table regardless of column values.
+It performs a full table scan or uses indexed access if appropriate.
+2. Using sys.partitions for Large Tables
+For large tables, querying metadata can be faster than COUNT(*). The sys.partitions system catalog contains row counts for each partition of a table or index.
+
+Query:
+sql
+Copy code
+SELECT SUM(p.rows) AS TotalRecords
+FROM sys.partitions p
+WHERE p.object_id = OBJECT_ID('TableName') 
+  AND p.index_id IN (0, 1); -- 0 = Heap, 1 = Clustered Index
+Explanation:
+Retrieves the total row count directly from metadata.
+Useful for large tables where COUNT(*) might be slow.
+Note: This approach might not be real-time accurate for tables with frequent updates.
+3. Using sp_spaceused
+The sp_spaceused system stored procedure provides information about the storage and row count of a table.
+
+Query:
+sql
+Copy code
+EXEC sp_spaceused 'TableName';
+Explanation:
+Returns the total row count (rows column) along with size-related details like data size and index size.
+Provides an estimate based on metadata but can sometimes be slightly outdated.
+When to Use Each?
+Method	Use Case
+COUNT(*)	When absolute accuracy is needed, and the table size is moderate.
+sys.partitions	For large tables or performance-critical queries requiring approximate row counts.
+sp_spaceused	When you need row count along with storage usage details, especially for monitoring.
+Example with Table Employees:
+Using COUNT(*):
+
+sql
+Copy code
+SELECT COUNT(*) AS TotalEmployees FROM Employees;
+Using sys.partitions:
+
+sql
+Copy code
+SELECT SUM(p.rows) AS TotalEmployees
+FROM sys.partitions p
+WHERE p.object_id = OBJECT_ID('Employees') AND p.index_id IN (0, 1);
+Using sp_spaceused:
+
+sql
+Copy code
+EXEC sp_spaceused 'Employees';
+These methods ensure you can get row counts accurately, depending on your use case and performance needs.
+
+
+78). What does it mean to have QUOTED_IDENTIFIER ON? What are the implications of
+having it OFF?
+79). What is the difference between a Local and a Global temporary table?
+
+80). What is the STUFF function and how does it differ from the REPLACE function
+
+STUFF Function
+The STUFF function is used to insert a string into another string by deleting a specified number of characters and replacing them with a new string.
+
+Syntax:
+sql
+Copy code
+STUFF(string_expression, start, length, replace_with_string)
+string_expression: The original string.
+start: The position where the replacement starts (1-based index).
+length: The number of characters to delete from the original string.
+replace_with_string: The string to insert into the original string.
+Example:
+sql
+Copy code
+SELECT STUFF('Hello World', 7, 5, 'SQL Server') AS Result;
+Output:
+
+arduino
+Copy code
+Hello SQL Server
+Replaces 5 characters starting at position 7 (World) with 'SQL Server'.
+
+
+Name all three Adaptive query processing features?
+In SQL Server 2017 and Azure SQL Database there are three adaptive query processing
+features by which you can improve your query performance:
+Batch mode memory grant feedback.
+Batch mode adaptive join.
+Interleaved execution.
+
+Write T-SQL statement to enable adaptive query processing?
+You can make workloads automatically
+adaptive query processing by enabling compatibility level 140 for the database. You can set
+this using Transact-SQL. For example:
+ALTER DATABASE [WideWorldImportersDW] SET COMPATIBILITY_LEVEL = 140;
+
+Name the new string function which is very useful to generate csv file from a table?
+CONCAT_WS is new function launched in SQL Server 2017 its takes a variable number of
+arguments and concatenates them into a single string using the first argument as separator.
+It requires a separator and a minimum of two arguments.
+It is very helpful in generate comma or pipe seprated csv file content.
+Example:
+
+SELECT CONCAT_WS('|','Vikas','Ahlawat','Gurgaon')
+
+What do you understand by TRANSLATE in SQL Sever 2017?
+TRANSLATE is a new string function launched in SQL Server 2017, It is very helpful to
+SQL INTERVIEWS PDF Disha Mukherjee
+ 2023
+CREDITS::-- Vikas (interviewquestions.pdf)
+replace multiple character with multiple character respectively. It will return an error if
+characters and translations have different lengths.
+In below example we are using traditional REPLACE function, and for same task we will use
+TRANSLATE function lets see the difference.
+
+--Then
+SELECT REPLACE(REPLACE(REPLACE(REPLACE('2*[3+4]/{7-2}','[','('),']',')'),'{','('),'}', ')')
+
+--Now doing same thing as above
+SELECT TRANSLACE('2*[3+4]/{7-2}','[]{}', '()()')
+
+RESULTS:
+--------
+By Replace
+2*(3+4)/(7-2)
+
+By Translate
+2*(3+4)/(7-2)
+
+What is the use of new TRIM function?
+It Removes the space character char(32) or other specified characters from the start or end
+of a string. 
+
+SELECT TRIM '.,!' FROM ' Vikas AS Result
+
+Result:
+------
+
+
+Is SQL Server 2017 support Python?
+Yes
+
+13). What are the purpose of Normalization?
+Ans: Minimize redundancy in data.
+Remove insert, delete and update anamoly during the database activities.
+Reduce the need to reorganize data it is modified or enhanced.
+Normalization reduces a complex user view to a set of small and stable subgroups of fields
+or relations.
+14). What are the types of database recovery models?
+Ans: There are 3 types of database recovery models available
+ Full
+ Simple
+ Bulk Logged
+15). What the difference between UNION and UNIONALL?
+Ans: Union will remove the duplicate rows from the result set while Union all doesn't
+
+17). What is NOT NULL Constraint?
+Ans: A NOT NULL constraint enforces that the column will not accept null values. The not
+null constraints are used to enforce domain integrity, as the check constraints.
+18). What is log shipping?
+Ans: Log shipping is the process of automating the backup of database and transaction log
+files on a production SQL server, and then restoring them onto a standby server. Enterprise
+Editions only supports log shipping. In log shipping the transactional log file from one
+server is automatically updated into the backup database on the other server.
+19). Define Joins?
+Ans: A Join combines columns and data from two or more tables (and in rare cases, of one
+table with itself).
+20). What is Cross Join?
+Ans: A cross join that does not have a WHERE clause produces the Cartesian product of the
+tables involved in the join. The size of a Cartesian product result set is the number of rows
+in the first table multiplied by the number of rows in the second table
+
+Set-22: Sql Server Very Basic Interview
+========================================
+1). What are the different locks in Sql Server?
+Ans: There are six types of locks
+ Intent
+ Shared
+ Update
+ Exclusive
+ Schema
+ Bulk Update
+2). What are the different types of BACKUPs available in SQL Server 2005?
+Ans: In SQL Server 2005 Backup Types are
+ Full
+ Transaction Log
+ Differential
+ Partial
+ Differential Partial
+ File and Filegroup
+ Copy Only Database Backups
+
+11). How you will find the LEN in above case?
+Select LEN('A value ' + 'x') - 1
+A)
+The LEN() function returns the number of characters in the string, excluding trailing spaces.
+
+For 'A value x', the length is 9 (8 characters from 'A value ' and 1 character from 'x').
+Subtract 1:
+
+Subtracting 1 from the length gives:
+Copy code
+9 - 1 = 8
+
+Output:
+The result of the query is:
+
+Copy code
+8
+
+12). Difference between Len() and DataLength()?
+Ans: DATALENGTH()- returns the length of the string in bytes, including trailing spaces.
+LEN()- returns the length in characters, excluding trailing spaces.
+For example
+SELECT LEN('string'), LEN('string '), DATALENGTH('string'), DATALENGTH('string '),
+LEN(N'string'), LEN(N'string '), DATALENGTH(N'string'), DATALENGTH(N'string ')
+will return 6, 6, 6, 9, 6, 6, 12, 18
+
+9). How much size “Null” value takes in SQL Server?
+Ans:
+ If the field is fixed width storing NULL takes the same space as any other value - the
+width of the field.
+ If the field is variable width the NULL value takes up no space.
+10). What would be the output of the following script?
+Select LEN('A value') --Without space at end
+Select LEN('A value ') --With 2 space at end
+Ans: Both will return 7 because LEN function not including trailing spaces in SQL Server.
+
+7). How can i query my sql server to only get the size of database?
+Ans: Use "YourDatabaseName"
+exec sp_spaceused
+8). What would be the LEN and DATALENGTH of NULL value in SQL Server?
+Ans: Both above function will return NULL as the length of NULL.
+
+UNIQUE- All the field values must be different, but it allow one null value.
+
+The UNIQUE constraint allows NULL values, but the behavior depends on the database system:
+In SQL Server, multiple NULL values are allowed in a column with a UNIQUE constraint. This is because NULL is not considered equal to any other NULL (including itself).
+Other database systems, such as Oracle, follow the same behavior, but there might be variations in other systems.
+
+
+Set-18: Sql Server Temp Table Interview
+Questions
+
+5). How can I check for the existence of a temporary table?
+IF object_id('tempdb..##TEMPTABLE') IS NOT NULL
+6). Table Variables vs. Temp Tables?
+ Table var doesn't have to be memory-resident. Its pages can be moved to tempdb if
+memory is low
+ Rollback doesn't affect table vars
+ Table vars don't participate in transactions or locking
+ Any DML operations done on table variables are not logged
+ No statistics are maintained on table variables
+7). Can you create foreign key constraints on temporary tables?
+No
+8). Do you have to manually delete temporary tables?
+No, temporary tables are automatically dropped, when the session that created the
+temporary tables is closed. But if you maintain a persistent connection or if connection
+pooling is enabled, then it is better to explicitly drop the temporary tables you have created.
+However, It is generally considered a good coding practice to explicitly drop every
+temporary table you create
+
+Set-17: Sql Server SP Interview Questions
+=========================================
+
+
+7). Have you ever created or used recursive stored procedure? Give example?
+Ans: I created a recursive stored procedure for calculating the factorial of a number.
+CREATE PROCEDURE [dbo].[Factorial_ap]
+( @Number Integer,@RetVal Integer OUTPUT )
+AS
+DECLARE @In Integer
+DECLARE @Out Integer
+IF @Number != 1
+BEGIN
+SELECT @In = @Number – 1
+EXEC Factorial_ap @In, @Out OUTPUT
+SELECT @RetVal = @Number * @Out
+END
+ELSE
+BEGIN
+SELECT @RetVal = 1
+END
+RETURN
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

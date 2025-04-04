@@ -1,0 +1,42 @@
+what is the different versions of databricks and their diffences?
+Year 2018, 3.2 version
+Year 2022, 8.3/8.4 version, Nov 10.5 version
+ 
+Databricks Runtime 7.3 LTS, spark version 3.0.1 
+
+
+Databricks Runtime 12.0, spark version 3.3.1
+
+11.3 LTS, 3.3.0
+
+Databricks Runtime version 11.2 - 11.3 LTS,
+Delta Lake API version 2.1.0
+
+Performance tuning using a star schema?
+key concepts in star schema and their uses?
+
+Performance tuning using a star schema?
+key concepts in star schema and their uses?
+
+Optimizing star queries?
+https://docs.oracle.com/cd/E29633_01/CDMOG/GUID-A21256D6-7A93-4FBA-9688-053F6C5CF432.htm
+
+https://aws.amazon.com/blogs/big-data/optimizing-for-star-schemas-and-interleaved-sorting-on-amazon-redshift/
+
+https://www.etl-tools.com/articles/star-schema-optimisation.html
+
+
+https://eliiza.com.au/
+
+
+from pyspark.sql.types import *
+import requests
+import json
+
+url = "https://api.example.com/data"
+response = requests.get(url)
+data =json.loads(response.text)
+schema = structtype([structfield("field1", stringtype()),
+			   structfield("field2", stringtype())])
+df = spark.createDataFrame(data, schema)
+df.write.format("csv").option("header","true").mode("overwrite").partitiobv("field1").save("path/to/output/dir")

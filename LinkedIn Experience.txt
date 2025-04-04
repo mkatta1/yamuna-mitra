@@ -1,0 +1,25 @@
+TE Connectivity (May/2017 to Aug/2017):
+Role: Talend Bigdata Senior Developer and Talend Admin
+Responsibilities:
+TE Connectivity is one of the largest sensor companies in the world with next generation data-driven technology. These sensors are varied for different applications across Automotive, industrial, Medical, Aerospace & Defense and so on. For data visualization and analysis purposes the data from these sensors are extracted, transformed and loaded into some flipflop tables using Talend ETL tool for transformations and also using Map Reduce, spark frameworks with the same tool.
+Developer Activities: Using sqoop scripts, data is ingested from Oracle and HANA into Hive with various facts, dimensions which are denormalized later to update flipflop tables a/b for data visualization using this data
+TALEND ADMIN Activities: Upgraded Talend 6.2.1 to 6.4.1. Created GIT for revision control system and MYSQL Database for securing authentication and logging details of jobs. Created URL monitor in SITESCOPE for monitoring the DEV TAC.
+
+HP (SAHARA LULU) (Dec/2016 to April/2017):
+Role: Talend Bigdata Senior Developer
+Responsibilities:
+This project environment consists of Talend 6.3, Hive, MS HD Insight, Azure Data lake, Ambari, windows. The source delimited files were extracted from cloud storage systems and using the Talend spark framework the bigdata batch jobs are executed. Performance of the jobs were tested with bulk data. Created hive tables using HQL queries on top of the Microsoft blob storage.
+
+Element Corp (Inbound & Outbound) (Oct/2015 to Dec/2016)
+Role: Talend Bigdata Developer
+Responsibilities:
+At Element Fleet Management, we deliver end-to-end fleet management services to organizations in a wide variety of industries. Previously, Element Fleet Management data is stored in historic MainFrames storage systems. So, by using Talend ETL extracted data from sources like MainFrame flat files, loaded this data into hdfs file systems, Cassandra, Sybase. 
+Big data streaming & batch jobs were developed in Talend to track vehicle info and analysis. Autosys and TAC(Talend Admin Console) are used for scheduling jobs. 
+Converting the Informatica jobs, PL/SQL procedures and packages to Talend jobs.
+
+Talend Big data Developer, I am a passionate engineering professional with substantial experience who loves executing solutions for complex business problems involving large-scale data
+
+
+www.linkedin.com/in/mitra-manohar-sai-katta-048099140
+
+https://jobsearch.gov.au/CareerProfile/llUJ7lWTbcLnILfSr4xw4Y5rclm8JAKBnfMmS4he3YaanQb0OjRgSEagmlFsOmpr2TZAp5PmLSjt8VwTJO5fgA%3D%3D
