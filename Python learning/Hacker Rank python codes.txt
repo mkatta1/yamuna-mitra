@@ -1,0 +1,1176 @@
+https://learn.microsoft.com/en-us/previous-versions/sql/sql-server-2008-r2/ms177484(v=sql.105)?redirectedfrom=MSDN
+
+https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-2017#nonclustered-index-architecture
+
+https://www.ibm.com/docs/en/db2/10.5?topic=overview-dimensional-schema-design
+
+https://www.mssqltips.com/sqlservertip/6315/group-by-in-sql-server-with-cube-rollup-and-grouping-sets-examples/
+
+https://apandre.wordpress.com/data/datacube/
+
+
+
+
+def swap_case(s):
+   return s.swapcase()
+
+def split and join(line):
+  line = line.split()
+  line = "-".join(line)
+ return line
+
+line = line.split()
+"-".join(line)
+
+def mutate_string(string, position, character):
+    return s[:position]+character+s[position+1:]
+
+convert list to string using
+string = ''.join(l)
+
+string = string[:5] +"k"+ string[6:]
+print string
+
+def mutate_string(string, pos, character):
+  return s[:pos]+ character + s[pos+1:]
+
+
+def count_substring(substring, sub_string):
+  count =0
+  for I in range(len(string)):
+     if string[i:].startswith(sub_string):
+        count+=1 
+  return count
+
+if __name = '__main__':
+  s= input()
+print(any(c.isalnum() for c in s))
+print(any(c.isalpha for c in s))
+print(any(c.isdigit() for c in s)
+print(any(c.islower() for c in s))
+print(any(c.isupper() for c in s))
+
+#Replace all ______ with rjust, ljust or center. 
+
+thickness = int(input()) #This must be an odd number
+c = 'H'
+
+#Top Cone
+for i in range(thickness):
+    print((c*i).rjust(thickness-1)+c+(c*i).ljust(thickness-1))
+
+
+#Top Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+    
+  
+#Middle Belt
+for i in range((thickness+1)//2):
+    print((c*thickness*5).center(thickness*6))
+
+
+#Bottom Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+
+
+#Bottom Cone
+for i in range(thickness):
+    print(((c*(thickness-i-1)).rjust(thickness)+c+(c*(thickness-i-1)).ljust(thickness)).rjust(thickness*6))
+
+
+def wrap(string, max_width):
+  return "\n".join(textwrap.wrap(string,max_width))
+
+if __name__ = '__main__':
+  string, max_width = input(), int(input())
+  result = wrap(string, max_width)
+  print(result)
+
+string, maxwidth = input(), int(input())
+result = wrap(string, max_width)
+print(result)
+
+def minion_gaming(string):
+ vowels = 'AEIOU'
+ kevin = 0
+ stuart = 0
+ n = len(string)
+
+ for i in range(n):
+  if string[i] in vowels:
+	kevin + = n - i
+  else:
+	stuart + = n - i
+
+ if kevin> stuart:
+  print('kevin', kevin)
+ elif stuart > kevin:
+  print('stuart', stuart)
+ else:
+  print('draw')
+
+def solve(s):
+ return ''.join(list(map(str.capitalize, s.split(''))))
+ return ''.join([a.capitalize() for a in s.split('')])
+
+******
+m = int(input())
+a = set(map(int, input().split()[:m]))
+n = int(input())
+b = set(map(int, input().split()[:n]))
+result = a ^ b
+for item in sorted(result):
+ print(item)
+
+
+set(map(int, input().split()[:m]))
+
+print(len(set([str(input()) for i in range(int(input()))])))
+
+***
+_, e, _, f = [input().split() for _ in range(4)]
+print(len(set(e+f)))
+
+n = int(input())
+A = set(map(int, input().split()))
+b = int(input())
+B = set(map(int, input().split()))
+print(len(A | B))
+
+*** SET INTERSECTION ***
+input()
+a = set(map(int,input().split()))
+for i in range(int(input())):
+    cm = input().split()
+    eval(f"a.{cm[0]}({set(map(int,input().split()))})")
+print(sum(a))
+
+/*
+hello = "hello world" # a string
+
+cmd = "print(hello.upper())" #another string
+
+print(cmd) # show print(hello.upper())
+
+eval(cmd) # show HELLO WORLD
+
+exec(cmd) do the same but its better to use it to execute more complex stuff
+*/
+
+**********
+
+
+for _ in range(int(input())):
+    _, a, _, b = [set(input().split()) for _ in range(4)]
+    print(a.issubset(b))
+
+
+----
+a, b, c, d = [int(input()) for _ in range(4)]
+
+print(pow(a, b) + pow(c, d))
+
+Type 1:
+------
+print(pow(int(input()),int(input()))+pow(int(input()),int(input())))
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+Validating Roman Numerals
+
+Type 1:
+
+regex_pattern = r"^(?!.*(I{4}|V{2,}|X{4}|L{2,}|C{4}|D{2,}|M{4})).*$"
+
+^^^^^^^^^^^^^^^^^^^^^
+Triangle Quest:
+--------------
+[print(((10 ** i - 1) // 9)* i) for i in range(1,int(input()))]
+
+Triangle Quest 2:
+----------------
+
+
+def print_from_stream(n, stream=EvenStream()):
+    if isinstance(stream,EvenStream):
+        stream.current = 0
+    for _ in range(n):
+        print(stream.get_next())
+
+
+---
+class EvenStream(object): def init(self): self.current = 0
+
+def get_next(self):
+    to_return = self.current
+    self.current += 2
+    return to_return
+class OddStream(object): def init(self): self.current = 1
+
+def get_next(self):
+    to_return = self.current
+    self.current += 2
+    return to_return
+
+*******************************
+
+#Replace all ______ with rjust, ljust or center. 
+
+thickness = int(input()) #This must be an odd number
+c = 'H'
+
+#Top Cone
+for i in range(thickness):
+    print((c*i).rjust(thickness-1)+c+(c*i).ljust(thickness-1))
+
+
+#Top Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+    
+  
+#Middle Belt
+for i in range((thickness+1)//2):
+    print((c*thickness*5).center(thickness*6))
+
+
+#Bottom Pillars
+for i in range(thickness+1):
+    print((c*thickness).center(thickness*2)+(c*thickness).center(thickness*6))
+
+
+#Bottom Cone
+for i in range(thickness):
+    print(((c*(thickness-i-1)).rjust(thickness)+c+(c*(thickness-i-1)).ljust(thickness)).rjust(thickness*6))
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Designer Door Mat:
+-----------------
+
+def doormat(N,M):
+
+for i in range(1, N, 2):
+    pattern=(".|."*i).center(M,"-")
+
+    print(pattern)
+
+print("WELCOME".center(M,"-"))
+
+
+
+for i in range(N-2,0, -2):
+
+    pattern=(".|."*i).center(M,"-")
+
+    print(pattern)
+if name=="main": N,M=map(int, input().split())
+
+doormat(N,M)
+
+n,m = map(int, input().split())
+for i in range(1,(n//2)+1):
+    print(('.|.'*(i*2-1)).center(n*3,'-'))
+print('WELCOME'.center(n*3,'-'))
+for i in range((n//2),0,-1):
+    print(('.|.'*(i*2-1)).center(n*3,'-'))
+
+Question:
+ Can you explain the below line for me. 
+
+    for i in range((n//2),0,-1):
+
+    How exactly this (n//2,0,-1) works ?
+
+Answer:
+The second for loop is written for the bottom half of the Door Mat, where i print the remaining part of the mat below the "WELCOME" message. The loop iterates from the n//2 to 0 i.e backwards. The ' -1 ' represents the loop to run backwards by 1. Similiarly if i had ' -2 ' in place of 1, the loop would iterate by 2 i.e say if n = 10, the loop would iterate in this way 10, 8 ,7 ....(considering n remains n and not n\2). This way i can print the appropriate number of .|. patterns in each line
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+What's Your Name?
+
+def print_full_name(first, last): print("Hello {0} {1}! You just delved into python.".format(first, last)) if name == 'main': first_name = input() last_name = input() print_full_name(first_name, last_name)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+def merge_the_tools(string: str, k: int):
+    result = [''.join(dict.fromkeys(string[i:i + k])) for i in range(0, len(string), k)]
+    print('\n'.join(result))
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+Type of Triangle
+----------------
+
+SELECT CASE WHEN A + B <= C THEN 'Not A Triangle' WHEN A = B AND B = C THEN 'Equilateral' WHEN A = B OR A = C THEN 'Isosceles' ELSE 'Scalene' END FROM TRIANGLES
+
+SELECT CASE WHEN a + b <= c or b + c <= a or a + c <= b THEN 'Not A Triangle' WHEN a = b AND b = c THEN 'Equilateral' WHEN a = b AND b <> c OR a = c AND b <> a OR b = c and c <> a THEN 'Isosceles' ELSE 'Scalene' END
+FROM Triangles
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+select h.hacker_id, h.name, sum(mscore) as tt
+from hackers h join
+    (select hacker_id, challenge_id, MAX(score) AS mscore
+     from submissions
+    group by hacker_id, challenge_id) as s
+on h.hacker_id=s.hacker_id
+group by h.hacker_id, h.name
+having sum(mscore)!=0
+order by tt desc, hacker_id asc
+
+TYPE 2:
+
+with msc as (
+    select
+        s.submission_id as sid,
+        h.hacker_id as hid,
+        s.challenge_id as cid,
+        h.name,
+        row_number() over(
+            Partition by h.hacker_id,
+            s.challenge_id
+            order by
+                s.score desc
+        ) as rn,
+        s.score
+    from
+        hackers h
+        JOIN submissions s on s.hacker_id = h.hacker_id
+),
+temp as(
+    select
+        msc.hid,
+        msc.name,
+        msc.score
+    from
+        msc
+    where
+        rn = 1
+)
+select
+    temp.hid,
+    temp.name,
+    SUM(temp.score) as s
+from
+    temp
+group by
+    temp.hid,
+    temp.name
+having
+    sum(temp.score) > 0
+order by
+    s desc,
+    hid asc;
+
+##################################################
+Ollivander's Inventory:
+----------------------
+
+
+SELECT
+    w.id, 
+    wp.age, 
+    w.coins_needed, 
+    w.power
+FROM Wands w
+JOIN Wands_Property wp
+    ON w.code=wp.code
+WHERE is_evil=0
+AND coins_needed=
+    (SELECT MIN(coins_needed)
+    FROM Wands as w1
+    JOIN Wands_Property as wp1
+        ON w1.code=wp1.code
+    WHERE w1.power=w.power
+    AND wp1.age=wp.age)
+ORDER BY
+    w.power DESC,
+    wp.age DESC;
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Revising Aggregations - Averages:
+--------------------------------
+select avg(population) from city where District='California'
+
+
+Weather Observation Station 20:
+------------------------------
+SET @row_num := 0;
+
+SELECT ROUND(AVG(t.LAT_N), 4) AS Median FROM ( SELECT LAT_N, @row_num := @row_num + 1 AS row_num FROM STATION ORDER BY LAT_N ) AS t WHERE t.row_num IN (FLOOR((@row_num + 1) / 2), FLOOR((@row_num + 2) / 2));
+
+Occupations:
+-----------
+
+SELECT
+MIN(CASE WHEN  Occupation = 'Doctor' then Name else Null end) as Doctor,
+MIN(CASE WHEN  Occupation = 'Professor' then Name else Null end )as Professor,
+MIN(CASE WHEN  Occupation = 'Singer' then Name else Null end) as Singer,
+MIN(CASE WHEN  Occupation = 'Actor' then Name else Null end) as Actor
+
+FROM
+(SELECT
+    *,
+    ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY name asc) AS Occ_Row
+FROM OCCUPATIONS ) a
+GROUP BY
+    Occ_Row
+;
+
+
+
+
+with regex the code will be
+
+import re n = int(input()) pattern = (r'^+-|([0-9]+[.][0-9]+)$') for i in range(0,n): input_str = input() if re.match(pattern,input_str): print("True") else: print("False")
+
+
+T = int(input())
+
+for k in range (T) :
+    x = 1
+    s = input()
+    
+    try :
+        y = float (s)
+        if s.count(".") == 0 :
+            x *= 0
+            
+    except :
+        x *= 0 
+           
+    print(bool(x))  
+
+from re import match
+[print(bool(match(r'^[+-]?\d*\.\d*$',input().strip()))) for _ in range(int(input()))]
+
+	@@@@@	LINX   @@@@@@@@
+AWK 4
+code: awk 'ORS=NR%2?";":RS'
+
+Explaining this for anyone who might see it
+
+ORS = Output Record Separator, what the output will be separated with. In this case, we're doing some syntax stuff with the ternary expression:
+
+NR%2 ? ";" : "\n"
+
+NR = Number of Records processed by awk so far. If NR % (modulo) 2 = 0, the expression evaluates to false, and goes to the '\n' side of the ternary. If NR % 2 = 1, the expression evaluates to true and goes to the ';' side of the ternary.
+
+Basically what this statement says is "when awk encounters an odd numbered line, use the semi-colon instead of '\n'."
+
+((((((((((((((((((( OLAP PERFORMANCE ((((((((((((((((((((
+
+Which of these helps OLAP speed up queries, in terms of performance?
+A) It's because it reduce the number of rows readed, for example, if you want the number of sales within a month, you just summarize it in a single column and in the future, instead of joining all sales related tables and looking for all the rows, you just point to that specific column in the month results row.
+
+The real term is called denormalization.
+So, it's NOT a "Dice" used to speedup the queries
+
+This OLAP operation involves computing all of the data relationships for one or more dimensions.
+a) dice b) slice c) pivot d) roll-up
+
+Answer is: Roll up
+Roll up operation of OLAP involves computing all of the data relationships for one or more dimensions. Roll-up performs aggregation on a data cube in any of the following ways: - By climbing up a concept hierarchy for a dimension - By dimension reduction
+
+Complete OLAP cube explanations:
+https://apandre.wordpress.com/data/datacube/
+
+The dice operation is a slice on more than two dimensions of a data cube (or more than two consecutive slices).But(Aggregate, Consolidate) A roll-up involves computing all of the data relationships for one or more dimensions. To do this, a computational relationship or formula might be defined.
+
+Question:
+This OLAP Operation rotates the data, and delivers an alternative to the original presentation. 
+
+options: pivot/slice/roll-up/dice
+Answer:
+Pivot : Because we can rotate the data axes to provide any substitue presentations of the data.
+
+Question:
+What is the source of the cube metadata for OLAP?
+options: Star Schema/snowflake schema/standard database/ both star and snowflake schemas
+
+Answer: Both star and snowflake schemas
+
+Read these below:
+https://www.guru99.com/online-analytical-processing.html
+https://apandre.wordpress.com/data/datacube/
+https://www.ibm.com/docs/en/db2/10.5?topic=overview-dimensional-schema-design
+
+In a Star-Schema you have a central fact-table, which is supplied with additionaly information (via foregin keys) called dimensions. If you think of the dimensions centered around the fact-table it looks like a star. In most of the time those dimensions are not normalized for the benefit of processing performance. If you normalize the dimensions you are adding further subtables. Visualizing this the star comes more 'branched' making it look like a snow flake.
+
+Question:
+Which of these are alternate names for an OLAP Cube? The options in the top row are a and b respectively and those in the bottom row are c and d.
+
+options: cube/multidimensional/ hyper cube
+A) 
+Multidimensional Cube and Hyper cube
+
+
+Roll up operation of OLAP includes computing all the statistics relationships for one or extra dimensions that I have applied on Fragrance sea. Roll-up plays aggregation on a records cube in any of the subsequent approaches
+
+Question: Which of these provides a total view of the organization?
+
+options: OLAP/OLTP/Data warehousing/ Database
+"The Total View" is a phrase that could refer to various contexts, depending on the subject matter. Without further context, it's challenging to provide a specific interpretation. Without more context, it's difficult to determine the specific McDonald’s Wrap of the day meaning intended by "The Total View." If you have additional information or context, feel free to provide it, and I can offer a more tailored response.
+
+- The question isn't clear. Furthermore, as much as DWHing is concerned; it is a process which facilitates data-harvesting, whereas OLAP (DWH) is the source of information per se; therefore, in my opinion OLAP provides the "Total View" of an organization because interesting insights could easily be built using the information here.
+
+
+- I think that online analytical processing does not necessarily use all the data of a warehouse.
+
+Correct Answer: Data warehousing
+
+Question:
+--------
+Consider a fact table DataPoints(D1,D2,D3,x), and the following three queries:
+
+Q1: Select D1,D2,D3,Sum(x) From DataPoints Group By D1,D2,D3
+
+Q2: Select D1,D2,D3,Sum(x) From DataPoints Group By D1,D2,D3 WITH CUBE
+
+Q3: Select D1,D2,D3,Sum(x) From DataPoints Group By D1,D2,D3 WITH ROLLUP
+Suppose attributes D1, D2, and D3 have n1, n2, and n3 different values respectively, and assume that each possible combination of values appears at least once in the table DataPoints. The number of tuples in the result of each of the three queries above can be specified as an arithmetic formula involving n1, n2, and n3. Pick the one tuple (a,b,c,d,e,f) in the list below such that when n1=a, n2=b, and n3=c, then the result sizes of queries Q1, Q2, and Q3 are d, e, and f respectively.
+
+Just (4, 7, 3, 84, 160, 117)
+
+ANSWER EXPLANATION:
+------------------
+
+Let's break down the problem systematically and compute the number of tuples generated by each of the queries.
+
+Given: - The table has three attributes ( D1, D2, D3 ) with ( n1, n2, n3 ) distinct values respectively. - The queries use different forms of aggregation: standard GROUP BY, GROUP BY ... WITH CUBE, and GROUP BY ... WITH ROLLUP.
+
+Explanation of Queries
+Q1: GROUP BY D1, D2, D3:
+
+This query simply groups by all combinations of ( D1, D2, D3 ).
+The total number of combinations = ( n1 \times n2 \times n3 ).
+Q2: GROUP BY D1, D2, D3 WITH CUBE:
+
+The CUBE operation generates aggregates for all possible combinations of the columns, including:
+Individual values of ( D1, D2, D3 )
+Combinations of two values (e.g., ( D1, D2 ); ( D1, D3 ); ( D2, D3 ))
+The overall total (no specific grouping).
+The total number of combinations for a CUBE with three columns is ( (n1 + 1) \times (n2 + 1) \times (n3 + 1) ).
+Q3: GROUP BY D1, D2, D3 WITH ROLLUP:
+
+The ROLLUP operation generates hierarchical aggregates:
+Groups by ( D1, D2, D3 )
+Groups by ( D1, D2 ) only
+Groups by ( D1 ) only
+Overall total (no grouping at all).
+The total number of combinations for a ROLLUP on three columns is ( n1 \times n2 \times n3 + n1 \times n2 + n1 + 1 ).
+Applying the Formulas to Identify the Correct Option
+From the description, the results should match the formulas: 1. Q1: ( d = n1 \times n2 \times n3 ) 2. Q2: ( e = (n1 + 1) \times (n2 + 1) \times (n3 + 1) ) 3. Q3: ( f = n1 \times n2 \times n3 + n1 \times n2 + n1 + 1 )
+
+Now, let's inspect the given options:
+
+Option 1: (2, 2, 2, 6, 18, 8)
+
+( d = 2 \times 2 \times 2 = 8 )
+( e = (2 + 1) \times (2 + 1) \times (2 + 1) = 3 \times 3 \times 3 = 27 ) (This does not match 18)
+( f = 2 \times 2 \times 2 + 2 \times 2 + 2 + 1 = 8 + 4 + 2 + 1 = 15 ) (This does not match 8)
+Option 2: (2, 2, 2, 8, 64, 15)
+
+( d = 2 \times 2 \times 2 = 8 )
+( e = (2 + 1) \times (2 + 1) \times (2 + 1) = 3 \times 3 \times 3 = 27 ) (This does not match 64)
+( f = 2 \times 2 \times 2 + 2 \times 2 + 2 + 1 = 8 + 4 + 2 + 1 = 15 ) (This matches 15)
+Option 3: (5, 10, 10, 500, 1000, 550)
+
+( d = 5 \times 10 \times 10 = 500 )
+( e = (5 + 1) \times (10 + 1) \times (10 + 1) = 6 \times 11 \times 11 = 726 ) (This does not match 1000)
+( f = 5 \times 10 \times 10 + 5 \times 10 + 5 + 1 = 500 + 50 + 5 + 1 = 556 ) (This does not match 550)
+Option 4: (4, 7, 3, 84, 160, 117)
+
+( d = 4 \times 7 \times 3 = 84 )
+( e = (4 + 1) \times (7 + 1) \times (3 + 1) = 5 \times 8 \times 4 = 160 ) (This matches 160)
+( f = 4 \times 7 \times 3 + 4 \times 7 + 4 + 1 = 84 + 28 + 4 + 1 = 117 ) (This matches 117)
+Conclusion
+The correct option is:
+
+(4, 7, 3, 84, 160, 117)
+
+****************** INDEXES ******************************************
+
+How many index architecture type classifications are there in MS SQL Server?
+
+A) 2 types of indexes: clustered and non-clustered indexex
+
+In Microsoft SQL Server, there are two primary types of indexes: clustered and non-clustered. A clustered index organizes the actual physical order of data in a table based on a chosen column, typically the primary key. However, each table can have only one clustered index. Clustered indexes are best suited for operations like sorting and range-based queries since they determine the physical data order. On the other hand, non-clustered indexes are separate structures that contain a copy of indexed columns along with pointers to the corresponding rows in the table. Tables can have multiple non-clustered indexes, and they are particularly useful for speeding up queries that involve specific columns or combinations of columns, enhancing query performance and efficiency.
+
+
+In MS SQL Server, there are two index architecture type classifications: clustered and non-clustered indexes.
+
+A clustered index determines the physical order of data in a table based on the values in one of the columns of the table. Each table can have only one clustered index, and it is usually created on the primary key of the table.
+
+A non-clustered index is a separate structure that contains a copy of the indexed columns and a pointer to the corresponding row in the table. A table can have multiple non-clustered indexes, and they are usually created on columns frequently used in queries.
+
+These two types of indexes have different characteristics and are used for different purposes. Clustered indexes are more suitable for range-based queries and sorting operations, while non-clustered indexes are better for queries that involve specific columns or combinations of columns.
+
+Question:
+---------
+
+Which of the following statement is true about row locators in non-clustered indexes in MS SQL Server?
+
+
+The answer for the following question is "If the table has a clustered index, or the index is on an indexed view, the row locator is the clustered index key for the row."
+
+Read this article:
+https://learn.microsoft.com/en-us/previous-versions/sql/sql-server-2008-r2/ms177484(v=sql.105)?redirectedfrom=MSDN
+
+https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-2017#nonclustered-index-architecture
+
+Correct answer : option C] If the table has a clustered index, or the index is on an indexed view, the row locator is the clustered index key for the row.
+
+~ Non-clustered indexes contain index key values and row locators that point to the actual data row. If there is no clustered index, the row locator is a pointer to the row. When there is a clustered index present, the row locator is the clustered index key for the row.
+
+QUESTION:
+--------
+Consider the following two designs to store the data using clustered indexes in MS SQL Server:
+In the first design, the fill factor is 20% and the total number of free rows per page are A.
+
+In the second design, the fill factor is 40% and the total number of free rows per page are B.
+
+Which the followings describes the relation between A and B:
+
+ANSWER:
+-------
+Fill Factor: This percentage indicates how full each page should be when data is inserted. For example, a fill factor of 20% means that only 20% of each page will be used for data, leaving 80% of the page free for future growth. Conversely, a fill factor of 40% means that 60% of each page is free.
+
+TYPE 1:
+------
+if total number rows in design of A = total number rows in design of B,
+
+A = 0.8x AND B = 0.6x
+then
+x = A/0.8 = B/0.6
+
+A = (B / 0.6)*0.8
+
+A = (0.8 / 0.6)* B
+
+A = 1.33B
+
+
+TYPE 2:
+------
+
+We can use the formula to calculate the number of rows per page for a clustered index in MS SQL Server:
+
+Rows per page = 8096 / (Avg row size + 2) where Avg row size includes the maximum possible size of all columns in the table.
+
+For the first design with a fill factor of 20%, we can calculate the number of rows per page using the following formula:
+
+Rows per page = 8096 / (Avg row size + 2) * 0.2 For the second design with a fill factor of 40%, we can use the following formula:
+
+Rows per page = 8096 / (Avg row size + 2) * 0.4 We can simplify these formulas by dividing them by each other:
+
+Rows per page (design 1) / Rows per page (design 2) = 0.2 / 0.4 Rows per page (design 1) / Rows per page (design 2) = 0.5 Rows per page (design 1) = 0.5 * Rows per page (design 2) Now, we can substitute the formula for Rows per page to get:
+
+(Avg row size (design 2) + 2) / 0.4 / (Avg row size (design 1) + 2) / 0.2 = 0.5 (Avg row size (design 2) + 2) / (Avg row size (design 1) + 2) = 0.67 (Avg row size (design 2) + 2) = 0.67 * (Avg row size (design 1) + 2) Avg row size (design 2) + 2 = 0.67 * Avg row size (design 1) + 1.34 Avg row size (design 2) = 0.67 * Avg row size (design 1) - 0.66 Since the number of free rows per page depends on the number of rows per page, we can use the formulas for Rows per page to relate the number of free rows per page for each design:
+
+A / Rows per page (design 1) = B / Rows per page (design 2) A / (8096 / (Avg row size (design 1) + 2) * 0.2) = B / (8096 / (Avg row size (design 2) + 2) * 0.4) A / (Avg row size (design 1) + 2) = B / (Avg row size (design 2) + 2) * 2 A / (Avg row size (design 1) + 2) = B / (0.67 * Avg row size (design 1) - 0.66 + 2) * 2 A / (Avg row size (design 1) + 2) = B / (0.67 * Avg row size (design 1) + 1.34) * 2 A / (Avg row size (design 1) + 2) = B / (0.67 * Avg row size (design 1)) * 1.49 A / B = (0.67 * Avg row size (design 1) + 2) / (Avg row size (design 1) + 2) * 1.49 A / B = 0.67 * 1.49 + 2 / (Avg row size (design 1) + 2) A / B = 1.33 + 2 / (Avg row size (design 1) + 2) Therefore, the relation between A and B is:
+
+A / B = 1.33 + 2 / (Avg row size (design 1) + 2) Since we do not have information about the average row size for each design, we cannot determine a numerical relation between A and B. Therefore, none of the given options (A = 1.33B, B = 1.33A, A = 0.67B, B = 0.67A) can be confirmed with the given information.
+
+TYPE 3:
+------
+
+According to Copilot: The fill factor in a database determines the percentage of each page (in a page-organized storage system) to be filled with data, leaving the rest as free space for future growth. In your question, the fill factor is 20% for the first design and 40% for the second design. This means that 80% of each page is left as free space in the first design and 60% in the second design.
+
+If we denote the total number of rows that can fit in a page as R, then the number of free rows per page can be calculated as follows:
+
+For the first design: A = R * 80% For the second design: B = R * 60% If we divide A by B, we get:
+
+A/B = (R * 80%) / (R * 60%) = 80/60 = 1.33
+
+So, A = 1.33B.
+
+This means that the first design, with a lower fill factor, leaves more free rows per page than the second design.
+
+
+QUESTION:
+--------
+
+The correct syntax for creating composite indexes in MS SQL Sever is:
+
+ANSWER:
+-------
+CREATE INDEX index_name ON table_name(column1), table_name(column2);
+    This syntax is incorrect because it separates the columns with a comma and mistakenly repeats the table name.
+
+CREATE INDEX index_name ON table_name(column1) and table_name(column2);
+    This syntax is incorrect because it uses the word and, which is not valid in this context.
+
+CREATE INDEX index_name ON table_name(column1, column2);
+    This syntax is correct. It creates a composite index on column1 and column2 within the table table_name.
+
+All the above-mentioned syntax are correct.
+    This option is incorrect because not all the provided syntaxes are valid.
+Conclusion
+
+The correct syntax is: CREATE INDEX index_name ON table_name (column1, column2);
+
+CREATE INDEX index_name ON table_name (column1, column2);
+
+*******************  Database Normalization #1 - 1NF  *******************
+
+Question:
+--------
+
+The following unnormalized table named PRODUCT is transformed to first normal form (1NF) by splitting it into two tables which have X and Y rows (such that X <Y) respectively. Both the tables have Z columns.
+
+*Product-ID*    *Colors*    *Price*
+1               Red,Green   15.0
+2               Blue        18.0
+3               Yellow,Pink 2.5
+
+What are the values of X, Y, Z? Enter these integers, each on a new line, in the text-box below. Do not leave any leading or trailing spaces.
+
+Answer:
+-------
+
+3 5 2
+
+Spliting 1 NF (two table formation )
+Product-ID* Price 1 15.0 2 18.0
+
+3 2.5
+Product-ID* Colors
+1 Red,
+1 Green
+2 Blue
+3 Yellow
+3 Pink
+
+3 rows 1st table and 5 rows 2nd table (3 columns both table )
+
+
+
+my thoughts: the question is about elimination of options not aconfirmation. since question itself says table is in 1nf or 2nf or 3nf then at least it is 1nf. now we have 2nf or 3nf to choose from. since city determines zipcode. according to functional dependency condition. and since we know that there are other attribute about whom which we not know then we can say for sure that zipcode is not a prime attribute. this removes the partiaal dependency problem. so it is in 2nf form. this leaves 3nf since city is not a pk and we are only left with 3nf to eliminate it mean our answer is 3nf
+
+Based on the given information, if there is a many-to-one mapping between the set of Zip Code(s) and City in a table, then the database is not in the third normal form (3NF). The presence of transitive dependencies, as indicated by the many-to-one mapping, violates the rules of 3NF.
+
+Therefore, the integer x representing the normalization level is 3.
+
+Database normalization improves data integrity and efficiency by organizing information into logical tables. For comprehensive insights and expert advice.
+
+
+QUESTION 3:
+-----------
+A database used by a college’s application stores the relationship between students and the courses they are enrolled in. We have information for each STUDENT (such as name, date of birth, date of enrollment, student-id) and COURSE (course code, instructor, etc.). In real life, a student takes several courses simultaneously while a subject is studied by several students. We need to capture this many-to-many relationship in our database. From the above information, what is the minimum number of tables required to structure this database in accordance with the rules of 2NF normalization?
+
+Answer:
+------
+- You cannot add course details of each student in the students table as it would violate 2NF cause each student can take up more than 1 course. Also, you can't add the ids of students enrolled for each course for the same reason.
+- With an intermediate table which would map student_id to course_code, you can achieve the 2NF.
+Hence, 2+1 tables required.
+- Hey guys here in Brazil, the result is 3 because when there's a many-to-many relationship, another table is created and then 3
+- Database Normalization is a crucial topic in database management, and I'm glad to see it being discussed here. Understanding the principles, like learnpaydayloan, is vital for maintaining data integrity and efficiency in systems. It's essential to implement normalization techniques to ensure a well-organized and optimized database structure. Great post!
+
+QUESTION 4:
+----------
+A database, normalized as per 2NF rules, has been split into 10 tables. Each of the tables has exactly two columns: one key attribute and one non-key attribute. What is the minimum number of tables required to express this database in 3NF form? Enter the integer in the text box below. Do not leave any leading or trailing spaces.
+
+Answer:
+------
+The database is currently in 2NF with 10 tables Each table has: 1 key attribute 1 non-key attribute To convert from 2NF to 3NF: Any non-key attribute that is transitively dependent on the key is removed into a separate table Since each table already has only 1 non-key attribute, there are no transitive dependencies possible within a table Therefore, no further normalization is needed to achieve 3NF The 10 existing tables satisfy 3NF requirements So if the database has 10 tables in 2NF, with 1 key and 1 non-key column each, then the same 10 tables also represent the 3NF form.
+
+- Minimum number of tables required for 3NF = 10
+Therefore, the minimum number of tables required to express this database in 3NF is 10.
+- Because to transition a table from 2NF to 3NF the only rule to follow, since the table is already in 2NF, is the table can't have any transitive functional dependency.
+- Transitive dependency means that changing any non-key column might change other non-key values in the table.
+- In the example of the exercise, the tables have only 2 columns, one being the key and the other being a non-key. That means the table is already in 3NF because if you change any non-key value on that tables, it wouldnt have any other non-key value that might get affected by that and so the table doesn't have any transitive dependency which is a requirement for 3NF.
+
+QUESTION 5:
+----------
+Consider the following relation and determinants.
+
+R(a, b,c,d)
+
+                   a,c -> b,d
+                   a,d -> b
+        Also, a,b is a primary key for the above relation.
+The above relation is in x NF form where x may take the following values {1,2,3,3.5} corresponding to {1NF, 2NF, 3NF and BCNF} respectively.
+What is the maximum possible value of x such that the above relation satisfies the *x*NF form?
+Your answer should only be restricted to one of these numbers:1/2/3/3.5 Do not leave any leading or trailing spaces.
+
+Answer:
+------
+This relation will be in 1NF,2NF and in 3NF but not in BCNF because one condition for bcnf is going to false here which is determinant side in functional dependency should be a superkey but in this case superkey is only "ac" . "ad "is not a superkey in this relation so this relation is not in boyce code normal form .
+
+Why "ad" is not a super key. ad -> b so we have ab and ab is primary key so it defines c. Finally, (ad)+ = abcd?
+
+Given that AB is a primary key, here 'a' and 'b' are prime attributes. As per the rule of 3nf : the relation schema R is in 3nf only if either left hand side is a super key or right hand side is a prime attribute. Here in the first dependency AC is a candidate key because it determines everything and in second dependency right hand side is a prime attribute. Hence, as per the rule the relation is in 3nf.
+
+Shouldn't this be BCNF? We have:
+i) ac -> b,d ii) ad -> b, and ab is primary key.
+1) ac+ = {a,c,b,d} => ac is candidate key 2) ad+ = {a,d,b,c} (ab -> c as ab is primary key) => ad is candidate key so the answer should be 3.5?
+
+Answer is 3NF.
+
+QUESTION 6:
+--------
+
+Let us take the example of a simple movie library. Each movie has a description, director, and serial number. Customers have a name, address, and membership number. Assume only one copy of each movie exists in the library. We are given the following relations and determinants. The keys for each relation are CAPITALIZED.
+
+Relations (The key is CAPITALIZED):
+customer(name,addr,MEMBERNO)
+movie(DESCRIPTION,director,serialno)
+borrow(memberno,DATE,SERIALNO)
+
+Determinants:
+description->director,serialno
+serialno->description
+serialno->director
+name,addr -> memberno
+memberno -> name,addr
+serialno,date -> memberno
+The above relation is in x**NF form where x may take the following values {1,2,3,3.5} corresponding to {1NF, 2NF, 3NF and BCNF} respectively.
+What is the maximum possible value of **x such that the above relation satisfies the *x*NF form?
+Your answer should only be restricted to one of these numbers:1/2/3/3.5 Do not leave any leading or trailing spaces.
+
+ANSWER:
+------
+This is my process of identifying the normal forms:
+
+Tables:
+-------
+customer(name,addr,MEMBERNO)
+movie(DESCRIPTION,director,serialno)
+borrow(memberno,DATE,SERIALNO)
+
+Determinants:
+-------------
+memberno -> name,addr
+description -> director,serialno
+serialno,date -> memberno
+serialno -> description
+serialno -> director
+name,addr -> memberno
+
+CKs:
+---
+memberno is CK
+description is CK
+serialno,date is CK
+serialno -> description,director (so serialno is CK)
+name,addr is CK
+For 2NF, non-prime attributes must be dependent on CK:
+
+movie.director: depends on description (is CK) or serialno (is CK)
+borrow.memberno: depends on serialno,date (is CK)
+It is in 2NF.
+
+For 3NF, non-prime attributes must be directly dependent on CK, not transitively dependent:
+
+movie.director: depends on serialno, then depends on description (is CK)
+It is NOT in 3NF.
+But serialno is also a candidate key. 3NF causes problem of X->Y, Y->Z only when Y is not candidate key.
+
+This breaks 3NF
+description->director,serialno serialno->description serialno->director
+
+
+QUESTION 7:
+----------
+
+Let us take the example of a simple movie library. Each movie has a description, director, and serial number. Customers have a name, address, and membership number. Assume only one copy of each movie exists in the library. We are given the following relations and determinants:
+
+Relations:
+movie(DESCRIPTION,serialno)
+serial(SERIALNO,director)
+customer(name,addr,MEMBERNO)
+borrow(memberno,DATE,SERIALNO)
+
+Determinants:
+description->director,serialno
+serialno->description
+serialno->director
+name,addr -> memberno
+memberno -> name,addr
+serialno,date -> memberno
+The above relation is in x**NF form where x may take the following values {1,2,3,3.5} corresponding to {1NF, 2NF, 3NF and BCNF} respectively.
+What is the maximum possible value of **x such that the above relation satisfies the *x*NF form?
+Your answer should only be restricted to one of these numbers:1/2/3/3.5 Do not leave any leading or trailing spaces.
+
+ANSWER:
+------
+
+TYPE 1:
+-------
+
+movie(DESCRIPTION,serialno)
+description->director,serialno
+serialno->description
+
+serial(SERIALNO,director)
+serialno->director
+
+customer(name,addr,MEMBERNO)
+name,addr -> memberno
+memberno -> name,addr
+
+borrow(memberno,DATE,SERIALNO)
+serialno,date -> memberno
+1NF valid 2NF valid 3NF valid BCNF <=> A->B were A not CANDIDATE KEY, even though name,addr -> memberno in customer looks invalid by the complementary axiom we have that name, addr is actually a key of customer!
+
+TYPE 2:
+-------
+
+Extending my process of identifying the normal forms here: https://www.hackerrank.com/challenges/database-normalization-6/forum/comments/1225774
+
+For 3NF, non-prime attributes must be directly dependent on CK, not transitively dependent:
+
+serial.director: depends on serialno (is CK)
+borrow.memberno: depends on serialno,date (is CK)
+It is in 3NF.
+
+For BCNF, every determinant must be a CK:
+
+description -> director,serialno (description is CK)
+serialno -> description (serialno is CK)
+serialno -> director (serialno is CK)
+memberno -> name,addr (memberno is CK)
+serialno,date -> memberno (serialno,date is CK)
+name,addr -> memberno (name,addr is CK)
+
+Answer is 3.5
+-------
+
+QUESTION 8:
+----------
+
+Let us take the example of a simple movie library. Each movie has a description, director, and serial number. Customers have a name, address, and membership number. Assume only one copy of each movie exists in the library. We are given the following relations and determinants. The keys for each relation are CAPITALIZED.
+
+Relations (The key is CAPITALIZED):
+customer(name,addr,MEMBERNO)
+movie(DESCRIPTION,director,serialno)
+borrow(memberno,DATE,SERIALNO)
+Which of these determinants is a NON-KEY dependency? In the text box, only enter the index number (1-6) of the dependency which you have identified as non-key.
+
+1.  description->director,serialno
+2.  serialno->description
+3.  serialno->director
+4.  name,addr -> memberno
+5.  memberno -> name,addr
+6.  serialno,date -> memberno
+Output Format
+
+In the text box, only enter the index number (1-6) of the dependency which you have identified as non-key.
+
+Answer:
+------
+3 - this is basically a fancy way of asking "which one doesn't have a key on either side of arrow?"
+
+Finally i have found the solution that in this question that from previous table Relations (The key is CAPITALIZED): customer(name,addr,MEMBERNO) movie(DESCRIPTION,director,serialno) borrow(memberno,DATE,SERIALNO)
+
+and the table to find the non-key dependency
+
+description->director,serialno
+serialno->description
+serialno->director
+name,addr -> memberno
+memberno -> name,addr
+serialno,date -> memberno
+each index value has a relation between them thus the index value 3 has serial no which is not a key dependency.
+
+QUESTION 9:
+----------
+
+Consider the following relation and determinants. The key(s) are bolded.
+R(a, b ,c,d,e)
+
+Which of these determinants is a NON-CANDIDATE key? In the text box, only enter the index number (1-3) of the dependency which you have identified as non-key.
+
+a,c -> b,d,e
+a,d -> b
+a,c,e -> b,d
+
+Answer:
+------
+2 - A canidate key is a subset of a superkey (hence, why it is also called a "minimal superkey"). A superkey is capable of uniquely identifying all rows. #2 is the only one that doesn't list all of the attributes. Hence, it can't be a superkey .
+
+
+***********************  Relational Algebra  ***********************
+
+QUESTION 1:
+-----------
+
+Basics of Sets and Relations #1
+You are given two sets.
+Set A = {1,2,3,4,5,6}
+Set B = {2,3,4,5,6,7,8}
+
+How many elements are present in A U B?
+Only enter the correct integer in the editor below. Do not include any extra spaces, tabs or newlines.
+
+ANSWER:
+-------
+Given set A = {1,2,3,4,5,6}
+      set B = {2,3,4,5,6,7,8}
+
+A U B = {1,2,3,4,5,6,7,8}
+A U B represent a union. We have 8 elements in this union :)
+
+
+QUESTION 2:
+----------
+You are given two sets.
+Set A = {1,2,3,4,5,6}
+Set B = {2,3,4,5,6,7,8}
+
+How many elements are present in A.intersection(B) = 5 ?
+Only enter the correct integer in the answering box. Do not include any extra spaces, tabs or newlines.
+
+ANSWER:
+------
+
+import java.util.Set; import java.util.HashSet;
+
+public class IntersectionOfSets {
+
+public static void main(String[] args) {
+    // Create two sets
+    Set<Integer> setA = new HashSet<>();
+    setA.add(1);
+    setA.add(2);
+    setA.add(3);
+    setA.add(4);
+    setA.add(5);
+    setA.add(6);
+
+    Set<Integer> setB = new HashSet<>();
+    setB.add(2);
+    setB.add(3);
+    setB.add(4);
+    setB.add(5);
+    setB.add(6);
+    setB.add(7);
+    setB.add(8);
+
+    // Find the intersection of the two sets
+    Set<Integer> intersection = new HashSet<>(setA);
+    intersection.retainAll(setB);
+
+    // Print the number of elements in the intersection
+    System.out.println(intersection.size());
+}
+}
+
+common elements between them {2,3,4,5,6} = 5
+
+Sets are collections of unique elements enclosed in curly braces. Relations establish connections between sets or elements through ordered pairs. They can represent equality, inequality, or functions, with properties like reflexivity and symmetry. These concepts are fundamental in mathematics and essential for various fields, including computer science services and discrete mathematics.
+
+QUESTION 3:
+----------
+You are given two sets.
+Set A = {1,2,3,4,5,6}
+Set B = {2,3,4,5,6,7,8}
+
+How many elements are present in A - B?
+Only enter the correct integer in the answering box. Do not include any extra spaces, tabs or newlines.
+
+ANSWER:
+------
+Elements that are in SET A and not in SET B {1}
+
+QUESTION 4:
+----------
+
+************* Relational Algebra - 3 ************* 
+
+QUESTION 1:
+----------
+
+Which is a join condition contains an equality operator?
+
+Options: equijoins/cartesian/natural/left
+
+Answer: Equijoins
+
+I'll join the chorus calling for the problem to reflect the fact that Natural Joins are in fact a subset of Equijoins. If you're going to include the natural join as an answer, don't also include Equijoins unless you want both answers to be valid.
+
+QUESTION 2:
+----------
+In precedence of set operators the expression is evaluated from:
+
+Options: Depends on the expression/ left to right/ right to left/ from user specification
+
+Answer: Left to right
+------
+
+QUESTION 3: Database Query Languages
+----------
+Using which language can a user request information from a database ?
+
+Answer: 
+------
+SQL is the standard language for managing and manipulating relational databases, allowing users to perform tasks like querying data, updating records, and managing database structures.
+
+Procedural Language
+
+QUESTION:
+--------
+Which one of the following is a procedural language ?
+
+Options: domain relational calculus/tuple relational calculus/ relational algebra/ query language
+
+Answer: Relational algebra
+------
+- I finished the 3 chances i have in this problem but i really need to solve it how I can solve this
+
+- Understanding procedural language is like exploring a detailed network of information, where every concept is connected by meaningful links. It’s the foundation of efficient programming, with precise communication between instructions forming a logical flow. Mastering this language allows you to create strong and organized code structures, shaping a digital story through well-designed links.
+
+QUESTION: Relations -1 
+--------
+The_____ operation allows the combining of two relations by merging pairs of tuples, one from each relation, into a single tuple.
+
+options: select/join/union/intersection
+-------
+Answer:
+------
+
+The answer is "Join".
+
+The join operation allows the combining of two relations by merging pairs of tuples, one from each relation, into a single tuple.
+
+Join finds the common tuple in the relations and combines it.
+- I assume it is because using UNION is in regards to combining results from two queries, whereas JOIN is with attributes -> tuples. Someone correct me if I am wrong.
+
+
+QUESTION: Relations - 2
+-----------------------
+
+The result which operation contains all pairs of tuples from the two relations, regardless of whether their attribute values match.
+
+options: join/ cartesian product/ Intersection / set difference
+-------
+Answer: CARTESIAN PRODUCT 
+------
+
+The result which operation contains all pairs of tuples from the two relations, regardless of whether their attribute values match.
+
+*Ans: * Cartesian product
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

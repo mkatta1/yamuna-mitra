@@ -1,0 +1,166 @@
+spark test1
+answers:
+q6)syntax to query a view?
+a) spark.read.table("global_temp.my_global_view")
+q8)spark dynamically handles skew in sort-merge join by splitting skewed partitions?
+spark.sql.adaptive.skewJoin.enabled
+
+spark manages the metadata, while you control the data location. as soon as you add the path option in dataframe writer it will be treated as global external/unmanaged table.when you drop table only metadata gets dropped 
+a global unmanaged/external table is available across all clusters
+
+q11) syntax to drop a col name is:
+df.drop("aSquared")
+
+q12) syntax of inner join data frame is:
+d1.join(d2, d1.col("id") === d2.col("id"), "inner")
+df1.join(df2, joinExpression, joinType)
+df1.join(df2, joinExpression, joinType)
+
+a14) syntax to write parquet file that already exists with same name:
+
+df.write.mode("parquet").option("compression", "snappy").save("path")
+
+parquet is the default file format. if you don't include the format() method, the df will still be saved as parquet file.
+
+and if the file name already exist in the path given and if you don't include option mode("overwrite") you will get an error.
+
+spark parallelizes via slots
+each slot can be assigned a task
+each executor has a number of slots
+
+slots are not the same thing as executors. executors could have multiple slots in them, and tasks are executed as slots.
+
+reduce the size of your applications if possible 
+
+any collection of data to the driver can be very expensive operation! If you have a large dataset and call collect, you can crash the driver.
+If you use toLocalIterator and have very large partitions, you can easily crash the driver node and lose the state of your application. This is a expensive because we can operate on a one-by-one basis, instead of running computation in parallel.
+
+An execution mode gives you the power to determine where the aforementioned resources are physically located when you go to run your application. you have three modes to choose from:
+cluster mode, client mode and local mode.
+Standalone is one of the cluster manager types.
+
+client mode is nearly the same as cluster mode except that the spark driver remains on the client machine that submitted the application.
+
+val squared = (s:Long) => { s*s }
+spark.udf.register("square", squared)
+spark.range(1,20).createOrReplaceTempView("test")
+spark.sql("select id, squared(id) as id_squared from test")
+
+df.withColumn("aSquared", col("a") * col("a"))
+
+worker nodes are the nodes of a cluster that perform computations
+
+the dataframe class does not have an uncache() operation
+
+the default storage level for a dataframe is memory and disk
+
+the dataframe class does not have an uncache() operation
+
+explicit caching can decrease application perfromance by interferring with the catalyst optimizer's ability to optimize some queries.
+
+
+breadcast variables are shared, immutable variables that are cached on every mcachine in the cluster instead of serialized with every single task
+
+
+q31) count the number of "quantity" for each "invoice No" in df
+
+df.groupBy("InvoiceNo").agg(expr("count(Quantity)"))
+
+
+driver does 
+1)maintaining info about the spark application
+2)responding to the users program
+3)analyzing, distributing and scheduling work across the executors
+
+DataFrame.persist() data on disk is always serialized
+Data on a disk is serailized using either java or kryo serialization
+
+First set of optimizations takes place in step logical optimization.
+https://databricks.com/glossary/catalyst-optimizer
+
+Coalse function avoids a full shuffle if it's known that the number is decreasing then the executor can safely keep data on the minimum number of partitions, 
+only moving the data off the extra nodes, onto the nodes that we kept.
+
+df.filter(col("count")<2) is similar to df.where("count < 2")
+
+Very detailed explanation is made below:
+If you would like to run multiple Spark Applications on the same cluster, Spark provides a mechanism to dynamically adjust the resources your application occupies based on the workload. This means that your application can give resources back to the cluster if they are no longer used, and request them again later when there is demand. This feature is particularly useful if multiple applications share resources in your Spark cluster. This feature is disabled by default and available on all coarse-grained cluster managers; that is, standalone mode, YARN mode, and Mesos coarse-grained mode. There are two requirements for using this feature. First, your application must set spark.dynamicAllocation.enabled to true. Second, you must set up an external shuffle service on each worker node in the same cluster and set spark.shuffle.service.enabled to true in your application. The purpose of the external shuffle service is to allow executors to be removed without deleting shuffle files written by them. The Spark Fair Scheduler specifies resource pools and allocates jobs to different resource pools to achieve resource scheduling within an application. In this way, the computing resources are effectively used and the runtime of jobs is balanced, ensuring that the subsequently-submitted jobs are not affected by over-loaded jobs.
+
+
+An executor is a Java Virtual Machine (JVM) running on a worker node. See the componenets here: https://spark.apache.org/docs/latest/cluster-overview.html
+
+to create a constant integer 1 as a new column 'new_column' in a dataframe df syntax is:
+df.withColumn("new_column",lit(1))
+
+new df with 25 percent of random records from df without replacement
+df.sample(false, 0.25, 5)
+Seed parameter, third parameter for this function is used to save the state of a random function, so that it can generate same random numbers on multiple executions of the code on the same machine or on different machines (for a specific seed value).
+so the last parameter seed is not really important for this question.
+
+dfA.groupBy("Userkey")
+.agg(sort_arry(collect_list(struct("score","Itemkey","ItemName")), false))
+.toDF("Userkey", "Collection")
+.show(20, false)
+
+spark.read.format("csv").option("header","true").option("inferschema","true").option("sep",";").load(file)
+
+StorageLevel.MEMORY_AND_DISK_2 is same as MEMORY_AND_DISK storage level but replicate each partition to two cluster nodes.
+
+import org.apache.spark.sql.expressions.window
+val windowSpec = Window.partitionBy("department").orderBy(col("score").desc)
+
+peopleDF
+.withColumn("score", explode(col("score")))
+.select(col("department"),col("name"),dense_rank().over(windowSpec).alias("rank"), max(col("score")).over(windowSpec).alias("highest"))
+.where(col("rank") === 1)
+.drop("rank")
+.orderBy("department")
+.show()
+
+cache(), printSchema(), limit() are not actions
+
+first(), show(), foreach() are actions
+see https://spark.apache.org/docs/latest/rdd-programming-guide.html#actions
+
+For text files, we can only have one column in the dataframe that we want to write.
+explanation: When you write a text file, you need to be sure to have only one string column; otherwise, the write fail;
+
+Dynamic Partition Pruning (DPP):
+DPP can auto-optimize your queries and make them more performant automatically. Use the diagram below and the listed steps to better understand how dynamic partition pruning works. The dimension table (on the right) is queried and filtered. A hash table is built as part of the filter query. Spark uses the result of this query (and hash table) to create a broadcast variable Then, it will broadcast the filter to each executor At runtime, Spark's physical plan is changed so that the dynamic filter is applied to the fact table. For more information; https://spark.apache.org/docs/latest/configuration.html#dynamic-allocation
+
+Question 52:
+AQE attempts to to do the following at runtime:
+
+1. Reduce the number of reducers in the shuffle stage by decreasing the number of shuffle partitions.
+
+2. Optimize the physical execution plan of the query, for example by converting a SortMergeJoin into a BroadcastHashJoin where appropriate.
+
+3. Handle data skew during a join.
+
+
+
+Hence the following responses are correct;
+
+1. AQE allows you to dynamically switch join strategies.
+
+2. AQE allows you to dynamically coalesce shuffle partitions.
+
+
+
+
+
+Spark catalyst optimizer let's you do;
+
+1. Dynamically convert physical plans to RDDs.
+
+2.Dynamically reorganize query orders. 
+
+3. Dynamically select physical plans based on cost.
+
+
+
+more on catalyst optimizer:
+
+https://databricks.com/blog/2015/04/13/deep-dive-into-spark-sqls-catalyst-optimizer.html
+
+

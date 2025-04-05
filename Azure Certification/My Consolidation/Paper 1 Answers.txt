@@ -1,0 +1,45 @@
+Deploy Azure Databricks workspace with Secure Cluster Connectivity (No Public IP)
+No
+Deploy Azure Databricks workspace in your own Virtual Network (VNet)
+No
+
+
+CLUSTERED COLUMNSTORE INDEX -
+Columnstore indexes are the standard for storing and querying large data warehousing fact tables. This index uses column-based data storage and query processing to achieve gains up to 10 times the query performance in your data warehouse over traditional row-oriented storage. You can also achieve gains up to
+10 times the data compression over the uncompressed data size. Beginning with SQL Server 2016 (13.x) SP1, columnstore indexes enable operational analytics: the ability to run performant real-time analytics on a transactional workload.
+Note: Clustered columnstore index
+A clustered columnstore index is the physical storage for the entire table.
+
+
+Automated Databricks clusters are the best for jobs and automated batch processing.
+Note: Azure Databricks has two types of clusters: interactive and automated. You use interactive clusters to analyze data collaboratively with interactive notebooks. You use automated clusters to run fast and robust automated jobs.
+Example: Scheduled batch workloads (data engineers running ETL jobs)
+This scenario involves running batch job JARs and notebooks on a regular cadence through the Databricks platform.
+The suggested best practice is to launch a new cluster for each run of critical jobs. This helps avoid any issues (failures, missing SLA, and so on) due to an existing workload (noisy neighbor) on a shared cluster.
+
+
+
+Box 1: DATEDIFF -
+DATEDIFF function returns the count (as a signed integer value) of the specified datepart boundaries crossed between the specified startdate and enddate.
+Syntax: DATEDIFF ( datepart , startdate, enddate )
+
+Box 2: LAST -
+The LAST function can be used to retrieve the last event within a specific condition. In this example, the condition is an event of type Start, partitioning the search by PARTITION BY user and feature. This way, every user and feature is treated independently when searching for the Start event. LIMIT DURATION limits the search back in time to 1 hour between the End and Start events.
+Example:
+
+SELECT -
+[user],
+feature,
+DATEDIFF(
+second,
+LAST(Time) OVER (PARTITION BY [user], feature LIMIT DURATION(hour,
+1) WHEN Event = 'start'),
+
+Time) as duration -
+
+FROM input TIMESTAMP BY Time -
+
+WHERE -
+Event = 'end'
+Reference:
+https://docs.microsoft.com/en-us/azure/stream-analytics/stream-analytics-stream-analytics-query-patterns

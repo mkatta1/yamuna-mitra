@@ -1,0 +1,21 @@
+package utilities
+import org.apache.spark.SparkSession
+import org.apache.spark.{SparkConf, SparkContext}
+import problems.customerInsights.CIConstants
+
+object SparkUtilities {
+
+	def getSparkContext(appName:String):SparkContext=
+	val conf = new SparkConf().setAppName(appName).setMaster("local")
+	val sc = new SparkContext(conf)
+	sc
+	}
+	def convertCurrencyToDouble(currency:String):Double={
+		currency.stripPrefix("$").trim.toDouble
+	}
+	def getDate(date:String):Timestamp={
+		new java.sql.Timestamp(CIConstants.formatter.parseDateTime(date.getMillis)
+		
+	}
+		
+}

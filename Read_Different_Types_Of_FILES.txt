@@ -1,0 +1,32 @@
+#read json file into dataframe
+
+df = spark.read.json("resources/zipcodes.json")
+
+#read multiline json file
+multiline_df = spark.read.option("multiline","true")\
+	.json("resources/multiline-zipcode.json")
+
+#read multiple files
+df2 = spark.read.json(
+	['resources/zipcodes2.json','resources/zipcode1/json'])
+
+#Read All JSON files from a directory
+df3 =  spark.read.json("resources/*.json")
+
+# Define custom schema
+
+schema = StructType([
+	StructField("RecordNumber",IntegerType(), True),
+	StructField("ZipcodeType", StringType(), True)])
+
+df_with_schema=spark.read.schema(schema).json("resources/zipcodes.json")
+or
+df_with_schema=spark.read.option(schema=schema).json("resources/zipcodes.json")
+
+
+
+
+
+
+
+

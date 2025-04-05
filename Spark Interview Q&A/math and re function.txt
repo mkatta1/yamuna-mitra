@@ -1,0 +1,41 @@
+MATH FUNCTIONS
+from math import tan
+def time_function(x):
+    t = [tan(j) for j in range(10000)]
+    return tan(x)
+
+%%time
+map_test = rdd1.map(lambda x: time_function(x))
+Wall time: 0 ns
+
+
+%%time 
+# Count the number of entries where the values is greater than 0.
+print(map_test.filter(lambda x:x>0).count())
+50005
+Wall time: 18.6 s
+
+
+%%time
+# Perform the equivalent operations on a python list. All of the setup is included, since this is all included in the 
+# computation time above.
+large_list = [i for i in range(100000)]
+large_list = list(map(lambda x: time_function(x), large_list))
+print(len(list(filter(lambda x: x>0, large_list))))
+50005
+Wall time: 1min 45s
+
+
+RE FUNCTIONS:
+
+def replace(text):
+    text = text.lower()
+    # remove http links
+    text = re.sub(r'http[s]?:\/\/t.co\/[\w]+', '', text)
+    # remove trailing 's chars followed by other apostrophes
+    text = re.sub(r"'s", '', text)
+    text = re.sub(r"'", '', text)
+    text = re.sub(r"[^a-zA-Z0-9]+", ' ', text)
+    return text
+replaceUDF = F.udf(lambda z: replace(z), T.StringType())
+df_cleaned = df_json_reviews.withColumn("cleanedText", replaceUDF(F.col("reviewText")))

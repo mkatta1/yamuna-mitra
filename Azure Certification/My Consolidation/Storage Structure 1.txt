@@ -1,0 +1,161 @@
+Azure storage data objects are accessible over HTTP OR HTTPS via a REST API.
+It offers client libraries for develpers building applications or services with .NET, JAVA, PYTHON, JAVASCRIPT, C++, GO
+.NET, JAVA, JAVASCRIPT (NODE.js), PYTHON, C++, RUBY, GO, REST API
+Azure NetApp Files (ANF) is enterprise-grade Azure File shares, charged per hour, customers are provisioned mini of 4TiB and increments of 1 TiB. It charges for cross region replication pricing varies by desired frequency
+
+Security to storage accounts:
+AD for Blobs and Queues is via RBAC, for Azure Tables through AD is in preview
+
+Shared key (blob, files with SMB, files with REST, Queues, Tables)
+SAS (blob, files with REST, queues, tables)
+AD (Blob, files with SMB with AAD domain services, Azure Queues, tables)
+on premise AD Domain sevies (Azure Files SMB)
+Anonymous public read access(Azure files SMB)
+Storage local Users ( Supported only for SFTP)
+
+
+Types of Blobs:
+Append blob: 
+- Commonly used to store and update of log files. 
+- Also contains BLOCKS which may be appended to the end of an append blob, but previously existing blocks may not be modified or deleted.
+- An append blob contains 50,000 blocks, each up to 4 MB
+
+Block blob:
+- stores media files, docs, text, binary files with size of 4000 MiB(mebibytes) per block
+- same 50,000 blocks per blob equals to 4.75 TiB (tebibytes).
+- It can be modified updated, added or deleted from block blob.
+- Block blob can store upto 190.7 TiB
+- StreamWriteSizeInBytes property allows you to set a block Blob size as per unstable network and commited to give Content-MD5
+
+Page blob:
+- Store random access files up to 8 TiB in size. Page blobs store upto Virtual Hard drive (VHD) files and serve a disks for Azure virtual machines.
+- upto 8 TiB in size
+
+Azure Tables:
+Allows you to store structured NoSQL data in the cloud, providing a key/attribute store with a schemaless design.
+You want to store flexible datasets like user data for web applications, address books, device information, or other types of metadata your service requires.
+
+Diff bw Azure tables and cosmos DB are here:
+https://learn.microsoft.com/en-us/azure/cosmos-db/table/support
+
+DATA EXPLORER:
+
+It uses columnar formats for analytical queries.
+Data explorer supports parquet and ORC columnar formats. Parquet is suggested becoz of optimized implementation
+
+<filename>.gz.parquet or <filename>.snappy.parquet and not <filename>.parquet.gz.
+
+Design your table service soultion to be read-efficient.
+- Design for querying in read-heavy application
+- Specify both partitionKey and RowKey in your queries. Rowkey is a primary key within your partition. PrimaryKey + RowKey form the composite unique identifier for an entity.
+- Consider storing duplicate copies of entities: Table storage is cheap so consider storing the same entity multiple times
+- consider denormalizing your data: For example, store summary entities so that queries for aggregate data olny need to access a single entity.
+- Use compound key values: to enable alternate keyed access paths to entities.
+- Use query projection: select just the fields you need.
+
+
+Design your table service solution to be write-efficient:
+-Do not create hot partitions
+- Avoid spikes in traffice
+- Don't necessarily create a separate table for each type of entity
+- Consider the maximum throughput you must achieve.
+
+
+DYNNAMIC FILE PRUNING:
+
+To achieve dynamic file pruing using z-ordering technique of delta
+1) spark.databricks.optimizer.dynamicFilePruning (default is true):
+2) spark.databricks.optimizer.deltaTableFilesThreshold (default is 10 IN Databricks Runtime 8.4 and above ) on the probe side to trigger dynamic files than the threshold value, dynamic file pruning is not triggered.
+
+3) spark.databricks.optimizer.deltaTableSizeThreshold ( default is 10 GB)
+
+In Deltatables:
+Autotune is anticipated after a few rewrite operations have occured using delta.tuneFileSizesForRewrites
+
+Z-Ordering(multi-dimensional clustering):
+if you want to further read https://learn.microsoft.com/en-us/azure/databricks/delta/file-mgmt#delta-zorder
+
+To perform Copy activity with a pipeline, we need to use tools or SDK's
+CopyDatatool, azure portal, .NET SDK, python SDK, PowerShell, REST API, Azure Resource Manager template (ARM)
+
+ARM uses json file with declarative syntax, where this syntax is you need to describe your intended deployment without programming commands 
+Create the template ADFv2QuickStartPSH folder
+ 
+json for storage account or blob container is
+type, defaultValue, metadata(under it description)
+
+schema, contentVersion, metadata, _generator(name, version, templateHash)
+variables(ADFLinkedserviceName, ADFDatasetInName, ADFDatasetOutName, pipelineName)
+resources (type, apiVersion, name, location, sku(name), kind v2 storage
+
+NEEKU BAGA DURADAGA UNTE IDI CHOODU (https://learn.microsoft.com/en-us/azure/data-factory/quickstart-create-data-factory-resource-manager-template)
+
+
+TOPIC: DESIGNING DISTRIBUTED TABLES:
+
+Distributed table rows are stored across 60 distributions.
+
+Hash is to improve query performance on large fact tables in star schema. 
+- Choose this for table size less than 2 GB and table has frequent insert, update, and delete operations.
+- Multi column distribution upto EIGHT COLUMNS for distribution.
+- Since identical values always hash to same distribution, SQL Analytics has built-in knowledge of the row locations.
+- In dedicated SQL pool this knowledge is used to minimize data movement during queries, which improves query performance.
+
+Round-robin is to improve loading speed
+- Unlike hash it is doesn't distribute equal values in the same distribution.
+- To resolve a query, we need to invoke a DATA MOVEMENT OPERATION to better organize your data. Means reshuffling the rows to query.
+CONSIDER THIS WHEN
+- for no obvious joining key, no good candidate column for hashing.
+- If the table does not share a common join key with others
+- When table is a temporary staging table, less significant than other joins in the query.
+
+
+
+
+MATERIALIZED VIEW:
+It cannot reference other views
+- It can't be created on table with dynamci data masking (DDM)
+- It can't be created on a table with row level security enabled.
+- doesn't support COUNT, DISTINCT, COUNT(DISTINCT expression) or COUNT_BIG(DISTINCT expression), SELECT queries with these functions. BUT IT AUTOMATICALLY ADDED BY MATERIALIZED VIEW
+- APPOX_COUNT_DISTINCT is not supported 
+- Only CLUSTERED COLUMNSTORE INDEX is supported by materialized view.
+
+
+sp_spaceused (Transact-SQL)
+applies to SQL Server, Azure sql db, azure sql managed instance, synapse analytics, analytics platform system (PDW)
+Displays no.of rows, disk space reserved, and disck space used by a table, indexed view, service broker queue in the current db, displays the disk space reserved and used by the whole db.
+
+NOTE: This syntax is not supported by serverless sql pool in synapse
+If objname is not specified, results are returned for the whole database.
+
+Syntax:
+sp_spaceused [[ @objname = ] 'objname' ]   
+[, [ @updateusage = ] 'updateusage' ]  
+[, [ @mode = ] 'mode' ]  
+[, [ @oneresultset = ] oneresultset ]  
+[, [ @include_total_xtp_storage = ] include_total_xtp_storage ]
+
+
+DBCC PDW_SHOWSPACEUSED (Transact-SQL)
+Applies to: Azure Synapse Analytics, Analytics Platform System (PDW)
+
+Displays the no.of rows, disk space reserved, and disk space used for a specific table, or 
+
+DBCC PDW_SHOWSPACEUSED;
+
+DBCC PDW_SHOWSPACEUSED ( "AdventureworksPDW2012.dbo.FactInternetSales" );
+DBCC PDW_SHOWSPACEUSED ( "AdventureworksPDW2012..FactInternetSales" );
+DBCC PDW_SHOWSPACEUSED ( "dbo.FactInternetSales ");
+DBCC PDW_SHOWSPACEUSED ( FactInternetSales );
+
+Reference: https://learn.microsoft.com/en-us/sql/t-sql/database-console-commands/dbcc-pdw-showspaceused-transact-sql?view=azure-sqldw-latest&preserve-view=true
+
+DBCC PDW_SHOWEXECUTIONPLAN ( distribution_id, spid )  
+[ ; ]
+DBCC PDW_SHOWEXECUTIONPLAN ( pdw_node_id, spid )  
+[ ; ]
+
+SELECT [sql_spid], [pdw_node_id], [request_id], [dms_step_index], [type], [start_time], [end_time], [status], [distribution_id]  
+FROM sys.dm_pdw_dms_workers   
+WHERE [status] <> 'StepComplete' and [status] <> 'StepError'  
+order by request_id, [dms_step_index];

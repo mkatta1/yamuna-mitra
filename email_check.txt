@@ -1,0 +1,16 @@
+EMAIL VERIFICATION CODE:
+
+import re
+regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+def check(email):
+  if re.search(regex,email):
+    print("valid email")
+  else:
+    print("invalid email")
+    
+if _name_ = __main__
+  email = mitra.katta@gmail.com
+  check(email)
+
+# email-validator 1.0.5, pylsEmail 1.3.2, py3-validate-email
+

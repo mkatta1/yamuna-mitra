@@ -1,0 +1,53 @@
+ADF, Copy Data Tool in synapse, Monitor the pipeline and run activity runs
+
+DELTA TABLE BEST PRACTICES AND THEIR CODE TO DO IT:
+
+It contains z ordering, optimize to compact the files. Don't delete files from the directory level, instead overwrite them.
+PAGE1: https://learn.microsoft.com/en-us/azure/databricks/delta/best-practices
+PAGE2: https://learn.microsoft.com/en-us/azure/databricks/delta/file-mgmt#delta-optimize
+
+
+DESIGNING PARTITIONS:
+https://learn.microsoft.com/en-us/azure/architecture/best-practices/data-partitioning#designing-partitions-for-query-performance
+
+Horizontal partitioning (often called sharding): Each partition is known as a shard. For example: Each shard holds the data for a contiguous range of shard keys (A-G and H-Z), organized alphabetically. Try to minimize HOT partitions means data starts with similar letters.
+Vertical partitioning: each partition holds a subset of the fields/columns which are used mostly in the data store
+Functional partitioning: data is aggregated according to how it is used by each bounded context in the system.For example, an e-commerce system might store invoice data in one partition and product inventory data in another. Separate read, write data to read only data.
+
+************* COMPLETELY COMPLEX ONE WHICH I LEFT NOW TO READ LATER IN DETAILS ******************************************
+designing a partition strategy for Azure Synapse Analytics:
+
+https://learn.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-tables-partition
+
+
+TOPIC 3:DESIGN THE SERVING LAYER
+CHECK THE BELOW ONES OUT IN THE FOLLOWING PAGE:
+https://learn.microsoft.com/en-us/power-bi/guidance/star-schema#role-playing-dimensions
+
+Measures
+Surrogate keys
+Snowflake dimensions
+Role-playing dimensions
+Slowly changing dimensions
+Junk dimensions
+Degenerate dimensions
+Factless fact tables
+
+Temporal table implementation is seen in SSMS: SQL SERVER MANAGEMENT STUDIO, SSDT SQL SERVER DATA TOOL, AZURE DATA STUDIO or any other T-SQL
+SYSTEM_VERSION TABLE -->TEMPORAL TABLE
+
+WITH T-SQL, temporal table creation
+CREATE TABLE TABLE_NAME (COLUMNS) WITH (SYSTEM_VERSIONING = ON (HISTORY_TABLE = dbo.HISTORY_TABLE_NAME)
+
+
+Temporal tables old versions are stored as history tables. It is a system-versioned temporal table.
+Simply SCD-TYPE2 mechanism is seen and the validto, validfrom uses the datetime2 data type
+
+Incrementally copy a table using the below:
+Normally, the data in this selected column (for example, last_modify_time or ID) keeps increasing when rows are created or updated. The maximum value in this column is used as a WATERMARK.
+
+Azure anlysis services like powerbi,excel
+
+What are your options for choosing an analytical data store?
+Azure Synapse Analytics, Synapse spark pools, databricks, sql server in VM, SQL DB, Hbase/Phoenix on HDI,
+HIVE LLP on HDI, Azure Analysis services(powerbi, excel), Cosmos DB

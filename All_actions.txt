@@ -1,0 +1,3 @@
+data = [('Project',1),('Gutenbergs's',1),('Alice's',1)]
+rdd = spark.SparkContext.parallelize(data)
+rdd2=rdd.reduceByKey(lambda a,b: a+b)

@@ -1,0 +1,144 @@
+Mitra Manohar Sai
+Katta
+Unit 32 47 53 Lydbrook Street Westmead 
+469385490
+mitra.katta@gmail.com
+
+               .setNamespaceName("ehubns-RANDOM") // to target National clouds - use .setEndpoint(URI)
+                .setEventHubName("yam2")
+                .setSasKeyName("RootManageSharedAccessKey")
+                .setSasKey("YAiiyMM2vsOmHG0LBxdpTHCRJA+whEAPjWz1RgBDiwU=");
+
+cd ~/azure-event-hubs/samples/Java/Basic/SimpleSend
+java -jar ./target/simplesend-1.0.0-jar-with-dependencies.jar
+
+
+cd ~/azure-event-hubs/samples/Java/Basic/EventProcessorSample
+java -jar ./target/eventprocessorsample-1.0.0-jar-with-dependencies.jar
+
+Unfinished tasks:
+ Data integration at scale with Azure Data Factory or Azure Synapse Pipeline from the point EXERCISE 4
+
+ 
+
+
+When we select the source to optimize then it will give us 3 options:
+1) Use current partitioning
+2) Single partition
+3) Set partition
+Under Set partition, we have partition types as
+Round Robin: Input no of partitions
+Hash: Input no of partitions, Column values to hash on
+Dynamic Rnage: inputs no of partitions, sorted ranges in columns 
+Fixed Range: inputs no of partitions, Condition in partition with expression to be entered
+Key: input unique key column with Unique value per partition
+
+
+https://learn.microsoft.com/en-us/certifications/azure-data-engineer/#certification-exam-disclaimers
+
+
+Website1: https://www.projectpro.io/article/pyspark-interview-questions-and-answers/520
+Website2: https://www.javatpoint.com/pyspark-interview-questions
+Website3: For all coding examples look into https://github.com/spark-examples/pyspark-examples
+
+Diff bw RDD and DataFrames and datasets?
+dataframes provides API's quickly than RDD's. For aggregations and grouping datasets are faster than RDD'S. So fastness Dataframes>Datasets>RDD's
+Read this website as well: https://data-flair.training/blogs/apache-spark-rdd-vs-dataframe-vs-dataset/
+Why Dataframes are faster than datasets?
+JOINS USING THE DATABRICKS COMMUNITY EDITION
+
+class SparkStageInfo(namedtuple("SparkStageInfo", "stageId currentAttemptId name numTasks unumActiveTasks" "numCompletedTasks numFailedTasks" )):  
+
+what are the challenges you faced while working with spark?
+What happens when you enter the spark submit command?
+to submit the application program to the cluster
+the application jar along with the any jars included with it will be automatically transfered to the cluster
+
+Four libraries of spark SQL
+DataSource API
+DataFrame API
+Interpreter&Optimizer
+SQL Service
+
+For improving performance, PySpark supports custom serializers to transfer data. They are:
+
+MarshalSerializer: It supports only fewer data types, but compared to PickleSerializer, it is faster.
+PickleSerializer: It is by default used for serializing objects. Supports any Python object but at a slow speed.
+
+SparkContext uses py4j library to launch a JVM, and then creates a spark Context
+
+
+Few main attributes of SparkConf are listed below:
+
+set(key, value): This attribute helps in setting the configuration property.
+setSparkHome(value): This attribute enables in setting Spark installation path on worker nodes.
+setAppName(value): This attribute helps in setting the application name.
+setMaster(value): This attribute helps in setting the master URL.
+get(key, defaultValue=None): This attribute supports in getting a configuration value of a key.
+
+SparkSession is an unified API with sparkcontext, sqlcontext, streamingcontext, hive context etc of all contexts
+
+filter,map, reduce() in this the variables are not shared and also not reusable
+
+sc.parallelize(list) the data is present in the driver and then we create an RDD.
+sparkContext.textFile() read text file and we convert them into RDD 
+sparkContext.wholeTextFiles() this function returns PairRDD(RDD containing key-value paris) with file path being the key and the file content is the value. We can also read json, parquet, csv and other formats
+sparkContext.emptyRDD : create empty RDD with nodata and no partitions
+sparkContext.parallelize([],20): When we want no data but require partition then do this. This will create empty RDD with 20 partitions
+
+
+Types of joins in spark are:
+ inner, left, right, cross, full, outer, left_outer, right_outer, left_anti, left_semi.
+
+emp_dept_df = empdf.join(depdf,empdf.empdept_id == depdf.dept_id,"inner").show(truncate=False)
+or
+if you want to perform chain joins
+df1.join(df2,["colname"]).join(df3,["colname"] == df3["column_name"]).show()
+
+resultDF = empDF.join(addressDF,["emp_id])
+			.join(deptDF, empDF["empdept_id"] == deptDF["dept_id"])
+			.show()
+
+set this parameter to clean up the accumulated metadata ‘spark.cleaner.ttl’ 
+
+
+Pair RDD:
+
+class PairRDDFunctions[K, V] extends Logging with HadoopMapReduceUtil with Serializable
+
+Special operations can be performed on RDDs in Spark using key/value pairs and such RDDs are referred to as Pair RDDs. Pair RDDs allow users to access each key in parallel. They have a reduceByKey() method that collects data based on each key and a join() method that combines different RDDs together, based on the elements having the same key.
+
+
+SparkJobinfo exposes information about Spark Jobs:
+
+class SparkJobInfo(namedtuple("SparkJobInfo", "jobId stageIds status")):
+
+
+
+SparkStageinfo exposes information about Spark Stages
+
+
+class SparkStageInfo(namedtuple("SparkStageInfo",
+                               "stageId currentAttemptId name numTasks numActiveTasks "
+                               "numCompletedTasks numFailedTasks")):
+
+
+################################### HOW TO CREATE SPARK TRY CATCH EXCEPTION ############################################################3
+
+spark.range(100).repartition(1).write.mode("overwrite").csv("/tmp/test-1/")
+
+scala.util.Try(
+  spark
+    .range(100)
+    .repartition(1)
+    .map { i =>
+      if (i > 50) {
+        Thread.sleep(5000)
+        throw new RuntimeException("Oops!")
+      }
+      i
+    }
+    .write
+    .mode("overwrite")
+    .csv("/tmp/test-1/")
+)

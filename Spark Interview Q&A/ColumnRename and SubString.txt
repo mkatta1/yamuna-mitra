@@ -1,0 +1,32 @@
+Three ways to rename a column:
+
+data1  = [{'Name':'Jhon','ID':21.528,'Add':'USA'},{'Name':'Joe','ID':3.69,'Add':'USA'},{'Name':'Tina','ID':2.48,'Add':'IND'},{'Name':'Jhon','ID':22.22, 'Add':'USA'},{'Name':'Joe','ID':5.33,'Add':'INA'}]
+
+CREATE RDD:
+a= sc.parallelize(data1)
+
+b= spark.createDataFrame(a)
+b.show()
+Type1:
+c=b.withColumnRenamed("Add","Address")
+c=b.withColumnRenamed("Add","Address").withColumnRenamed("ID","Card No")
+
+Type2: .alias() function
+c=b.select(col("Add").alias("Address"))
+
+Typ3: custom Pyspark logic and loop it with the columns in a dataframe that can be used to rename all the columns at once.
+
+rename_col = [f"{e.upper()}_updated" for e in b.columns]
+The method defined.
+This method can be passed on the dataframe and it returns a new data frame as the output
+
+c= b.toDF(*rename_col)
+
+
+SUBSTRING FUNCTION:
+
+b=df.withColumn("Sub_Name", a.Name.substr(1,3))
+
+to substring from the last elements
+b=df.withCoumn("Name_End", a.Name.substr(-2,2))
+b= a.withColumn("Concated_Value", concat(a.Name.substr(-3,3),lit("--"), a.Name.substr(1,3)))

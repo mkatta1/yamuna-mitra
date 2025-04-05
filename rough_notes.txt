@@ -1,0 +1,89 @@
+/*
+  This is your scratchpad.
+  You can write and preview dbt code here without building it as a model or saving it as an analysis. 
+  
+  Tips for using the IDE:
+  - Press [CTRL] + [Space] or type two underscores [__] to get common snippets of SQL, Jinja and YAML
+  - Press [CTRL] + [O] to open a file picker
+  - Press [F1] to get a list of keyboard shortcuts
+  
+  Press [CTRL] + [Enter] or click the 'Preview' button to see the results of the query.
+  You can also review the generated SQL query in the 'Compiled SQL' tab.
+  */
+  
+  {%- for i in range(1, 10) %}
+      select {{ i }} as my_column
+  
+      {%- if not loop.last %}
+          union all 
+      {% endif %}
+  
+  {%- endfor %}
+
+
+
+df = spark.createDataFrame([["1"]],["id"])
+df.select
+
+
+to get the top n rows in the list
+df.head(n)
+
+df.first() is equal to df.head(1)
+df.take(2) for the first n rows _-> this will internally calls list and collect
+
+df.tail(2) for the last n rows
+
+Idempotent
+
+To create and rdd we need
+
+rdd =  SparkSession.sparkContext.parallelize((0,25),6)
+
+
+
+
+
+
+
+
+
+
+with Submission_Stats as
+(
+select Challenge_id
+    , total_submissions
+    , total_accepted_submissions
+    , sum(total_submissions) as SumOfSubmissions
+    , sum(total_accepted_submissions) as SumOfAcceptedSubmisssions
+from Submission_Stats
+group by Challenge_id, total_submissions, total_accepted_submissions
+)
+, View_Stats as
+(
+select Challenge_id
+, total_views
+, total_unique_views
+, sum(total_views) as SumOfViews
+, sum(total_unique_views) as SumOfUniqueViews
+from View_Stats
+group by Challenge_id, total_views, total_unique_views
+)
+select contests.contest_id
+, contests.hacker_id
+, contests.name
+, sum(Submission_Stats.total_submissions)
+, sum(Submission_Stats.total_accepted_submissions)
+, sum(View_Stats.total_views)
+, sum(View_Stats.total_unique_views)
+from contests
+inner join colleges on contests.contest_id = colleges.contest_id
+inner join Challenges on colleges.college_id = Challenges.college_id
+inner join View_Stats on View_Stats.Challenge_id = Challenges.Challenge_id
+inner join Submission_Stats on Submission_Stats.Challenge_id = Challenges.Challenge_id
+where Submission_Stats.SumOfSubmissions!=0
+and Submission_Stats.SumOfAcceptedSubmisssions!=0
+and View_Stats.SumOfViews! = 0
+and View_Stats.SumOfUniqueViews! = 0
+group by contests.contest_id, contests.hacker_id, contests.name
+order by contests.contest_id

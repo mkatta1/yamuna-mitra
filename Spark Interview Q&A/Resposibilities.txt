@@ -1,0 +1,6 @@
+Built jobs using PySpark programming, Hive (HQL) and TALEND ETL with Big data.
+Performed Unit testing and peer review.
+Practicing Data Vault modeling techniques in the (Enterprise Data Warehouse) EDW agile.
+Orchestration of jobs with Airflow DAGs.
+Creation of Control-M scripts in order to trigger the Airflow DAGs.
+Using the existing bamboo CI/CD pipeline, SQL framework and Bit bucket for the build process.
